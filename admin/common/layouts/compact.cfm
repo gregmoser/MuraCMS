@@ -59,6 +59,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfif len(rc.frontEndProxyLoc)>
 	<cfset session.frontEndProxyLoc=rc.frontEndProxyLoc>
 </cfif>
+
+<cfif not structKeyExists(rc,"$")>
+	<cfset rc.$=application.serviceFactory.getBean('$').init(session.siteid)>
+</cfif> 
 </cfsilent>
 <cfoutput>
 <!DOCTYPE html>
@@ -155,6 +159,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					});					
 				};
 			});
+
+			preloadimages(['#application.configBean.getContext()#/admin/assets/images/ajax-loader.gif'])
 		</script>
 		#rc.ajax#
 		

@@ -173,7 +173,7 @@ var hasBody=#subType.getHasBody()#;
 			<cfquery name="rsSubTypes" dbtype="query">
 			select * from rsSubTypes
 			where 
-				type in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#pageLevelList#"/>)
+				type in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#extendedList#"/>)
 				or type='Base'
 			</cfquery>
 		<!---
@@ -312,9 +312,14 @@ var hasBody=#subType.getHasBody()#;
 		</p>
 	</cfif>
 
+	<cfif len(rc.contentBean.getNotes())>
+		<p class="alert">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.notes")#: #HTMLEditFormat(rc.contentBean.getNotes())#</p>
+	</cfif>
+
 	<cfif not structIsEmpty(rc.contentBean.getErrors())>
 		<div class="alert alert-error">#application.utility.displayErrors(rc.contentBean.getErrors())#</div>
 	</cfif>
+
 	<form novalidate="novalidate" action="index.cfm" method="post" enctype="multipart/form-data" name="contentForm" onsubmit="return ckContent(draftremovalnotice);" id="contentForm">
 	
 	<!--- This is plugin message targeting --->	

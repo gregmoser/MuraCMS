@@ -1417,6 +1417,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="crumbseparator" type="string" default="&raquo;&nbsp;">
 	<cfargument name="showMetaImage" type="numeric" default="1">
 	<cfargument name="includeMetaHREF" type="boolean" default="true" />
+	<cfargument name="bodyAttribute">
+	<cfargument name="titleAttribute">
 	
 	<cfset var theIncludePath = variables.event.getSite().getIncludePath() />
 	<cfset var str = "" />
@@ -1463,7 +1465,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfswitch>
 			<cfelse>
 				 <cfoutput>
-					<cfif arguments.pageTitle neq ''>
+				 	<cfif structKeyExists(arguments,'titleAttribute')>
+				 		<#getHeaderTag('headline')# class="pageTitle">#renderEditableAttribute(attribute=arguments.titleAttribute,required=true)#</#getHeaderTag('headline')#>
+					<cfelseif arguments.pageTitle neq ''>
 						<#getHeaderTag('headline')# class="pageTitle"><cfif arguments.pageTitle eq $.content('title')>#renderEditableAttribute(attribute='title',required=true)#<cfelse>#arguments.pageTitle#</cfif></#getHeaderTag('headline')#>
 					</cfif>
 					<cfif arguments.crumblist>
@@ -1550,7 +1554,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								</cfoutput>	
 						</cfif>		
 						<cfoutput>
-							#renderEditableAttribute(attribute="body",type="htmlEditor")#	
+							<cfif structKeyExists(arguments,'bodyAttribute')>
+								#renderEditableAttribute(attribute=arguments.bodyAttribute,type="htmlEditor")#
+							<cfelseif $.content('body') eq arguments.body>
+								#renderEditableAttribute(attribute="body",type="htmlEditor")#
+							<cfelse>
+								#setDynamicContent(arguments.body)#
+							</cfif>		
 						</cfoutput>
 					</cfdefaultcase>
 					</cfswitch>
@@ -2723,6 +2733,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 			if(arguments.type eq 'HTMLEditor' ){
 				inline='';
+
+				if(not len(arguments.value)){
+					arguments.value="<p></p>";
+				}
 			}
 			
 			return '<div class="mura-editable inactive#inline#">
