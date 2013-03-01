@@ -37,11 +37,11 @@ Notes:
 																								
 	This template is designed to display a list of products.  In order to do that Slatwall uses	
 	a utility called a "SmartList".  The SmartList allows for you to easily add do common		
-	listing tasks: Search, Range, Filter, Paging, ect.											
+	listing tasks: Search, Filter, Range Filter, Paging, ect.									
 																								
 	Anywhere on your site you can use the following to get the current productList:				
 																								
-	$.slatwall.productList()																	
+	$.slatwall.getProductSmartList()															
 																								
 	The product list will always have these filters set by default:								
 																								
@@ -64,14 +64,74 @@ Notes:
 	$.slatwall.productList().getCurrentPage()													
 	$.slatwall.productList().getTotalPages()													
 																								
+																								
+																								
+	Inside of the main loop of a productList() you can use any of the following properties		
+	that will be be avaliable as part of the primary query.  If you ask for any additional		
+	properties, you will run the Risk of N+1 SQL Statements where each record will make			
+	1 or more additional database calls	and directly impact performance.  This is why we make	
+	use of the 'calculated' fields so that processing necessary is done ahead of time. All of	
+	the following values are safe to use in this listing without concern of lazy loading		
+																								
+	local.product.getProductID()																
+	local.product.getActiveFlag()																
+	local.product.getURLTitle()																	
+	local.product.getProductName()																
+	local.product.getProductCode()																
+	local.product.getProductDescription()														
+	local.product.getPublishedFlag()															
+	local.product.getSortOrder()																
+	local.product.getCalculatedSalePrice()														
+	local.product.getCalculatedQATS()															
+	local.product.getCalculatedAllowBackorderFlag()												
+	local.product.getCalculatedTitle()															
+	local.product.getCreatedDateTime()															
+	local.product.getModifiedDateTime()															
+	local.product.getRemoteID()																	
+																								
+	local.product.getDefaultSku().getSkuID()													
+	local.product.getDefaultSku().getActiveFlag()												
+	local.product.getDefaultSku().getSkuCode()													
+	local.product.getDefaultSku().getListPrice()												
+	local.product.getDefaultSku().getPrice()													
+	local.product.getDefaultSku().getRenewalPrice()												
+	local.product.getDefaultSku().getImageFile()												
+	local.product.getDefaultSku().getUserDefinedPriceFlag()										
+	local.product.getDefaultSku().getCreatedDateTime()											
+	local.product.getDefaultSku().getModifiedDateTime()											
+	local.product.getDefaultSku().getRemoteID()													
+																								
+	local.product.getBrand().getBrandID()														
+	local.product.getBrand().getActiveFlag()													
+	local.product.getBrand().getPublishedFlag()													
+	local.product.getBrand().getURLTitle()														
+	local.product.getBrand().getBrandName()														
+	local.product.getBrand().getBrandWebsite()													
+	local.product.getBrnad().getCreatedDateTime()												
+	local.product.getBrnad().getModifiedDateTime()												
+	local.product.getBrnad().getRemoteID()														
+																								
+	local.product.getProductType().getProductTypeID()											
+	local.product.getProductType().getProductTypeIDPath()										
+	local.product.getProductType().getActiveFlag()												
+	local.product.getProductType().getPublishedFlag()											
+	local.product.getProductType().getURLTitle()												
+	local.product.getProductType().getProductTypeName()											
+	local.product.getProductType().getProductTypeDescription()									
+	local.product.getProductType().getSystemCode()												
+	local.product.getProductType().getCreatedDateTime()											
+	local.product.getProductType().getModifiedDateTime()										
+	local.product.getProductType().getRemoteID()												
+																								
 	You can find detailed information on SmartList and all of the additional API methods at:	
-	http://docs.getSlatwall.com/reference/SmartList
+	http://docs.getslatwall.com/#developers-reference-smart-list								
+																								
 --->
 <cfinclude template="_slatwall-header.cfm" />
 <cfoutput>
 	
 
-<!--- Example 1 --->
+<!--- Product Listing Example 1 --->
 <div class="container">
 	<div class="row">
 		<div class="span12">
@@ -80,21 +140,49 @@ Notes:
 	</div>
 	<div class="row">
 		<div class="span3">
+			<!--- Filter Brand --->
+			<cfset brandFilterOptions = $.slatwall.getProductSmartList().getFilterOptions('brand.brandID', 'brand.brandName') />
+			<h4>Filter By Brand</h4>
+			<ul class="nav">
+				<cfloop array="#brandFilterOptions#" index="brandOption">
+					<li><a href="#$.slatwall.getProductSmartList().buildURL( 'f:brand.brandID=#brandOption["value"]#' )#">#brandOption["name"]#</a></li>
+				</cfloop>
+			</ul>
 			
+			<!--- Price Range Filter --->
+			<h4>Price Range Filter</h4>
+			<ul class="nav">
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'r:calculatedSalePrice=^20' )#">less than $20.00</a></li>
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'r:calculatedSalePrice=20^50' )#">$20.00 - $50.00</a></li>
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'r:calculatedSalePrice=50^100' )#">$50.00 - $100.00</a></li>
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'r:calculatedSalePrice=100^250' )#">$100.00 - $250.00</a></li>
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'r:calculatedSalePrice=250^' )#">over $250.00</a></li>
+			</ul>
+			
+			<!--- Sorting --->
+			<h4>Sorting</h4>
+			<ul class="nav">
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'orderBy=calculatedSalePrice|ASC' )#">Price Low To High</a></li>
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'orderBy=calculatedSalePrice|DESC' )#">Price High To Low</a></li>
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'orderBy=calculatedTitle|ASC' )#">Product Title A-Z</a></li>
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'orderBy=calculatedTitle|DESC' )#">Product Title Z-A</a></li>
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'orderBy=productName|ASC' )#">Product Name A-Z</a></li>
+				<li><a href="#$.slatwall.getProductSmartList().buildURL( 'orderBy=productName|DESC' )#">Product Name Z-A</a></li>
+			</ul>
 		</div>
 		<div class="span9">
 			<cfif $.slatwall.productList().getRecordsCount()>
 				<ul class="thumbnails">
-					<cfloop array="#$.slatwall.productList().getPageRecords()#" index="product">
+					<cfloop array="#$.slatwall.getProductSmartList().getPageRecords()#" index="product">
 						<li class="span3">
 							<div class="thumbnail">
 								<img src="#product.getResizedImagePath(size='m')#" alt="#product.getCalculatedTitle()#" />
-								<h4>#product.getCalculatedTitle()#</h4>
+								<h5>#product.getCalculatedTitle()#</h5>
 	      						<p>#product.getDescription()#</p>
 								<cfif product.getPrice() gt product.getCalculatedSalePrice()>
-									<h5><span style="text-decoration:line-through;">#product.getPrice()#</span> <span class="text-error">#product.getFormattedValue('calculatedSalePrice')#</span></h5>
+									<p><span style="text-decoration:line-through;">#product.getPrice()#</span> <span class="text-error">#product.getFormattedValue('calculatedSalePrice')#</span></p>
 								<cfelse>
-									<h5>#product.getFormattedValue('calculatedSalePrice')#</h5>	
+									<p>#product.getFormattedValue('calculatedSalePrice')#</p>	
 								</cfif>
 								<a href="#product.getListingProductURL()#">Details / Buy</a>
 							</div>
