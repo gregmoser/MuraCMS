@@ -36,10 +36,10 @@
 Notes: 
 	
 --->
-<cfinclude template="_slatwall-header.cfm" />
+<cfinclude template="slatwall-inc/slatwall-header.cfm" />
 <div class="row">
 	<div class="span12">
-		<h2>#$.product.getTitle()#</h2>
+		<h2>#$.product.getTitle()()#</h2>
 	</div>
 </div>
 <div class="row">
