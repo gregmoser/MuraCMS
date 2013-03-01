@@ -36,14 +36,19 @@
 Notes: 
 	
 --->
-<cfinclude template="slatwall-inc/slatwall-header.cfm" />
-<div class="row">
-	<div class="span12">
-		<h2>#$.product.getTitle()()#</h2>
+<cfinclude template="_slatwall-header.cfm" />
+<cfoutput>
+<!--- Example 1 --->
+<div class="container">
+	<div class="row">
+		<div class="span12">
+			<h2>#$.slatwall.getProduct().getTitle()#</h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span4">Test</div>
+		<div class="span8">Test 2</div>
 	</div>
 </div>
-<div class="row">
-	<div class="span4">Test</div>
-	<div class="span8">Test 2</div>
-</div>
-<cfinclude template="slatwall-inc/slatwall-footer.cfm" />
+</cfoutput>
+<cfinclude template="_slatwall-footer.cfm" />

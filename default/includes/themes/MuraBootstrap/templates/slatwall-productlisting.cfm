@@ -69,34 +69,45 @@ Notes:
 --->
 <cfinclude template="_slatwall-header.cfm" />
 <cfoutput>
+	
+
+<!--- Example 1 --->
+<div class="container">
 	<div class="row">
 		<div class="span12">
-			<h2>Product Listing</h2>
+			<h2>Product Listing Example 1</h2>
 		</div>
 	</div>
 	<div class="row">
 		<div class="span3">
-	
+			
 		</div>
 		<div class="span9">
-			<ul class="thumbnails">
-				<cfloop array="#$.slatwall.productList().getPageRecords()#" index="product">
-					<li class="span3">
-						<div class="thumbnail">
-							<img src="#product.getProductListingURL()#" alt="#product.getCalculatedTitle()#" />
-							<h4>#product.getCalculatedTitle()#</h4>
-      						<p>#product.getDescription()#</p>
-							<cfif product.getPrice() gt product.getCalculatedSalePrice()>
-								<h5><span style="text-decoration:line-through;">#product.getPrice()#</span> <span class="text-error">#product.getFormattedValue('calculatedSalePrice')#</span></h5>
-							<cfelse>
-								<h5>#product.getFormattedValue('calculatedSalePrice')#</h5>	
-							</cfif>
-							<a href="#product.getListingProductURL()#">Details / Buy</a>
-						</div>
-					</li>
-				</cfloop>
-			</ul>
+			<cfif $.slatwall.productList().getRecordsCount()>
+				<ul class="thumbnails">
+					<cfloop array="#$.slatwall.productList().getPageRecords()#" index="product">
+						<li class="span3">
+							<div class="thumbnail">
+								<img src="#product.getResizedImagePath(size='m')#" alt="#product.getCalculatedTitle()#" />
+								<h4>#product.getCalculatedTitle()#</h4>
+	      						<p>#product.getDescription()#</p>
+								<cfif product.getPrice() gt product.getCalculatedSalePrice()>
+									<h5><span style="text-decoration:line-through;">#product.getPrice()#</span> <span class="text-error">#product.getFormattedValue('calculatedSalePrice')#</span></h5>
+								<cfelse>
+									<h5>#product.getFormattedValue('calculatedSalePrice')#</h5>	
+								</cfif>
+								<a href="#product.getListingProductURL()#">Details / Buy</a>
+							</div>
+						</li>
+					</cfloop>
+				</ul>
+			<cfelse>
+				<p>There are currently no products to display.</p>
+			</cfif>
 		</div>
 	</div>
+</div>
+
+
 </cfoutput>
 <cfinclude template="_slatwall-footer.cfm" />
