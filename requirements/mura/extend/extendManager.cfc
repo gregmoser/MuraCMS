@@ -47,26 +47,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfcomponent extends="mura.cfobject" output="false">
 
 <cfset variables.definitionsQuery="">
-<cfset variables.iconmap={}>
+<cfset variables.iconlookup={}>
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	<cfargument name="configBean">
 	
 	<cfset variables.configBean=arguments.configBean />
 
-	<cfset var rs=getDefinitionsQuery()>
-
-	<cfloop query="rs">
-		<cfscript>
-			if(listFindNoCase('Page,Folder,Calendar,Gallery,File,Link,Portal',rs.type)){
-				if(not structKeyExists(variables.iconmap,'#rs.siteid#')){
-					variables.iconmap['#rs.siteid#']={};
-					variables.iconmap['#rs.siteid#']['#rs.type##rs.subtype#']=rs.iconclass;
-				}
-			}
-		</cfscript>
-	</cfloop>
-
+	<cfset buildIconClassLookup()>
 	<cfreturn this />
 </cffunction>
 
@@ -75,12 +63,37 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="subtype">
 	<cfargument name="siteid">
 
-	<cfif isdefined('variables.iconmap.#arguments.siteid#.#arguments.type##arguments.subtype#')>
-		<cfreturn variables.iconmap['#arguments.siteid#']['#arguments.type##arguments.subtype#']>
+	<cfif isdefined('variables.iconlookup.#arguments.siteid#.#arguments.type##arguments.subtype#')>
+		<cfreturn variables.iconlookup['#arguments.siteid#']['#arguments.type##arguments.subtype#']>
 	</cfif>
 
 	<cfreturn ''>
 
+</cffunction>
+
+<cffunction name="buildIconClassLookup" output="false">	
+	<cfset var rs=getDefinitionsQuery()>
+	<cfloop query="rs">
+		<cfset setIconClass(type=rs.type,subtype=rs.subtype,siteid=rs.siteid,iconclass=rs.iconclass)>
+	</cfloop>
+</cffunction>
+
+<cffunction name="setIconClass" output="false">	
+	<cfargument name="type">
+	<cfargument name="subtype">
+	<cfargument name="siteid">
+	<cfargument name="iconclass">
+
+		<cfscript>
+			if(listFindNoCase('Page,Folder,Calendar,Gallery,File,Link,Portal',arguments.type)){
+				if(not structKeyExists(variables.iconlookup,'#arguments.siteid#')){
+					variables.iconlookup['#arguments.siteid#']={};
+				}
+
+				variables.iconlookup['#arguments.siteid#']['#arguments.type##arguments.subtype#']=arguments.iconclass;
+			}
+		</cfscript>
+	
 </cffunction>
 
 <cffunction name="buildDefinitionsQuery" output="false">

@@ -443,7 +443,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	
 	<cfset variables.classExtensionManager.purgeDefinitionsQuery()>
-	
+	<cfset variables.classExtensionManager.setIconClass(type=getType(),subtype=getSubType(),siteid=getSiteID(),iconclass=getIconClass())>
 	<cfreturn this>
 </cffunction>
 

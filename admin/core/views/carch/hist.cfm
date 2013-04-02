@@ -100,7 +100,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset isActiveRenderered=true>
 	<cfset versionStatus=application.rbFactory.getKeyValue(session.rb,'sitemanager.content.published')>
 <cfelseif listFindNoCase('Pending,Rejected',rc.item.getapprovalstatus())>
-	<cfset versionStatus=application.rbFactory.getKeyValue(session.rb,'sitemanager.content.#rc.rshist.approvalstatus#')>
+	<cfset versionStatus=application.rbFactory.getKeyValue(session.rb,'sitemanager.content.#rc.item.getApprovalStatus()#')>
 <cfelseif not rc.item.getapproved() and len(rc.item.getchangesetID())>
 	<cfset versionStatus=application.rbFactory.getKeyValue(session.rb,'sitemanager.content.queued')>
 <cfelseif not rc.item.getapproved()>
