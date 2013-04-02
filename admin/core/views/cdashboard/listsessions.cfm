@@ -114,7 +114,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <div>
 <cfif rc.contentid neq ''>
 <cfset crumbdata=application.contentManager.getCrumbList(rc.contentid, rc.siteid)/>
-<h3>#application.contentRenderer.dspZoom(crumbdata)#</h3>
+<h3>#$.dspZoom(crumbdata)#</h3>
 </cfif>
 
 <table class="table table-striped table-condensed table-bordered mura-table-grid"> 

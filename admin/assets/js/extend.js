@@ -126,31 +126,37 @@ var extendManager = {
 		}
 		if(dataArray[0] == "") {
 			$(".subTypeContainer").hide();
+			$(".SubTypeIconSelect").hide();
 			$(".hasSummaryContainer").hide();
 			$(".hasBodyContainer").hide();
 			$(".availableSubTypesContainer").hide();
 		} else if(dataArray[0] == "Site") {
 			$(".subTypeContainer").hide();
+			$(".SubTypeIconSelect").hide();
 			$(".hasSummaryContainer").hide();
 			$(".hasBodyContainer").hide();
 			$("#subType").val("Default");
 		} else if(dataArray[0] == "1" || dataArray[0] == "2" || dataArray[0] == "Address" || dataArray[0] == "Custom" || dataArray[0] == "Base") {
 			$(".subTypeContainer").show();
+			$(".SubTypeIconSelect").hide();
 			$(".hasSummaryContainer").hide();
 			$(".hasBodyContainer").hide();
 			$(".availableSubTypesContainer").hide();
 		} else if(dataArray[0] == "File" || dataArray[0] == "Link") {
 			$(".subTypeContainer").show();
+			$(".SubTypeIconSelect").show();
 			$(".hasSummaryContainer").show();
 			$(".hasBodyContainer").hide();
 			$(".availableSubTypesContainer").show();
 		} else if(dataArray[0] == "Component" || dataArray[0] == "Form") {
 			$(".subTypeContainer").show();
+			$(".SubTypeIconSelect").hide();
 			$(".hasSummaryContainer").hide();
 			$(".hasBodyContainer").show();
 			$(".availableSubTypesContainer").hide();
 		} else {
 			$(".subTypeContainer").show();
+			$(".SubTypeIconSelect").show();
 			$(".hasSummaryContainer").show();
 			$(".hasBodyContainer").show();
 			$(".availableSubTypesContainer").show();

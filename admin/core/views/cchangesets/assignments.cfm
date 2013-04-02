@@ -67,7 +67,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <p>#HTMLEditFormat(rc.changeset.getName())#</p>
 
 <cfset rc.rslist=rc.siteAssignments.getQuery()>
-<cfset rc.previewLink="http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,"")#?changesetID=#rc.changesetID#">
+<cfset rc.previewLink="http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##$.getURLStem(rc.siteid,"")#?changesetID=#rc.changesetID#">
 <h3>#application.rbFactory.getKeyValue(session.rb,'changesets.filterview')#</h3>
 <p>#application.rbFactory.getKeyValue(session.rb,'changesets.filterviewnotice')#</p>
 <form class="form-inline" novalidate="novalidate" id="assignmentSearch" name="assignmentSearch" method="get">
@@ -94,7 +94,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset verdict=application.permUtility.getnodePerm(crumbdata)/>
 		</cfsilent>
         <tr>  
-          <td class="title var-width">#application.contentRenderer.dspZoom(crumbdata)#</td>
+          <td class="title var-width">#$.dspZoom(crumbdata)#</td>
            <td> 
             <cfif len(rc.rslist.approvalStatus)>
               #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.#rc.rslist.approvalStatus#')#
@@ -106,11 +106,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<ul>
 		<cfif verdict neq 'none'>
       <li class="edit"><a title="Edit" href="index.cfm?muraAction=cArch.edit&contenthistid=#rc.rsList.ContentHistID#&contentid=#rc.rsList.ContentID#&type=#rc.rsList.type#&parentid=#rc.rsList.parentID#&topid=#URLEncodedFormat(rc.rslist.contentID)#&siteid=#URLEncodedFormat(rc.siteid)#&moduleid=#rc.rslist.moduleid#&startrow=#rc.startrow#&return=changesets"> <i class="icon-pencil"></i></a></li> 	
-			 <li class="preview"><a title="Preview" href="##" onclick="return preview('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,"")#?changesetPreviewID=#JSStringFormat(rc.rslist.changesetID)#&linkServID=#JSStringFormat(rc.rslist.contentID)#','#rc.rsList.targetParams#');"><i class="icon-globe"></i></a></li>
+			 <li class="preview"><a title="Preview" href="##" onclick="return preview('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##$.getURLStem(rc.siteid,"")#?changesetPreviewID=#JSStringFormat(rc.rslist.changesetID)#&linkServID=#JSStringFormat(rc.rslist.contentID)#','#rc.rsList.targetParams#');"><i class="icon-globe"></i></a></li>
 		   <li class="version-history"><a title="Version History" href="index.cfm?muraAction=cArch.hist&contentid=#rc.rsList.ContentID#&type=#rc.rsList.type#&parentid=#rc.rsList.parentID#&topid=#rc.rsList.contentID#&siteid=#URLEncodedFormat(rc.siteid)#&moduleid=#rc.rslist.moduleID#&startrow=#rc.startrow#"><i class="icon-book"></i></a></li>
     <cfelse>
       <li class="edit disabled"><i class="icon-edit"></i></li>
-      <li class="preview"><a title="Preview" href="##" onclick="return preview('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,"")#?changesetPreviewID=#JSStringFormat(rc.rslist.changesetID)#&linkServID=#JSStringFormat(rc.rslist.contentID)#','#rc.rsList.targetParams#');"><i class="icon-globe"></i></a></li>
+      <li class="preview"><a title="Preview" href="##" onclick="return preview('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##$.getURLStem(rc.siteid,"")#?changesetPreviewID=#JSStringFormat(rc.rslist.changesetID)#&linkServID=#JSStringFormat(rc.rslist.contentID)#','#rc.rsList.targetParams#');"><i class="icon-globe"></i></a></li>
 		  <li class="version-history disabled"><i class="icon-book"></i></li>
     </cfif>
 		<li class="delete"><a  title="Delete" href="index.cfm?muraAction=cChangesets.removeItem&contentHistId=#rc.rsList.contentHistID#&siteid=#URLEncodedFormat(rc.siteid)#&changesetID=#URLEncodedFormat(rc.rslist.changesetID)#&keywords=#HTMLEditFormat(rc.keywords)#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,'changesets.removeitemconfirm'),rc.rslist.menutitle))#',this.href)"><i class="icon-remove-sign"></i></a></li>

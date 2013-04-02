@@ -593,6 +593,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="renderIcon" returntype="string" output="false">
 <cfargument name="data">
 
+<cfset var iconclass=application.configBean.getClassExtensionManager().getCustomIconClass(argumentCollection=arguments.data)>
+
+<cfif len(iconclass)>
+	<cfreturn iconclass>
+</cfif>
+
 <cfif arguments.data.type eq 'File'>
 	<cfif structKeyExists(arguments.data,"fileExt")>
 		<cfreturn lcase(arguments.data.fileExt)>
@@ -2682,6 +2688,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="iconClassByContentType" output="false">
 	<cfargument name="type">
 	<cfargument name="subtype" default="Default">
+	<cfargument name="siteid" default="#$.event('siteid')#">
+
+	<cfset var iconclass=application.configBean.getClassExtensionManager().getCustomIconClass(argumentCollection=arguments)>
+	
+	<cfif len(iconclass)>
+		<cfreturn iconclass>
+	</cfif>
 
 	<cfswitch expression="#arguments.type#">
 	<cfcase value="Folder">

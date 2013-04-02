@@ -31,7 +31,7 @@
 			      <cfset editlink="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.getType()#&parentid=#item.getParentID()#&siteid=#URLEncodedFormat(item.getSiteID())#&moduleid=#item.getModuleID()#&return=chain">
 			    </cfsilent>
 		        <tr>  
-		          <td class="title var-width">#application.contentRenderer.dspZoom(item.getCrumbArray())#</td>
+		          <td class="title var-width">#$.dspZoom(item.getCrumbArray())#</td>
 		          <cfif hasChangesets>
 		          	<td>
 		          		<cfif isDate(item.getchangesetPublishDate())><a href="##" rel="tooltip" title="#HTMLEditFormat(LSDateFormat(item.getchangesetPublishDate(),"short"))#"> <i class="icon-calendar"></i></a></cfif>
@@ -45,7 +45,7 @@
 		              <li class="edit"><a title="Edit" href="#editlink#"><i class="icon-pencil"></i></a></li>  
 		              <cfswitch expression="#item.getType()#">
 						<cfcase value="Page,Folder,Calendar,Gallery,Link,File">
-							<cfset previewURL='http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,item.getFilename())#?previewid=#item.getContentHistID()#'>
+							<cfset previewURL='http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##$.getURLStem(rc.siteid,item.getFilename())#?previewid=#item.getContentHistID()#'>
 							<cfif rc.compactDisplay eq 'true'>
 								<li class="preview"><a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.preview')#" href="##" onclick="frontEndProxy.post({cmd:'setLocation',location:encodeURIComponent('#JSStringFormat(previewURL)#')});return false;"><i class="icon-globe"></i></a></li>
 							<cfelse>

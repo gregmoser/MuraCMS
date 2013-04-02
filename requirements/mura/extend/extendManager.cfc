@@ -47,13 +47,40 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfcomponent extends="mura.cfobject" output="false">
 
 <cfset variables.definitionsQuery="">
+<cfset variables.iconmap={}>
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	<cfargument name="configBean">
 	
 	<cfset variables.configBean=arguments.configBean />
-	
+
+	<cfset var rs=getDefinitionsQuery()>
+
+	<cfloop query="rs">
+		<cfscript>
+			if(listFindNoCase('Page,Folder,Calendar,Gallery,File,Link,Portal',rs.type)){
+				if(not structKeyExists(variables.iconmap,'#rs.siteid#')){
+					variables.iconmap['#rs.siteid#']={};
+					variables.iconmap['#rs.siteid#']['#rs.type##rs.subtype#']=rs.iconclass;
+				}
+			}
+		</cfscript>
+	</cfloop>
+
 	<cfreturn this />
+</cffunction>
+
+<cffunction name="getCustomIconClass" output="false">
+	<cfargument name="type">
+	<cfargument name="subtype">
+	<cfargument name="siteid">
+
+	<cfif isdefined('variables.iconmap.#arguments.siteid#.#arguments.type##arguments.subtype#')>
+		<cfreturn variables.iconmap['#arguments.siteid#']['#arguments.type##arguments.subtype#']>
+	</cfif>
+
+	<cfreturn ''>
+
 </cffunction>
 
 <cffunction name="buildDefinitionsQuery" output="false">

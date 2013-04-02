@@ -100,6 +100,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</cfcase>
 						</cfswitch>
 						<a class="btn" href="index.cfm?muraAction=cArch.hist&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#"><i class="icon-book"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.versionhistory")#</a>
+						<a class="btn" href="index.cfm?muraAction=cArch.audit&contentid=#URLEncodedFormat(rc.contentid)#&contenthistid=#rc.contentBean.getContentHistID()#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#"><i class="icon-sitemap"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.audittrail")#</a>
 						<cfif rc.compactDisplay neq 'true' and rc.contentBean.getactive()lt 1 and (rc.perm neq 'none')>
 							<a class="btn" href="index.cfm?muraAction=cArch.update&contenthistid=#URLEncodedFormat(rc.contenthistid)#&action=delete&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&return=#rc.return#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.deleteversionconfirm"))#',this.href)"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.deleteversion")#</a>
 						</cfif>
@@ -112,7 +113,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</cfif>
 					</cfif>
 				</cfcase>
-				<cfcase value="hist">
+				<cfcase value="hist,audit">
 					<a class="btn" href="index.cfm?muraAction=cArch.list&siteid=#URLEncodedFormat(rc.siteid)#&topid=#URLEncodedFormat(rc.moduleid)#&parentid=#URLEncodedFormat(rc.moduleid)#&moduleid=#URLEncodedFormat(rc.moduleid)#"><i class="icon-circle-arrow-left"></i> 
 						<cfif rc.moduleid eq "00000000000000000000000000000000003">
 							#application.rbFactory.getKeyValue(session.rb,'sitemanager.backtocomponents')#
@@ -128,11 +129,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</cfif>
 					</cfcase>
 					</cfswitch>
+					<cfif rc.originalfuseaction eq 'hist'>	
 					<cfif rc.perm neq 'none'>
 						<a class="btn" href="index.cfm?muraAction=cArch.update&action=deletehistall&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearversionhistoryconfirm'))#',this.href)"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearversionhistory')#</a>
 					</cfif>
-					<cfif rc.compactDisplay neq 'true' and rc.contentBean.getactive()lt 1 and (rc.perm neq 'none')>
-						<a class="btn" href="index.cfm?muraAction=cArch.update&contenthistid=#URLEncodedFormat(rc.contenthistid)#&action=delete&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&return=#rc.return#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.deleteversionconfirm"))#',this.href)"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.deleteversion")#</a>
+					<cfelse>
+						<a class="btn" href="index.cfm?muraAction=cArch.hist&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#"><i class="icon-book"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.versionhistory")#</a>
 					</cfif>
 					<cfif rc.deletable>
 						<a class="btn" href="index.cfm?muraAction=cArch.update&action=deleteall&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#" 
@@ -147,7 +149,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfcase>
 	<cfdefaultcase>
 		<cfswitch expression="#rc.originalfuseaction#">
-			<cfcase value="edit">
+			<cfcase value="edit,update">
 				<a class="btn" href="index.cfm?muraAction=cArch.list&siteid=#URLEncodedFormat(rc.siteid)#&moduleid=00000000000000000000000000000000000"><i class="icon-circle-arrow-left"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.backtositemanager')#</a>
 				<cfif rc.contentid neq "">
 				<cfif (rc.contentBean.getfilename() neq '' or rc.contentid eq '00000000000000000000000000000000001')>
@@ -155,18 +157,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfcase value="Page,Folder,Calendar,Gallery,Link">
 						<cfif not rc.contentBean.getIsNew()>
 							<cfset currentBean=application.contentManager.getActiveContent(rc.contentID,rc.siteid) />
-							<a class="btn" href="##" onclick="return openPreviewDialog('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,currentBean.getfilename())#','#currentBean.getTargetParams()#');"><i class="icon-globe"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewactive")#</a>
+							<a class="btn" href="##" onclick="return openPreviewDialog('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##$.getURLStem(rc.siteid,currentBean.getfilename())#','#currentBean.getTargetParams()#');"><i class="icon-globe"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewactive")#</a>
 						</cfif>
-						<a class="btn" href="##" onclick="return openPreviewDialog('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,"")#?previewid=#rc.contentBean.getcontenthistid()#&contentid=#rc.contentBean.getcontentid()#','#rc.contentBean.getTargetParams()#');"><i class="icon-eye-open"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewversion")#</a>
+						<a class="btn" href="##" onclick="return openPreviewDialog('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##$.getURLStem(rc.siteid,"")#?previewid=#rc.contentBean.getcontenthistid()#&contentid=#rc.contentBean.getcontentid()#','#rc.contentBean.getTargetParams()#');"><i class="icon-eye-open"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewversion")#</a>
 					</cfcase>
 					<cfcase value="File">	
-						<a class="btn" href="##" href="##" onclick="return openPreviewDialog('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,"")#?LinkServID=#rc.contentid#');"><i class="icon-globe"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewactive")#</a>
+						<a class="btn" href="##" href="##" onclick="return openPreviewDialog('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##$.getURLStem(rc.siteid,"")#?LinkServID=#rc.contentid#');"><i class="icon-globe"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewactive")#</a>
 						<a class="btn" href="##" href="##" onclick="return openPreviewDialog('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()#/tasks/render/file/?fileID=#rc.contentBean.getFileID()#');"><i class="icon-eye-open"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewversion")#</a>
 					</cfcase>
 					</cfswitch>
 				</cfif>
 				
 				<a class="btn" href="index.cfm?muraAction=cArch.hist&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#"><i class="icon-book"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.versionhistory")#</a>
+				<a class="btn" href="index.cfm?muraAction=cArch.audit&contentid=#URLEncodedFormat(rc.contentid)#&contenthistid=#rc.contentBean.getContentHistID()#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#"><i class="icon-sitemap"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.audittrail")#</a>
 				<cfif rc.compactDisplay neq 'true' and rc.contentBean.getactive()lt 1 and (rc.perm neq 'none')>
 					<a class="btn" href="index.cfm?muraAction=cArch.update&contenthistid=#URLEncodedFormat(rc.contenthistid)#&action=delete&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&return=#rc.return#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.deleteversionconfirm"))#',this.href)"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.deleteversion")#</a>
 				</cfif>
@@ -179,15 +182,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 			</cfif>
 			</cfcase>
-			<cfcase value="hist">
+			<cfcase value="hist,audit">
 				<a class="btn" href="index.cfm?muraAction=cArch.list&siteid=#URLEncodedFormat(rc.siteid)#&moduleid=00000000000000000000000000000000000"><i class="icon-circle-arrow-left"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.backtositemanager')#</a>
-				<cfif rc.perm neq 'none'>
-					<a class="btn" href="index.cfm?muraAction=cArch.update&action=deletehistall&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearversionhistoryconfirm'))#',this.href)"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearversionhistory')#</a>
+				<cfif rc.originalfuseaction eq 'hist'>
+					<cfif rc.perm neq 'none'>
+						<a class="btn" href="index.cfm?muraAction=cArch.update&action=deletehistall&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearversionhistoryconfirm'))#',this.href)"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearversionhistory')#</a>
+					</cfif>
+				<cfelse>
+					<a class="btn" href="index.cfm?muraAction=cArch.hist&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#"><i class="icon-book"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.versionhistory")#</a>
 				</cfif>
 				<cfif rc.deletable and rc.compactDisplay neq 'true'>
-					<a class="btn" href="index.cfm?muraAction=cArch.update&action=deleteall&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#" 
-					<cfif listFindNoCase(nodeLevelList,rc.contentBean.getType())>onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontentrecursiveconfirm'),rc.contentBean.getMenutitle()))#',this.href)"<cfelse>onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontentconfirm'))#',this.href)"</cfif> ><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontent')#</a>
-				</cfif>
+						<a class="btn" href="index.cfm?muraAction=cArch.update&action=deleteall&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#" 
+						<cfif listFindNoCase(nodeLevelList,rc.contentBean.getType())>onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontentrecursiveconfirm'),rc.contentBean.getMenutitle()))#',this.href)"<cfelse>onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontentconfirm'))#',this.href)"</cfif> ><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontent')#</a>
+					</cfif>
 				<cfif listFind(session.mura.memberships,'Admin;#application.settingsManager.getSite(rc.siteid).getPrivateUserPoolID()#;0') or listFind(session.mura.memberships,'S2')>
 					<a class="btn" href="index.cfm?muraAction=cPerm.main&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&moduleid=#URLEncodedFormat(rc.moduleid)#&startrow=#URLEncodedFormat(rc.startrow)#"><i class="icon-group"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.permissions')#</a>
 				</cfif>

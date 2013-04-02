@@ -96,7 +96,7 @@ to your own modified versions of Mura CMS.
     </cfif>
   </cfoutput> <cfoutput query="rsPluginScripts" group="pluginid"> <cfoutput>
       <cfset tabLabelList=listAppend(tabLabelList,rsPluginScripts.name)/>
-      <cfset tabList=listAppend(tabList,"tab" & application.contentRenderer.createCSSID(rsPluginScripts.name))>
+      <cfset tabList=listAppend(tabList,"tab" & $.createCSSID(rsPluginScripts.name))>
     </cfoutput> </cfoutput> <cfoutput>
     <div class="tabbable tabs-left">
     <ul class="nav nav-tabs tabs initActiveTab">
@@ -1026,7 +1026,7 @@ to your own modified versions of Mura CMS.
   
   <cfoutput query="rsPluginScripts" group="pluginID"> 
     <!---<cfset tabLabelList=tabLabelList & ",'#jsStringFormat(rsPluginScripts.name)#'"/>--->
-    <cfset tabID="tab" & application.contentRenderer.createCSSID(rsPluginScripts.name)>
+    <cfset tabID="tab" & $.createCSSID(rsPluginScripts.name)>
     <div id="#tabID#" class="tab-pane fade"> <cfoutput>
         <cfset rsPluginScript=application.pluginManager.getScripts("onSiteEdit",rc.siteID,rsPluginScripts.moduleID)>
         <cfif rsPluginScript.recordcount>

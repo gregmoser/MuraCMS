@@ -384,7 +384,7 @@ var hasBody=#subType.getHasBody()#;
 	</span>
 
 	<cfif rc.compactDisplay neq "true" and rc.moduleid eq '00000000000000000000000000000000000'>
-		#application.contentRenderer.dspZoom(crumbdata=rc.crumbdata,class="navZoom alt")#
+		#$.dspZoom(crumbdata=rc.crumbdata,class="navZoom alt")#
 	</cfif>
 	
 	</cfoutput>
@@ -501,7 +501,7 @@ var hasBody=#subType.getHasBody()#;
 		<cfoutput query="rsPluginScripts" group="pluginID">
 			<!---<cfset tabLabelList=tabLabelList & ",'#jsStringFormat(rsPluginScripts.name)#'"/>--->
 			<cfset tabLabelList=listAppend(tabLabelList,rsPluginScripts.name)/>
-			<cfset tabID="tab" & application.contentRenderer.createCSSID(rsPluginScripts.name)>
+			<cfset tabID="tab" & $.createCSSID(rsPluginScripts.name)>
 			<cfset tabList=listAppend(tabList,tabID)>
 			<cfset pluginEvent.setValue("tabList",tabLabelList)>
 				<div id="#tabID#" class="tab-pane fade">

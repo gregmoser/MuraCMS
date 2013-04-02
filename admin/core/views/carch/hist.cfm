@@ -69,7 +69,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfinclude template="dsp_secondary_menu.cfm">
 
 	<cfif rc.moduleid eq '00000000000000000000000000000000000'>
-		#application.contentRenderer.dspZoom(crumbdata=crumbdata,class="navZoom alt")#
+		#$.dspZoom(crumbdata=crumbdata,class="navZoom alt")#
 	</cfif>
 </cfif>
 
@@ -121,7 +121,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	</td>
 </cfif>
-<td class="notes"><cfif rc.item.getnotes() neq ''><a rel="tooltip" data-original-title="#application.contentRenderer.setParagraphs(htmleditformat(rc.item.getnotes()))#">View&nbsp;Note</a></cfif></td>
+<td class="notes"><cfif rc.item.getnotes() neq ''><a rel="tooltip" data-original-title="#$.setParagraphs(htmleditformat(rc.item.getnotes()))#">View&nbsp;Note</a></cfif></td>
 <cfif hasChangesets>
 	<td class="changeset">
 		<cfif isDate(rc.item.getchangesetPublishDate())><a href="##" rel="tooltip" title="#HTMLEditFormat(LSDateFormat(rc.item.getchangesetPublishDate(),"short"))#"> <i class="icon-calendar"></i></a></cfif>
@@ -178,7 +178,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<ul><li class="edit"><a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.edit')#" href="index.cfm?muraAction=cArch.edit&contenthistid=#rc.item.getContenthistID()#&contentid=#rc.item.getContentID()#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&return=hist&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#"><i class="icon-pencil"></i></a></li>
 <cfswitch expression="#rc.item.gettype()#">
 <cfcase value="Page,Folder,Calendar,Gallery,Link,File">
-	<cfset previewURL='http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,rc.contentBean.getFilename())#?previewid=#rc.item.getcontenthistid()#'>
+	<cfset previewURL='http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##$.getURLStem(rc.siteid,rc.contentBean.getFilename())#?previewid=#rc.item.getcontenthistid()#'>
 	<cfif rc.compactDisplay eq 'true'>
 		<li class="preview"><a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.preview')#" href="##" onclick="frontEndProxy.post({cmd:'setLocation',location:encodeURIComponent('#JSStringFormat(previewURL)#')});return false;"><i class="icon-globe"></i></a></li>
 	<cfelse>

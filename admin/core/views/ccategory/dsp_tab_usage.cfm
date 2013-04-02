@@ -63,7 +63,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset crumbdata=application.contentManager.getCrumbList(rsUsage.contentid, rc.siteid)/>
 		<cfset verdict=application.permUtility.getnodePerm(crumbdata)/>
         <tr>  
-          <td class="var-width">#application.contentRenderer.dspZoom(crumbdata)#</td>
+          <td class="var-width">#$.dspZoom(crumbdata)#</td>
 			   <td> 
 	    <cfif rsUsage.Display and (rsUsage.Display eq 1 and rsUsage.approved)>#application.rbFactory.getKeyValue(session.rb,'categorymanager.yes')#<cfelseif(rsUsage.Display eq 2 and rsUsage.approved)>#LSDateFormat(rsUsage.displaystart,session.dateKeyFormat)# - #LSDateFormat(rsUsage.displaystop,session.dateKeyFormat)#<cfelse>#application.rbFactory.getKeyValue(session.rb,'categorymanager.no')#</cfif></td>
 		<td>#LSDateFormat(rsUsage.lastupdate,session.dateKeyFormat)#</td>

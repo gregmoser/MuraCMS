@@ -419,7 +419,7 @@ select * from rsSubTypes where subType <> 'Default'
 		<cfoutput query="rsPluginScripts" group="pluginID">
 		<!---<cfset tabLabelList=tabLabelList & ",'#jsStringFormat(rsPluginScripts.name)#'"/>--->
 		<cfset tabLabelList=listAppend(tabLabelList,rsPluginScripts.name)/>
-		<cfset tabID="tab" & application.contentRenderer.createCSSID(rsPluginScripts.name)>
+		<cfset tabID="tab" & $.createCSSID(rsPluginScripts.name)>
 		<cfset tabList=listAppend(tabList,tabID)>
 		<cfset pluginEvent.setValue("tabList",tabLabelList)>
 			<div id="#tabID#" class="tab-pane fade">
