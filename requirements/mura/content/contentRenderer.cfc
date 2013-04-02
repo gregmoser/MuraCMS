@@ -2688,12 +2688,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="iconClassByContentType" output="false">
 	<cfargument name="type">
 	<cfargument name="subtype" default="Default">
-	<cfargument name="siteid" default="#$.event('siteid')#">
+	<cfargument name="siteid" default="">
 
-	<cfset var iconclass=application.configBean.getClassExtensionManager().getCustomIconClass(argumentCollection=arguments)>
-	
-	<cfif len(iconclass)>
-		<cfreturn iconclass>
+	<cfif len(arguments.siteID)>
+		<cfset var iconclass=application.classExtensionManager.getCustomIconClass(siteid=arguments.siteid,type=arguments.type,subtype=arguments.subtype)>
+		
+		<cfif len(iconclass)>
+			<cfreturn iconclass>
+		</cfif>
 	</cfif>
 
 	<cfswitch expression="#arguments.type#">
