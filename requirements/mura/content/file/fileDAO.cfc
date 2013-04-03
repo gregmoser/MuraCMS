@@ -60,9 +60,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset variables.s3=createObject("component","s3").init(
 							listFirst(variables.configBean.getFileStoreAccessInfo(),'^'),
 							listGetAt(variables.configBean.getFileStoreAccessInfo(),2,'^'),
-							"#application.configBean.getFileDir()##application.configBean.getFileDelim()#s3cache#application.configBean.getFileDelim()#")>
+							"#application.configBean.getFileDir()##application.configBean.getFileDelim()#s3cache#application.configBean.getFileDelim()#",
+							variables.configBean.getFileStoreEndPoint())>
 			<cfif listLen(variables.configBean.getFileStoreAccessInfo(),"^") eq 3>
-			<cfset variables.bucket=listLast(variables.configBean.getFileStoreAccessInfo(),"^") />
+				<cfset variables.bucket=listLast(variables.configBean.getFileStoreAccessInfo(),"^") />
 			<cfelse>
 				<cfset variables.bucket="sava" />
 			</cfif>
@@ -148,13 +149,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfcase>
 			<cfcase value="s3">
 				<cfset variables.s3.putFileOnS3(arguments.fileObj,ct,variables.bucket,'#arguments.siteid#/#arguments.fileid#.#arguments.fileExt#') />
-				<cfif arguments.fileExt eq 'jpg' or arguments.fileExt eq 'jpeg' or arguments.fileExt eq 'png' or arguments.fileExt eq 'gif'>
-					<cfif isBinary(fileObjSmall)><cfset variables.s3.putFileOnS3(arguments.fileObjSmall,ct,variables.bucket,'#arguments.siteid#/#arguments.fileid#_small.#arguments.fileExt#') /></cfif>
-					<cfif isBinary(fileObjMedium)><cfset variables.s3.putFileOnS3(arguments.fileObjMedium,ct,variables.bucket,'#arguments.siteid#/#arguments.fileid#_medium.#arguments.fileExt#') /></cfif>
-				<cfelseif arguments.fileExt eq 'flv'>
-					<cfif isBinary(fileObjSmall)><cfset variables.s3.putFileOnS3(arguments.fileObjSmall,'image/jpeg',variables.bucket,'#arguments.siteid#/#arguments.fileid#_small.jpg') /></cfif>
-					<cfif isBinary(fileObjMedium)><cfset variables.s3.putFileOnS3(arguments.fileObjMedium,'image/jpeg',variables.bucket,'#arguments.siteid#/#arguments.fileid#_medium.jpg') /></cfif>
-				</cfif>
+		        <cfset var s3_path = "#arguments.siteid#/cache/file/">
+		        <cfset variables.s3.putFileOnS3(arguments.fileObj,ct,variables.bucket,'#s3_path##arguments.fileid#.#arguments.fileExt#') />
+		        <cfif arguments.fileExt eq 'jpg' or arguments.fileExt eq 'jpeg' or arguments.fileExt eq 'png' or arguments.fileExt eq 'gif'>
+		       	 	<cfif isBinary(fileObjSmall)><cfset variables.s3.putFileOnS3(arguments.fileObjSmall,ct,variables.bucket,'#s3_path##arguments.fileid#_small.#arguments.fileExt#') /></cfif>
+		          	<cfif isBinary(fileObjMedium)><cfset variables.s3.putFileOnS3(arguments.fileObjMedium,ct,variables.bucket,'#s3_path##arguments.fileid#_medium.#arguments.fileExt#') /></cfif>
+		         <cfelseif arguments.fileExt eq 'flv'>
+		          	<cfif isBinary(fileObjSmall)><cfset variables.s3.putFileOnS3(arguments.fileObjSmall,'image/jpeg',variables.bucket,'#s3_path##arguments.fileid#_small.jpg') /></cfif>
+		          	<cfif isBinary(fileObjMedium)><cfset variables.s3.putFileOnS3(arguments.fileObjMedium,'image/jpeg',variables.bucket,'#s3_path##arguments.fileid#_medium.jpg') /></cfif>
+		         </cfif>
 			</cfcase>
 		</cfswitch>
 		

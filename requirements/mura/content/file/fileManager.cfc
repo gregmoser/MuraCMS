@@ -363,11 +363,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfscript>
 	<cftry>
 		<cfif len(variables.configBean.getProxyServer())>
-			<cfhttp getasbinary="yes" result="local.theFile" method="get" url="http://s3.amazonaws.com/#arguments.bucket#/#local.rsFile.siteid#/#arguments.fileid##local.size#.#local.rsFile.fileExt#"
+			<cfhttp getasbinary="yes" result="local.theFile" method="get" url="http://#variables.configBean.getFileStoreEndPoint()#/#arguments.bucket#/#local.rsFile.siteid#/cache/file/#arguments.fileid##local.size#.#local.rsFile.fileExt#"
 			proxyUser="#variables.configBean.getProxyUser()#" proxyPassword="#variables.configBean.getProxyPassword()#"
 			proxyServer="#variables.configBean.getProxyServer()#" proxyPort="#variables.configBean.getProxyPort()#"></cfhttp>
 		<cfelse>
-			<cfhttp getasbinary="yes" result="local.theFile" method="get" url="http://s3.amazonaws.com/#arguments.bucket#/#local.rsFile.siteid#/#arguments.fileid##local.size#.#local.rsFile.fileExt#"></cfhttp>
+			<cfhttp getasbinary="yes" result="local.theFile" method="get" url="http://#variables.configBean.getFileStoreEndPoint()#/#arguments.bucket#/#local.rsFile.siteid#/cache/file/#arguments.fileid##local.size#.#local.rsFile.fileExt#"></cfhttp>
 		</cfif>
 		<cfcatch>
 		</cfcatch>
@@ -652,7 +652,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset arguments.direct=true>
 	</cfif>
 	
-	<cfif arguments.direct and application.configBean.getFileStore() eq "fileDir">
+	<cfif arguments.direct and listFindNoCase("fileDir,s3",application.configBean.getFileStore())>
 
 		<cfif arguments.size eq 'undefined'>
 			<cfif (isNumeric(arguments.width) or isNumeric(arguments.height))>

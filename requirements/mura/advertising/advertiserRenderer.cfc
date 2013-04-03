@@ -184,7 +184,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfswitch expression="#variables.instance.configBean.getFileStore()#">
 	<cfcase value="S3">
-		<cfreturn "http://s3.amazonaws.com/#variables.instance.bucket#/#arguments.creativeBean.getSiteID()#/#arguments.creativeBean.getFileID()#.#arguments.creativeBean.getFileExt()#">
+		<cfreturn "http://#variables.instance.configBean.getFileStoreEndPoint()#/#variables.instance.bucket#/#arguments.creativeBean.getSiteID()#/#arguments.creativeBean.getFileID()#.#arguments.creativeBean.getFileExt()#">
 	</cfcase>
 	<cfcase value="database">
 		<cfreturn "#variables.instance.configBean.getContext()#/tasks/render/file/index.cfm?fileID=#arguments.creativeBean.getFileID()#" />

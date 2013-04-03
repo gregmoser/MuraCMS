@@ -92,6 +92,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset variables.instance.productionPushMode="full"/>
 <cfset variables.instance.fileStore=""/>
 <cfset variables.instance.fileStoreAccessInfo=""/>
+<cfset variables.instance.fileStoreEndPoint="http://s3.amazonaws.com"/>
 <cfset variables.instance.tooltips=structNew()/>
 <cfset variables.instance.sessionHistory=1 />
 <cfset variables.instance.clearSessionHistory=1 />
@@ -709,6 +710,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="getFileStoreAccessInfo" returntype="any" access="public" output="false">
 	<cfreturn variables.instance.fileStoreAccessInfo />
+</cffunction>
+
+<cffunction name="setFileStoreEndPoint" access="public" output="false">
+  	<cfargument name="fileStoreEndPoint" type="String" />
+  	<cfset variables.instance.fileStoreEndPoint = arguments.fileStoreEndPoint />
+  	<cfreturn this>
+</cffunction>
+
+<cffunction name="getFileStoreEndPoint" returntype="any" access="public" output="false">
+  	<cfreturn variables.instance.fileStoreEndPoint />
 </cffunction>
 
 <cffunction name="getSessionHistory" returntype="numeric" access="public" output="false">
