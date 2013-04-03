@@ -47,111 +47,115 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset event=request.event>
 <cfhtmlhead text="#session.dateKey#">
 <cfset userPoolID=application.settingsManager.getSite(rc.siteID).getPublicUserPoolID()>
-<cfset rsSubTypes=application.classExtensionManager.getSubTypesByType(type=1,siteID=userPoolID,activeOnly=true) />
+<cfset rsSubTypes=application.classExtensionManager.getSubTypesByType(type=1,siteid=userPoolID,activeOnly=true) />
 <cfquery name="rsNonDefault" dbtype="query">
 select * from rsSubTypes where subType <> 'Default'
 </cfquery>
 <cfset variables.pluginEvent=createObject("component","mura.event").init(event.getAllValues())/>
 <cfset rsPluginScripts=application.pluginManager.getScripts("onGroupEdit",rc.siteID)>
-<cfoutput>
-<!---
-<cfsavecontent variable="actionButtons">
-<cfoutput>
-<div class="alt form-actions">
-<cfif rc.userid eq ''>
-<input type="button" class="btn" onclick="submitForm(document.forms.form1,'add');" value="#application.rbFactory.getKeyValue(session.rb,'user.add')#" />
-<cfelse>
-<input type="button" class="btn" onclick="submitForm(document.forms.form1,'delete','This');" value="#application.rbFactory.getKeyValue(session.rb,'user.delete')#" /> 
-<input type="button" class="btn" onclick="submitForm(document.forms.form1,'update');" value="#application.rbFactory.getKeyValue(session.rb,'user.update')#" />
+<cfset tabLabelList='#application.rbFactory.getKeyValue(session.rb,'user.basic')#'>
+<cfset tablist="tabBasic">
+<cfif rsSubTypes.recordcount>
+<cfset tabLabelList=listAppend(tabLabelList,application.rbFactory.getKeyValue(session.rb,'user.extendedattributes'))>
+<cfset tabList=listAppend(tabList,"tabExtendedattributes")>
 </cfif>
-</div>
-</cfoutput>
-</cfsavecontent>
---->
+<cfoutput>
+
 <h1>#application.rbFactory.getKeyValue(session.rb,'user.groupform')#</h1>
+
 
 <div id="nav-module-specific" class="btn-group">
   <a class="btn" href="##" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.back'))#" onclick="window.history.back(); return false;"><i class="icon-circle-arrow-left"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.back'))#</a>
 </div>
-<!---
-<cfif listLast(request.action,".") eq "editgroup" and rc.userid neq ''>
-  <div id="nav-module-specific" class="btn-group">
-    <a class="btn" href="javascript:intuserselect('#rc.userid#',1,<cfif listFind(session.mura.memberships,'S2')>1<cfelse>0</cfif>,'#rc.siteid#')">#application.rbFactory.getKeyValue(session.rb,'user.addusertogroup')#</a>
-  </div>
-</cfif>
---->
+
+
 </cfoutput>
 <cfswitch expression="#rc.userBean.getperm()#">
-	  <cfcase value="1">
-  		<!---topid form system groups--->
-  		<cfoutput>
-  		<h2><strong>#application.rbFactory.getKeyValue(session.rb,'user.group')#:</strong> #rc.userBean.getgroupname()#</h2>
-  		</cfoutput>
-		</cfcase>
-		<cfdefaultcase>
-		<!---top form non-system groups--->
+    <cfcase value="1">
+      <!---topid form system groups--->
+      <cfoutput>
+      <h2><strong>#application.rbFactory.getKeyValue(session.rb,'user.group')#:</strong> #rc.userBean.getgroupname()#</h2>
+      </cfoutput>
+    </cfcase>
+    <cfdefaultcase>
+    <!---top form non-system groups--->
     <cfoutput>
       
-      <cfif not structIsEmpty(rc.userBean.getErrors())>
+     <cfif not structIsEmpty(rc.userBean.getErrors())>
        <p class="alert  alert-error">#application.utility.displayErrors(rc.userBean.getErrors())#</p>
       </cfif>
 
-     <form class="fieldset-wrap" novalidate="novalidate" action="index.cfm?muraAction=cPublicUsers.update&userid=#URLEncodedFormat(rc.userid)#" enctype="multipart/form-data" method="post" name="form1" onsubmit="return validate(this);">
-      <cfif rsSubTypes.recordcount>
+     <form novalidate="novalidate" action="index.cfm?muraAction=cPublicUsers.update&userid=#URLEncodedFormat(rc.userid)#" enctype="multipart/form-data" method="post" name="form1" onsubmit="return validate(this);">
+      </cfoutput>
+      <cfif rsSubTypes.recordcount or rsPluginScripts.recordcount>
         <div class="tabbable tabs-left">
         <ul class="nav nav-tabs tabs initActiveTab">
-        <li><a href="##tabBasic" onclick="return false;"><span>#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'user.basic'))#</span></a></li>
-        <li id="tabExtendedattributesLI" class="hide"><a href="##tabExtendedattributes" onclick="return false;"><span>#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'user.extendedattributes'))#</span></a></li>
+        <cfoutput>
+          <li><a href="##tabBasic" onclick="return false;"><span>#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'user.basic'))#</span></a></li>
+         
+          <cfif rsSubTypes.recordcount>
+             <li id="tabExtendedattributesLI" class="hide"><a href="##tabExtendedattributes" onclick="return false;"><span>#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'user.extendedattributes'))#</span></a></li>
+          </cfif>
+        </cfoutput>
+
+        <cfif rsPluginScripts.recordcount>
+           <cfoutput query="rsPluginScripts" group="pluginID">
+                <cfset tabID="tab" & $.createCSSID(rsPluginScripts.name)>
+                <li id="###tabID#LI"><a href="###tabID#" onclick="return false;"><span>#HTMLEditFormat(rsPluginScripts.name)#</span></a></li>
+            </cfoutput>
+        </cfif>
+
         </ul>
         <div class="tab-content">
         <div id="tabBasic" class="tab-pane fade">
       </cfif>
+       <cfoutput>
           <div class="fieldset">
+  
+            <cfif rsNonDefault.recordcount>
+                <div class="control-group">
+                  <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.type')#</label>
+                  <div class="controls">
+                    <select name="subtype"  onchange="userManager.resetExtendedAttributes('#rc.userBean.getUserID()#','1',this.value,'#userPoolID#','#application.configBean.getContext()#','#application.settingsManager.getSite(rc.siteID).getThemeAssetPath()#');">
+                    <option value="Default" <cfif  rc.userBean.getSubType() eq "Default">selected</cfif>> #application.rbFactory.getKeyValue(session.rb,'user.default')#</option>
+                      <cfloop query="rsNonDefault">
+                        <option value="#rsNonDefault.subtype#" <cfif rc.userBean.getSubType() eq rsNonDefault.subtype>selected</cfif>>#rsNonDefault.subtype#</option>
+                      </cfloop>
+                    </select>
+                   </div>
+                </div>
+            </cfif>
+            
+            <div class="control-group">
+              <div class="span6">
+                  <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.groupname')#</label>
+                  <div class="controls"><input type="text" class="span12" name="groupname" value="#HTMLEditFormat(rc.userBean.getgroupname())#"  required="true" message="#application.rbFactory.getKeyValue(session.rb,'user.groupnamerequired')#"></div>
+                </div>
 
-          <cfif rsNonDefault.recordcount>
-          		<div class="control-group">
-                <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.type')#</label>
-                <div class="controls">
-                  <select name="subtype"  onchange="userManager.resetExtendedAttributes('#rc.userBean.getUserID()#','1',this.value,'#userPoolID#','#application.configBean.getContext()#','#application.settingsManager.getSite(rc.siteID).getThemeAssetPath()#');">
-            			<option value="Default" <cfif  rc.userBean.getSubType() eq "Default">selected</cfif>> #application.rbFactory.getKeyValue(session.rb,'user.default')#</option>
-            				<cfloop query="rsNonDefault">
-            					<option value="#rsNonDefault.subtype#" <cfif rc.userBean.getSubType() eq rsNonDefault.subtype>selected</cfif>>#rsNonDefault.subtype#</option>
-            				</cfloop>
-            			</select>
-          	     </div>
+              <div class="span6">
+                  <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.email')#</label>
+                  <div class="controls"><input type="text" class="span12" name="email" value="#HTMLEditFormat(rc.userBean.getemail())#"></div>
               </div>
-          </cfif>
-        		
-          <div class="control-group">
-            <div class="span6">
-                <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.groupname')#</label>
-                <div class="controls"><input type="text" class="span12" name="groupname" value="#HTMLEditFormat(rc.userBean.getgroupname())#"  required="true" message="#application.rbFactory.getKeyValue(session.rb,'user.groupnamerequired')#"></div>
-              </div>
-
-            <div class="span6">
-                <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.email')#</label>
-                <div class="controls"><input type="text" class="span12" name="email" value="#HTMLEditFormat(rc.userBean.getemail())#"></div>
             </div>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.tablist')#</label>
-            <div class="controls">
-              <select name="tablist" multiple="true">
-              <option value=""<cfif not len(rc.userBean.getTablist())> selected</cfif>>All</option>
-              <cfloop list="#application.contentManager.getTabList()#" index="t">
-              <option value="#t#"<cfif listFindNoCase(rc.userBean.getTablist(),t)> selected</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.tabs.#REreplace(t, "[^\\\w]", "", "all")#")#</option>
-              </cfloop>
-              </select>
+            
+            <div class="control-group">
+              <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.tablist')#</label>
+              <div class="controls">
+                <select name="tablist" multiple="true">
+                <option value=""<cfif not len(rc.userBean.getTablist())> selected</cfif>>All</option>
+                <cfloop list="#application.contentManager.getTabList()#" index="t">
+                <option value="#t#"<cfif listFindNoCase(rc.userBean.getTablist(),t)> selected</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.tabs.#REreplace(t, "[^\\\w]", "", "all")#")#</option>
+                </cfloop>
+                </select>
+              </div>
             </div>
           </div>
 
           <span id="extendSetsBasic"></span>
-         </div>
-    
-        
-          <cfif rsSubTypes.recordcount or rsPluginScripts.recordcount>
-            </div>
+
+        </cfoutput>
+        <cfif rsSubTypes.recordcount or rsPluginScripts.recordcount>
+        </div>
 
 
             <cfif rsSubTypes.recordcount>
@@ -159,7 +163,8 @@ select * from rsSubTypes where subType <> 'Default'
                   <span id="extendSetsDefault"></span>
               </div>
             </cfif>
-
+            
+            
             <cfif rsPluginScripts.recordcount>
               <cfoutput query="rsPluginScripts" group="pluginID">
                 <!---<cfset tabLabelList=tabLabelList & ",'#jsStringFormat(rsPluginScripts.name)#'"/>--->
@@ -177,7 +182,9 @@ select * from rsSubTypes where subType <> 'Default'
                   </div>
               </cfoutput>
             </cfif>
-
+         
+            <cfoutput>
+           
             <div class="form-actions">
               <cfif rc.userid eq ''>
               <input type="button" class="btn" onclick="submitForm(document.forms.form1,'add');" value="#application.rbFactory.getKeyValue(session.rb,'user.add')#" />
@@ -188,15 +195,19 @@ select * from rsSubTypes where subType <> 'Default'
               <input type="hidden" name="action" value=""><input type="hidden" name="type" value="1"><input type="hidden" name="contact" value="0">
               <input type="hidden" name="isPublic" value="1">
               <input type="hidden" name="siteid" value="#HTMLEditFormat(rc.siteid)#">
+              <cfif not rsNonDefault.recordcount><input type="hidden" name="subtype" value="Default"/></cfif>
             </div>
-           </div>
-        
+           
+        </div>
+        </div>
+          
             <cfif rsSubTypes.recordcount>
               <cfhtmlhead text='<script type="text/javascript" src="assets/js/user.js"></script>'>
               <script type="text/javascript">
-              userManager.loadExtendedAttributes('#rc.userbean.getUserID()#','1','#rc.userbean.getSubType()#','#userPoolID#','#application.configBean.getContext()#','#application.settingsManager.getSite(rc.siteid).getThemeAssetPath()#');	
-              </script>
-            </cfif>	
+              userManager.loadExtendedAttributes('#rc.userbean.getUserID()#','1','#rc.userbean.getSubType()#','#userPoolID#','#application.configBean.getContext()#','#application.settingsManager.getSite(rc.siteid).getThemeAssetPath()#'); 
+              </script> 
+            </cfif>
+            </cfoutput>
          <cfelse>
           <div class="form-actions">
             <cfif rc.userid eq ''>
@@ -214,13 +225,11 @@ select * from rsSubTypes where subType <> 'Default'
             <cfif not rsNonDefault.recordcount><input type="hidden" name="subtype" value="Default"/></cfif>
           </div>
        </cfif>
-    </cfoutput>
     </form>
   </cfdefaultcase>
 </cfswitch>
 
-
-      <cfif rc.userid neq ''>
+ <cfif rc.userid neq ''>
       <cfoutput>
       <h2>#application.rbFactory.getKeyValue(session.rb,'user.groupmembers')#</h2> 
         <table class="table table-striped table-condensed table-bordered mura-table-grid">
@@ -228,28 +237,28 @@ select * from rsSubTypes where subType <> 'Default'
               <th class="var-width">#application.rbFactory.getKeyValue(session.rb,'user.name')#</th>
               <th>#application.rbFactory.getKeyValue(session.rb,'user.email')#</th>
               <th>#application.rbFactory.getKeyValue(session.rb,'user.update')#</th>
-			  <th>#application.rbFactory.getKeyValue(session.rb,'user.time')#</th>
+        <th>#application.rbFactory.getKeyValue(session.rb,'user.time')#</th>
               <th>#application.rbFactory.getKeyValue(session.rb,'user.authoreditor')#</th>
               <th>&nbsp;</th>
             </tr></cfoutput>
           <cfif rc.rsgrouplist.recordcount>
             <cfoutput query="rc.rsgrouplist" maxrows="#rc.nextN.recordsperPage#" startrow="#rc.startrow#"> 
-			  <tr> 
+        <tr> 
                 <td class="var-width"><a href="index.cfm?muraAction=#iif(rc.rsgrouplist.isPublic,de('cPublicUsers'),de('cPrivateUsers'))#.edituser&userid=#rc.rsgrouplist.UserID#&routeid=#rc.userid#&siteid=#URLEncodedFormat(rc.siteid)#">#HTMLEditFormat(rc.rsgrouplist.lname)#, #HTMLEditFormat(rc.rsgrouplist.fname)# <cfif rc.rsgrouplist.company neq ''> (#HTMLEditFormat(rc.rsgrouplist.company)#)</cfif></a></td>
                 <td><cfif rc.rsgrouplist.email gt ""><a href="mailto:#rc.rsgrouplist.email#">#email#</a><cfelse>&nbsp;</cfif></td>
                 <td>#LSDateFormat(rc.rsgrouplist.lastupdate,session.dateKeyFormat)#</td>
-				<td>#LSTimeFormat(rc.rsgrouplist.lastupdate,"short")#</td>
+        <td>#LSTimeFormat(rc.rsgrouplist.lastupdate,"short")#</td>
               <td>#rc.rsgrouplist.LastUpdateBy#</td>
                 <td class="actions"><ul class="group"><li class="edit"><a href="index.cfm?muraAction=#iif(rc.rsgrouplist.isPublic,de('cPublicUsers'),de('cPrivateUsers'))#.edituser&userid=#rc.rsgrouplist.UserID#&routeid=#rc.userid#&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-pencil"></i></a></li><li class="delete"><a href="index.cfm?muraAction=cPublicUsers.removefromgroup&userid=#rc.rsgrouplist.UserID#&routeid=#rc.userid#&groupid=#rc.userid#&siteid=#URLEncodedFormat(rc.siteid)#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'user.removeconfirm'))#',this.href)"><i class="icon-remove-sign"></i></a></li></ul></td>
               </tr>
             </cfoutput> 
-	
-		<cfelse>
-			<tr> 
+  
+    <cfelse>
+      <tr> 
               <td class="noResults" colspan="6"><cfoutput>#application.rbFactory.getKeyValue(session.rb,'user.nogroupmembers')#</cfoutput></td>
             </tr>
           </cfif>
-		   </table>
+       </table>
       </cfif>
   <cfif rc.nextN.numberofpages gt 1> 
     <cfoutput>
@@ -260,8 +269,7 @@ select * from rsSubTypes where subType <> 'Default'
     <p class="clearfix search-showing">
       #application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.paginationmeta"),args)#
     </p> 
-    <div class="pagination">
-    <ul>
+    <ul class="pagination">
       <cfif rc.nextN.currentpagenumber gt 1>
         <li>
        <a href="index.cfm?muraAction=cPublicUsers.editgroup&startrow=#rc.nextN.previous#&userid=#URLEncodedFormat(rc.userid)#&siteid=#URLEncodedFormat(rc.siteid)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a>
@@ -280,6 +288,5 @@ select * from rsSubTypes where subType <> 'Default'
       </li>
       </cfif>
     </ul>
-    </div>
   </div></cfoutput>
   </cfif>
