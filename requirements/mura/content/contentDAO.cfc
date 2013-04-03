@@ -658,6 +658,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 <cfargument name="siteID" type="string" required="yes" />
 	<cfset var rsdate= "">
 	<cfset var rslist= "">
+	<cfset var ap= "">
 	
 	<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rsdate"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 	select tcontent.lastupdate from tcontent 
@@ -700,6 +701,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		
 		<cfloop query="rslist">
 			<cfset variables.configBean.getClassExtensionManager().deleteExtendedData(rslist.contentHistID)/>
+
+			<cfset ap=getBean('approvalRequest').loadBy(contenthistid=rslist.contenthistid)>
+			<cfif not ap.getIsNew()>
+				<cfset ap.delete()>
+			</cfif>
 		</cfloop>
 		
 		<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
@@ -729,6 +735,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 <cfargument name="siteID" type="string" required="yes" />
 	<cfset var rslist= "">
 	<cfset var rsFiles= "">
+	<cfset var ap= "">
 		
 	<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" name="rslist"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
 	select tcontent.contenthistid from tcontent 
@@ -767,12 +774,16 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
 		and contenthistid in (<cfloop query="rslist"><cfqueryparam cfsqltype="cf_sql_varchar" value="#rslist.contentHistID#" /> <cfif rslist.currentrow lt rslist.recordcount>,</cfif></cfloop>)
 		</cfquery>
+
+		<cfset ap=getBean('approvalRequest').loadBy(contenthistid=rs.contenthistid)>
+		<cfif not ap.getIsNew()>
+			<cfset ap.delete()>
+		</cfif>
 	</cfif>
 	
 	<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
 	Delete from tcontent where siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
-	and contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
-	and approved=0 and changesetID is null
+	and contenthistid in (<cfloop query="rslist"><cfqueryparam cfsqltype="cf_sql_varchar" value="#rslist.contentHistID#" /> <cfif rslist.currentrow lt rslist.recordcount>,</cfif></cfloop>)
 	</cfquery>
 	
 	<cfset deleteOldSourceMaps(argumentCollection=arguments)>
@@ -981,7 +992,8 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 
 <cffunction name="delete" access="public" returntype="void" output="false">
 	<cfargument name="contentBean"  type="any" />
-	<cfset var rsList=""/>
+	<cfset var rsList="">
+	<cfset var ap="">
 	<cfif arguments.contentBean.getContentID() neq '00000000000000000000000000000000001'>
 	
 	<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
@@ -998,6 +1010,10 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	
 	<cfloop query="rslist">
 		<cfset variables.configBean.getClassExtensionManager().deleteExtendedData(rslist.contentHistID)/>
+		<cfset ap=getBean('approvalRequest').loadBy(contenthistid=rs.contenthistid)>
+		<cfif not ap.getIsNew()>
+			<cfset ap.delete()>
+		</cfif>
 	</cfloop>
 	<!--- --->
 	
