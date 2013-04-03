@@ -51,6 +51,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfquery name="rsNonDefault" dbtype="query">
 select * from rsSubTypes where subType <> 'Default'
 </cfquery>
+<cfset variables.pluginEvent=createObject("component","mura.event").init(event.getAllValues())/>
+<cfset rsPluginScripts=application.pluginManager.getScripts("onGroupEdit",rc.siteID)>
 <cfoutput>
 <!---
 <cfsavecontent variable="actionButtons">
@@ -144,25 +146,37 @@ select * from rsSubTypes where subType <> 'Default'
             </div>
           </div>
 
-          <!---
-          <div class="control-group">
-                <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.contactform')#</label>
-                <div class="controls"><ul><cfloop collection="#application.settingsManager.getSites()#" item="site">
-           <cfif application.settingsManager.getSite(site).getPrivateUserPoolID() eq application.settingsManager.getSite(rc.siteid).getPrivateUserPoolID()>
-           <li><input type="checkbox" name="ContactForm" value="#site#" <cfif listfind(rc.userBean.getcontactform(),site)>Checked</cfif>> #application.settingsManager.getSite(site).getSite()#</li>
-           </cfif></cfloop></ul></div>
-              </div>
-          --->
           <span id="extendSetsBasic"></span>
          </div>
     
         
-          <cfif rsSubTypes.recordcount>
-            </div>
-            <div id="tabExtendedattributes" class='tab-pane'>
-                <span id="extendSetsDefault"></span>
+          <cfif rsSubTypes.recordcount or rsPluginScripts.recordcount>
             </div>
 
+
+            <cfif rsSubTypes.recordcount>
+              <div id="tabExtendedattributes" class='tab-pane'>
+                  <span id="extendSetsDefault"></span>
+              </div>
+            </cfif>
+
+            <cfif rsPluginScripts.recordcount>
+              <cfoutput query="rsPluginScripts" group="pluginID">
+                <!---<cfset tabLabelList=tabLabelList & ",'#jsStringFormat(rsPluginScripts.name)#'"/>--->
+                <cfset tabLabelList=listAppend(tabLabelList,rsPluginScripts.name)/>
+                <cfset tabID="tab" & $.createCSSID(rsPluginScripts.name)>
+                <cfset tabList=listAppend(tabList,tabID)>
+                <cfset pluginEvent.setValue("tabList",tabLabelList)>
+                  <div id="#tabID#" class="tab-pane fade">
+                  <cfoutput>
+                  <cfset rsPluginScript=application.pluginManager.getScripts("onGroupEdit",rc.siteID,rsPluginScripts.moduleID)>
+                  <cfif rsPluginScript.recordcount>
+                  #application.pluginManager.renderScripts("onGroupEdit",rc.siteid,pluginEvent,rsPluginScript)#
+                  </cfif>
+                  </cfoutput>
+                  </div>
+              </cfoutput>
+            </cfif>
 
             <div class="form-actions">
               <cfif rc.userid eq ''>
@@ -177,15 +191,12 @@ select * from rsSubTypes where subType <> 'Default'
             </div>
            </div>
         
-            <!---
-            <cfhtmlhead text='<link rel="stylesheet" href="css/tab-view.css" type="text/css" media="screen">'>
-            <cfhtmlhead text='<script type="text/javascript" src="assets/js/tab-view.js"></script>'>
-            --->
-            <cfhtmlhead text='<script type="text/javascript" src="assets/js/user.js"></script>'>
-            <script type="text/javascript">
-            userManager.loadExtendedAttributes('#rc.userbean.getUserID()#','1','#rc.userbean.getSubType()#','#userPoolID#','#application.configBean.getContext()#','#application.settingsManager.getSite(rc.siteid).getThemeAssetPath()#');	
-            //initTabs(Array("#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'user.basic'))#","#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'user.extendedattributes'))#"),0,0,0);
-            </script>	
+            <cfif rsSubTypes.recordcount>
+              <cfhtmlhead text='<script type="text/javascript" src="assets/js/user.js"></script>'>
+              <script type="text/javascript">
+              userManager.loadExtendedAttributes('#rc.userbean.getUserID()#','1','#rc.userbean.getSubType()#','#userPoolID#','#application.configBean.getContext()#','#application.settingsManager.getSite(rc.siteid).getThemeAssetPath()#');	
+              </script>
+            </cfif>	
          <cfelse>
           <div class="form-actions">
             <cfif rc.userid eq ''>

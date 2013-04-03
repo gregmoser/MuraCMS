@@ -427,9 +427,6 @@ select * from rsSubTypes where subType <> 'Default'
 			<cfset rsPluginScript=application.pluginManager.getScripts("onUserEdit",rc.siteID,rsPluginScripts.moduleID)>
 			<cfif rsPluginScript.recordcount>
 			#application.pluginManager.renderScripts("onUserEdit",rc.siteid,pluginEvent,rsPluginScript)#
-			<cfelse>
-			<cfset rsPluginScript=application.pluginManager.getScripts("on#rc.type#Edit",rc.siteID,rsPluginScripts.moduleID)>
-			#application.pluginManager.renderScripts("on#rc.type#Edit",rc.siteid,pluginEvent,rsPluginScript)#
 			</cfif>
 			</cfoutput>
 			</div>
