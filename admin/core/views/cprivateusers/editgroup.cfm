@@ -71,14 +71,14 @@ select * from rsSubTypes where subType <> 'Default'
 
 </cfoutput>
 <cfswitch expression="#rc.userBean.getperm()#">
-	  <cfcase value="1">
-  		<!---topid form system groups--->
-  		<cfoutput>
-  		<h2><strong>#application.rbFactory.getKeyValue(session.rb,'user.group')#:</strong> #rc.userBean.getgroupname()#</h2>
-  		</cfoutput>
-		</cfcase>
-		<cfdefaultcase>
-		<!---top form non-system groups--->
+    <cfcase value="1">
+      <!---topid form system groups--->
+      <cfoutput>
+      <h2><strong>#application.rbFactory.getKeyValue(session.rb,'user.group')#:</strong> #rc.userBean.getgroupname()#</h2>
+      </cfoutput>
+    </cfcase>
+    <cfdefaultcase>
+    <!---top form non-system groups--->
     <cfoutput>
       
      <cfif not structIsEmpty(rc.userBean.getErrors())>
@@ -113,19 +113,19 @@ select * from rsSubTypes where subType <> 'Default'
           <div class="fieldset">
   
             <cfif rsNonDefault.recordcount>
-            		<div class="control-group">
+                <div class="control-group">
                   <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.type')#</label>
                   <div class="controls">
                     <select name="subtype"  onchange="userManager.resetExtendedAttributes('#rc.userBean.getUserID()#','1',this.value,'#userPoolID#','#application.configBean.getContext()#','#application.settingsManager.getSite(rc.siteID).getThemeAssetPath()#');">
-              			<option value="Default" <cfif  rc.userBean.getSubType() eq "Default">selected</cfif>> #application.rbFactory.getKeyValue(session.rb,'user.default')#</option>
-              				<cfloop query="rsNonDefault">
-              					<option value="#rsNonDefault.subtype#" <cfif rc.userBean.getSubType() eq rsNonDefault.subtype>selected</cfif>>#rsNonDefault.subtype#</option>
-              				</cfloop>
-              			</select>
-            	     </div>
+                    <option value="Default" <cfif  rc.userBean.getSubType() eq "Default">selected</cfif>> #application.rbFactory.getKeyValue(session.rb,'user.default')#</option>
+                      <cfloop query="rsNonDefault">
+                        <option value="#rsNonDefault.subtype#" <cfif rc.userBean.getSubType() eq rsNonDefault.subtype>selected</cfif>>#rsNonDefault.subtype#</option>
+                      </cfloop>
+                    </select>
+                   </div>
                 </div>
             </cfif>
-          	
+            
             <div class="control-group">
               <div class="span6">
                   <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'user.groupname')#</label>
@@ -204,8 +204,8 @@ select * from rsSubTypes where subType <> 'Default'
             <cfif rsSubTypes.recordcount>
               <cfhtmlhead text='<script type="text/javascript" src="assets/js/user.js"></script>'>
               <script type="text/javascript">
-              userManager.loadExtendedAttributes('#rc.userbean.getUserID()#','1','#rc.userbean.getSubType()#','#userPoolID#','#application.configBean.getContext()#','#application.settingsManager.getSite(rc.siteid).getThemeAssetPath()#');	
-              </script>	
+              userManager.loadExtendedAttributes('#rc.userbean.getUserID()#','1','#rc.userbean.getSubType()#','#userPoolID#','#application.configBean.getContext()#','#application.settingsManager.getSite(rc.siteid).getThemeAssetPath()#'); 
+              </script> 
             </cfif>
             </cfoutput>
          <cfelse>
@@ -236,23 +236,23 @@ select * from rsSubTypes where subType <> 'Default'
               <th class="var-width">#application.rbFactory.getKeyValue(session.rb,'user.name')#</th>
               <th>#application.rbFactory.getKeyValue(session.rb,'user.email')#</th>
               <th>#application.rbFactory.getKeyValue(session.rb,'user.update')#</th>
-			  <th>#application.rbFactory.getKeyValue(session.rb,'user.time')#</th>
+        <th>#application.rbFactory.getKeyValue(session.rb,'user.time')#</th>
               <th>#application.rbFactory.getKeyValue(session.rb,'user.authoreditor')#</th>
               <th>&nbsp;</th>
             </tr>
         </cfoutput>
         <cfif rc.rsgrouplist.recordcount>
           <cfoutput query="rc.rsgrouplist" maxrows="#rc.nextN.recordsperPage#" startrow="#rc.startrow#"> 
-  			     <tr> 
+             <tr> 
                   <td class="var-width"><a href="index.cfm?muraAction=#iif(rc.rsgrouplist.isPublic,de('cPublicUsers'),de('cPrivateUsers'))#.edituser&userid=#rc.rsgrouplist.UserID#&routeid=#rc.userid#&siteid=#URLEncodedFormat(rc.siteid)#">#rc.rsgrouplist.lname#, #rc.rsgrouplist.fname# <cfif rc.rsgrouplist.company neq ''> (#rc.rsgrouplist.company#)</cfif></a></td>
                   <td><cfif rc.rsgrouplist.email gt ""><a href="mailto:#rc.rsgrouplist.email#">#rc.rsgrouplist.email#</a><cfelse>&nbsp;</cfif></td>
                   <td>#LSDateFormat(rc.rsgrouplist.lastupdate,session.dateKeyFormat)#</td>
-  				        <td>#LSTimeFormat(rc.rsgrouplist.lastupdate,"short")#</td>
+                  <td>#LSTimeFormat(rc.rsgrouplist.lastupdate,"short")#</td>
                 <td>#rc.rsgrouplist.LastUpdateBy#</td>
                   <td class="actions"><ul class="group"><li class="edit"><a href="index.cfm?muraAction=#iif(rc.rsgrouplist.isPublic,de('cPublicUsers'),de('cPrivateUsers'))#.edituser&userid=#rc.rsgrouplist.UserID#&routeid=#rc.userid#&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-pencil"></i></a></li><li class="delete"><a href="index.cfm?muraAction=cPrivateUsers.removefromgroup&userid=#rc.rsgrouplist.UserID#&routeid=#rc.userid#&groupid=#rc.userid#&siteid=#URLEncodedFormat(rc.siteid)#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'user.removeconfirm'))#',this.href)"><i class="icon-remove-sign"></i></a></li></ul></td>
               </tr>
           </cfoutput> 
-  		<cfelse>
+      <cfelse>
               <tr> 
                 <td class="noResults" colspan="6"><cfoutput>#application.rbFactory.getKeyValue(session.rb,'user.nogroupmembers')#</cfoutput></td>
               </tr>
@@ -261,7 +261,7 @@ select * from rsSubTypes where subType <> 'Default'
 </cfif>
 
 <cfif rc.nextN.numberofpages gt 1> 
-		<cfoutput>
+    <cfoutput>
       <cfset args=arrayNew(1)>
         <cfset args[1]="#rc.nextn.startrow#-#rc.nextn.through#">
         <cfset args[2]=rc.nextn.totalrecords>
@@ -271,24 +271,24 @@ select * from rsSubTypes where subType <> 'Default'
         </p> 
         <div class="pagination">
         <ul>
-    			<cfif rc.nextN.currentpagenumber gt 1>
+          <cfif rc.nextN.currentpagenumber gt 1>
             <li>
-    			 <a href="index.cfm?muraAction=cPrivateUsers.editgroup&startrow=#rc.nextN.previous#&userid=#URLEncodedFormat(rc.userid)#&siteid=#URLEncodedFormat(rc.siteid)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a>
+           <a href="index.cfm?muraAction=cPrivateUsers.editgroup&startrow=#rc.nextN.previous#&userid=#URLEncodedFormat(rc.userid)#&siteid=#URLEncodedFormat(rc.siteid)#">&laquo;&nbsp;#application.rbFactory.getKeyValue(session.rb,'user.prev')#</a>
            </li> 
-    			</cfif>
-    			<cfloop from="#rc.nextn.firstPage#"  to="#rc.nextN.lastPage#" index="i">
+          </cfif>
+          <cfloop from="#rc.nextn.firstPage#"  to="#rc.nextN.lastPage#" index="i">
             <cfif rc.nextN.currentpagenumber eq i><li class="active"><a href="##">#i#</a></li> 
           <cfelse> 
             <li>
             <a href="index.cfm?muraAction=cPrivateUsers.editgroup&startrow=#evaluate('(#i#*#rc.nextN.recordsperpage#)-#rc.nextN.recordsperpage#+1')#&userid=#URLEncodedFormat(rc.userid)#&siteid=#URLEncodedFormat(rc.siteid)#">#i#</a> 
             </li>
           </cfif></cfloop>
-               	<cfif rc.nextN.currentpagenumber lt rc.nextN.NumberOfPages>
+                <cfif rc.nextN.currentpagenumber lt rc.nextN.NumberOfPages>
           <li>
-    			<a href="index.cfm?muraAction=cPrivateUsers.editgroup&startrow=#rc.nextN.next#&userid=#URLEncodedFormat(rc.userid)#&siteid=#URLEncodedFormat(rc.siteid)#">#application.rbFactory.getKeyValue(session.rb,'user.next')#&nbsp;&raquo;</a> 
+          <a href="index.cfm?muraAction=cPrivateUsers.editgroup&startrow=#rc.nextN.next#&userid=#URLEncodedFormat(rc.userid)#&siteid=#URLEncodedFormat(rc.siteid)#">#application.rbFactory.getKeyValue(session.rb,'user.next')#&nbsp;&raquo;</a> 
           </li>
-    			</cfif>
-    		</ul>
+          </cfif>
+        </ul>
         </div>
       </div>
     </cfoutput>
