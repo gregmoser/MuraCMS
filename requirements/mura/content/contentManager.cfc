@@ -2193,11 +2193,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfset var data = structNew() />
 		<cfset var cb = getBean("content").loadby(contentid=arguments.contentid,siteid=arguments.siteid) /> 
-		<cfset var verdict=getBean("permUtility").getPerm(contentid=arguments.contentid,siteid=arguments.siteid)>
 		<cfset var newDraft = "" />
 		<cfset var history = getDraftHist(arguments.contentid,arguments.siteid) />
 		<cfset var pending = "">
 
+		<cfset data.verdict=getBean("permUtility").getPerm(contentid=arguments.contentid,siteid=arguments.siteid)>
 		<cfset data.pendingchangesets=variables.changesetManager.getPendingByContentID(arguments.contentID,arguments.siteID) />
 		<cfset data.hasdraft=false>
 		<cfset data.hasdraftpending=false>
@@ -2213,7 +2213,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					select contenthistid, lastupdate, approvalStatus from data.pendingchangesets
 				</cfquery>
 
-				<cfif listFindNoCase('Author,Editor',verdict)>
+				<cfif listFindNoCase('Author,Editor',data.verdict)>
 					<cfquery name="newDraft" dbtype="query">
 						select * from newDraft order by lastupdate desc
 					</cfquery>
@@ -2239,7 +2239,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						select * from data.yourapprovals
 						where approvalGroupID in (<cfqueryparam list='true' cfsqltype='cf_sql_varchar' value='#session.mura.membershipids#'>) order by lastupdate asc
 					</cfquery>
-				<cfelseif not listFindNoCase('Author,Editor',verdict)>
+				<cfelseif not listFindNoCase('Author,Editor',data.verdict)>
 					<cfset data.pendingchangesets=queryNew("empty")>
 				</cfif>
 		
