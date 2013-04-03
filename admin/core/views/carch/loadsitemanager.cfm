@@ -101,6 +101,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	<cfset icon=icon & " " & rc.rsTop.subtype>
 </cfif>
+
 <cfset session.flatViewArgs["#rc.siteID#"].tab=0>
 <cfset variables.pluginEvent=createObject("component","mura.event").init(event.getAllValues())/>	
 </cfsilent>

@@ -53,8 +53,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="configBean">
 	
 	<cfset variables.configBean=arguments.configBean />
-
+	
 	<cfset buildIconClassLookup()>
+
 	<cfreturn this />
 </cffunction>
 
@@ -72,7 +73,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="buildIconClassLookup" output="false">	
-	<cfset var rs=getDefinitionsQuery()>
+	<cfset var rs="">
+	
+	<cfquery name="rs" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+		select siteID,type,subtype,iconclass from tclassextend
+	</cfquery>
+
 	<cfloop query="rs">
 		<cfset setIconClass(type=rs.type,subtype=rs.subtype,siteid=rs.siteid,iconclass=rs.iconclass)>
 	</cfloop>
@@ -94,6 +100,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			}
 		</cfscript>
 	
+</cffunction>
+
+<cffunction name="getIconClassLookUp" output="false">
+	<cfreturn variables.iconlookup>
 </cffunction>
 
 <cffunction name="buildDefinitionsQuery" output="false">
