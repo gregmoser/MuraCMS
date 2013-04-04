@@ -57,7 +57,7 @@ tcontent.responseDisplayFields,tcontent.responseMessage,tcontent.responseSendTo,
 tcontent.searchExclude,tcontent.SiteID,tcontent.sortBy,tcontent.sortDirection,tcontent.Summary,tcontent.Target,
 tcontent.TargetParams,tcontent.Template,tcontent.Title,tcontent.Type,tcontent.subType,tcontent.Path,tcontent.tags,
 tcontent.doCache,tcontent.created,tcontent.urltitle,tcontent.htmltitle,tcontent.mobileExclude,tcontent.changesetID,
-tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTemplate,tcontent.majorVersion,tcontent.minorVersion,tcontent.expires,tcontent.displayInterval,tcontent.sourceID
+tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTemplate,tcontent.majorVersion,tcontent.minorVersion,tcontent.expires,tcontent.displayInterval
 </cfoutput></cfsavecontent>
 
 <cffunction name="init" access="public" returntype="any" output="false">

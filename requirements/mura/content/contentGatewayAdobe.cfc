@@ -1003,7 +1003,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		tfiles.fileSize,tfiles.FileExt,tfiles.ContentType,tfiles.ContentSubType, tcontent.siteID, tcontent.featureStart,tcontent.featureStop,tcontent.template,tcontent.childTemplate,
 		tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,
 		tcontentstats.rating,tcontentstats.totalVotes, tcontentstats.comments,
-		tfiles.filename as AssocFilename,tcontent.displayInterval, tcontent.sourceID, tcontent.fileid
+		tfiles.filename as AssocFilename,tcontent.displayInterval, tcontent.fileid
 	
 		FROM tcontent LEFT JOIN tcontent tcontent2 #tableModifier# ON tcontent.contentid=tcontent2.parentid
 		LEFT JOIN tfiles #tableModifier# On tcontent.FileID=tfiles.FileID and tcontent.siteID=tfiles.siteID
