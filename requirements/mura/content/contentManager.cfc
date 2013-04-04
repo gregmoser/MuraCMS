@@ -1068,6 +1068,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 						OR listFindNoCase('Link,File',newBean.getType()) and newBean.getMuraURLReset() eq "true">
 										
+					<cfif variables.configBean.getLoadContentBy() eq 'urltitle'>
+						<cfset getBean('contentUtility').setUniqueURLTitle(newBean) />
+					</cfif>
+
 					<cfset getBean('contentUtility').setUniqueFilename(newBean) />
 												
 					<cfif not newBean.getIsNew() and newBean.getoldfilename() neq newBean.getfilename() and len(newBean.getoldfilename())>
@@ -1086,12 +1090,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				
 
 				<cfif newBean.getapproved() or newBean.getIsNew()>
-				<!--- BEGIN CONTENT TYPE: FILE, LINK 
-					<cfif listFindNoCase("Link,File",newBean.getType())>
-						<cfset getBean('contentUtility').setUniqueURLTitle(newBean) />
-					</cfif>
-				 END CONTENT TYPE: FILE, LINK --->
-							
 					<!--- BEGIN CONTENT TYPE: COMPONENT, FORM --->	
 					<cfif listFindNoCase("Component,Form",newBean.getType())>
 						<!---
