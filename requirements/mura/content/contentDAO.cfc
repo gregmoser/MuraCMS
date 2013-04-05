@@ -1011,7 +1011,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	
 	<cfloop query="rslist">
 		<cfset variables.configBean.getClassExtensionManager().deleteExtendedData(rslist.contentHistID)/>
-		<cfset ap=getBean('approvalRequest').loadBy(contenthistid=rs.contenthistid)>
+		<cfset ap=getBean('approvalRequest').loadBy(contenthistid=rslist.contenthistid)>
 		<cfif not ap.getIsNew()>
 			<cfset ap.delete()>
 		</cfif>
