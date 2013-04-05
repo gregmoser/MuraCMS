@@ -158,6 +158,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 	</cfif>
 
+	<cfset arguments.event.getValidator("standardWrongFilename").validate(arguments.event)>
+
 	<cfset arguments.event.getValidator("standard404").validate(arguments.event)>
 	
 	<cfif arguments.event.getValue('contentBean').getForceSSL()>
@@ -222,6 +224,21 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset renderer.showEditableObjects=false>
 	</cfif>
 	
+</cffunction>
+
+<cffunction name="standardWrongFilenameHandler" output="false" returnType="any">
+	<cfargument name="event" required="true">
+	<cfset var currentFilename=arguments.event.getValue('currentFilename')>
+	<cfset var currentFilenameAdjusted=arguments.event.getValue('currentFilenameAdjusted')>
+
+	<cfif len(currentFilename) and currentFilename neq currentFilenameAdjusted>
+		<cfset arguments.event.setValue('currentFilename',arguments.event.getValue('contentBean').getFilename() & right(currentFilename,len(currentFilename)-len(currentFilenameAdjusted)))>
+	<cfelse>
+		<cfset arguments.event.setValue('currentFilename',arguments.event.getValue('contentBean').getFilename())>
+	</cfif>
+
+	<cflocation url="#arguments.event.getValue('contentRenderer').getCurrentURL()#" addtoken="false" statuscode="301">
+
 </cffunction>
 
 <cffunction name="standardLinkTranslationHandler" output="false" returnType="any">
@@ -509,6 +526,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="event" required="true">
 	<cfif request.muraMobileRequest and not len(arguments.event.getValue('altTheme'))>
 		<cfset arguments.event.getHandler("standardMobile").handle(arguments.event)>
+	</cfif>
+</cffunction>
+
+<cffunction name="standardWrongFilenameValidator" output="false" returnType="any">
+	<cfargument name="event" required="true">
+	<cfset var requestedfilename=arguments.event.getValue('currentFilenameAdjusted')>
+	<cfset var contentFilename=arguments.event.getValue('contentBean').getFilename()>
+
+	<cfif contentFilename neq '404' and len(requestedfilename) and requestedfilename neq contentFilename>
+		<cfset arguments.event.getHandler("standardWrongFilename").handle(arguments.event)>
 	</cfif>
 </cffunction>
 
