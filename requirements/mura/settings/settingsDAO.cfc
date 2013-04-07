@@ -247,6 +247,26 @@ googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPP
 	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
 	delete from tchangesets where siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
 	</cfquery>
+
+	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	delete from tapprovalactions where siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
+	</cfquery>
+
+	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	delete from tapprovalassignments where siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
+	</cfquery>
+
+	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	delete from tapprovalchains where siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
+	</cfquery>
+
+	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	delete from tapprovalmemberships where siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
+	</cfquery>
+
+	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	delete from tapprovalrequests where siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
+	</cfquery>
 	
 	</cftransaction>
 	
