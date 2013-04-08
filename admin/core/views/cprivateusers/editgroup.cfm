@@ -85,7 +85,7 @@ select * from rsSubTypes where subType <> 'Default'
        <p class="alert  alert-error">#application.utility.displayErrors(rc.userBean.getErrors())#</p>
       </cfif>
 
-     <form novalidate="novalidate" action="index.cfm?muraAction=cPrivateUsers.update&userid=#URLEncodedFormat(rc.userid)#" enctype="multipart/form-data" method="post" name="form1" onsubmit="return validate(this);">
+     <form novalidate="novalidate"<cfif not (rsSubTypes.recordcount or rsPluginScripts.recordcount)> class="fieldset-wrap"</cfif> action="index.cfm?muraAction=cPrivateUsers.update&userid=#URLEncodedFormat(rc.userid)#" enctype="multipart/form-data" method="post" name="form1" onsubmit="return validate(this);">
       </cfoutput>
       <cfif rsSubTypes.recordcount or rsPluginScripts.recordcount>
         <div class="tabbable tabs-left">
