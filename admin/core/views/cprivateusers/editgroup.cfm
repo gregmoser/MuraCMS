@@ -209,6 +209,7 @@ select * from rsSubTypes where subType <> 'Default'
             </cfif>
             </cfoutput>
          <cfelse>
+          <cfoutput>
           <div class="form-actions">
             <cfif rc.userid eq ''>
             <input type="button" class="btn" onclick="submitForm(document.forms.form1,'add');" value="#application.rbFactory.getKeyValue(session.rb,'user.add')#" />
@@ -224,6 +225,7 @@ select * from rsSubTypes where subType <> 'Default'
             <input type="hidden" name="returnurl" value="#HTMLEditFormat(rc.returnurl)#">
             <cfif not rsNonDefault.recordcount><input type="hidden" name="subtype" value="Default"/></cfif>
           </div>
+          </cfoutput>
        </cfif>
     </form>
   </cfdefaultcase>

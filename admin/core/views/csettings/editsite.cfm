@@ -561,6 +561,23 @@ to your own modified versions of Mura CMS.
       </div>
       </div>
       
+       <div class="control-group">
+        <label class="control-label">Content Approval Script</label>
+        <div class="controls">
+            <p class="help-block">Available Dynamic Content: ##returnURL## ##contentName## ##parentName## ##contentType##</p>
+            <textarea rows="6" class="span12" name="contentApprovalScript">#HTMLEditFormat(rc.siteBean.getContentApprovalScript())#</textarea>
+          </div>
+      </div>
+
+
+       <div class="control-group">
+        <label class="control-label">Content Rejection Script</label>
+        <div class="controls">
+            <p class="help-block">Available Dynamic Content: ##returnURL## ##contentName## ##parentName## ##contentType##</p>
+            <textarea rows="6" class="span12" name="contentRejectionScript">#HTMLEditFormat(rc.siteBean.getContentRejectionScript())#</textarea>
+          </div>
+      </div>
+
         <div class="control-group">
         <label class="control-label">User Login Info Request Script</label>
         <div class="controls">
@@ -582,6 +599,7 @@ to your own modified versions of Mura CMS.
             <textarea rows="6" class="span12" name="accountActivationScript">#HTMLEditFormat(rc.siteBean.getAccountActivationScript())#</textarea>
           </div>
       </div>
+      <!---
         <div class="control-group">
         <label class="control-label">Public Submission Approval Script</label>
         <div class="controls">
@@ -589,6 +607,7 @@ to your own modified versions of Mura CMS.
             <textarea rows="6" class="span12" name="publicSubmissionApprovalScript">#HTMLEditFormat(rc.siteBean.getPublicSubmissionApprovalScript())#</textarea>
           </div>
       </div>
+      --->
         <div class="control-group">
         <label class="control-label">Event Reminder Script</label>
         <div class="controls">

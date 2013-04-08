@@ -87,8 +87,13 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 							.getContentHistID()
 						 );
 					save();
+
 				}
 	    	}
+		}
+
+		if(getValue('status') eq 'Approved'){
+		    sendActionMessage(content,'Approval');
 		}
 
     	return this;
@@ -107,7 +112,10 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 	    	save();
 	    	var content=getBean('content').loadBy(contenthistid=getValue('contenthistid'),siteid=getValue('siteid'));
 	    	getBean('contentManager').purgeContentCache(contentBean=content);
+
+	    	sendActionMessage(content,'Rejection');
  		}
+
     	return this;
     }
 
@@ -138,5 +146,47 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
     	}
     	return super.save();
     }
+
+    function sendActionMessage(contentBean,actionType){
+    	
+		var $=getBean('$').init(arguments.contentBean.getSiteID());
+		var script=$.siteConfig('Content#Arguments.actionType#Script');
+		var subject="";
+
+		if(script neq '' and listFindNoCase('Approval,Rejection',arguments.actionType) ){
+
+			if(arguments.actionType eq 'Approval'){
+				subject="Your #$.siteConfig('site')# Content Submission has been Approved";
+			} else {
+				subject="Your #$.siteConfig('site')# Content Submission has been Rejected";
+			}
+
+			$.event('approvalRequest',arguments.approvalRequest);
+			$.event('contentBean',arguments.contentBean);
+			$.event('requester',arguments.approvalRequest.getUser());
+			$.event('approver',$.getCurrentUser());
+
+			var finder=refind('##.+?##',script,1,"true");
+
+			while (finder.len[1]) {
+				try{
+					script=replace(theString,mid(script, finder.pos[1], finder.len[1]),'#trim(evaluate(mid(script, finder.pos[1], finder.len[1])))#');
+				} catch(any e){
+					script=replace(theString,mid(script, finder.pos[1], finder.len[1]),'');
+				}
+				finder=refind('##.+?##',script,1,"true");
+			}
+			
+			getBean('mailer').sendText($.setDynamicContent(script),
+				$.event('requester').getEmail(),
+				$.siteConfig('tMailServerUsernameEmail'),
+				subject,
+				$.event('siteid'),
+				$.event('approver').getEmail());
+
+		}
+
+	}
+
 
 }

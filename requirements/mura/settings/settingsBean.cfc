@@ -115,6 +115,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="javaLocale" type="string" default="" required="true" /> 
 <cfproperty name="orderno" type="numeric" default="0" required="true" />
 <cfproperty name="enforceChangesets" type="numeric" default="0" required="true" />
+<cfproperty name="contentApprovalScript" type="string" default="" required="true" />
+<cfproperty name="contentRejectionScript" type="string" default="" required="true" />
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	
@@ -200,6 +202,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.baseID=createUUID()/>
 	<cfset variables.instance.orderno=0/>
 	<cfset variables.instance.enforceChangesets=0/>
+	<cfset variables.instance.contentApprovalScript=""/>
+	<cfset variables.instance.contentRejectionScript=""/>
 	
 	<cfreturn this />
 </cffunction>

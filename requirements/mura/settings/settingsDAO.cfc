@@ -53,7 +53,7 @@ publicUserPoolID,PrivateUserPoolID,AdvertiserUserPoolID,displayPoolID,orderno,fe
 largeImageHeight, largeImageWidth, smallImageHeight, smallImageWidth, mediumImageHeight, mediumImageWidth,
 sendLoginScript, mailingListConfirmScript,publicSubmissionApprovalScript,reminderScript,ExtranetPublicRegNotify,
 loginURL,editProfileURL,CommentApprovalDefault,deploy,accountActivationScript,
-googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPPort, mailserverTLS, mailserverSSL, theme, tagline,hasChangesets,baseID,enforceChangesets</cfoutput></cfsavecontent>
+googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPPort, mailserverTLS, mailserverSSL, theme, tagline,hasChangesets,baseID,enforceChangesets,contentApprovalScript,contentRejectionScript</cfoutput></cfsavecontent>
 
 <cffunction name="init" access="public" returntype="any" output="false">
 <cfargument name="configBean" type="any" required="yes"/>
@@ -345,7 +345,9 @@ googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPP
 	 	 tagline=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getTagline()#" />,
 	 	 hasChangesets=#arguments.bean.getHasChangesets()#,
 	 	 baseID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getBaseID()#" />,
-	 	 EnforceChangesets=#arguments.bean.getEnforceChangesets()#
+	 	 EnforceChangesets=#arguments.bean.getEnforceChangesets()#,
+	 	 contentApprovalScript=<cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.bean.getContentApprovalScript() neq '',de('no'),de('yes'))#" value="#arguments.bean.getContentApprovalScript()#" />,
+	 	 contentRejectionScript=<cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.bean.getContentRejectionScript() neq '',de('no'),de('yes'))#" value="#arguments.bean.getContentRejectionScript()#" />
 		 
 		where siteid='#arguments.bean.getsiteid()#'
    </cfquery>
@@ -441,8 +443,10 @@ googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPP
 	 	 <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getTagline()#" />,
 	 	 #arguments.bean.getHasChangesets()#,
 	 	 <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getBaseID()#" />,
-	 	 #arguments.bean.getEnforceChangesets()#
-		   )
+	 	 #arguments.bean.getEnforceChangesets()#,
+	 	 <cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.bean.getContentApprovalScript() neq '',de('no'),de('yes'))#" value="#arguments.bean.getContentApprovalScript()#" />,
+	 	 <cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.bean.getContentRejectionScript() neq '',de('no'),de('yes'))#" value="#arguments.bean.getContentRejectionScript()#" />
+		)
    </cfquery>
   
  

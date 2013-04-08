@@ -9,4 +9,8 @@
 
 	dbUtility.setTable("tclassextend")
 	.addColumn(column="iconclass",dataType="varchar",length="50");
+
+	dbUtility.setTable("tsettings")
+	.addColumn(column="contentApprovalScript",dataType="longtext")
+	.addColumn(column="contentRejectionScript",dataType="longtext");
 </cfscript>
