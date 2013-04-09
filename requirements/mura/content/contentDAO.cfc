@@ -775,7 +775,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		and contenthistid in (<cfloop query="rslist"><cfqueryparam cfsqltype="cf_sql_varchar" value="#rslist.contentHistID#" /> <cfif rslist.currentrow lt rslist.recordcount>,</cfif></cfloop>)
 		</cfquery>
 
-		<cfset ap=getBean('approvalRequest').loadBy(contenthistid=rs.contenthistid)>
+		<cfset ap=getBean('approvalRequest').loadBy(contenthistid=rslist.contenthistid)>
 		<cfif not ap.getIsNew()>
 			<cfset ap.delete()>
 		</cfif>
