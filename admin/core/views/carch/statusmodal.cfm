@@ -80,7 +80,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	--->
 </cfif>
 
-<strong>Created By:</strong>  <cfif not user.getIsNew()>#HTMLEditFormat(user.getFullName())# <cfelse> N/A </cfif></br>
+<strong>Created By:</strong>  <cfif not user.getIsNew()>#HTMLEditFormat(user.getFullName())# <cfelse> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.na")# </cfif></br>
 <strong>Created:</strong> #LSDateFormat(parseDateTime(content.getLastUpdate()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(content.getLastUpdate()),"short")#</br>
 
 <strong>Status:</strong>
