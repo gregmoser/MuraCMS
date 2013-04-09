@@ -52,7 +52,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset isExtended=false>
 <cfset nodeLevelList="Page,Folder,Calendar,Gallery,Link,File"/>
 <cfset hasChangesets=application.settingsManager.getSite(rc.siteID).getHasChangesets()>
-<cfset requiresApproval=rc.contentBean.requiresApproval()>
+<cfif rc.contentBean.getIsNew()>
+	<cfset requiresApproval=$.getBean('content').loadBy(contentid=rc.parentID).requiresApproval()>
+<cfelse>
+	<cfset requiresApproval=rc.contentBean.requiresApproval()>
+</cfif>
+
 <cfset rc.perm=application.permUtility.getnodePerm(rc.crumbdata)>
 <cfif rc.parentID eq "" and not rc.contentBean.getIsNew()>
 	<cfset rc.parentID=rc.contentBean.getParentID()>	
