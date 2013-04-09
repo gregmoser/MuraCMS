@@ -9,14 +9,14 @@
 	<cfelse>
 		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.pendingmessage")#: 
 	</cfif>
-	<strong><a href="##" onclick="return viewApprovalInfo('#JSStringFormat(rc.contentBean.getContentHistID())#','#JSStringFormat(rc.contentBean.getSiteID())#');">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewdetails")#</a></strong>
+	<strong><a href="##" onclick="return viewStatusInfo('#JSStringFormat(rc.contentBean.getContentHistID())#','#JSStringFormat(rc.contentBean.getSiteID())#');">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewdetails")#</a></strong>
 </p>
 </cfif>
 <script>
-function viewApprovalInfo(contenthistid,siteid){
+function viewStatusInfo(contenthistid,siteid){
 	
 	var url = 'index.cfm';
-	var pars = 'muraAction=cArch.approvalmodal&compactDisplay=true&siteid=' + siteid  + '&contenthistid=' + contenthistid +'&cacheid=' + Math.random();
+	var pars = 'muraAction=cArch.statusmodal&compactDisplay=true&siteid=' + siteid  + '&contenthistid=' + contenthistid +'&cacheid=' + Math.random();
 	var d = jQuery('##approvalModalContainer');
 	d.html('<div class="load-inline"></div>');
 	$.get(url + "?" + pars, 
