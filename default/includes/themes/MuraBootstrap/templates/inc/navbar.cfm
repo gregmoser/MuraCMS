@@ -1,5 +1,5 @@
 <cfoutput>
-<header class="#$.getMBRowClass()#">
+<header class="row-fluid">
 	<nav class="navbar navbar-inverse span12">
 		<div class="navbar-inner">
 			<div class="#$.getMBContainerClass()#">
@@ -40,8 +40,8 @@
 							liHasKidsCustomString='',
 							liHasKidsNestedClass='',
 							liNestedClass='',
-							aaHasKidsClass='dropdown-toggle',
-							aaHasKidsCustomString='',
+							aHasKidsClass='dropdown-toggle',
+							aHasKidsCustomString='',
 							liCurrentClass='active',
 							aCurrentClass=''
 						)#
