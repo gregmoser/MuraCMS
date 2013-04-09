@@ -245,7 +245,7 @@
 		<cfset blockFactor=100>
 	</cfif>
 	
-	<cfquery name="rs" datasource="#variables.configBean.getDatasource()#" blockfactor="#blockFactor#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	<cfif dbType eq "oracle" and getMaxItems()>select * from (</cfif>
 	select <cfif dbtype eq "mssql" and getMaxItems()>top #getMaxItems()#</cfif> 	
 	tclassextend.type,tclassextend.subtype,tclassextend.siteID, #dataTable#.baseID as ID<cfif hasExtendedSort>, extendedSort</cfif>

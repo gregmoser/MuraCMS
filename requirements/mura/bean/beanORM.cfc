@@ -87,7 +87,7 @@ component extends="mura.bean.bean" {
 					return evaluate(variables.synthedFunctions[arguments.MissingMethodName].exp);
 
 				} catch(any err){
-					if(request.muraORMtransaction){
+					if(request.muratransaction){
 						transactionRollback();
 					}				
 					writeDump(var=variables.synthedFunctions[arguments.MissingMethodName]);
@@ -527,7 +527,7 @@ component extends="mura.bean.bean" {
 			pluginManager.announceEvent('on#variables.beanClass#Save',event);
 		
 		} else {
-			request.muraORMtransaction=false;
+			request.muratransaction=false;
 		}
 
 		return this;
@@ -535,14 +535,14 @@ component extends="mura.bean.bean" {
 
 	/*
 	function save(){
-		if(request.muraORMtransaction){
+		if(request.muratransaction){
 			_save();
 		} else {
-			request.muraORMtransaction=true;
+			request.muratransaction=true;
 			transaction {
 				try{
 					_save();
-					if(request.muraORMtransaction){
+					if(request.muratransaction){
 						transactionCommit();
 					} else {
 						transactionRollback();
@@ -551,19 +551,19 @@ component extends="mura.bean.bean" {
 					transactionRollback();
 				}
 			}
-			request.muraORMtransaction=false;
+			request.muratransaction=false;
 		}
 	}
 		
 	function delete(){
-		if(request.muraORMtransaction){
+		if(request.muratransaction){
 			_delete();
 		} else {
-			request.muraORMtransaction=true;
+			request.muratransaction=true;
 			transaction {
 				try{
 					_delete();
-					if(request.muraORMtransaction){
+					if(request.muratransaction){
 						transactionCommit();
 					} else {
 						transactionRollback();
@@ -573,7 +573,7 @@ component extends="mura.bean.bean" {
 					transactionRollback();
 				}
 			}
-			request.muraORMtransaction=false;
+			request.muratransaction=false;
 		}
 	}*/
 	

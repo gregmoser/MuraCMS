@@ -657,7 +657,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rslist= "" />
 		
 		<cfif len(arguments.newPath)>
-			<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+			<cfquery>
 				update tcontent 
 				set path=replace(ltrim(rtrim(cast(path AS char(1000)))),<cfqueryparam cfsqltype="cf_sql_longvarchar" value="#arguments.currentPath#">,<cfqueryparam cfsqltype="cf_sql_longvarchar" value="#arguments.newPath#">) 
 				where path like	<cfqueryparam cfsqltype="cf_sql_longvarchar" value="#arguments.currentPath#%">
@@ -903,6 +903,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>	
 				
 				<cftransaction>
+				<cfset request.muratransaction=true>
 				<!--- BEGIN CONTENT TYPE: ALL EXTENDABLE CONTENT TYPES --->
 				<cfif  listFindNoCase(this.ExtendableList,newBean.getType())>
 					<cfif isDefined('arguments.data.extendSetID') and len(arguments.data.extendSetID)>	
@@ -992,7 +993,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<!--- Begin Changeset --->
 				<cfif not newBean.getIsNew() and isBoolean(newBean.getValue("removePreviousChangeset")) and newBean.getValue("removePreviousChangeset") and isValid("uuid",previousChangesetID)>
 					<!--- If removePreviousChangeset cancel any approval requests previous version --->
-					<cfquery name="local.rsApprovalsDelete" datasource="#variables.configBean.getDatasource()#" password="#variables.configBean.getDbPassword()#" username="#variables.configBean.getDbUsername()#">
+					<cfquery name="local.rsApprovalsDelete">
 						select tcontent.contenthistid, tapprovalrequests.requestID
 						from tcontent 
 						left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -1001,7 +1002,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						and tcontent.siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getSiteID()#">
 					</cfquery>
 
-					<cfquery datasource="#variables.configBean.getDatasource()#" password="#variables.configBean.getDbPassword()#" username="#variables.configBean.getDbUsername()#">
+					<cfquery>
 						update tcontent set changesetID=null 
 						where contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getContentID()#">
 						and changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#previousChangesetID#">
@@ -1010,7 +1011,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 				<cfif len(newBean.getChangesetID())>
 					<!--- If the version has been assigned to a change set cancel any approval request for previous version--->
-					<cfquery name="local.rsApprovalsDelete" datasource="#variables.configBean.getDatasource()#" password="#variables.configBean.getDbPassword()#" username="#variables.configBean.getDbUsername()#">
+					<cfquery name="local.rsApprovalsDelete">
 						select tcontent.contenthistid, tapprovalrequests.requestID
 						from tcontent 
 						left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -1019,7 +1020,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						and tcontent.siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getSiteID()#">
 					</cfquery>
 
-					<cfquery datasource="#variables.configBean.getDatasource()#" password="#variables.configBean.getDbPassword()#" username="#variables.configBean.getDbUsername()#">
+					<cfquery>
 						update tcontent set changesetID=null 
 						where contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getContentID()#">
 						and changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#newBean.getChangesetID()#">
@@ -1211,7 +1212,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				or (newBean.getapproved() and not newBean.getIsNew() and newBean.getParentID() neq currentBean.getParentID() )>		 
 						
 					<cfif not isdefined('arguments.data.topOrBottom') or isdefined('arguments.data.topOrBottom') and arguments.data.topOrBottom eq 'Top' >
-						<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+						<cfquery>
 						 update tcontent set orderno=OrderNo+1 where parentid='#newBean.getparentid()#' 
 						 and siteid='#newBean.getsiteid()#' 
 						 and type in ('Page','Folder','Link','File','Component','Calendar','Form') and active=1
@@ -1222,7 +1223,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfelseif (isdefined('arguments.data.topOrBottom') and arguments.data.topOrBottom eq 'bottom')>
 						
 						<cfif not newBean.getIsNew() and newBean.getParentID() eq currentBean.getParentID()>
-							<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+							<cfquery>
 							 update tcontent set orderno=OrderNo-1 where parentid='#newBean.getparentid()#' 
 							 and siteid='#newBean.getsiteid()#' 
 							 and type in ('Page','Folder','Link','File','Component','Calendar','Form') and active=1
@@ -1230,7 +1231,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								</cfquery>
 						</cfif>
 				
-						<cfquery name="rsOrder" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+						<cfquery name="rsOrder">
 						 select max(orderno) as theBottom from tcontent where parentid='#newBean.getparentid()#' 
 						 and siteid='#newBean.getsiteid()#' 
 						 and type in ('Page','Folder','Link','File','Component','Calendar','Form') and active=1
@@ -1244,7 +1245,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 							 
 					<cfif not newBean.getIsNew() and newBean.getParentID() neq currentBean.getParentID() >
-						<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+						<cfquery>
 						update tcontent set parentid='#newBean.getparentid()#' where contentid='#newBean.getcontentid()#' 
 						and active=0 and siteid='#newBean.getsiteid()#'
 						</cfquery>
@@ -1268,6 +1269,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</cfloop>
 					</cfif>
 					--->
+				<cfset request.muratransaction=false>
 				</cftransaction>
 					
 				<cfif doPurgeOutputCache>
@@ -1380,7 +1382,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfabort>
 		</cfif>
 		
-		<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+		<cfquery name="rs">
 		select contentID from tcontent where parentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.data.contentID#">
 		and active = 1
 		</cfquery>
@@ -1825,7 +1827,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfabort>
 		</cfif>
 		
-		<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 		select contentID from tcontent where parentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.data.contentID#">
 		and active = 1
 		</cfquery>
@@ -2001,7 +2003,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset fileItem.fileid=variables.fileManager.create(theFileStruct.fileObj, '', arguments.data.siteid, tempFile.ClientFile, tempFile.ContentType, tempFile.ContentSubType, tempFile.FileSize, "00000000000000000000000000000000000", tempFile.ServerFileExt, theFileStruct.fileObjSmall, theFileStruct.fileObjMedium, variables.utility.getUUID(), theFileStruct.fileObjSource) />
 		<cfset fileItem.filename=tempFile.serverfile/>
 		<cfset fileBean=add(structCopy(fileItem)) />
-		<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+		<cfquery>
 			 update tfiles set contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getContentID()#"> 
 			 where fileid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getFileID()#">
 		</cfquery>
@@ -2014,7 +2016,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfcatch>
 		</cftry>
 	</cfif>
-	
+
 	<cfloop condition="structKeyExists(arguments.data,'newFile#f#')">
 		<cfif len(form["NewFile#f#"])>
 		<cffile action="upload" result="tempFile" filefield="NewFile#f#" nameconflict="makeunique" destination="#variables.configBean.getTempDir()#">
@@ -2023,7 +2025,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset fileItem.fileid=variables.fileManager.create(theFileStruct.fileObj, '', arguments.data.siteid, tempFile.ClientFile, tempFile.ContentType, tempFile.ContentSubType, tempFile.FileSize, "00000000000000000000000000000000000", tempFile.ServerFileExt, theFileStruct.fileObjSmall, theFileStruct.fileObjMedium, variables.utility.getUUID(), theFileStruct.fileObjSource) />
 		<cfset fileItem.filename=tempFile.serverfile/>
 		<cfset fileBean=add(structCopy(fileItem)) />
-		<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+		<cfquery>
 			 update tfiles set contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getContentID()#"> 
 			 where fileid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getFileID()#">
 		</cfquery>
@@ -2047,7 +2049,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset fileItem.fileid=variables.fileManager.create(theFileStruct.fileObj, '', arguments.data.siteid, tempFile.ClientFile, tempFile.ContentType, tempFile.ContentSubType, tempFile.FileSize, "00000000000000000000000000000000000", tempFile.ServerFileExt, theFileStruct.fileObjSmall, theFileStruct.fileObjMedium, variables.utility.getUUID(), theFileStruct.fileObjSource) />
 				<cfset fileItem.filename=tempFile.serverfile/>
 				<cfset fileBean=add(structCopy(fileItem)) />
-				<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+				<cfquery>
 					 update tfiles set contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getContentID()#"> 
 					 where fileid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getFileID()#">
 				</cfquery>
@@ -2090,7 +2092,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset fileItem.fileid=variables.fileManager.create(theFileStruct.fileObj, '', arguments.data.siteid, tempFile.ClientFile, tempFile.ContentType, tempFile.ContentSubType, tempFile.FileSize, "00000000000000000000000000000000000", tempFile.ServerFileExt, theFileStruct.fileObjSmall, theFileStruct.fileObjMedium, variables.utility.getUUID(), theFileStruct.fileObjSource) />
 				<cfset fileItem.filename=tempFile.serverfile/>
 				<cfset fileBean=add(structCopy(fileItem)) />
-				<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+				<cfquery>
 					 update tfiles set contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getContentID()#"> 
 					 where fileid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getFileID()#">
 				</cfquery>
@@ -2338,7 +2340,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset arguments.contentBean=read(contentID=arguments.contentID,siteID=arguments.siteID)>
 	</cfif>
 	
-	<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	select contentID,siteID
 	from tcontent where 
 	siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getSiteID()#">
