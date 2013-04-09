@@ -535,14 +535,14 @@ component extends="mura.bean.bean" {
 
 	/*
 	function save(){
-		if(request.muratransaction){
+		if(request.muraORMtransaction){
 			_save();
 		} else {
-			request.muratransaction=true;
+			request.muraORMtransaction=true;
 			transaction {
 				try{
 					_save();
-					if(request.muratransaction){
+					if(request.muraORMtransaction){
 						transactionCommit();
 					} else {
 						transactionRollback();
@@ -551,19 +551,19 @@ component extends="mura.bean.bean" {
 					transactionRollback();
 				}
 			}
-			request.muratransaction=false;
+			request.muraORMtransaction=false;
 		}
 	}
 		
 	function delete(){
-		if(request.muratransaction){
+		if(request.muraORMtransaction){
 			_delete();
 		} else {
-			request.muratransaction=true;
+			request.muraORMtransaction=true;
 			transaction {
 				try{
 					_delete();
-					if(request.muratransaction){
+					if(request.muraORMtransaction){
 						transactionCommit();
 					} else {
 						transactionRollback();
@@ -573,7 +573,7 @@ component extends="mura.bean.bean" {
 					transactionRollback();
 				}
 			}
-			request.muratransaction=false;
+			request.muraORMtransaction=false;
 		}
 	}*/
 	
