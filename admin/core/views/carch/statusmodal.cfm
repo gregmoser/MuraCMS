@@ -92,7 +92,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
 	<cfelse>
 		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
-	</cfif>
+	</cfif></br>
 
 <cfif requiresApproval>
 	<cfif approvalRequest.getStatus() eq 'Pending'>
