@@ -198,7 +198,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
 								</a>
 							<cfelse>
-								<a href="##" onclick="return false;">
+								<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
 									<i class="icon-ok"></i> 
 									#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
 									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
@@ -211,13 +211,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#$.content('approvalstatus')#")#
 							</a>
 						<cfelseif $.content('approved') lt 1>
-							<a href="##" onclick="return false;">
+							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
 								<i class="icon-ok"></i> 
 								#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
 								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
 							</a>
 						<cfelse>
-							<a href="##" onclick="return false;">
+							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
 								<i class="icon-ok"></i> 
 								#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
 								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#

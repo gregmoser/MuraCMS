@@ -1201,4 +1201,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn source>
 
 </cffunction>
+
+<cffunction name="getUser" output="false">
+	<cfreturn getBean('user').loadBy(userID=getValue('LastUpdateByID'))>
+</cffunction>
 </cfcomponent>
