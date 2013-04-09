@@ -775,11 +775,12 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		and contenthistid in (<cfloop query="rslist"><cfqueryparam cfsqltype="cf_sql_varchar" value="#rslist.contentHistID#" /> <cfif rslist.currentrow lt rslist.recordcount>,</cfif></cfloop>)
 		</cfquery>
 
+		<!---
 		<cfset ap=getBean('approvalRequest').loadBy(contenthistid=rslist.contenthistid)>
 		<cfif not ap.getIsNew()>
 			<cfset ap.delete()>
 		</cfif>
-
+		--->
 		<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
 		delete from tcontent where 
 		siteid='#arguments.siteid#'

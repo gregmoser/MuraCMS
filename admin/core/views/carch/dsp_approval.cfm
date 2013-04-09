@@ -52,10 +52,13 @@ function applyApprovalAction(requestid,action,comment,siteid){
 				$.post('index.cfm',
 					pars,
 					function(data) {
-						//$('html').html(data);
-						var href = window.location.href.replace('#rc.contentBean.getContentHistID()#',data.contenthistid);
-						//alert(href)
-						window.location = href;
+						if(typeof(data) == 'string'){
+							$('html').html(data);
+						} else {
+							var href = window.location.href.replace('#rc.contentBean.getContentHistID()#',data.contenthistid);
+							//alert(href)
+							window.location = href;
+						}
 					}
 				);
 			}

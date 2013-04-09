@@ -161,25 +161,25 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 				subject="Your #$.siteConfig('site')# Content Submission has been Rejected";
 			}
 
-			$.event('approvalRequest',arguments.approvalRequest);
+			$.event('approvalRequest',this);
 			$.event('contentBean',arguments.contentBean);
-			$.event('requester',arguments.approvalRequest.getUser());
+			$.event('requester',getBean('user').loadBy(userID=getValue('userid')));
 			$.event('approver',$.getCurrentUser());
 
 			var finder=refind('##.+?##',script,1,"true");
 
 			while (finder.len[1]) {
 				try{
-					script=replace(theString,mid(script, finder.pos[1], finder.len[1]),'#trim(evaluate(mid(script, finder.pos[1], finder.len[1])))#');
+					script=replace(script,mid(script, finder.pos[1], finder.len[1]),'#trim(evaluate(mid(script, finder.pos[1], finder.len[1])))#');
 				} catch(any e){
-					script=replace(theString,mid(script, finder.pos[1], finder.len[1]),'');
+					script=replace(script,mid(script, finder.pos[1], finder.len[1]),'');
 				}
 				finder=refind('##.+?##',script,1,"true");
 			}
 			
 			getBean('mailer').sendText($.setDynamicContent(script),
 				$.event('requester').getEmail(),
-				$.siteConfig('tMailServerUsernameEmail'),
+				$.siteConfig('MailServerUsernameEmail'),
 				subject,
 				$.event('siteid'),
 				$.event('approver').getEmail());
