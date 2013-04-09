@@ -808,8 +808,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif newBean.getcontentID() eq ''>
 				<cfset newBean.setcontentID(createUUID()) />
 			</cfif>
+
+			<cfif newBean.getIsNew()>
+				<cfset var parent=getBean('content').loadBy(contentID=arguments.data.parentID,siteid=arguments.data.siteid)>
+				<cfset var requiresApproval=parent.requiresApproval()>
+				<cfset var chainid= parent.getChainID()>
+			<cfelse>
+				<cfset var requiresApproval=newBean.requiresApproval()>
+				<cfset var chainid= newBean.getChainID()>
+			</cfif>
 			
-			<cfif not newBean.getApprovalChainOverride() and (newBean.getApproved() or len(newBean.getChangesetID())) and newBean.requiresApproval()>		
+			<cfif not newBean.getApprovalChainOverride() and (newBean.getApproved() or len(newBean.getChangesetID())) and requiresApproval>		
+				<cfset newBean.setChainID(chainID)>
 				<cfset var approvalRequest=newBean.getApprovalRequest()>
 			</cfif>
 			
@@ -858,7 +868,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 				<cfif isDefined('approvalRequest')>
 					<!---If it does not have a currently pending aproval request create one --->
-					<cfif approvalRequest.getIsNew() or (not newBean.getIsNew() and currentBean.getActive())>			
+					<cfif approvalRequest.getIsNew() or (not newBean.getIsNew() and currentBean.getActive() and currentBean.getApproved())>			
 						<cfif isDefined("session.mura") and session.mura.isLoggedIn>
 							<cfset approvalRequest.setUserID(session.mura.userID)>
 						</cfif>
