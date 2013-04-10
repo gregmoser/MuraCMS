@@ -95,7 +95,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif></br>
 
 <cfif requiresApproval>
-	<cfif approvalRequest.getStatus() eq 'Pending'>
+	<cfif not content.getActive() and approvalRequest.getStatus() eq 'Pending'>
 		<strong>Waiting For Group:</strong> #HTMLEditFormat(group.getGroupName())#</br>
 	</cfif>
 
@@ -111,7 +111,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfloop>
 	</cfif>
 
-	<cfif approvalRequest.getStatus() eq 'Pending' and (listfindNoCase(session.mura.membershipids,approvalRequest.getGroupID()) or $.currentUser().isAdminUser() or $.currentUser().isSuperUser())>
+	<cfif not content.getActive() and approvalRequest.getStatus() eq 'Pending' and (listfindNoCase(session.mura.membershipids,approvalRequest.getGroupID()) or $.currentUser().isAdminUser() or $.currentUser().isSuperUser())>
 		<strong>Action</strong></br>
 		<input class="approval-action" id="approval-approve" name="approval-action"type="radio" value="Approve" checked/> Approve</br>
 		<input class="approval-action" id="approval-reject" name="approval-action" type="radio" value="Reject" checked/> Reject</br>
@@ -124,7 +124,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 
 <cfif rc.mode eq 'frontend'>
-	<cfif requiresApproval>
+	<cfif not content.getActive() and requiresApproval>
 		<script>
 		function applyApprovalAction(requestid,action,comment,siteid){
 			
