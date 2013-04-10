@@ -142,6 +142,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.imageWidth="AUTO" />
 	<cfset variables.instance.displayList="Date,Title,Image,Summary,Credits,Tags" />
 	<cfset variables.instance.liveOnly=1 />
+	<cfset variables.instance.activeOnly=1 />
 	<cfset variables.instance.beanClass="content" />
 	<cfset variables.instance.table="tcontent">
 	<cfset variables.instance.viewalllink="" />

@@ -429,7 +429,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	where
 	tcontent.siteid = <cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.feedBean.getsiteid()#">
-	#renderActiveClause("tcontent",arguments.feedBean.getSiteID(),arguments.feedBean.getLiveOnly())#
+	#renderActiveClause("tcontent",arguments.feedBean.getSiteID(),arguments.feedBean.getLiveOnly(),arguments.feedBean.getActiveOnly())#
 	<cfif arguments.feedBean.getShowNavOnly() and not listFindNoCase('Form,Component',arguments.feedBean.getType())>
 	AND tcontent.isNav = 1
 	</cfif>
@@ -725,8 +725,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfargument name="table" default="tcontent">
 <cfargument name="siteID">
 <cfargument name="liveOnly" default="1">
+<cfargument name="activeOnly" default="1">
 	<cfset var previewData="">
 	<cfoutput>
+		<cfif arguments.activeOnly>
 			<cfif request.muraChangesetPreview>
 				<cfset previewData=getCurrentUser().getValue("ChangesetPreviewData")>
 				<cfif len(previewData.contentIDList)>
@@ -750,6 +752,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				and #arguments.table#.active = 1
 				<cfif arguments.liveOnly>and #arguments.table#.Approved = 1</cfif>
 			</cfif>	
+		</cfif>
 	</cfoutput>
 </cffunction>
 </cfcomponent>
