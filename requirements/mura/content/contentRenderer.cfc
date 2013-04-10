@@ -1922,6 +1922,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset itemId="nav" & setCamelback(rsSection.menutitle)>
 			
 			<cfset linkArgs=structNew()>
+			<cfset linkArgs.aHasKidsClass=arguments.aHasKidsClass>
+			<cfset linkArgs.aHasKidsCustomString=arguments.aHasKidsCustomString>
+			<cfset linkArgs.aNotCurrentClass=arguments.aNotCurrentClass>
+			<cfset linkArgs.aCurrentClass=arguments.aCurrentClass>
+			<cfset linkArgs.aCurrentCustomString=arguments.aCurrentCustomString>
 			<cfset linkArgs.type=rsSection.type>
 			<cfset linkArgs.filename=rsSection.filename>
 			<cfset linkArgs.title=rsSection.menutitle>
