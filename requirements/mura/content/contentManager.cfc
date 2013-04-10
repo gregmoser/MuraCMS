@@ -218,6 +218,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfreturn rs />
 	</cffunction>
+
+	<cffunction name="getApprovalList" access="public" returntype="query" output="false">
+		<cfargument name="siteid" type="string"/>
+		<cfset var rs ="" />
+		
+		<cfset rs=variables.contentGateway.getApprovalList(arguments.siteid) />
+		
+		<cfreturn rs />
+	</cffunction>
 	
 	<cffunction name="read" output="false" returntype="Any" hint="Takes (contentid | contenthistid | filename | remoteid | title), siteid, use404">
 	<cfargument name="contentID" required="true" default="">

@@ -934,8 +934,26 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tapprovalrequests.status
 	HAVING module.SiteID='#arguments.siteid#' AND draft.SiteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 	
-	union
+	</cfquery>
 	
+	<cfquery name="rsDraftList" dbtype="query" maxrows="#arguments.limit#">
+	select * from rsDraftList 
+	order by #arguments.sortBy# #arguments.sortDirection#
+	</cfquery>
+	<cfreturn rsDraftList />
+</cffunction>
+
+<cffunction name="getApprovals" output="false">
+	<cfargument name="siteID"  type="string" />
+	<cfargument name="userID"  type="string"  required="true" default="#session.mura.userID#"/>
+	<cfargument name="limit" type="numeric" required="true" default="100000000">
+	<cfargument name="startDate" type="string" required="true" default="">
+	<cfargument name="stopDate" type="string" required="true" default="">
+	<cfargument name="sortBy" type="string" required="true" default="lastUpdate">
+	<cfargument name="sortDirection" type="string" required="true" default="desc">
+	<cfset var rs="">
+
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	SELECT DISTINCT module.Title AS module, draft.ModuleID, draft.SiteID, draft.ParentID, draft.Type, draft.subtype, draft.MenuTitle, draft.Filename, draft.ContentID,
 	 module.SiteID, draft.SiteID, draft.SiteID, draft.targetparams,draft.lastUpdate,
 	 draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
@@ -967,12 +985,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	tapprovalrequests.status
 	</cfquery>
-	
-	<cfquery name="rsDraftList" dbtype="query" maxrows="#arguments.limit#">
-	select * from rsDraftList 
+
+	<cfquery name="rs" dbtype="query" maxrows="#arguments.limit#">
+	select * from rs
 	order by #arguments.sortBy# #arguments.sortDirection#
 	</cfquery>
-	<cfreturn rsDraftList />
+
 </cffunction>
 
 <cffunction name="getNest" returntype="query" access="public" output="false">
