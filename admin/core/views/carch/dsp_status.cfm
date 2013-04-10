@@ -1,16 +1,16 @@
 
 <cfoutput>
 <cfif requiresApproval and listFindNoCase('Pending,Rejected',rc.contentBean.getApprovalStatus())  >
-<p class="alert alert-error">
-	<cfif rc.contentBean.getApprovalStatus() eq 'Rejected'>
-		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.rejectedmessage")#: 
-	<cfelseif rc.contentBean.getApprovalStatus() eq 'Cancelled'>
-		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.cancelledmessage")#: 
-	<cfelse>
-		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.pendingmessage")#: 
-	</cfif>
-	<strong><a href="##" onclick="return viewStatusInfo('#JSStringFormat(rc.contentBean.getContentHistID())#','#JSStringFormat(rc.contentBean.getSiteID())#');">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewdetails")#</a></strong>
-</p>
+	<p class="alert alert-error">
+		<cfif rc.contentBean.getApprovalStatus() eq 'Rejected'>
+			#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.rejectedmessage")#: 
+		<cfelseif rc.contentBean.getApprovalStatus() eq 'Cancelled'>
+			#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.cancelledmessage")#: 
+		<cfelse>
+			#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.pendingmessage")#: 
+		</cfif>
+		<strong><a href="##" onclick="return viewStatusInfo('#JSStringFormat(rc.contentBean.getContentHistID())#','#JSStringFormat(rc.contentBean.getSiteID())#');">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.viewdetails")#</a></strong>
+	</p>
 </cfif>
 <script>
 function viewStatusInfo(contenthistid,siteid){
@@ -66,7 +66,7 @@ function applyApprovalAction(requestid,action,comment,siteid){
 	}
 }
 </script>
-<div style="display:none" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#rc.contentBean.getApprovalStatus()#"))#" id="approvalModalContainer">
+<div style="display:none" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"layout.status"))#" id="approvalModalContainer">
 
 </div>
 </cfoutput>

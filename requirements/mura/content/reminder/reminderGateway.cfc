@@ -56,7 +56,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfargument name="theTime" default="#now()#" required="yes">
 <cfset var rs=""/>
 
-<cfquery name="rs" datasource="#variables.instance.configBean.getReadOnlyDatasource()#"  username="#variables.instance.configBean.getReadOnlyDbUsername()#" password="#variables.instance.configBean.getReadOnlyDbPassword()#">
+<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 select tsettings.site,tsettings.contact,tsettings.mailserverIP,tsettings.mailserverUsername,
 tsettings.domain ,tsettings.contactName,
 tsettings.contactAddress,tsettings.contactCity,tsettings.contactState,tsettings.contactZip,

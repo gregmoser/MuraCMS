@@ -106,28 +106,28 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset var rsScripts2="">
 <cfset var siteIDadjusted="">
 <cfset var handlerData="">
-<cfquery name="variables.rsPlugins" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='variables.rsplugins')#">
 select * from tplugins
 <cfif arguments.safeMode>
 	where 0=1
 </cfif>
 </cfquery>
 
-<cfquery name="variables.rsPluginSiteAsignments" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='variables.rsPluginSiteAsignments')#">
 select moduleID, siteid from tcontent where type='Plugin'
 <cfif arguments.safeMode>
 	and 0=1
 </cfif>
 </cfquery>
 
-<cfquery name="variables.rsSettings" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='variables.rsSettings')#">
 select * from tpluginsettings
 <cfif arguments.safeMode>
 	where 0=1
 </cfif>
 </cfquery>
 
-<cfquery name="rsScripts1" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsScripts1')#">
 select tplugins.name, tplugins.package, tplugins.directory, tpluginscripts.moduleID, tplugins.pluginID, tpluginscripts.runat, tpluginscripts.scriptfile, 
 tcontent.siteID, tpluginscripts.docache, tplugins.loadPriority from tpluginscripts
 inner join tplugins on (tpluginscripts.moduleID=tplugins.moduleID)
@@ -139,7 +139,7 @@ and tplugins.deployed=1
 </cfif>
 </cfquery>
 
-<cfquery name="rsScripts2" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsScripts2')#">
 select tplugins.name, tplugins.package, tplugins.directory, tpluginscripts.moduleID, tplugins.pluginID, tpluginscripts.runat, tpluginscripts.scriptfile, '' siteID, tpluginscripts.docache,tplugins.loadPriority from tpluginscripts
 inner join tplugins on (tpluginscripts.moduleID=tplugins.moduleID)
 where tpluginscripts.runat in ('onGlobalLogin','onGlobalRequestStart','onApplicationLoad','onGlobalError','onGlobalSessionStart','onGlobalSessionEnd')
@@ -181,7 +181,7 @@ select * from rsScripts order by loadPriority
 	</cfif>
 </cfloop>
 
-<cfquery name="variables.rsDisplayObjects" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='variables.rsDisplayObjects')#">
 select tplugindisplayobjects.objectID, tplugindisplayobjects.moduleID, tplugindisplayobjects.name, 
 tplugindisplayobjects.displayObjectfile, tplugins.pluginID, tplugins.package, tplugins.directory, tcontent.siteID, tplugins.name title, tplugins.package, tplugins.directory,
 tplugindisplayobjects.location, tplugindisplayobjects.displaymethod, tplugindisplayobjects.docache,tplugindisplayobjects.configuratorInit, tplugindisplayobjects.configuratorJS
@@ -207,7 +207,7 @@ inner join tcontent on (tplugins.moduleID=tcontent.moduleID)
 <cffunction name="getAllPlugins" returntype="query" access="public" output="false">
 <cfargument name="orderby" default="name" required="true">
 <cfset var rsAllPlugins="">
-<cfquery name="rsAllPlugins" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAllPlugins')#">
 select * from tplugins order by #arguments.orderby#
 </cfquery>
 <cfreturn rsAllPlugins/>
@@ -275,7 +275,7 @@ select * from tplugins order by #arguments.orderby#
 				<cfreturn "">
 			</cfif>
 			
-			<cfquery name="rsPlugin" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+			<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPlugin')#">
 			select pluginID,moduleID from tplugins order by pluginID desc
 			</cfquery>
 			<cfset modID=rsPlugin.moduleID>
@@ -295,7 +295,7 @@ select * from tplugins order by #arguments.orderby#
 		</cfif>
 		
 		<cfif isNew>
-			<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+			<cfquery>
 			insert into tplugins (moduleID,name,provider,providerURL,version,deployed,
 			category,created,loadPriority,directory) values (
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#modID#">,
@@ -315,7 +315,7 @@ select * from tplugins order by #arguments.orderby#
 			)
 			</cfquery>
 		<cfelse>
-			<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+			<cfquery>
 			update tplugins set deployed=2 where moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#modID#">
 			</cfquery>
 		</cfif>
@@ -324,7 +324,7 @@ select * from tplugins order by #arguments.orderby#
 		
 		<!--- Set the directory to the newly installed pluginID--->
 		<cfif isNew and not len(arguments.pluginDir)>
-			<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+			<cfquery>
 			update tplugins set
 			directory=<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsPlugin.pluginID#">
 			where moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsPlugin.moduleID#">			
@@ -437,7 +437,7 @@ select * from tplugins order by #arguments.orderby#
 	<cfset var pluginXML=getPluginXML(modID)>
 
 	
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery>
 	update tplugins set
 	provider=<cfqueryparam cfsqltype="cf_sql_varchar" value="#pluginXML.plugin.provider.xmlText#">,
 	providerURL=<cfqueryparam cfsqltype="cf_sql_varchar" value="#pluginXML.plugin.providerURL.xmlText#">,
@@ -780,7 +780,7 @@ select * from tplugins order by #arguments.orderby#
 		</cfif>
 		</cfquery>
 	<cfelse>
-		<cfquery name="rsPlugin" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPlugin')#">
 		select * from tplugins where  
 		<cfif isNumeric(arguments.ID)>
 			pluginID=#arguments.ID#
@@ -862,7 +862,7 @@ select * from tplugins order by #arguments.orderby#
 		<cfset pluginConfig.setPackage(rs.package) />
 		<cfset pluginConfig.setDirectory(rs.directory) />
 		
-		<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDBUsername()#" password="#variables.configBean.getReadOnlyDBPassword()#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 		select * from tpluginsettings where  moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#rs.moduleID#">
 		</cfquery>
 		
@@ -881,7 +881,7 @@ select * from tplugins order by #arguments.orderby#
 <cffunction name="getAssignedSites" returntype="query" output="false">
 <cfargument name="moduleID">
 	<cfset var rsAssignedSites=""/>
-	<cfquery name="rsAssignedSites" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDBUsername()#" password="#variables.configBean.getReadOnlyDBPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAssignedSites')#">
 	select siteID,moduleID from tcontent where  moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.moduleID#">
 	</cfquery>
 	<cfreturn rsAssignedSites>
@@ -889,7 +889,7 @@ select * from tplugins order by #arguments.orderby#
 
 <cffunction name="deleteAssignedSites" returntype="void" output="false">
 <cfargument name="moduleID">
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery>
 	delete from tcontent where  moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.moduleID#">
 	</cfquery>
 </cffunction>
@@ -912,7 +912,7 @@ select * from tplugins order by #arguments.orderby#
 	<cfset var rsCheck="">
 	
 	<cfif len(arguments.args.package)>
-		<cfquery datasource="#variables.configBean.getDatasource()#" name="rsCheck" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+		<cfquery>
 				select moduleID from tplugins
 				where package=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.package#"/>
 				and moduleID<><cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.moduleID#"/>
@@ -931,7 +931,7 @@ select * from tplugins order by #arguments.orderby#
 	
 	<cfif len(settingsLen)>
 		<cfloop from="1" to="#settingsLen#" index="i">
-			<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+			<cfquery>
 			insert into tpluginsettings (moduleID,name,settingValue) values (
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.moduleID#">,
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#pluginXML.plugin.settings.setting[i].name.xmlText#">,
@@ -948,7 +948,7 @@ select * from tplugins order by #arguments.orderby#
 	
 	
 	<!--- save the submitted name --->
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery>
 	update tplugins set name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.pluginalias#">,
 	loadPriority=<cfqueryparam cfsqltype="cf_sql_numeric" value="#arguments.args.loadPriority#">,
 	package=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.package#">
@@ -987,7 +987,7 @@ select * from tplugins order by #arguments.orderby#
 		
 		<cfset variables.fileWriter.renameDir(directory = "#variables.configBean.getPluginDir()#/#pluginConfig.getDirectory()#", newDirectory = "#directory#")>
 	
-		<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+		<cfquery>
 		update tplugins set directory=<cfqueryparam cfsqltype="cf_sql_varchar" value="#directory#">
 		,package=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.package#">
 		where moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.moduleID#">			
@@ -1006,7 +1006,7 @@ select * from tplugins order by #arguments.orderby#
 
 			<cfset variables.configBean.getClassExtensionManager().loadConfigXML(pluginXML,i)>
 			
-			<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+			<cfquery>
 			insert into tcontent (siteID,moduleID,contentID,contentHistID,parentID,type,subType,title,
 			display,approved,isNav,active,forceSSL,searchExclude) values (
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#i#">,
@@ -1029,7 +1029,7 @@ select * from tplugins order by #arguments.orderby#
 	</cfif>
 	
 	
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery>
 	update tplugindisplayobjects 
 	set location=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.location#">
 	where moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.moduleID#">
@@ -1088,7 +1088,7 @@ select * from tplugins order by #arguments.orderby#
 			</cfif>
 		</cfif>
 		
-		<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+		<cfquery>
 		update tplugins 
 		set deployed=1
 		where moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.moduleID#">
@@ -1100,21 +1100,21 @@ select * from tplugins order by #arguments.orderby#
 
 <cffunction name="deleteSettings" returntype="void" output="false">
 <cfargument name="moduleID">
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery>
 	delete from tpluginsettings where  moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.moduleID#">
 	</cfquery>
 </cffunction>
 
 <cffunction name="deleteScripts" returntype="void" output="false">
 <cfargument name="moduleID">
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery>
 	delete from tpluginscripts where  moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.moduleID#">
 	</cfquery>
 </cffunction>
 
 <cffunction name="deleteDisplayObjects" returntype="void" output="false">
 <cfargument name="moduleID">
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery>
 	delete from tcontentobjects where 
 	objectID in (select objectID from tplugindisplayobjects where moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.moduleID#">)
 	</cfquery>
@@ -1130,7 +1130,7 @@ select * from tplugins order by #arguments.orderby#
 	<cfset var rs="">
 	<cfset var moduleList="">
 	
-	<cfquery name="rs" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	select tplugins.pluginID,tplugins.moduleID, tplugins.package, tplugins.directory, tplugins.name,tplugins.version,
 	tplugins.provider, tplugins.providerURL,tplugins.category,tplugins.created from tplugins inner join tcontent
 	on (tplugins.moduleID=tcontent.moduleID and tcontent.siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#">)
@@ -1224,7 +1224,7 @@ select * from tplugins order by #arguments.orderby#
 	<cfset deleteScripts(arguments.moduleID)>
 	<cfset deleteDisplayObjects(arguments.moduleID)>
 	
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+	<cfquery>
 	delete from tplugins where  moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.moduleID#">
 	</cfquery>
 	

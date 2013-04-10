@@ -74,7 +74,7 @@
   </div>
 </div>
 <div class="form-actions">
-  <cfif chainID eq ''>
+  <cfif rc.chainID eq ''>
     <input type="button" class="btn" onclick="submitForm(document.forms.form1,'add');" value="#application.rbFactory.getKeyValue(session.rb,'approvalchains.add')#" />
   <cfelse>
     <input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'approvalchains.delete')#" onclick="confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'approvalchains.deleteconfirm'))#','index.cfm?muraAction=cchain.delete&chainID=#chain.getchainID()#&siteid=#URLEncodedFormat(chain.getSiteID())#')" /> 

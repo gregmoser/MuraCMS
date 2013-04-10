@@ -37,7 +37,7 @@
 		<cfset bean=getBean("changeset")>
 	</cfif>
 	
-	<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	select changesetID, siteID, name, description, created, publishDate, published, lastupdate, lastUpdateBy, lastUpdateByID, remoteID, remotePubDate, remoteSourceURL
 	from tchangesets where
 	<cfif len(arguments.siteID)>
@@ -70,13 +70,13 @@
 	
 	<cfset var rs="">
 	
-	<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 		select changesetID from tchangesets
 		where changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getChangesetID()#"> 
 	</cfquery>
 	
 	<cfif rs.recordcount>
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+	<cfquery>
 		update tchangesets set
 		siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getSiteID()#">,
 		name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getName()#">,
@@ -109,7 +109,7 @@
 	</cfquery>
 
 	<cfelse>
-		<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+		<cfquery>
 		insert into tchangesets (changesetID, siteID, name, description, created, publishDate, 
 		published, lastupdate, lastUpdateBy, lastUpdateByID,
 		remoteID, remotePubDate, remoteSourceURL)
@@ -159,7 +159,7 @@
 	
 	<cfset variables.trashManager.throwIn(bean)>
 	
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+	<cfquery>
 	delete from tchangesets 
 	where changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.changesetID#">
 	</cfquery>
@@ -175,7 +175,7 @@
 <cfargument name="sortBy">
 
 	<cfset var rsChangeSets="">
-	<cfquery name="rsChangeSets" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsChangeSets')#">
 	select changesetID, siteID, name, description, created, publishDate, published, lastupdate, lastUpdateBy, remoteID, remotePubDate, remoteSourceURL
 	from tchangesets
 	where siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#">
@@ -214,7 +214,7 @@
 <cfargument name="contentID">
 <cfargument name="siteID">
 	<cfset var rsPendingChangeSets="">
-	<cfquery name="rsPendingChangeSets" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPendingChangeSets')#">
 	select tchangesets.changesetID, tcontent.contentID, tcontent.contenthistid, 
 	tcontent.siteID, tchangesets.name changesetName, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID,
 	tcontent.lastupdate, tapprovalrequests.groupid approvalGroupID, tchangesets.publishDate
@@ -231,7 +231,7 @@
 <cffunction name="publishBySchedule" access="public" returntype="any" output="false">
 	<cfset var rsPendingChangeSets="">
 	
-	<cfquery name="rsPendingChangeSets" cachedwithin="#CreateTimeSpan(0, 0, 5, 0)#" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPendingChangeSets',cachedwithin=CreateTimeSpan(0, 0, 5, 0))#">
 	select changesetID
 	from tchangesets
 	where tchangesets.published=0
@@ -257,7 +257,7 @@
 
 <cfif not local.changeset.getIsNew() and not local.changeset.getPublished()>
 	<cfif isDate(local.changeset.getPublishDate())>
-		<cfquery name="local.prereqs" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='local.prereqs')#">
 		select changesetID,name,publishDate
 		from tchangesets
 		where tchangesets.published=0
@@ -396,7 +396,7 @@
 <cfargument name="keywords" default="">
 <cfargument name="moduleid" default="">
 	<cfset var rs="">
-	<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	select tcontent.menutitle, tcontent.siteid, tcontent.parentID, tcontent.path, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.subtype, tcontent.lastupdateby, tcontent.active, tcontent.approved, tcontent.lastupdate,
 	tcontent.lastupdateby, tcontent.lastupdatebyid, 
 	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.inheritObjects,tcontent.filename,tcontent.targetParams,tcontent.releaseDate,
@@ -425,7 +425,7 @@
 <cfargument name="changesetID">
 
 	<cfset var rs="">
-	<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	select tcontent.contenthistid
 	from tcontent 
 	inner join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)
@@ -439,7 +439,7 @@
 <cfargument name="changesetID">
 <cfargument name="contentHistID">
 	
-	<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+	<cfquery>
 	update tcontent
 	set changesetID=null
 	where 

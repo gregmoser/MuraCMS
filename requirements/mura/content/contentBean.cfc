@@ -1014,7 +1014,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="deleteVersion" returnType="any" output="false" access="public">
-	<cfif not getActive()>
+	<cfif not getValue('active')>
 		<cfset variables.contentManager.delete(getAllValues()) />
 		<cfreturn true>
 	<cfelse>
@@ -1200,5 +1200,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfreturn source>
 
+</cffunction>
+
+<cffunction name="getUser" output="false">
+	<cfreturn getBean('user').loadBy(userID=getValue('LastUpdateByID'))>
 </cffunction>
 </cfcomponent>

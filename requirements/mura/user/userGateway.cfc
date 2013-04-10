@@ -62,7 +62,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="isPublic" type="numeric" default="0" />
 	<cfset var rsUserGroups = "" />
 	
-	<cfquery name="rsUserGroups" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsUserGroups')#">
 	SELECT tusers.UserID, tusers.Email, tusers.GroupName, tusers.Type, tusers.LastLogin, tusers.LastUpdate, tusers.LastUpdateBy, 
 	tusers.LastUpdateByID, memberQuery.Counter, tusers.Perm, tusers.isPublic
 	FROM tusers LEFT JOIN 
@@ -94,7 +94,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="isPublic" type="numeric" default="0" />
 	<cfset var rsUserSearch = "" />
 
-	<cfquery name="rsUserSearch" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsUserSearch')#">
 	Select #variables.fieldList# from tusers 
 	left join tfiles on tusers.photofileID=tfiles.fileID
 	where tusers.type=2 and tusers.isPublic = <cfqueryparam cfsqltype="cf_sql_numeric" value="#arguments.isPublic#"> and 
@@ -180,7 +180,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 	</cfloop>
 
-	<cfquery name="rsAdvancedUserSearch" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAdvancedUserSearch')#">
 	Select #variables.fieldList# <cfif len(params.getAdditionalColumns())>,#params.getAdditionalColumns()#</cfif> from tusers 
 	left join tfiles on tusers.photofileID=tfiles.fileID
 	<cfloop list="#jointables#" index="jointable">
@@ -328,7 +328,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="getPrivateGroups" returntype="query" access="public" output="false">
 	<cfargument name="siteid" type="string" default="" />
 	<cfset var rsPrivateGroups = "" />
-	<cfquery name="rsPrivateGroups" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPrivateGroups')#">
 	SELECT tsettings.Site, #variables.fieldList#
 	FROM tsettings INNER JOIN tusers ON tsettings.SiteID = tusers.SiteID
 	LEFT JOIN tfiles on tusers.photofileID=tfiles.fileID
@@ -343,7 +343,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="getPublicGroups" returntype="query" access="public" output="false">
 	<cfargument name="siteid" type="string" default="" />
 	<cfset var rsPublicGroups = "" />
-	<cfquery name="rsPublicGroups" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPublicGroups')#">
 	SELECT tsettings.Site, #variables.fieldList# 
 	FROM tsettings INNER JOIN tusers ON tsettings.SiteID = tusers.SiteID
 	LEFT JOIN tfiles on tusers.photofileID=tfiles.fileID
@@ -363,7 +363,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rsCreatedMembers = "" />
 	<cfset var start = "" />
 	<cfset var stop = "" />
-	<cfquery name="rsCreatedMembers" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsCreatedMembers')#">
 	SELECT Count(*) as theCount
 	FROM tusers
 	WHERE tusers.Type=2 AND tusers.isPublic=1
@@ -383,7 +383,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	
 	<cfset var rsTotalMembers = "" />
-	<cfquery name="rsTotalMembers" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsTotalMembers')#">
 	SELECT Count(*) as theCount
 	FROM tusers
 	WHERE tusers.Type=2 AND tusers.isPublic=1
@@ -399,7 +399,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	
 	<cfset var rsTotalAdministrators = "" />
-	<cfquery name="rsTotalAdministrators" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsTotalAdministrators')#">
 	SELECT Count(*) as theCount
 	FROM tusers
 	WHERE tusers.Type=2 AND tusers.isPublic=0

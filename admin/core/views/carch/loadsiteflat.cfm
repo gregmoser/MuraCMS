@@ -47,6 +47,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfsilent>
 <cfset request.layout=false>
 <cfset event=request.event>
+<cftry>
 <cfscript>
 	//data=structNew();
 	
@@ -117,6 +118,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			{writeDump(var=e,abort=true);}
 		*/
 		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contentID));
+	} else if($.event('report') eq "myapprovals"){
+		subList=$.getBean("contentManager").getApprovalsQuery($.event("siteID"));
+		//writeDump(var=subList,abort=true);
+		/*
+		try {
+		approvals=new Query(dbtype='query',sql="select * from subList where approvalStatus='Pending'").execute().getResult();
+		}catch(any e)
+			{writeDump(var=e,abort=true);}
+		*/
+		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contentID));
 	}
 	
 	if(len($.event("keywords"))){	
@@ -127,6 +138,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	iterator=feed.getIterator();
 	iterator.setPage($.event('page'));
 </cfscript>
+<cfcatch>
+	<cfdump var="#cfcatch#" abort="true">
+</cfcatch>
+</cftry>
 
 <cfsavecontent variable="pagination">
 <cfoutput>
@@ -199,21 +214,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset topID=item.getParentID()>
 		</cfif>
 
-		<cfif $.event('report') eq "mydrafts">
-			<cfquery dbtype="query" name="rsHasPendingApprovals">
-				select * from sublist 
-				where 
-				contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.getContentID()#">
-				and approvalStatus='Pending'
-			</cfquery>
-			<cfquery dbtype="query" name="rsHasDrafts">
-				select * from sublist 
-				where 
-				contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.getContentID()#">
-				and approvalStatus != 'Pending'
-			</cfquery>
-		</cfif>
-
 		<cfset deletable=((item.getParentID() neq '00000000000000000000000000000000001' and application.settingsManager.getSite(item.getSiteID()).getLocking() neq 'all') or (item.getParentID() eq '00000000000000000000000000000000001' and application.settingsManager.getSite(item.getSiteID()).getLocking() eq 'none')) and (verdict eq 'editor')  and item.getIsLocked() neq 1 and item.getContentID() neq '00000000000000000000000000000000001'>
 
 		<cfset editLink="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">
@@ -225,7 +225,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 			<div class="actions">
 				<ul class="siteSummary">
-					<cfif not listFindNoCase('none,read',verdict) or $.event('report') eq 'mydrafts'>
+					<cfif not listFindNoCase('none,read',verdict) or $.event('report') eq 'myapprovals'>
 					 
 					    <li class="edit"><a title="Edit" class="draftprompt" href="#editLink#"><i class="icon-pencil"></i></a></li>
 						
@@ -278,17 +278,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<h2>
 				<cfif not listFindNoCase('none,read',verdict) or $.event('report') eq 'mydrafts'>
 					<a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.edit')#" class="draftprompt" href="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">#HTMLEditFormat(item.getMenuTitle())# 
-						<cfif $.event('report') eq 'mydrafts'>
-							(
-							<cfif rsHasPendingApprovals.recordcount>
-									#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#
-								<cfif rsHasDrafts.recordcount>,</cfif>
-							</cfif>
-							<cfif rsHasDrafts.recordcount>
-								#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.draft')#
-							</cfif>
-							)
-						</cfif>
 					</a>
 				<cfelse>
 					#HTMLEditFormat(item.getMenuTitle())#
@@ -364,6 +353,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<ul id="navReports" class="nav nav-list">
 			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#</a></li>
 			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#</a></li>
+			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#</a></li>
 			<li><a href="" data-report="expires"<cfif $.event("report") eq "expires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.expires")#</a></li>
 			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#</a></li>
 			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#</a></li>

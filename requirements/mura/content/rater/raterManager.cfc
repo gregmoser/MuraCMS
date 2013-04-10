@@ -142,7 +142,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfset var rsAvgRating=""/>
 	
-	<cfquery name="rsAvgRating" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAvgRating')#">
 	select avg(tcontentratings.rate) as theAvg, count(tcontentratings.contentID) as theCount, (count(tcontentratings.contentID)-downVotes) as upVotes, downVotes from tcontentratings
 	left join (select count(rate) as downVotes, contentID,siteID from tcontentratings
 				where siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
@@ -170,7 +170,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var stop=""/>
 	<cfset var start=""/>
 	<cfset var dbType=variables.configBean.getDbType() />
-	<cfquery name="rsTopRating" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsTopRating')#">
 	    <cfif dbType eq "oracle" and arguments.limit>select * from (</cfif>
 	    SELECT <cfif dbType eq "mssql" and arguments.limit>Top #arguments.limit#</cfif> tcontent.ContentHistID, tcontent.ContentID, tcontent.Approved, tcontent.filename, tcontent.Active,
 	    tcontent.Type, tcontent.OrderNo, tcontent.ParentID, tcontent.siteID,  tcontent.moduleID,

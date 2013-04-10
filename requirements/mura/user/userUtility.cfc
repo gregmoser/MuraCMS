@@ -96,7 +96,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset variables.pluginManager.announceEvent('onGlobalLogin',pluginEvent)/>
 		</cfif>
 		
-		<cfquery datasource="#application.configBean.getReadOnlyDatasource()#" name="rsUser" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsUser')#">
 		SELECT * FROM tusers WHERE
 		username=<cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.username)#"> 
 		AND Type = 2 
@@ -192,7 +192,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var lastLogin = now() />
 		<cfset var pluginEvent = createObject("component","mura.event").init(arguments) />
 		
-		<cfquery datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#" name="rsUser">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsUser')#">
 		SELECT * FROM tusers WHERE userid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.userID#"> AND Type = 2
 		and inactive=0
 		</cfquery>
@@ -235,7 +235,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfset structDelete(session,'siteArray')>
 
-		<cfquery name="RsGetRoles" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsGetRoles')#">
 			Select userID, groupname, isPublic, siteid from tusers where userid in
 			(Select GroupID from tusersmemb where userid='#rsuser.userid#')
 		</cfquery>
@@ -282,7 +282,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cflogin>	
 		</cfif>
 				
-		<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+		<cfquery>
 		UPDATE tusers SET LastLogin = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">
 		WHERE tusers.UserID='#rsUser.UserID#'
 		</cfquery>
@@ -299,7 +299,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="siteid" type="string" required="yes" default="">
 	<cfset var rsCheck=""/>
 	
-		<cfquery name="rsCheck" datasource="#variables.configBean.getReadOnlyDatasource()#" username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsCheck')#">
 		select * from tusers where type=2 and inactive=0 and email=<cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.email)#">
 		<cfif arguments.siteid neq ''>
 		and (
@@ -477,7 +477,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <!--- add extra attributes --->
 <cfset editProfileURL=editProfileURL & "&returnID=#returnID#&returnUserID=#arguments.args.userID#">
 
-<cfquery datasource="#variables.configBean.getDatasource()#"  username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
+<cfquery>
 	insert into tredirects (redirectID,URL,created) values(
 	<cfqueryparam cfsqltype="cf_sql_varchar" value="#returnID#" >,
 	<cfqueryparam cfsqltype="cf_sql_varchar" value="#editProfileURL#" >,
@@ -716,7 +716,7 @@ Thanks for using #contactName#</cfoutput>
 <cfargument name="$">
 	<cfset var rs="">
 	<cfif not arguments.$.currentUser().isLoggedIn() and len(arguments.$.event('returnID')) and len(arguments.$.event('returnUserID'))>
-		<cfquery name="rs" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 			select created from tredirects
 			where redirectID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.$.event('returnID')#" >
 		</cfquery>

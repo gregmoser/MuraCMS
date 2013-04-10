@@ -44,87 +44,130 @@ For clarity, if you create a modified version of Mura CMS, you are not obligated
 modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
-<cfset content=$.getBean('content').loadBy(contenthistid=rc.contenthistid)>
-<cfset content.requiresApproval()>
-<cfset approvalRequest=content.getApprovalRequest()>
-<cfset group=approvalRequest.getGroup()>
-<cfset user=approvalRequest.getUser()>
-<cfset actions=approvalRequest.getActionsIterator()>
-<cfparam name="rc.mode" default="">
+<cfsilent>
+	<cfset content=$.getBean('content').loadBy(contenthistid=rc.contenthistid)>
+	<cfset $.event('contentBean',content)>
+	<cfset requiresApproval=content.requiresApproval()>
+	<cfset user=content.getUser()>
+
+	<cfif requiresApproval>
+		<cfset approvalRequest=content.getApprovalRequest()>
+		<cfset group=approvalRequest.getGroup()>
+		<cfset actions=approvalRequest.getActionsIterator()>
+		<cfif user.getIsNew()>
+			<cfset user=approvalRequest.getUser()>
+		</cfif>
+	</cfif>
+	<cfparam name="rc.mode" default="">
+</cfsilent>
 <cfoutput>
 <cfif rc.mode eq 'frontend'>
-	<h2>#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#content.getApprovalStatus()#"))#</h2>
-</cfif>
-<strong>Approval Status:</strong>  #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#approvalRequest.getStatus()#"))#</br>
-<strong>Submitted:</strong> #LSDateFormat(parseDateTime(approvalRequest.getCreated()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(approvalRequest.getCreated()),"short")#</br>
-<strong>Submitted By:</strong>  #HTMLEditFormat(user.getFullName())#</br>
-<cfif approvalRequest.getStatus() eq 'Pending'>
-	<strong>Waiting For Group:</strong> #HTMLEditFormat(group.getGroupName())#</br>
-</cfif>
-
-<cfif actions.hasNext()>
-	<cfloop condition="actions.hasNext()">
-		<cfset action=actions.next()>
-		<dl>
-			<dt>#UCase(action.getActionType())# by #HTMLEditFormat(action.getUser().getFullName())# on #LSDateFormat(parseDateTime(action.getCreated()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(action.getCreated()),"short")#</dt>
-			<cfif len(action.getComments())>
-				#HTMLEditFormat(action.getComments())#
-			</cfif>
-		</dl>
-	</cfloop>
+	<h2>#application.rbFactory.getKeyValue(session.rb,'layout.status')#</h2>
+	<!---
+	<cfif requiresApproval>
+		<h2>#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#content.getApprovalStatus()#"))#</h2>
+	<cfelse>
+		<cfif $.content('active') gt 0 and  $.content('approved')  gt 0>
+			<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#</h2>
+		<cfelseif len($.content('approvalStatus')) and $.content().requiresApproval() >
+			<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#$.content('approvalstatus')#")#</h2>
+		<cfelseif $.content('approved') lt 1>
+			<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#</h2>
+		<cfelse>
+			<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#</h2>
+		</cfif>
+	</cfif>
+	--->
 </cfif>
 
-<cfif approvalRequest.getStatus() eq 'Pending' and (listfindNoCase(session.mura.membershipids,approvalRequest.getGroupID()) or $.currentUser().isAdminUser() or $.currentUser().isSuperUser())>
-	<strong>Action</strong></br>
-	<input class="approval-action" id="approval-approve" name="approval-action"type="radio" value="Approve" checked/> Approve</br>
-	<input class="approval-action" id="approval-reject" name="approval-action" type="radio" value="Reject" checked/> Reject</br>
-	<strong>Comments</strong></br>
-	<textarea id="approval-comments"></textarea></br></br>
-	<input type="button" class="btn" value="Apply" onclick="applyApprovalAction('#approvalRequest.getRequestID()#',$('input:radio[name=approval-action]:checked').val(),$('##approval-comments').val(),'#approvalRequest.getSiteID()#');"/>
+<strong>Created By:</strong>  <cfif not user.getIsNew()>#HTMLEditFormat(user.getFullName())# <cfelse> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.na")# </cfif></br>
+<strong>Created:</strong> #LSDateFormat(parseDateTime(content.getLastUpdate()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(content.getLastUpdate()),"short")#</br>
+
+<strong>Status:</strong>
+	<cfif content.getactive() gt 0 and content.getapproved() gt 0>
+		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
+	<cfelseif len(content.getApprovalStatus()) and requiresApproval >
+		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#content.getApprovalStatus()#")#
+	<cfelseif content.getapproved() lt 1>
+		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
+	<cfelse>
+		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
+	</cfif></br>
+
+<cfif requiresApproval>
+	<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending'>
+		<strong>Waiting For Group:</strong> #HTMLEditFormat(group.getGroupName())#</br>
+	</cfif>
+
+	<cfif actions.hasNext()>
+		<cfloop condition="actions.hasNext()">
+			<cfset action=actions.next()>
+			<dl>
+				<dt>#UCase(action.getActionType())# by #HTMLEditFormat(action.getUser().getFullName())# on #LSDateFormat(parseDateTime(action.getCreated()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(action.getCreated()),"short")#</dt>
+				<cfif len(action.getComments())>
+					#HTMLEditFormat(action.getComments())#
+				</cfif>
+			</dl>
+		</cfloop>
+	</cfif>
+
+	<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending' and (listfindNoCase(session.mura.membershipids,approvalRequest.getGroupID()) or $.currentUser().isAdminUser() or $.currentUser().isSuperUser())>
+		<strong>Action</strong></br>
+		<input class="approval-action" id="approval-approve" name="approval-action"type="radio" value="Approve" checked/> Approve</br>
+		<input class="approval-action" id="approval-reject" name="approval-action" type="radio" value="Reject" checked/> Reject</br>
+		<strong>Comments</strong></br>
+		<textarea id="approval-comments"></textarea></br></br>
+		<input type="button" class="btn" value="Apply" onclick="applyApprovalAction('#approvalRequest.getRequestID()#',$('input:radio[name=approval-action]:checked').val(),$('##approval-comments').val(),'#approvalRequest.getSiteID()#');"/>
+	</cfif>
 </cfif>
+
+
+
 <cfif rc.mode eq 'frontend'>
-<script>
-function applyApprovalAction(requestid,action,comment,siteid){
-	
-	if(action == 'Reject' && comment == ''){
-		alertDialog('#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.rejectioncommentrequired"))#');
-	} else {
-		var pars={
-					muraAction:'carch.approvalaction',
-					siteid: siteid,
-					requestid: requestid,
-					comment: comment,
-					action:action
-				};
+	<cfif not content.getActive() and requiresApproval>
+		<script>
+		function applyApprovalAction(requestid,action,comment,siteid){
+			
+			if(action == 'Reject' && comment == ''){
+				alertDialog('#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.rejectioncommentrequired"))#');
+			} else {
+				var pars={
+							muraAction:'carch.approvalaction',
+							siteid: siteid,
+							requestid: requestid,
+							comment: comment,
+							action:action
+						};
 
-		actionModal(
-			function(){
-				$.post('index.cfm',
-					pars,
-					function(data) {
-						//$('html').html(data);
-						window.location = top.location.replace(data.previewurl);
+				actionModal(
+					function(){
+						$.post('index.cfm',
+							pars,
+							function(data) {
+								//$('html').html(data);
+								window.location = top.location.replace(data.previewurl);
+							}
+						);
 					}
 				);
 			}
-		);
-	}
-}
+		}
 
-$(document).ready(function(){
-	if (top.location != self.location) {
-		if(jQuery("##ProxyIFrame").length){
-			jQuery("##ProxyIFrame").load(
-				function(){
+		$(document).ready(function(){
+			if (top.location != self.location) {
+				if(jQuery("##ProxyIFrame").length){
+					jQuery("##ProxyIFrame").load(
+						function(){
+							frontEndProxy.post({cmd:'setWidth',width:'configurator'});
+						}
+					);	
+				} else {
 					frontEndProxy.post({cmd:'setWidth',width:'configurator'});
 				}
-			);	
-		} else {
-			frontEndProxy.post({cmd:'setWidth',width:'configurator'});
-		}
-	}
-});
-</script>
+			}
+		});
+		</script>
+	</cfif>
 <cfelse>
 	<cfset request.layout=false>
 </cfif>

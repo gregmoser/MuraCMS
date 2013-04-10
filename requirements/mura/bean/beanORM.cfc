@@ -87,7 +87,7 @@ component extends="mura.bean.bean" {
 					return evaluate(variables.synthedFunctions[arguments.MissingMethodName].exp);
 
 				} catch(any err){
-					if(request.muraORMtransaction){
+					if(request.muratransaction){
 						transactionRollback();
 					}				
 					writeDump(var=variables.synthedFunctions[arguments.MissingMethodName]);
@@ -527,7 +527,7 @@ component extends="mura.bean.bean" {
 			pluginManager.announceEvent('on#variables.beanClass#Save',event);
 		
 		} else {
-			request.muraORMtransaction=false;
+			request.muratransaction=false;
 		}
 
 		return this;
