@@ -47,6 +47,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfsilent>
 <cfset request.layout=false>
 <cfset event=request.event>
+<cftry>
 <cfscript>
 	//data=structNew();
 	
@@ -118,7 +119,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		*/
 		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contentID));
 	} else if($.event('report') eq "myapprovals"){
-		subList=$.getBean("contentManager").getApprovals($.event("siteID"));
+		subList=$.getBean("contentManager").getApprovalsQuery($.event("siteID"));
 		//writeDump(var=subList,abort=true);
 		/*
 		try {
@@ -137,6 +138,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	iterator=feed.getIterator();
 	iterator.setPage($.event('page'));
 </cfscript>
+<cfcatch>
+	<cfdump var="#cfcatch#" abort="true">
+</cfcatch>
+</cftry>
 
 <cfsavecontent variable="pagination">
 <cfoutput>
@@ -348,7 +353,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<ul id="navReports" class="nav nav-list">
 			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#</a></li>
 			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#</a></li>
-			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#</a></li>
+			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#</a></li>
 			<li><a href="" data-report="expires"<cfif $.event("report") eq "expires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.expires")#</a></li>
 			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#</a></li>
 			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#</a></li>

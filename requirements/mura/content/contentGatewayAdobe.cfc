@@ -972,7 +972,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								and draft.siteID=tcontentstats.siteID
 								)
 		INNER JOIN tapprovalrequests on (tapprovalrequests.contenthistid=draft.contenthistid)
-	WHERE draft.active=0 
+	WHERE (draft.active=0 or draft.active=1 and draft.approved=0 )
 	and tapprovalrequests.status = 'Pending'
 	<cfif not getCurrentUser().isAdminUser() and not getCurrentUser().isSuperUser()>
 		and tapprovalrequests.groupid in (<cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#session.mura.membershipids#">)
@@ -990,6 +990,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	select * from rs
 	order by #arguments.sortBy# #arguments.sortDirection#
 	</cfquery>
+
+	<cfreturn rs>
 
 </cffunction>
 
