@@ -122,12 +122,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <td class="notes"><cfif rc.item.getnotes() neq ''><a rel="tooltip" data-original-title="#$.setParagraphs(htmleditformat(rc.item.getnotes()))#">View&nbsp;Note</a></cfif></td>
 <cfif hasChangesets>
 	<td class="changeset">
-		<cfif isDate(rc.item.getchangesetPublishDate())><a href="##" rel="tooltip" title="#HTMLEditFormat(LSDateFormat(rc.item.getchangesetPublishDate(),"short"))#"> <i class="icon-calendar"></i></a></cfif>
+		<cfif len(rc.item.getchangesetID())>
+		<cfset changeset=$.getBean('changeset').loadby(changesetID=rc.item.getChangesetID())>
+		
+		<cfif isDate(changeset.getPublishDate())><a href="##" rel="tooltip" title="#HTMLEditFormat(LSDateFormat(changeset.getPublishDate(),"short"))#"> <i class="icon-calendar"></i></a></cfif>
 		<cfif hasChangesetAccess>
-			<a href="./?muraAction=cChangesets.assignments&siteID=#rc.item.getsiteid()#&changesetID=#rc.item.getchangesetID()#">		#HTMLEditFormat(rc.item.getchangesetName())#
+			<a href="./?muraAction=cChangesets.assignments&siteID=#rc.item.getsiteid()#&changesetID=#rc.item.getchangesetID()#">		#HTMLEditFormat(changeset.getName())#
 			</a>
 		<cfelse>
-			#HTMLEditFormat(rc.item.getchangesetName())#
+			#HTMLEditFormat(changeset.getName())#
+		</cfif>
 		</cfif>
 	</td>
 </cfif> 

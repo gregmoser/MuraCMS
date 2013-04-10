@@ -1205,4 +1205,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="getUser" output="false">
 	<cfreturn getBean('user').loadBy(userID=getValue('LastUpdateByID'))>
 </cffunction>
+
+<cffunction name="getClassExtension" output="false">
+	<cfreturn variables.configBean.getClassExtensionManager().getSubTypeByName(getValue('type'),getValue('subtype'),getValue('siteid'))>
+</cffunction>
 </cfcomponent>

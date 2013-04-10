@@ -52,142 +52,152 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset isExtended=false>
 <cfset nodeLevelList="Page,Folder,Calendar,Gallery,Link,File"/>
 <cfset hasChangesets=application.settingsManager.getSite(rc.siteID).getHasChangesets()>
+<cfset rc.perm=application.permUtility.getnodePerm(rc.crumbdata)>
+
+<cfif rc.parentID eq "" and not rc.contentBean.getIsNew()>
+	<cfset rc.parentID=rc.contentBean.getParentID()>	
+</cfif>
+
+<cfset rc.parentBean=$.getBean('content').loadBy(contentid=rc.parentID)>
+<cfset subtypefilter=rc.parentBean.getClassExtension().getAvailableSubTypes()>
 <cfif rc.contentBean.getIsNew()>
-	<cfset requiresApproval=$.getBean('content').loadBy(contentid=rc.parentID).requiresApproval()>
+	<cfset requiresApproval=rc.parentBean.requiresApproval()>
 <cfelse>
 	<cfset requiresApproval=rc.contentBean.requiresApproval()>
 </cfif>
 
-<cfset rc.perm=application.permUtility.getnodePerm(rc.crumbdata)>
-<cfif rc.parentID eq "" and not rc.contentBean.getIsNew()>
-	<cfset rc.parentID=rc.contentBean.getParentID()>	
- </cfif>
 <cfif hasChangesets>
-<cfset currentChangeset=application.changesetManager.read(rc.contentBean.getChangesetID())>
-<cfset pendingChangesets=application.changesetManager.getPendingByContentID(rc.contentBean.getContentID(),rc.siteID)>
+	<cfset currentChangeset=application.changesetManager.read(rc.contentBean.getChangesetID())>
+	<cfset pendingChangesets=application.changesetManager.getPendingByContentID(rc.contentBean.getContentID(),rc.siteID)>
 </cfif>
+
 <cfset rc.deletable=rc.compactDisplay neq "true" and ((rc.parentid neq '00000000000000000000000000000000001' and application.settingsManager.getSite(rc.siteid).getlocking() neq 'all') or (rc.parentid eq '00000000000000000000000000000000001' and application.settingsManager.getSite(rc.siteid).getLocking() eq 'none')) and (rc.perm eq 'editor' and rc.contentid neq '00000000000000000000000000000000001') and rc.contentBean.getIsLocked() neq 1>
 <cfset assignChangesets=rc.perm eq 'editor' and hasChangesets>
 <cfset $=event.getValue("MuraScope")>
 <cfset tabAssignments=$.getBean("user").loadBy(userID=session.mura.userID, siteID=session.mura.siteID).getContentTabAssignments()>
 <script>
-var draftremovalnotice=<cfif application.configBean.getPurgeDrafts() and event.getValue("suppressDraftNotice") neq "true" and rc.contentBean.hasDrafts() and not requiresApproval><cfoutput>'#jsStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draftremovalnotice"))#'</cfoutput><cfelse>""</cfif>;
+	var draftremovalnotice=<cfif application.configBean.getPurgeDrafts() and event.getValue("suppressDraftNotice") neq "true" and rc.contentBean.hasDrafts() and not requiresApproval><cfoutput>'#jsStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draftremovalnotice"))#'</cfoutput><cfelse>""</cfif>;
 </script>
-<cfif rc.compactDisplay neq "true" and application.configBean.getConfirmSaveAsDraft()><script>
-siteManager.requestedURL="";
-siteManager.formSubmitted=false;
-<cfoutput>
-function setRequestedURL(){
-	siteManager.requestedURL=this.href
-	return conditionalExit("#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.saveasdraft"))#");
-}</cfoutput>
 
-$(document).ready(function(){
-	var anchors=document.getElementsByTagName("A");
-	
-	for(var i=0;i<anchors.length;i++){	
-		try{
-			if (typeof(anchors[i].onclick) != 'function' 
-				&& typeof(anchors[i].getAttribute('href')) == 'string' 
-				&& anchors[i].getAttribute('href').indexOf('#') == -1) {
-	   			anchors[i].onclick = setRequestedURL;
-			}
-		} catch(err){}
-	}
-	
-});
+<cfif rc.compactDisplay neq "true" and application.configBean.getConfirmSaveAsDraft()>
+	<script>
+	siteManager.requestedURL="";
+	siteManager.formSubmitted=false;
+	<cfoutput>
+	function setRequestedURL(){
+		siteManager.requestedURL=this.href
+		return conditionalExit("#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.saveasdraft"))#");
+	}</cfoutput>
 
-$(document).unload(function(){
-	if(!siteManager.formSubmitted && siteManager.requestedURL != '')
-	{
-		conditionalExit();
-	}
-});
-
-function conditionalExit(msg){
-	if(siteManager.form_is_modified(document.contentForm)){
-	if(msg==null){
-		<cfoutput>msg="#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.saveasdraft"))#";</cfoutput>
-	}
-	
-	document.contentForm.approved.value=0;
-	jQuery("#alertDialog").html(msg);
-	jQuery("#alertDialog").dialog({
-			resizable: false,
-			modal: true,
-			position: getDialogPosition(),
-			buttons: {
-				'Yes': function() {
-					jQuery(this).dialog('close');
-					if(siteManager.ckContent()){
-						document.getElementById('contentForm').returnURL.value=siteManager.requestedURL;
-						submitForm(document.contentForm,'add');
-						}
-						return false;
-					},
-				'No': function() {
-					jQuery(this).dialog('close');
-					location.href=siteManager.requestedURL;
-					siteManager.requestedURL="";
-				}
-			}
-		});
-	
-		return false;	
+	$(document).ready(function(){
+		var anchors=document.getElementsByTagName("A");
 		
-	} else {
-		siteManager.requestedURL="";
-		return true;	
-	}
-
-}
-</script>
-<cfelseif rc.compactDisplay eq "true">
-<script type="text/javascript">
-jQuery(document).ready(function(){
-	if (top.location != self.location) {
-		if(jQuery("#ProxyIFrame").length){
-			jQuery("#ProxyIFrame").load(
-				function(){
-					frontEndProxy.post({cmd:'setWidth',width:'standard'});
+		for(var i=0;i<anchors.length;i++){	
+			try{
+				if (typeof(anchors[i].onclick) != 'function' 
+					&& typeof(anchors[i].getAttribute('href')) == 'string' 
+					&& anchors[i].getAttribute('href').indexOf('#') == -1) {
+		   			anchors[i].onclick = setRequestedURL;
 				}
-			);	
-		} else {
-			frontEndProxy.post({cmd:'setWidth',width:'standard'});
+			} catch(err){}
 		}
+		
+	});
+
+	$(document).unload(function(){
+		if(!siteManager.formSubmitted && siteManager.requestedURL != '')
+		{
+			conditionalExit();
+		}
+	});
+
+	function conditionalExit(msg){
+		if(siteManager.form_is_modified(document.contentForm)){
+		if(msg==null){
+			<cfoutput>msg="#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.saveasdraft"))#";</cfoutput>
+		}
+		
+		document.contentForm.approved.value=0;
+		jQuery("#alertDialog").html(msg);
+		jQuery("#alertDialog").dialog({
+				resizable: false,
+				modal: true,
+				position: getDialogPosition(),
+				buttons: {
+					'Yes': function() {
+						jQuery(this).dialog('close');
+						if(siteManager.ckContent()){
+							document.getElementById('contentForm').returnURL.value=siteManager.requestedURL;
+							submitForm(document.contentForm,'add');
+							}
+							return false;
+						},
+					'No': function() {
+						jQuery(this).dialog('close');
+						location.href=siteManager.requestedURL;
+						siteManager.requestedURL="";
+					}
+				}
+			});
+		
+			return false;	
+			
+		} else {
+			siteManager.requestedURL="";
+			return true;	
+		}
+
 	}
-});
-</script>
+	</script>
+<cfelseif rc.compactDisplay eq "true">
+	<script type="text/javascript">
+	jQuery(document).ready(function(){
+		if (top.location != self.location) {
+			if(jQuery("#ProxyIFrame").length){
+				jQuery("#ProxyIFrame").load(
+					function(){
+						frontEndProxy.post({cmd:'setWidth',width:'standard'});
+					}
+				);	
+			} else {
+				frontEndProxy.post({cmd:'setWidth',width:'standard'});
+			}
+		}
+	});
+	</script>
 </cfif> 
+
 <script>
-<cfif requiresApproval>
-	<cfset approvalRequest=rc.contentBean.getApprovalRequest()>
-	<cfif not approvalRequest.getIsNew() and approvalRequest.getStatus() eq 'Pending'>
-		var pendingApproval=true;
-		var cancelPendingApproval=<cfoutput>'#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"approvalchains.cancelPendingApproval"))#'</cfoutput>;
+	<cfif requiresApproval>
+		<cfset approvalRequest=rc.contentBean.getApprovalRequest()>
+		<cfif not approvalRequest.getIsNew() and approvalRequest.getStatus() eq 'Pending'>
+			var pendingApproval=true;
+			var cancelPendingApproval=<cfoutput>'#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"approvalchains.cancelPendingApproval"))#'</cfoutput>;
+		<cfelse>
+			var pendingApproval=false;
+		</cfif>
 	<cfelse>
 		var pendingApproval=false;
 	</cfif>
-<cfelse>
-	var pendingApproval=false;
-</cfif>
 </script>
 
 <cfset subtype=application.classExtensionManager.getSubTypeByName(rc.type,rc.contentBean.getSubType(),rc.siteid)>
+
 <cfoutput>
-<script type="text/javascript">
-var hasSummary=#subType.getHasSummary()#;
-var hasBody=#subType.getHasBody()#;
-</script>
+	<script type="text/javascript">
+		var hasSummary=#subType.getHasSummary()#;
+		var hasBody=#subType.getHasBody()#;
+	</script>
 </cfoutput>
 
 <cfsilent>
 	<cfif rc.contentBean.getType() eq 'File'>
-	<cfset rsFile=application.serviceFactory.getBean('fileManager').readMeta(rc.contentBean.getFileID())>
-	<cfset fileExt=rsFile.fileExt>
+		<cfset rsFile=application.serviceFactory.getBean('fileManager').readMeta(rc.contentBean.getFileID())>
+		<cfset fileExt=rsFile.fileExt>
 	<cfelse>
-	<cfset fileExt=''/>
+		<cfset fileExt=''/>
 	</cfif>
+
 	<cfif listFindNoCase(extendedList,rc.type)>
 		<cfset rsSubTypes=application.classExtensionManager.getSubTypes(siteID=rc.siteID,activeOnly=true) />
 		<!---
@@ -196,8 +206,18 @@ var hasBody=#subType.getHasBody()#;
 			<cfquery name="rsSubTypes" dbtype="query">
 			select * from rsSubTypes
 			where 
-				type in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#pageLevelList#"/>)
-				or type='Base'
+				<cfif not len(subtypefilter)>
+					type in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#pageLevelList#"/>)
+					or type='Base'
+				<cfelse>
+					1=1
+					<cfloop list="subtypefilter" index="i">
+						and (
+								type=<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#listFirst(i,'/')#"/>
+								and subtype=<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#listLast(i,'/')#"/>
+							)
+					</cfloop>
+				</cfif>
 			</cfquery>
 		<!---
 		<cfelse>
@@ -242,18 +262,18 @@ var hasBody=#subType.getHasBody()#;
 	</cfif>
 	
 	<cfif  ListFindNoCase("Page,Folder,Calendar,Link,File,Gallery",rc.type)>
-	<cfset rsPluginScripts1=application.pluginManager.getScripts("onContentEdit",rc.siteID)>
-	<cfset rsPluginScripts2=application.pluginManager.getScripts("on#rc.type#Edit",rc.siteID)>
-	<cfquery name="rsPluginScripts3" dbtype="query">
-	select * from rsPluginScripts1 
-	union
-	select * from rsPluginScripts2 
-	</cfquery>
-	<cfquery name="rsPluginScripts" dbtype="query">
-	select * from rsPluginScripts3 order by pluginID
-	</cfquery>
+		<cfset rsPluginScripts1=application.pluginManager.getScripts("onContentEdit",rc.siteID)>
+		<cfset rsPluginScripts2=application.pluginManager.getScripts("on#rc.type#Edit",rc.siteID)>
+		<cfquery name="rsPluginScripts3" dbtype="query">
+			select * from rsPluginScripts1 
+			union
+			select * from rsPluginScripts2 
+		</cfquery>
+		<cfquery name="rsPluginScripts" dbtype="query">
+			select * from rsPluginScripts3 order by pluginID
+		</cfquery>
 	<cfelse>
-	<cfset rsPluginScripts=application.pluginManager.getScripts("on#rc.type#Edit",rc.siteID)>
+		<cfset rsPluginScripts=application.pluginManager.getScripts("on#rc.type#Edit",rc.siteID)>
 	</cfif>
 
 	<cfsavecontent variable="actionButtons">
