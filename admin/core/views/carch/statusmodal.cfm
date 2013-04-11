@@ -124,7 +124,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 
 <cfif rc.mode eq 'frontend'>
-	<cfif not content.getActive() and requiresApproval>
+	<cfif not content.getApproved() and requiresApproval>
 		<script>
 		function applyApprovalAction(requestid,action,comment,siteid){
 			
@@ -145,7 +145,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							pars,
 							function(data) {
 								//$('html').html(data);
-								window.location = top.location.replace(data.previewurl);
+								//alert(data.previewurl)
+								top.location.replace(data.previewurl);
 							}
 						);
 					}
