@@ -117,8 +117,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		}catch(any e)
 			{writeDump(var=e,abort=true);}
 		*/
-		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contentID));
-		//feed.setActiveOnly(0);
+		feed.addParam(field="tcontent.contentHistID",datatype="varchar",condition="in",criteria=valuelist(subList.contentHistID));
+		feed.setActiveOnly(0);
+
+		//writeDump(var=feed.getQuery(),abort=true);
 	} else if($.event('report') eq "myapprovals"){
 		subList=$.getBean("contentManager").getApprovalsQuery($.event("siteID"));
 		//writeDump(var=subList,abort=true);
@@ -128,8 +130,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		}catch(any e)
 			{writeDump(var=e,abort=true);}
 		*/
-		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contentid));
-		//feed.setActiveOnly(0);
+		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contenthistid));
+		feed.setActiveOnly(0);
 	}
 	
 	if(len($.event("keywords"))){	
@@ -140,6 +142,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	iterator=feed.getIterator();
 	iterator.setPage($.event('page'));
 </cfscript>
+<!---
+<cfif $.event('report') eq "mydrafts">
+	<cfset rs=iterator.getQuery()>
+
+	<cfquery name="rs" dbtype="query">
+		select * from rs
+	</cfquery>
+
+	<cfset iterator=feed.setQuery(rs,20)>
+</cfif>
+--->
 <cfcatch>
 	<cfdump var="#cfcatch#" abort="true">
 </cfcatch>
@@ -220,6 +233,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		<cfset editLink="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">
 
+		<!---
 		<cfif $.event('report') eq "mydrafts">
 			<cfquery dbtype="query" name="rsHasPendingApprovals">
 				select * from sublist 
@@ -234,6 +248,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				and approvalStatus != 'Pending'
 			</cfquery>
 		</cfif>
+		--->
 		</cfsilent>
 	
 		<tr data-siteid="#item.getSiteID()#" data-contentid="#item.getContentID()#" data-contenthistid="#item.getContentHistID()#" data-sortby="#item.getSortBy()#" data-sortdirection="#item.getSortDirection()#" data-moduleid="#HTMLEditFormat(item.getModuleID())#" data-type="#item.getType()#" class="mura-node-data">
@@ -295,6 +310,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<h2>
 				<cfif not listFindNoCase('none,read',verdict) or $.event('report') eq 'mydrafts'>
 					<a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.edit')#" class="draftprompt" href="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">#HTMLEditFormat(item.getMenuTitle())#
+						<!---
 						<cfif $.event('report') eq 'mydrafts'>
 							(
 							<cfif rsHasPendingApprovals.recordcount>
@@ -305,7 +321,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.draft')#
 							</cfif>
 							)
-						</cfif>	 
+						</cfif>	
+						--->
+						<cfif $.event('report') eq 'mydrafts'>
+							(
+							<cfif item.getApprovalStatus() eq 'Pending'>
+								#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#
+							<cfelse>
+								#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.draft')#
+							</cfif>
+							)
+						</cfif>
+
 					</a>
 				<cfelse>
 					#HTMLEditFormat(item.getMenuTitle())#
