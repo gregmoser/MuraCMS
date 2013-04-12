@@ -109,28 +109,22 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		subList=$.getBean("contentManager").getExpiringContent($.event("siteID"),$.currentUser("userID"));
 		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contentID));
 	} else if($.event('report') eq "mydrafts"){
-		subList=$.getBean("contentManager").getDraftList($.event("siteID"));
-		//writeDump(var=subList,abort=true);
+		drafts=$.getBean("contentManager").getDraftList($.event("siteID"));
+		//writeDump(var=drafts,abort=true);
 		/*
 		try {
 		approvals=new Query(dbtype='query',sql="select * from subList where approvalStatus='Pending'").execute().getResult();
 		}catch(any e)
 			{writeDump(var=e,abort=true);}
 		*/
-		feed.addParam(field="tcontent.contentHistID",datatype="varchar",condition="in",criteria=valuelist(subList.contentHistID));
-		feed.setActiveOnly(0);
+		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(drafts.contentID));
+		//feed.setActiveOnly(0);
 
 		//writeDump(var=feed.getQuery(),abort=true);
 	} else if($.event('report') eq "myapprovals"){
-		subList=$.getBean("contentManager").getApprovalsQuery($.event("siteID"));
+		drafts=$.getBean("contentManager").getApprovalsQuery($.event("siteID"));
 		//writeDump(var=subList,abort=true);
-		/*
-		try {
-		approvals=new Query(dbtype='query',sql="select * from subList where approvalStatus='Pending'").execute().getResult();
-		}catch(any e)
-			{writeDump(var=e,abort=true);}
-		*/
-		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contenthistid));
+		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
 		feed.setActiveOnly(0);
 	}
 	
@@ -140,24 +134,66 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 	
 	iterator=feed.getIterator();
+
+/*
+	if(iterator.getRecordcount() and $.event('report') eq 'mydrafts'){
+		rs=iterator.getQuery();
+		//writeDump(var=drafts,abort=true);
+		for(i=1;i lte rs.recordcount;i++){
+			qs= new Query(dbType='query',sql='select max(lastupdate) as mostrecent from drafts where contentid= :contentID');
+			qs.addParam(name='contentID',cfsqltype='cf_sql_varchar',value=rs.contentid[i]);
+
+			rstemp=qs.execute().getResult();
+
+			querySetCell(rs, "lastupdate", rstemp.mostrecent, i);
+		}
+
+		if($.event('sortby') eq 'lastupdate'){
+			qs= new Query(dbType='query',sql="select * from rs order by lastupdate #feed.getSortDirection()#")
+			.execute()
+			.getResult();
+		}
+		iterator.setQuery(rs,feed.getNextN());
+	}
+
 	iterator.setPage($.event('page'));
+
+*/
 </cfscript>
-<!---
-<cfif $.event('report') eq "mydrafts">
+
+<cfif iterator.getRecordcount() and $.event('report') eq 'mydrafts'>
 	<cfset rs=iterator.getQuery()>
-
-	<cfquery name="rs" dbtype="query">
-		select * from rs
-	</cfquery>
-
-	<cfset iterator=feed.setQuery(rs,20)>
+	
+		<cfloop query="rs">
+			<cfquery name="rstemp" dbtype="query">
+				select max(lastupdate) as mostrecent from drafts where contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#rs.contentid#">
+			</cfquery>
+		
+			<cfset querySetCell(rs, "lastupdate", rstemp.mostrecent, rs.currentrow)>
+		</cfloop>
+		<cfif $.event('sortby') eq 'lastupdate'>
+			<cfquery name="rstemp" dbtype="query">
+				select * from rs order by lastupdate #feed.getSortDirection()#
+			</cfquery>
+		</cfif>
+		
+		<cfset iterator.setQuery(rs,feed.getNextN())>
+	
 </cfif>
---->
+
+<cfset iterator.setPage($.event('page'))>
+
+
+
+
 <cfcatch>
 	<cfdump var="#cfcatch#" abort="true">
 </cfcatch>
 </cftry>
 
+</cfsilent>
+<div class="row-fluid">
+	<cfsilent>
 <cfsavecontent variable="pagination">
 <cfoutput>
 	<cfif iterator.hasNext()>
@@ -181,12 +217,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</div>
 	</cfif>	
 </cfoutput>	
-</cfsavecontent></cfsilent>
-<!---<cfsavecontent variable="data.html">--->
-<cfset hasCustomImage=structKeyExists(getMetaData($.getBean('fileManager').getValue('imageProcessor')),'getCustomImage')>
+</cfsavecontent>
 
+<cfset hasCustomImage=structKeyExists(getMetaData($.getBean('fileManager').getValue('imageProcessor')),'getCustomImage')>
+</cfsilent>
 <cfoutput>
-<div class="row-fluid">
 <div id="main" class="span9">
 	<div class="navSort">
 		<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.sortby")#:</h2>
@@ -398,9 +433,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</table>
 
 	#pagination#
-
 </div>
-
 
 <div class="sidebar span3">
 	<!---<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports")#</h2>--->
