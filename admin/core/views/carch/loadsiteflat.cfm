@@ -163,13 +163,27 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfif iterator.getRecordcount() and $.event('report') eq 'mydrafts'>
 	<cfset rs=iterator.getQuery()>
-	
+
+	<cfset queryAddColumn(rs, "approvalStatus", 'varchar', [])>
+
 		<cfloop query="rs">
 			<cfquery name="rstemp" dbtype="query">
-				select max(lastupdate) as mostrecent from drafts where contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#rs.contentid#">
+				select max(lastupdate) as mostrecent from drafts 
+				where contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#rs.contentid#">
+			</cfquery>
+
+			<cfset querySetCell(rs, "lastupdate", rstemp.mostrecent, rs.currentrow)>
+
+			<cfquery name="rstemp" dbtype="query">
+				select contentid from drafts 
+				where contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#rs.contentid#"> 
+				and approvalStatus='Pending'
 			</cfquery>
 		
-			<cfset querySetCell(rs, "lastupdate", rstemp.mostrecent, rs.currentrow)>
+			<cfif rstemp.recordcount>
+				<cfset querySetCell(rs, "approvalStatus", 'Pending', rs.currentrow)>
+			</cfif>
+			
 		</cfloop>
 		<cfif $.event('sortby') eq 'lastupdate'>
 			<cfquery name="rs" dbtype="query">
