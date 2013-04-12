@@ -172,7 +172,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset querySetCell(rs, "lastupdate", rstemp.mostrecent, rs.currentrow)>
 		</cfloop>
 		<cfif $.event('sortby') eq 'lastupdate'>
-			<cfquery name="rstemp" dbtype="query">
+			<cfquery name="rs" dbtype="query">
 				select * from rs order by lastupdate #feed.getSortDirection()#
 			</cfquery>
 		</cfif>
@@ -182,9 +182,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfif>
 
 <cfset iterator.setPage($.event('page'))>
-
-
-
 
 <cfcatch>
 	<cfdump var="#cfcatch#" abort="true">
