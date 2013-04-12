@@ -427,7 +427,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<li class="categories">#application.rbFactory.getKeyValue(session.rb,"sitemanager.categories")#: <strong>
 						<cfloop condition="categories.hasNext()">
 							<cfset category=categories.next()>
-							#HTMLEditFormat(category.getName())#<cfif categories.hasPrevious()>, </cfif>
+							#HTMLEditFormat(category.getName())#<cfif categories.hasNext()>, </cfif>
 						</cfloop>
 						</strong>
 					</cfif></dd>
