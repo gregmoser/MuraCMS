@@ -48,7 +48,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="init" returntype="any" output="false" access="public">
 <cfargument name="configBean" type="any" required="yes"/>
-		<cfset variables.instance.configBean=arguments.configBean />
+		<cfset variables.configBean=arguments.configBean />
 	<cfreturn this />
 </cffunction>
 
