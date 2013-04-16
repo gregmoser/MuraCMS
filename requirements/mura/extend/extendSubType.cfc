@@ -325,7 +325,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfif not len(getBaseTable())>
 		<cfswitch expression="#getType()#">
-			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery">
+			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery,Base,Form">
 				<cfset setBaseTable("tcontent")>
 			</cfcase>
 			<cfcase value="1,2,User,Group,Address">
@@ -336,7 +336,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfif not len(getBaseKeyField())>
 		<cfswitch expression="#getType()#">
-			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery">
+			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery,Base,Form">
 				<cfset setBaseKeyField("contentHistID")>
 			</cfcase>
 			<cfcase value="1,2,User,Group,Address">
@@ -347,7 +347,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfif not len(getDataTable())>
 		<cfswitch expression="#getType()#">
-			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery">
+			<cfcase value="Page,Folder,Component,File,Link,Calendar,Gallery,Base,Form">
 				<cfset setDataTable("tclassextenddata")>
 			</cfcase>
 			<cfcase value="1,2,User,Group,Address">
@@ -378,7 +378,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		where subTypeID=<cfqueryparam cfsqltype="cf_sql_varchar"  value="#getSubTypeID()#">
 		</cfquery>
 		
-		<cfif not (rs.subtype eq 'Address' or getType() eq 'Address') and rs.type neq 'Default' and (rs.type neq getType() or rs.subtype neq getSubType() and getBaseTable() neq "Custom")>
+		<cfif rs.subtype neq 'Default' and (rs.type neq getType() or rs.subtype neq getSubType() and getBaseTable() neq "Custom")
+		and listFindNoCase('Folder,Page,Calendar,Gallery,File,link,Component,Form',rs.type) and listFindNoCase('Folder,Page,Calendar,Gallery,File,Link,Component,Form',getType())>
 			<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
 				update #getBaseTable()# set
 				type = <cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(getType() neq '',de('no'),de('yes'))#" value="#getType()#">,

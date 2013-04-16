@@ -140,7 +140,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfset var renderer=arguments.event.getValue("contentRenderer")>
 	<cfset var themeRenderer=arguments.event.getValue("themeRenderer")>
-	
+	<cfset var contentArray="">
+
 	<cfif arguments.event.valueExists('previewID')>
 		<cfset arguments.event.getHandler("standardSetPreview").handle(arguments.event)>
 	<cfelse>
@@ -149,10 +150,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif not arguments.event.valueExists('contentBean')>
 			<cfif len(arguments.event.getValue('linkServID'))>
 				<cfset arguments.event.setValue('contentBean',application.contentManager.getActiveContent(listFirst(arguments.event.getValue('linkServID')),arguments.event.getValue('siteid'),true)) />
+			<cfelseif len(arguments.event.getValue('currentFilenameAdjusted')) and application.configBean.getLoadContentBy() eq 'urltitle'>
+				<cfset arguments.event.setValue('contentBean',application.contentManager.getActiveByURLTitle(listLast(arguments.event.getValue('currentFilenameAdjusted'),'/'),arguments.event.getValue('siteid'),true)) />
 			<cfelse>
 				<cfset arguments.event.setValue('contentBean',application.contentManager.getActiveContentByFilename(arguments.event.getValue('currentFilenameAdjusted'),arguments.event.getValue('siteid'),true)) />
 			</cfif>
 		</cfif>
+	</cfif>
+
+	<cfif isArray(arguments.event.getValue('contentBean'))>
+		<cfset contentArray=arguments.event.getValue('contentBean')>
+		<cfset arguments.event.setValue('contentBean',contentArray[1])>
 	</cfif>
 
 	<cfset arguments.event.getValidator("standard404").validate(arguments.event)>
@@ -232,9 +240,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="event" required="true">
 	
 	<cfif application.utility.isHTTPS()>
-		<cflocation addtoken="no" url="http://#application.settingsManager.getSite(arguments.event.getValue('siteID')).getDomain()##application.configBean.getServerPort()##arguments.event.getContentRenderer().getCurrentURL(false)#">
+		<cflocation addtoken="no" url="http://#application.settingsManager.getSite(arguments.event.getValue('siteID')).getDomain()##application.configBean.getServerPort()##arguments.event.getContentRenderer().getCurrentURL(complete=false,filterVars=false)#">
 	<cfelse>
-		<cflocation addtoken="no" url="https://#application.settingsManager.getSite(arguments.event.getValue('siteID')).getDomain()##application.configBean.getServerPort()##arguments.event.getContentRenderer().getCurrentURL(false)#">
+		<cflocation addtoken="no" url="https://#application.settingsManager.getSite(arguments.event.getValue('siteID')).getDomain()##application.configBean.getServerPort()##arguments.event.getContentRenderer().getCurrentURL(complete=false,filterVars=false)#">
 	</cfif>
 </cffunction>
 

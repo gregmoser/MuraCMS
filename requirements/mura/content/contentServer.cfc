@@ -486,6 +486,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var localHandler=""/>
 	<cfset var previewData=""/>
 
+	<cfparam name="session.siteid" default="#arguments.event.getValue('siteID')#">
+
 	<cfif fileExists(expandPath("/#application.configBean.getWebRootMap()#/#arguments.event.getValue('siteid')#/includes/servlet.cfc"))>
 		<cfset servlet=createObject("component","#application.configBean.getWebRootMap()#.#arguments.event.getValue('siteid')#.includes.servlet").init(arguments.event)>
 	<cfelse>
@@ -502,6 +504,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset request.muraChangesetPreview=isStruct(previewData) and previewData.siteID eq arguments.event.getValue("siteID")>
 	
 	<cfif request.muraChangesetPreview>
+		<cfif getBean('changeset').loadBy(changesetID=previewData.changesetID,siteid=previewData.siteID).getLastUpdate() gt previewData.lastupdate>
+			<cfset getBean('changesetManager').setSessionPreviewData(previewData.changesetID)>	
+		</cfif>
+			
 		<cfset request.nocache=1>
 	</cfif>
 	

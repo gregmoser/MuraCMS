@@ -45,7 +45,7 @@ modified version; it is your choice whether to do so, or to make such modified v
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
 
-<cfloop from="1" to="#application.settingsManager.getSite('siteID').getColumnCount()#" index="i">
+<cfloop from="1" to="#application.settingsManager.getSite(rc.siteID).getColumnCount()#" index="i">
   <cfparam name="request.rsContentObjects#i#.recordcount" default=0>
 </cfloop>
 <cfset tabLabelList=listAppend(tabLabelList,application.rbFactory.getKeyValue(session.rb,"sitemanager.content.tabs.layoutobjects"))/>
@@ -57,7 +57,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
   <span id="extendset-container-tablayoutobjectstop" class="extendset-container"></span>
 
   <div class="fieldset">
+  
       <div class="control-group">
+      
+        <div class="span6">
               <label class="control-label">
                 <cfoutput><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.layoutTemplate"))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.layouttemplate')# <i class="icon-question-sign"></i></a></cfoutput>
             </label>
@@ -75,10 +78,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
             </cfloop>
           </select>
         </div>
-      </div>
-
-      <div class="control-group">
-              <label class="control-label">
+        </div>
+        <div class="span6">
+        <label class="control-label">
                 <cfoutput><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.childTemplate"))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.childtemplate')# <i class="icon-question-sign"></i></a></cfoutput>
               </label>
               <div class="controls">
@@ -93,7 +95,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
             </cfloop>
           </select>
         </div>
-    </div>
+        </div>
+
+      </div>
  
     <div class="control-group">
       <label class="control-label"> <a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.inheritanceRules"))#"> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.inheritancerules')# <i class="icon-question-sign"></i> </a> </label>

@@ -991,6 +991,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 						OR listFindNoCase('Link,File',newBean.getType()) and newBean.getMuraURLReset() eq "true">
 										
+					<cfif variables.configBean.getLoadContentBy() eq 'urltitle'>
+						<cfset getBean('contentUtility').setUniqueURLTitle(newBean) />
+					</cfif>
+
 					<cfset getBean('contentUtility').setUniqueFilename(newBean) />
 												
 					<cfif not newBean.getIsNew() and newBean.getoldfilename() neq newBean.getfilename() and len(newBean.getoldfilename())>
@@ -1210,16 +1214,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 					
 				<!--- Make sure preview data is in sync --->
-				<cfif isDefined('session.mura')>
-					<cfset changesetData=getCurrentUser().getValue("ChangesetPreviewData")>
-					<cfif isdefined("changesetData.changesetID")
-						and (
-								previousChangesetID eq changesetData.changesetID
-								or newBean.getChangesetID() eq changesetData.changesetID
-							)>
-						<cfset variables.changesetManager.setSessionPreviewData(changesetData.changesetID)>
-					</cfif>
-				</cfif>	
+				<cfif len(previousChangesetID)>
+					<cfset getBean('changeset').loadBy(changesetID=previousChangesetID,siteid=newBean.getSiteID()).save()>
+				</cfif>
+
+				<cfif len(newBean.getChangesetID()) and newBean.getChangesetID() neq previousChangesetID>
+					<cfset getBean('changeset').loadBy(changesetID=newBean.getChangesetID(),siteid=newBean.getSiteID()).save()>
+				</cfif>
 					
 				<cfset variables.trashManager.takeOut(newBean)>
 					
@@ -1803,14 +1804,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cffunction name="saveComment" access="public" output="false" returntype="any">
 		<cfargument name="data" type="struct">
-		<cfargument name="contentRenderer" required="true" default="#getBean('contentRenderer')#">
+		<cfargument name="contentRenderer" required="true" default="" hint="deprecated">
 		<cfargument name="script" required="true" default="">
 		<cfargument name="subject" required="true" default="">
 		<cfargument name="notify" required="true" default="true">
 		
 		<cfset var commentBean=getCommentBean() />
 		<cfset commentBean.set(arguments.data) />
-		<cfset commentBean.save(arguments.contentRenderer,arguments.script,arguments.subject,arguments.notify) />
+		<cfset commentBean.save(script=arguments.script,subject=arguments.subject,notify=arguments.notify) />
 		<cfreturn commentBean />
 	</cffunction>
 	
@@ -2103,14 +2104,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var showdialog = false />
 		<cfset var historyID = cb.getContentHistID() />
 		<cfset var newDraft = "" />
-		<cfset var history = "" />
+		<cfset var history = getDraftHist(arguments.contentid,arguments.siteid) />
+		<cfset var pendingchangsets=variables.changesetManager.getPendingByContentID(arguments.contentID,arguments.siteID) />
 		
 		<cfif cb.getActive()>
-			<cfif cb.hasDrafts()>
-				<cfset history = getDraftHist(arguments.contentid,arguments.siteid) />
+			<cfif history.recordcount or pendingchangsets.recordcount>
 				<cfquery name="newDraft" dbtype="query">
-					select * from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
-					order by lastUpdate desc
+					select contenthistid, lastupdate from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
+					union 
+					select contenthistid, lastupdate from pendingchangsets
+				</cfquery>
+				<cfquery name="newDraft" dbtype="query">
+					select * from newDraft order by lastupdate desc
 				</cfquery>
 				<cfif newDraft.recordCount>
 					<cfset showdialog = true />
@@ -2180,7 +2185,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfloop condition="history.hasNext()">
 			<cfset version=history.next()>
-			<cfset purgeContentCacheKey(cache,"version" & arguments.contentBean.getSiteID() & arguments.contentBean.getContentHistID(),false)>
+			<cfset purgeContentCacheKey(cache,"version" & version.getSiteID() & version.getContentHistID(),false)>
 		</cfloop>
 		
 		<cfif arguments.broadcast>

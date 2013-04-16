@@ -140,7 +140,7 @@
 				min-height: 18px;
 				line-height: 20px;
 				white-space: wrap;
-				padding: 4px 5px 0 0;
+				padding: 5px 5px 0 0;
 				float: left;
 				color: @grayDarker;		
 			}
@@ -207,12 +207,15 @@
 				
 				
 				
-				&.icon-mura-folder:before { content: "\f07b"; }
+				&.icon-mura-folder:before { 
+					content: "\f114";
+					top: 2px;
+					}
 				
 				&.icon-mura-page:before {
-					.icon-font('mura-icons');
-					content: "\36";
-					font-size: 17px;
+					.icon-font('FontAwesome');
+					content: "\f016";
+					font-size: 20px;
 					top: 2px;
 					margin-left: 1px;
 					width: 21px;
@@ -224,8 +227,8 @@
 				
 				&.icon-mura-calendar:before {
 					content: "\f073";
-					font-size: 22px;
-					top: 5px;
+					font-size: 16px;
+					top: 2px;
 					}
 					
 				&.icon-mura-gallery:before { content: "\f00a"; }
@@ -325,7 +328,7 @@
 					content: "\f0da"; // Right Caret Icon
 					}
 				
-				&.open + .icon-mura-folder:before { content: "\f07c" !important; }
+				&.open + .icon-mura-folder:before { content: "\f115" !important; }
 			
 			}
 						
@@ -607,23 +610,27 @@
 			margin: 0;
 			position: relative;
 			list-style: none;
-		}
-		
-		ul.nodeMeta li {
+			
+			li {
 			float: left;
 			padding: 0;
 			margin: 0 .5em .35em 0;
 			font-size: 11px;
+			white-space: nowrap;
+			
+				&:after {
+				content: "/";
+				margin-left: .5em;
+					}
+					
+				&:last-child:after {
+				content: "";
+				}
+				
+				&.categories { white-space: normal; }
+			}
 		}
-		
-		ul.nodeMeta li:after {
-			content: "/";
-			margin-left: .5em;
-		}
-		
-		ul.nodeMeta li:last-child:after {
-			content: "";
-		}
+
 		
 		.thumbnail {
 			float: left;
@@ -663,8 +670,8 @@
 				}
 			
 			.navZoom {
-			margin: .75em 0 .75em !important;
-			/*clear: both !important;*/
+			margin: .75em 0 .6em !important;
+			padding: 0 !important;
 			display: block;
 			overflow: hidden;
 			float: none !important;
@@ -1229,15 +1236,16 @@
 			.cancel {
 				position: absolute;
 				top: 4px;
-				right: 4px;
+				right: 2px;
 				cursor: pointer;
 				
 				i {
 					font-size: 16px;
-					color: @grayDark;
+					color: @gray;
+					text-shadow: 0 -1px 0 #000;
 					
 					&:hover {
-						color: @gray;
+						color: @grayDark;
 						}
 					
 					}
@@ -1345,16 +1353,37 @@
 			background: url('../images/quickedit-bottom-hasdraft.png') no-repeat center bottom;
 		}
 		
+		.hasDraft .mura-quickEdit > i {
+				float: left !important;
+				margin-left: -4px !important;
+				font-size: 20px !important;
+				}
+		
 		.hasDraft .mura-quickEdit h1 {
-			color: #333232;
-			font-weight: bold;
-			background: url('../images/icons/unsubscribe_24x24.png') no-repeat left top;
-			height: 24px;
-			line-height: 26px;
-			padding-left: 28px;
+			color: #333 !important;
+			font-weight: bold !important;
+			font-size: 16px !important;
+			line-height: 20px !important;
+			margin-bottom: 2px !important;
 		}
 		
+		.hasDraft .mura-quickEdit .cancel {
+				
+				i {
+					font-size: 16px;
+					color: @grayDark;
+					text-shadow: 0 1px 0 #fff;
+					
+					&:hover {
+						color: @grayDarker;
+						}
+					
+					}
+				}
+		
 		.hasDraft .mura-quickEdit p {
+			clear: both;
+			line-height: 1.2;
 			font-size: @qeFontSize !important;
 		}
 		
@@ -1511,8 +1540,12 @@ text-shadow: 0 0 1px @blue;
 				
 				i {
 					font-size: 16px;
-					margin-right: .25em
+					margin-right: .25em;
+					position: relative;
+					top: 2px;
 				}
+				
+				&#newZoom i { top: 0; }
 				
 			}
 			

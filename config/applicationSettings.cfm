@@ -56,6 +56,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfparam name="request.muraShowTrace" default="true"/>
 	<cfparam name="request.muraValidateDomain" default="true"/>
 	<cfparam name="request.muraAppreloaded" default="false"/>
+	<cfparam name="request.muraDynamicContentError" default="false">
 
 	<cffunction name="initTracePoint" output="false">
 		<cfargument name="detail">
@@ -190,6 +191,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfelse>
 		<cfset this.sessionTimeout = createTimeSpan(0,0,5,0)>
 	</cfif>
+	
+	<cfset this.timeout = properties.getProperty("requesttimeout","1000")>
 	
 	<!--- define a list of custom tag paths. --->
 	<cfset this.customtagpaths = properties.getProperty("customtagpaths","") />

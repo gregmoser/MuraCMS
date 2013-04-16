@@ -5,6 +5,7 @@
 <!--[if lt IE 7 ]><html class="mura ie ie6" lang="#HTMLEditFormat(session.locale)#"> <![endif]-->
 <!--[if IE 7 ]><html class="mura ie ie7" lang="#HTMLEditFormat(session.locale)#"> <![endif]-->
 <!--[if IE 8 ]><html class="mura ie ie8" lang="#HTMLEditFormat(session.locale)#"> <![endif]-->
+<!--[if IE 9 ]><html class="mura ie ie9" lang="#HTMLEditFormat(session.locale)#"> <![endif]-->
 <!--[if (gte IE 9)|!(IE)]><!--><html lang="#HTMLEditFormat(session.locale)#" class="mura ie"><!--<![endif]-->
 <cfelse>
 <html lang="#HTMLEditFormat(session.locale)#" class="mura">
@@ -156,7 +157,7 @@
 	
 	<!--[if lte IE 7]>
 	<script src="#application.configBean.getContext()#/admin/assets/js/upgrade-notification.min.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="#application.configBean.getContext()#/admin/assets/css/font-awesome-ie7.css">
+	<link rel="stylesheet" href="#application.configBean.getContext()#/admin/assets/css/font-awesome-ie7.min.css">
 	<script src="#application.configBean.getContext()#/admin/assets/js/mura-font-lte-ie7.js" type="text/javascript"></script>
 	<![endif]-->
 	</cfif>

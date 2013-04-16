@@ -79,7 +79,7 @@
                 <cfthrow errorcode="#REQUEST.constants.CKFINDER_CONNECTOR_ERROR_ACCESS_DENIED#" type="ckfinder" />
             </cfif>
          <cfelseif arguments.command eq "Permissions">
-            <cfif not(application.permUtility.isUserInGroup('Admin',session.siteid,1) or application.permUtility.isS2())>
+            <cfif not(application.permUtility.isUserInGroup('Admin',application.settingsManager.getSite(session.siteid).getPrivateUserPoolID(),0) or application.permUtility.isS2())>
                 <cfthrow errorcode="#REQUEST.constants.CKFINDER_CONNECTOR_ERROR_ACCESS_DENIED#" type="ckfinder" />
             </cfif>
          </cfif>
@@ -140,7 +140,7 @@
                 <cfset var perm=application.permUtility.getGroupPerm(request.rslist.userid,attributes.contentid,attributes.siteid)/>
                 <cfscript>
 					var node = XMLElemNew(THIS.xmlObject, "Group");
-					node.xmlText = request.rslist.GroupName;
+					node.xmlAttributes["name"] = request.rslist.GroupName;
 					node.xmlAttributes["perm"] = perm;
 					node.xmlAttributes["groupid"] = request.rslist.UserID;
 					ArrayAppend(private.xmlChildren, node);
@@ -157,7 +157,7 @@
                 <cfset var perm=application.permUtility.getGroupPerm(request.rslist.userid,attributes.contentid,attributes.siteid)/>
                 <cfscript>
 					var node = XMLElemNew(THIS.xmlObject, "Group");
-					node.xmlText = request.rslist.GroupName;
+					node.xmlAttributes["name"] = request.rslist.GroupName;
 					node.xmlAttributes["perm"] = perm;
 					node.xmlAttributes["groupid"] = request.rslist.UserID;
 					ArrayAppend(private.xmlChildren, node);

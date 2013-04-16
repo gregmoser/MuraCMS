@@ -64,9 +64,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</div>
 			   </div>
 			</cfif>
-
 			
-			<cfif rc.contentBean.getType() eq 'Component'>
+			<cfif rc.type eq 'Component'>
 			<div class="control-group">
 			      	<label class="control-label">
 			      		<cfoutput><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.layoutTemplate"))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.layouttemplate')# <i class="icon-question-sign"></i></a></cfoutput>
@@ -86,7 +85,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfif>
 
 			<cfif rc.type neq 'Component' and rc.type neq 'Form'>
-			
 
 				<div class="control-group">
 			      <div class="controls">
@@ -101,7 +99,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				
 			</cfif>
 
-			<cfif rc.type eq 'Form' >
+			<cfif rc.type eq 'Form' > 
 				<div class="control-group">
 					<label class="control-label">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.forcessllabel')#</label>
 				 	<div class="controls">
