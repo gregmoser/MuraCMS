@@ -72,8 +72,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset $.getHandler("standardSetIsOnDisplay").handle($)>
 		<cfset $.announceEvent('onRenderStart')>
 		<cfset r=$.event('r')>
+		<cfset r.allow=1>
 
-		<cfif not r.restrict or (r.restrict and not r.allow)>
+		<cfif not r.restrict or (r.restrict and r.allow)>
 			<cftry>
 				<cfset itemcontent=trim($.addCompletePath($.dspBody(pageTitle='',bodyAttribute='body', crumblist=0,showMetaImage=0),item.getSiteID()))>
 				<cfif request.muraDynamicContentError>
