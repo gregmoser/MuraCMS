@@ -353,7 +353,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfif arguments.oldfilename neq "/">
 		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rslist')#">
-		select contenthistid, body from tcontent where type in ('Page','Calendar','Folder','Component','Form','Gallery')
+		select contenthistid, body from tcontent where type in ('Page','Calendar','Folder','Component','Form','Gallery','Link')
 		 and body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#variables.configBean.getContext()##variables.contentRenderer.getURLStem(arguments.siteID,arguments.oldfilename)#%"/>
 		 and siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 		</cfquery>
@@ -368,7 +368,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 			
 		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rslist')#">
-		 select contenthistid, summary from tcontent where type in ('Page','Calendar','Folder','Component','Form','Gallery')
+		 select contenthistid, summary from tcontent where type in ('Page','Calendar','Folder','Component','Form','Gallery','Link')
 		 and summary like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#variables.configBean.getContext()##variables.contentRenderer.getURLStem(arguments.siteID,arguments.oldfilename)#%"/>
 		 and siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 		</cfquery>
