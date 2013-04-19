@@ -1206,8 +1206,7 @@ buttons: {
 						location.href = './';
 					}
 					$("#mura-quickEditor").html(data);
-					$("#mura-quickEditor").trigger('contextmenu');
-					
+
 					setDatePickers(".mura-quickEdit-datepicker", dtLocale, dtCh);
 					setToolTips(".mura-quickEdit-datepicker");
 					if($("#hasDraftsMessage").length) {
