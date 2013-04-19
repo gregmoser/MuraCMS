@@ -54,21 +54,31 @@
 		<cfparam name="arguments.rc.date1" default=""/>
 		<cfparam name="arguments.rc.date2" default=""/>
 		<cfparam name="arguments.rc.return" default=""/>
+		<cfparam name="arguments.rc.ommitPublishingTab" default="false"/>
+		<cfparam name="arguments.rc.ommitRelatedContentTab" default="false"/>
+		<cfparam name="arguments.rc.ommitAdvancedTab" default="false"/>
 
+		<cfif not arguments.rc.ommitPublishingTab>
+			<cfparam name="arguments.rc.isNav" default="0"/>
+			<cfparam name="arguments.rc.target" default="_self"/>
+			<cfparam name="arguments.rc.searchExclude" default="0"/>
+			<cfparam name="arguments.rc.restricted" default="0"/>
+			<cfparam name="arguments.rc.mobileExclude" default="0"/>
+		</cfif>
 
-		<cfparam name="arguments.rc.isNav" default="0"/>
-		<cfparam name="arguments.rc.isLocked" default="0"/>
-		<cfparam name="arguments.rc.forceSSL" default="0"/>
-		<cfparam name="arguments.rc.target" default="_self"/>
-		<cfparam name="arguments.rc.searchExclude" default="0"/>
-		<cfparam name="arguments.rc.restricted" default="0"/>
-		<cfparam name="arguments.rc.mobileExclude" default="0"/>
-		<cfparam name="arguments.rc.relatedcontentid" default=""/>
+		<cfif not arguments.rc.ommitAdvancedTab>
+			<cfparam name="arguments.rc.isLocked" default="0"/>
+			<cfparam name="arguments.rc.forceSSL" default="0"/>
+			<cfparam name="arguments.rc.doCache" default="1"/>
+			<cfparam name="arguments.rc.displayTitle" default="0"/>
+		</cfif>
+			
+		<cfif not arguments.rc.ommitRelatedContentTab>
+			<cfparam name="arguments.rc.relatedcontentid" default=""/>
+		</cfif>
+		
 		<cfparam name="arguments.rc.responseChart" default="0"/>
-		<cfparam name="arguments.rc.displayTitle" default="0"/>
-		<cfparam name="arguments.rc.doCache" default="1"/>
 		<cfparam name="arguments.rc.parentid" default=""/>
-
 		 
 		<cfif not isDefined("arguments.rc.topid")>
 			<cfparam name="session.topID" default="00000000000000000000000000000000001">

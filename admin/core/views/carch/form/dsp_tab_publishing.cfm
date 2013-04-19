@@ -102,25 +102,25 @@
 	      				<cfif rc.contentBean.getIsNew()>
 	      					"#rc.crumbData[1].menutitle#"<cfelse>"#rc.crumbData[2].menutitle#"
 	      				</cfif>
-						&nbsp;&nbsp;<a href="javascript:##;" onclick="javascript: siteManager.loadSiteParents('#rc.siteid#','#rc.contentid#','#rc.parentid#','',1);return false;">[#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectnewparent')#]</a>
-						<input type="hidden" name="parentid" value="#rc.parentid#">
+						&nbsp;&nbsp;<a href="javascript:##;" onclick="javascript: siteManager.loadSiteParents('#JSStringFormat(rc.siteid)#','#JSStringFormat(rc.contentid)#','#JSStringFormat(rc.parentid)#','',1);return false;">[#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectnewparent')#]</a>
+						<input type="hidden" name="parentid" value="#HTMLEditFormat(rc.parentid)#">
 					</span>
 				</label>
 			</div> <!--- /end control-group --->
 		<cfelse>
-		 	<input type="hidden" name="parentid" value="#rc.parentid#">
+		 	<input type="hidden" name="parentid" value="#HTMLEditFormat(rc.parentid)#">
 		</cfif>
 	<cfelse>
 		<cfif rc.type neq 'Component' and rc.type neq 'Form'>	
 			<input type="hidden" name="display" value="#rc.contentBean.getdisplay()#">
 				<cfif rc.contentid eq '00000000000000000000000000000000001' or (rc.parentid eq '00000000000000000000000000000000001' and application.settingsManager.getSite(rc.siteid).getlocking() eq 'top') or application.settingsManager.getSite(rc.siteid).getlocking() eq 'all'>
-					<input type="hidden" name="parentid" value="#rc.parentid#">
+					<input type="hidden" name="parentid" value="#HTMLEditFormat(rc.parentid)#">
 				</cfif>
 			<input type="hidden" name="displayStart" value="">
 			<input type="hidden" name="displayStop" value="">
 		<cfelse>
 			<input type="hidden" name="display" value="1">
-			<input type="hidden" name="parentid" value="#rc.parentid#">
+			<input type="hidden" name="parentid" value="#HTMLEditFormat(rc.parentid)#">
 		</cfif>
 		
 	</cfif>
@@ -138,7 +138,7 @@
 			</div>
 			<div class="controls" id="expires-notify">
 				<label for="dspexpiresnotify" class="checkbox">
-					<input type="checkbox" name="dspExpiresNotify" id="dspexpiresnotify" onclick="siteManager.loadExpiresNotify('#rc.siteid#','#rc.contenthistid#','#rc.parentid#');"  class="checkbox">
+					<input type="checkbox" name="dspExpiresNotify" id="dspexpiresnotify" onclick="siteManager.loadExpiresNotify('#JSStringFormat(rc.siteid)#','#JSStringFormat(rc.contenthistid)#','#JSStringFormat(rc.parentid)#');"  class="checkbox">
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.expiresnotify')#
 				</label>
 			</div>
@@ -189,7 +189,7 @@
 		<div class="controls">
 			<label class="control-label">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.notifyforreviewlabel')#</label>
 	   		<label for="dspnotify" class="checkbox">
-	      		<input type="checkbox" name="dspNotify"  id="dspnotify" onclick="siteManager.loadNotify('#rc.siteid#','#rc.contentid#','#rc.parentid#');"  class="checkbox"> 
+	      		<input type="checkbox" name="dspNotify"  id="dspnotify" onclick="siteManager.loadNotify('#JSStringFormat(rc.siteid)#','#JSStringFormat(rc.contentid)#','#JSStringFormat(rc.parentid)#');"  class="checkbox"> 
 	      		<a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.notifyReview"))#">
 	      			#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.notifyforreview')#
 	      		 <i class="icon-question-sign"></i></a>

@@ -452,58 +452,62 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 			</cfif>
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Categorization')>
-			<cfif application.categoryManager.getCategoryCount(rc.siteID)>
-			<cfinclude template="form/dsp_tab_categories.cfm">
-			</cfif>
+				<cfif application.categoryManager.getCategoryCount(rc.siteID)>
+					<cfinclude template="form/dsp_tab_categories.cfm">
+				</cfif>
 			</cfif>
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Tags')>
-			<cfinclude template="form/dsp_tab_tags.cfm">
+				<cfinclude template="form/dsp_tab_tags.cfm">
 			</cfif>	
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Related Content')>
-			<cfinclude template="form/dsp_tab_related_content.cfm">
+				<cfinclude template="form/dsp_tab_related_content.cfm">
+			<cfelse>
+				<input type="hidden" name="ommitRelatedContentTab" value="true">
 			</cfif>
 		</cfcase>
 		<cfcase value="Link,File">
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Categorization')>
-			<cfif application.categoryManager.getCategoryCount(rc.siteid)>
-			<cfinclude template="form/dsp_tab_categories.cfm">
-			</cfif>
+				<cfif application.categoryManager.getCategoryCount(rc.siteid)>
+					<cfinclude template="form/dsp_tab_categories.cfm">
+				</cfif>
 			</cfif>
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Tags')>
-			<cfinclude template="form/dsp_tab_tags.cfm">
+				<cfinclude template="form/dsp_tab_tags.cfm">
 			</cfif>		
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Related Content')>
-			<cfinclude template="form/dsp_tab_related_content.cfm">
+				<cfinclude template="form/dsp_tab_related_content.cfm">
+			<cfelse>
+				<input type="hidden" name="ommitRelatedContentTab" value="true">
 			</cfif>
 		</cfcase>
 		<cfcase value="Component">
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Categorization')>
-			<cfif application.categoryManager.getCategoryCount(rc.siteID)>
-			<cfinclude template="form/dsp_tab_categories.cfm">
-			</cfif>
+				<cfif application.categoryManager.getCategoryCount(rc.siteID)>
+					<cfinclude template="form/dsp_tab_categories.cfm">
+				</cfif>
 			</cfif>
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Tags')>
-			<cfinclude template="form/dsp_tab_tags.cfm">
+				<cfinclude template="form/dsp_tab_tags.cfm">
 			</cfif>	
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Usage Report')>
-			<cfif not rc.contentBean.getIsNew()>
-			<cfinclude template="form/dsp_tab_usage.cfm">
-			</cfif>
+				<cfif not rc.contentBean.getIsNew()>
+					<cfinclude template="form/dsp_tab_usage.cfm">
+				</cfif>
 			</cfif>		
 		</cfcase>
 		<cfcase value="Form">
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Categorization')>
-			<cfif application.categoryManager.getCategoryCount(rc.siteID)>
-			<cfinclude template="form/dsp_tab_categories.cfm">
-			</cfif>
+				<cfif application.categoryManager.getCategoryCount(rc.siteID)>
+					<cfinclude template="form/dsp_tab_categories.cfm">
+				</cfif>
 			</cfif>
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Tags')>
-			<cfinclude template="form/dsp_tab_tags.cfm">
+				<cfinclude template="form/dsp_tab_tags.cfm">
 			</cfif>	
 			<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Usage Report')>
-			<cfif not rc.contentBean.getIsNew()>
-			<cfinclude template="form/dsp_tab_usage.cfm">
-			</cfif>
+				<cfif not rc.contentBean.getIsNew()>
+					<cfinclude template="form/dsp_tab_usage.cfm">
+				</cfif>
 			</cfif>
 		</cfcase>
 	</cfswitch>
@@ -519,7 +523,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 	<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Advanced')>
 		<cfif listFind(session.mura.memberships,'S2IsPrivate')>
-		<cfinclude template="form/dsp_tab_advanced.cfm">
+			<cfinclude template="form/dsp_tab_advanced.cfm">
+		<cfelse>
+			<input type="hidden" name="ommitAdvancedTab" value="true">
 		</cfif> 
 	</cfif>
 
@@ -546,6 +552,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfif not len(tabAssignments) or listFindNocase(tabAssignments,'Publishing')>
 		<cfinclude template="form/dsp_tab_publishing.cfm">
+	<cfelse>
+		<input type="hidden" name="ommitPublishingTab" value="true">
+		<cfoutput><input type="hidden" name="parentid" value="#HTMLEditFormat(rc.parentid)#"></cfoutput>
 	</cfif>
 	</cfsavecontent>
 	<cfoutput>
