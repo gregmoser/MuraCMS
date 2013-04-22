@@ -50,7 +50,6 @@
 		<cfparam name="session.mura.viewDepth" default="#variables.settingsManager.getSite(arguments.rc.siteid).getviewdepth()#"/>
 		<cfparam name="session.mura.nextN" default="#variables.settingsManager.getSite(arguments.rc.siteid).getnextN()#"/>
 		<cfparam name="session.keywords" default=""/>
-		<cfparam name="arguments.rc.startrow" default="1"/>
 		<cfparam name="arguments.rc.date1" default=""/>
 		<cfparam name="arguments.rc.date2" default=""/>
 		<cfparam name="arguments.rc.return" default=""/>
