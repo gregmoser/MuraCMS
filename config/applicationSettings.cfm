@@ -190,33 +190,34 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	 
 	<!--- How long do session vars persist? --->
 	<cfif request.trackSession>
-		<cfset this.sessionTimeout = (properties.getProperty("sessionTimeout","180") / 24) / 60>
+		<cfset this.sessionTimeout = ( evalSetting(properties.getProperty("sessionTimeout","180")) / 24) / 60>
 	<cfelse>
 		<cfset this.sessionTimeout = createTimeSpan(0,0,5,0)>
 	</cfif>
 	
-	<cfset this.timeout = properties.getProperty("requesttimeout","1000")>
+	<cfset this.timeout =  evalSetting(properties.getProperty("requesttimeout","1000"))>
 
 	<!--- define a list of custom tag paths. --->
-	<cfset this.customtagpaths = properties.getProperty("customtagpaths","") />
+	<cfset this.customtagpaths =  evalSetting(properties.getProperty("customtagpaths","")) />
 	<cfset this.customtagpaths = listAppend(this.customtagpaths,variables.baseDir  &  "/requirements/mura/customtags/")>
 	
-	<cfset this.clientManagement = properties.getProperty("clientManagement","false") />
-	<cfset this.clientStorage = properties.getProperty("clientStorage","registry") />
-	<cfset this.ormenabled = properties.getProperty("ormenabled","true") />
+	<cfset this.clientManagement = evalSetting(properties.getProperty("clientManagement","false")) />
+	<cfset this.clientStorage = evalSetting(properties.getProperty("clientStorage","registry")) />
+	<cfset this.ormenabled =  evalSetting(properties.getProperty("ormenabled","true")) />
 	<cfset this.ormSettings={}>
 	<cfset this.ormSettings.cfclocation=[]>
 
 	<cfif len(properties.getProperty("datasource",""))>
+
 		<!--- You can't depend on 9 supporting datasource as struct --->
 		<cfif listFirst(SERVER.COLDFUSION.PRODUCTVERSION) gt 9 
 			or listGetAt(SERVER.COLDFUSION.PRODUCTVERSION,3) gt 0>
 			<cfset this.datasource = structNew()>
-			<cfset this.datasource.name = properties.getProperty("datasource","") />
-			<cfset this.datasource.username = properties.getProperty("dbusername","")>
-			<cfset this.datasource.password = properties.getProperty("dbpassword","")>
+			<cfset this.datasource.name = evalSetting(properties.getProperty("datasource","")) />
+			<cfset this.datasource.username = evalSetting(properties.getProperty("dbusername",""))>
+			<cfset this.datasource.password = evalSetting(properties.getProperty("dbpassword",""))>
 		<cfelse>
-			<cfset this.datasource =  properties.getProperty("datasource","") >
+			<cfset this.datasource =  evalSetting(properties.getProperty("datasource","")) >			
 		</cfif>
 	<cfelse>
 		<cfset this.ormenabled=false>
@@ -237,18 +238,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset this.ormSettings.dialect = "nuodb" />
 			</cfcase>
 		</cfswitch>
-		<cfset this.ormSettings.dbcreate = properties.getProperty("ormdbcreate","update") />
+		<cfset this.ormSettings.dbcreate = evalSetting(properties.getProperty("ormdbcreate","update")) />
 		<cfif len(properties.getProperty("ormcfclocation",""))>
-			<cfset arrayAppend(this.ormSettings.cfclocation,properties.getProperty("ormcfclocation")) />
+			<cfset arrayAppend(this.ormSettings.cfclocation,evalSetting(properties.getProperty("ormcfclocation"))) />
 		</cfif>
-		<cfset this.ormSettings.flushAtRequestEnd = properties.getProperty("ormflushAtRequestEnd","false") />
-		<cfset this.ormsettings.eventhandling = properties.getProperty("ormeventhandling","true") />
-		<cfset this.ormSettings.automanageSession = properties.getProperty("ormautomanageSession","false") />
-		<cfset this.ormSettings.savemapping=properties.getProperty("ormsavemapping","false") />
-		<cfset this.ormSettings.skipCFCwitherror=properties.getProperty("ormskipCFCwitherror","false") />
-		<cfset this.ormSettings.useDBforMapping=properties.getProperty("ormuseDBforMapping","true") />
-		<cfset this.ormSettings.autogenmap=properties.getProperty("ormautogenmap","true") />
-		<cfset this.ormSettings.logsql=properties.getProperty("ormlogsql","false") />
+		<cfset this.ormSettings.flushAtRequestEnd = evalSetting(properties.getProperty("ormflushAtRequestEnd","false")) />
+		<cfset this.ormsettings.eventhandling = evalSetting(properties.getProperty("ormeventhandling","true")) />
+		<cfset this.ormSettings.automanageSession = evalSetting(properties.getProperty("ormautomanageSession","false")) />
+		<cfset this.ormSettings.savemapping= evalSetting(properties.getProperty("ormsavemapping","false")) />
+		<cfset this.ormSettings.skipCFCwitherror= evalSetting(properties.getProperty("ormskipCFCwitherror","false")) />
+		<cfset this.ormSettings.useDBforMapping= evalSetting(properties.getProperty("ormuseDBforMapping","true")) />
+		<cfset this.ormSettings.autogenmap= evalSetting(properties.getProperty("ormautogenmap","true")) />
+		<cfset this.ormSettings.logsql= evalSetting(properties.getProperty("ormlogsql","false")) />
 	</cfif>
 
 	<cftry>
@@ -278,3 +279,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		, watchInterval=properties.getProperty('javaSettingsWatchInterval',60)
 		, watchExtensions=properties.getProperty('javaSettingsWatchExtensions','jar,class')
 	}>
+
+	<cffunction name="evalSetting" output="false">
+		<cfargument name="value">
+			<cfif left(arguments.value,2) eq "${"
+				and right(arguments.value,1) eq "}">
+				<cfset arguments.value=mid(arguments.value,3,len(arguments.value)-3)>
+				<cfset arguments.value = evaluate(arguments.value)>
+			<cfelseif left(arguments.value,2) eq "{{"
+				and right(arguments.value,2) eq "}}">
+				<cfset arguments.value=mid(arguments.value,3,len(arguments.value)-4)>
+				<cfset arguments.value = evaluate(arguments.value)>
+			</cfif>	
+		<cfreturn arguments.value>
+	</cffunction>
