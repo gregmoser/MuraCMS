@@ -273,11 +273,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 
 	<cfset this.javaSettings = {
-		loadPaths=[properties.getProperty('javaSettingsLoadPaths','/requirements/lib')]
-		, loadColdFusionClassPath=properties.getProperty('javaSettingsLoadColdFusionClassPath',false)
-		, reloadOnChange=properties.getProperty('javaSettingsReloadOnChange',false)
-		, watchInterval=properties.getProperty('javaSettingsWatchInterval',60)
-		, watchExtensions=properties.getProperty('javaSettingsWatchExtensions','jar,class')
+		loadPaths=[evalSetting(properties.getProperty('javaSettingsLoadPaths','/requirements/lib'))]
+		, loadColdFusionClassPath=evalSetting(properties.getProperty('javaSettingsLoadColdFusionClassPath',false))
+		, reloadOnChange=evalSetting(properties.getProperty('javaSettingsReloadOnChange',false))
+		, watchInterval=evalSetting(properties.getProperty('javaSettingsWatchInterval',60))
+		, watchExtensions=evalSetting(properties.getProperty('javaSettingsWatchExtensions','jar,class'))
 	}>
 
 	<cffunction name="evalSetting" output="false">
