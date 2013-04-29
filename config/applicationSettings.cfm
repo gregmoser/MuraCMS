@@ -148,7 +148,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset hasMainMappings=false>
 		</cfcatch>
 	</cftry>
-	<cfset hasMainMappings=true>
 	
 	<cftry>
 		<cfinclude template="#properties.getProperty("context","")#/plugins/mappings.cfm">
