@@ -271,6 +271,7 @@ component extends="mura.bean.bean" {
 			       	 		} else {
 			       	 			prop.persistent=true;
 			       	 			setPropAsIDColumn(prop);
+			       	 			//writeDump(var=prop,abort=true);
 			       	 		}
 
 			       	 		if(!structKeyExists(prop,'fkcolumn')){
@@ -336,10 +337,12 @@ component extends="mura.bean.bean" {
 		arguments.prop.default="";
 
 		if(arguments.prop.name eq 'site'){
-			arguments.ormtype="varchar";
+			arguments.prop.ormtype="varchar";
+			arguments.prop.datatype="varchar";
 			arguments.prop.length=25;
 		} else {
-			arguments.ormtype="char";
+			arguments.prop.ormtype="char";
+			arguments.prop.datatype="char";
 			arguments.prop.length=35;
 		}
 	}
