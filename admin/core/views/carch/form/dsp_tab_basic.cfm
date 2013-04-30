@@ -110,7 +110,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</div>
 
 		<script>
-			
+
 			hideSummaryEditor=function(){
 				if(typeof CKEDITOR.instances.summary != 'undefined'){
 					CKEDITOR.instances.summary.updateElement();
@@ -119,15 +119,21 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				jQuery(".summaryContainer").hide();
 				summaryLoaded=true;
 			}
-			
+
 			showSummaryEditor=function(){
 				if(typeof CKEDITOR.instances.summary == 'undefined'){
 					jQuery(".summaryContainer").show();
 					jQuery('##summary').ckeditor(
 		     		{ toolbar:'Summary',
 		     			height:'150',
-		     		  	customConfig : 'config.js.cfm'},
-		     		htmlEditorOnComplete
+		     		  	customConfig : 'config.js.cfm'
+					},
+		     		function(editorInstance){
+						htmlEditorOnComplete(editorInstance);
+						if (!hasBody){
+							showPreview();
+						}
+					}
 		     	);
 				}
 			}
@@ -237,6 +243,28 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfif not isExtended>
 						showBodyEditor();	
 					</cfif>
+
+					jQuery(document).ready(function(){
+						if (!hasSummary && !hasBody){
+							setTimeout(function(){
+								showPreview();
+							}, 2000);
+						}
+					});	
+
+					function showPreview(){
+						<cfif rc.preview eq 1>
+							if(!previewLaunched){
+						<cfif listFindNoCase("File",rc.type)>
+							preview('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,'')#?previewid=#rc.contentBean.getcontenthistid()#&siteid=#rc.contentBean.getsiteid()#');
+						<cfelse>
+							openPreviewDialog('http://#application.settingsManager.getSite(rc.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()##application.contentRenderer.getURLStem(rc.siteid,'')#?previewid=#rc.contentBean.getcontenthistid()#&siteid=#rc.contentBean.getsiteid()#');
+						</cfif>
+							previewLaunched=true;
+							}
+						</cfif>
+					}
+
 					</script>
 				</cfif>
 			</cfif>

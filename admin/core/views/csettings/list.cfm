@@ -220,11 +220,45 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</form>
 		</div>
 		<div id="tabPlugins" class="tab-pane fade"> <br/>
+			<script type="text/javascript">
+			$(function(){
+				$('#apptypeurl,#apptypefile').click(function(){
+					var appfield = $('#appzip');
+					var urlfield = $('#appurl');
+					if ($('#apptypefile:checked').length)
+					{
+						appfield.show().prop('disabled', null);
+						urlfield.hide().prop('disabled', 'disabled');
+					} else
+					{
+						urlfield.show().prop('disabled', null);
+						appfield.hide().prop('disabled', 'disabled');
+					};
+				}).filter(':first').triggerHandler('click');
+			});
+		</script>
+		
+		<h3>Install plugin:</h3>
+		Via <input type="radio" name="installType" value="File" Checked="true" id="apptypefile"> File or <input type="radio" name="installType" value="URL" id="apptypeurl"> URL:
+		<br>
+
+		<div id="appzip">
 			<form novalidate="novalidate" name="frmNewPlugin" action="index.cfm?muraAction=cSettings.deployPlugin" enctype="multipart/form-data" method="post" onsubmit="return validateForm(this);">
-				Upload New Plugin<br/>
+				Select the plugin file to upload:<br/>
 				<input name="newPlugin" type="file" required="true" message="Please select a plugin file.">
 				<input type="submit" value="Deploy" class="btn"/>
 			</form>
+		</div>
+		<div id="appurl">
+			<form  name="frmNewPluginFROMURL" action="index.cfm?muraAction=cSettings.deployPlugin" method="post">
+				Enter URL of the plugin:<br/>
+
+				<input name="newPlugin"  class="input-xxlarge" type="url" required="true" placeholder="http://www.domain.com/plugin.zip"
+				message="Please enter the url for your plugin file"
+				value="">
+				<input type="submit" value="Download and Deploy" class="btn"/>
+			</form>
+		</div>
 			<table class="table table-striped table-condensed table-bordered mura-table-grid">
 				<tr>
 					<th class="var-width">Name</th>

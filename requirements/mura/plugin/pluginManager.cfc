@@ -245,18 +245,32 @@ select * from tplugins order by #arguments.orderby#
 <cfset var cffileData=structNew()>
 <cfset var isPostedFile=false>
 <cfset var settingBean="">
+
 <cflock name="addPlugin#application.instanceID#" timeout="200">
 	<!--- <cftry> --->
 	
 	<cfif not len(modID) and len(arguments.id)>
 		<cfset modID=getPlugin(id,'',false).moduleID>
 	</cfif>
+
+	<!--- check to see if you want me to download something --->
+	<cfif isValid("url", arguments.pluginFile)>
+		<cfset serverfile=getLocalFileFromURL(arguments.pluginURL)>
 	
-	<cfif not len(arguments.pluginFile) and isDefined("form.NewPlugin") and getBean("fileManager").isPostedFile(form.NewPlugin)>
-		<cffile action="upload" result="cffileData" filefield="NewPlugin" nameconflict="makeunique" destination="#variables.configBean.getTempDir()#" >	
-		<cfset serverFile="#variables.configBean.getTempDir()##delim##cffileData.serverFile#">
+	<!--- Check if a path to a file was submitted--->
 	<cfelseif len(arguments.pluginFile)>
 		<cfset serverFile=arguments.pluginFile>
+	
+	<cfelseif isDefined("form.NewPlugin")>
+		<cfif isValid("url", form.NewPlugin)>
+			<cfset serverfile=getLocalFileFromURL(form.NewPlugin)>
+
+		<!--- Check if a file from a form was submitted --->
+		<cfelseif getBean("fileManager").isPostedFile(form.NewPlugin)>
+			<cffile action="upload" result="cffileData" filefield="NewPlugin" nameconflict="makeunique" destination="#variables.configBean.getTempDir()#" >	
+			<cfset serverFile="#variables.configBean.getTempDir()##delim##cffileData.serverFile#">
+		
+		</cfif>
 	</cfif>
 
 	<!--- Check to see if this is an Bundled plugin --->
@@ -2175,7 +2189,13 @@ select * from rs order by name
 	<cfset var pluginXml="">
 	<cfset var rsSites="">
 	<cfset var id="">
+	<cfset var deleteFile=false>
 	
+	<cfif isValid('url',arguments.pluginFile)>
+		<cfset arguments.pluginFile=getLocalFileFromURL(arguments.pluginFile)>
+		<cfset deleteFile=true>
+	</cfif>
+
 	<cfif variables.settingsManager.isBundle(arguments.pluginFile)>
 		<cfreturn deployBundle(siteID=arguments.siteID, bundleFile=arguments.pluginFile)>	
 	</cfif>
@@ -2199,6 +2219,10 @@ select * from rs order by name
 	<cfset result=deploy(id=id, pluginDir=tempDir, useDefaultSettings=arguments.useDefaultSettings, siteID=arguments.siteID,autoDeploy=arguments.autoDeploy)>
 	
 	<cfset variables.fileWriter.deleteDir(directory=getLocation(tempDir))>
+
+	<cfif deleteFile>
+		<cfset fileDelete(arguments.pluginFile)>
+	</cfif>
 	
 	<cfreturn result>
 
@@ -2316,6 +2340,29 @@ select * from rs order by name
 	</cfloop>
 		
 	<cfreturn zipTrim>
+</cffunction>
+
+<cffunction name="getLocalFileFromURL" output="false">
+	<cfargument name="pluginURL">
+
+	<cfset var myResult="">
+		
+	<cfif len(variables.configBean.getProxyServer())>
+		<cfhttp url="#arguments.pluginUrl#" method="get" getasbinary="yes" result="myResult"
+			proxyUser="#variables.configBean.getProxyUser()#" proxyPassword="#variables.configBean.getProxyPassword()#"
+			proxyServer="#variables.configBean.getProxyServer()#" proxyPort="#variables.configBean.getProxyPort()#">
+		</cfhttp>
+	<cfelse>
+		<cfhttp url="#arguments.pluginUrl#" method="get" getasbinary="yes" result="myResult">
+	</cfif>
+	<cfset var pluginFileName = CreateUUID() & ".zip">
+
+	<!--- try to download this... it should be a binary file --->
+	<cfhttp url="#arguments.pluginUrl#" method="get" getasbinary="yes" result="myResult"/>
+
+	<cfset var pluginFileLocation = variables.configBean.getTempDir() & pluginFileName>
+	<cfset fileWrite(pluginFileLocation, myResult.filecontent)>
+	<cfreturn pluginFileLocation>
 </cffunction>
 
 </cfcomponent>
