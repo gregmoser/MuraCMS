@@ -245,15 +245,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<div id="appzip">
 			<form novalidate="novalidate" name="frmNewPlugin" action="index.cfm?muraAction=cSettings.deployPlugin" enctype="multipart/form-data" method="post" onsubmit="return validateForm(this);">
 				Select the plugin file to upload:<br/>
-				<input name="newPlugin" type="file" required="true" message="Please select a plugin file.">
+				<input name="newPlugin" type="file" data-required="true" message="Please select a plugin file.">
 				<input type="submit" value="Deploy" class="btn"/>
 			</form>
 		</div>
 		<div id="appurl">
-			<form  name="frmNewPluginFROMURL" action="index.cfm?muraAction=cSettings.deployPlugin" method="post">
+			<form  name="frmNewPluginFROMURL" action="index.cfm?muraAction=cSettings.deployPlugin" method="post" onsubmit="return validateForm(this);">
 				Enter URL of the plugin:<br/>
 
-				<input name="newPlugin"  class="input-xxlarge" type="url" required="true" placeholder="http://www.domain.com/plugin.zip"
+				<input name="newPlugin"  class="input-xxlarge" type="url" data-required="true" placeholder="http://www.domain.com/plugin.zip"
 				message="Please enter the url for your plugin file"
 				value="">
 				<input type="submit" value="Download and Deploy" class="btn"/>
