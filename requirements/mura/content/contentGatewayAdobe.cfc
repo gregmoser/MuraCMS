@@ -1343,7 +1343,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rsPrivateSearch = "">
 	<cfset var kw = trim(arguments.keywords)>
 	
-	<cfquery name="rsPrivateSearch" datasource="#variables.configBean.getReadOnlyDatasource()#"  username="#variables.configBean.getReadOnlyDbUsername()#" password="#variables.configBean.getReadOnlyDbPassword()#" maxrows="1000">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPrivateSearch',maxrows=1000)#">
 	SELECT tcontent.ContentHistID, tcontent.ContentID, tcontent.Approved, tcontent.filename, tcontent.Active, tcontent.Type, tcontent.OrderNo, tcontent.ParentID, 
 	tcontent.Title, tcontent.menuTitle, tcontent.lastUpdate, tcontent.lastUpdateBy, tcontent.lastUpdateByID, tcontent.Display, tcontent.DisplayStart, 
 	tcontent.DisplayStop,  tcontent.isnav, tcontent.restricted, count(tcontent2.parentid) AS hasKids,tcontent.isfeature,tcontent.inheritObjects,tcontent.target,tcontent.targetParams,
@@ -1490,7 +1490,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var c = "">
 	<cfset var categoryListLen=listLen(arguments.categoryID)>
 	
-	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPublicSearch')#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPublicSearch',maxrows=1000)#">
 	<!--- Find direct matches with no releasedate --->
 	
 	select tcontent.contentid,tcontent.contenthistid,tcontent.siteid,tcontent.title,tcontent.menutitle,tcontent.targetParams,tcontent.filename,tcontent.summary,tcontent.tags,
