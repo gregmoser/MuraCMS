@@ -1552,8 +1552,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							or tcontent.menuTitle like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 							or tcontent.metaKeywords like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 							or tcontent.summary like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"> 
-							or tcontent.body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
-							or tcontent.credits like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">)
+							or (
+									tcontent.type not in ('Link','File')
+									and tcontent.body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+								)
+							or tcontent.credits like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+
+							or tcontent.contenthistid in (
+								select distinct tcontent.contenthistid from tclassextenddata 
+								inner join tcontent on (tclassextenddata.baseid=tcontent.contenthistid)
+								where tcontent.active=1
+								and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
+								and tclassextenddata.attributeValue like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							))
 				</cfif>
 				
 				and tcontent.searchExclude=0
@@ -1645,11 +1656,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					--->
 					and
 							(tcontent.Title like  <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							
 							or tcontent.menuTitle like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 							or tcontent.metaKeywords like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 							or tcontent.summary like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"> 
-							or tcontent.body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
-							or tcontent.credits like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">)
+							or 
+								(
+									tcontent.type not in ('Link','File')
+									and tcontent.body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+								)
+							or tcontent.credits like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+
+							or tcontent.contenthistid in (
+								select distinct tcontent.contenthistid from tclassextenddata 
+								inner join tcontent on (tclassextenddata.baseid=tcontent.contenthistid)
+								where tcontent.active=1
+								and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
+								and tclassextenddata.attributeValue like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							))
 				</cfif>
 				
 				and tcontent.searchExclude=0
@@ -1669,7 +1693,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				
 				#renderMobileClause()#			
 	</cfquery>
-	
+
 	<cfquery name="rsPublicSearch" dbtype="query">
 		select *
 		from rsPublicSearch 
