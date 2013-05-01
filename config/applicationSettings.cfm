@@ -199,9 +199,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<!--- define a list of custom tag paths. --->
 	<cfset this.customtagpaths =  evalSetting(properties.getProperty("customtagpaths","")) />
 	<cfset this.customtagpaths = listAppend(this.customtagpaths,variables.baseDir  &  "/requirements/mura/customtags/")>
-	
 	<cfset this.clientManagement = evalSetting(properties.getProperty("clientManagement","false")) />
-	<cfset this.clientStorage = evalSetting(properties.getProperty("clientStorage","registry")) />
+	
+	<cfset clientStorageCheck=evalSetting(properties.getProperty("clientStorage",""))>
+	
+	<cfif len(clientStorageCheck)>
+		<cfset this.clientStorage = clientStorageCheck />
+	</cfif>
+	
 	<cfset this.ormenabled =  evalSetting(properties.getProperty("ormenabled","true")) />
 	<cfset this.ormSettings={}>
 	<cfset this.ormSettings.cfclocation=[]>
