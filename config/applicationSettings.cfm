@@ -201,10 +201,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset this.customtagpaths = listAppend(this.customtagpaths,variables.baseDir  &  "/requirements/mura/customtags/")>
 	<cfset this.clientManagement = evalSetting(properties.getProperty("clientManagement","false")) />
 	
-	<cfset clientStorageCheck=evalSetting(properties.getProperty("clientStorage",""))>
+	<cfset variables.clientStorageCheck=evalSetting(properties.getProperty("clientStorage",""))>
 	
-	<cfif len(clientStorageCheck)>
-		<cfset this.clientStorage = clientStorageCheck />
+	<cfif len(variables.clientStorageCheck)>
+		<cfset this.clientStorage = variables.clientStorageCheck />
 	</cfif>
 	
 	<cfset this.ormenabled =  evalSetting(properties.getProperty("ormenabled","true")) />
