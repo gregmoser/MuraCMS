@@ -156,6 +156,29 @@ version 2 without this exception.  You may, if you choose, apply this exception 
          </div>
         
         <span id="htmlMessage" style="display:none;">
+
+          <!--- HTML LAYOUT TEMPLATE --->
+          <cfif rc.rsTemplates.recordcount>
+            <div class="control-group">
+              <label class="control-label">
+                #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.layouttemplate')#
+              </label>
+              <div class="controls">
+                <select name="template" class="dropdown">
+                  <cfloop query="rc.rsTemplates">
+                    <option value=""<cfif not Len(rc.rsTemplates.name)> selected</cfif>>Default</option>
+                    <cfif right(rc.rsTemplates.name,4) eq ".cfm">
+                      <cfoutput>
+                        <option value="#rc.rsTemplates.name#" <cfif rc.emailBean.gettemplate() eq rc.rsTemplates.name>selected</cfif>>#rc.rsTemplates.name#</option>
+                      </cfoutput>
+                    </cfif>
+                  </cfloop>
+                </select>
+              </div>
+            </div>
+            <cfelse>
+            <input type="hidden" name="template" value="">
+          </cfif>
         
         <div class="control-group">
         <label class="control-label">
