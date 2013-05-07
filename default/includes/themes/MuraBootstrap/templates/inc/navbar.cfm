@@ -28,11 +28,11 @@
 				<div class="nav-collapse collapse">
 					<cf_CacheOMatic key="dspPrimaryNav#$.content('contentid')#">
 						#$.dspPrimaryNav(
-							viewDepth=1,
+							viewDepth=3,
 							id='navPrimary',
 							class='nav',
 							displayHome='Never',
-							closePortals=false,
+							closeFolders=false,
 							showCurrentChildrenOnly=false,
 							ulTopClass='nav',
 							ulNestedClass='dropdown-menu',
@@ -49,7 +49,7 @@
 					<!---
 						Optional named arguments for Primary Nav are:
 							displayHome="Always/Never/Conditional"
-							openPortals/closePortals="contentid,contentid" 
+							openFolders/closeFolders="contentid,contentid" 
 								(e.g. show specific sub-content in dropdown nav)
 					--->
 				</div><!--/.nav-collapse -->
