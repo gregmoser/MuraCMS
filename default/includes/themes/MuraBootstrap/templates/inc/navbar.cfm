@@ -28,7 +28,7 @@
 				<div class="nav-collapse collapse">
 					<cf_CacheOMatic key="dspPrimaryNav#$.content('contentid')#">
 						#$.dspPrimaryNav(
-							viewDepth=3,
+							viewDepth=1,
 							id='navPrimary',
 							class='nav',
 							displayHome='Never',
