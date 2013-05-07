@@ -184,6 +184,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 			variables.serviceFactory.addBean('validationService', new hyrule.system.core.Hyrule() );
 
+			variables.serviceFactory.addBean('commentService', new admin.core.model.services.comment());
+
 			variables.serviceFactory.addAlias("scriptProtectionFilter","Portcullis");
 			variables.serviceFactory.addAlias("eventManager","pluginManager");
 			variables.serviceFactory.addAlias("permUtility","permission");
