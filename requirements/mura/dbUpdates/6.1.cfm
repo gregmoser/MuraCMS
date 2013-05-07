@@ -13,4 +13,7 @@
 	dbUtility.setTable("tsettings")
 	.addColumn(column="contentApprovalScript",dataType="longtext")
 	.addColumn(column="contentRejectionScript",dataType="longtext");
+
+	dbUtility.setTable('temails')
+	.addColumn(column='template',dataType='varchar');
 </cfscript>

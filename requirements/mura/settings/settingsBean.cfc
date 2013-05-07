@@ -711,7 +711,7 @@ s
 	<cfset var dir="">
 	
 	<cfswitch expression="#arguments.type#">
-	<cfcase value="Component">
+	<cfcase value="Component,Email">
 		
 		<cfset dir="#getTemplateIncludeDir()#/#lcase(arguments.type)#s">
 		

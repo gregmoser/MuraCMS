@@ -94,6 +94,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset arguments.rc.rsPrivateGroups=variables.emailManager.getPrivateGroups(arguments.rc.siteid) />
 	<cfset arguments.rc.rsPublicGroups=variables.emailManager.getPublicGroups(arguments.rc.siteid) />
 	<cfset arguments.rc.rsMailingLists=variables.emailManager.getMailingLists(arguments.rc.siteid) />
+	<cfset arguments.rc.rsTemplates=variables.emailManager.getTemplates(arguments.rc.siteid) />
 </cffunction>
 
 <cffunction name="update" output="false">
