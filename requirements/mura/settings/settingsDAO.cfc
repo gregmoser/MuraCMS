@@ -363,7 +363,7 @@ googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPP
 <cfset var rsSystemObject="">
 <cftransaction>
 
-<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSites')#">
+<cfquery name="rsSites">
  select siteID from tsettings
 </cfquery>
 
@@ -706,8 +706,8 @@ googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPP
 	  0
 	)
    </cfquery>
-   
-   <cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSystemObject')#">
+
+   <cfquery name="rsSystemObject">
       select * from tsystemobjects where siteid = 'default'
    	</cfquery>
 	
@@ -735,7 +735,7 @@ googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPP
 	)
    	</cfquery>
 
- <cfquery >
+ <cfquery>
         INSERT INTO tusers  (UserID, s2, Fname, Lname, Password, Email, GroupName, Type, subType, ContactForm, LastUpdate, lastupdateby, lastupdatebyid, InActive, username,  perm, isPublic,
 		company,jobtitle,subscribe,siteid,website,notes,keepPrivate,created)
      VALUES(
