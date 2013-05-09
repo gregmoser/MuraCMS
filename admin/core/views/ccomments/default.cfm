@@ -65,7 +65,8 @@
 --->
 </cfsilent>
 <cfoutput>
-	<h1>#application.rbFactory.getKeyValue(session.rb,'comments.commentsmanager')#</h1>
+<div id="commentsManagerWrapper">
+	<h1>#rc.$.rbKey('comments.commentsmanager')#</h1>
 
 	<!--- MESSAGING --->
 	<cfif StructKeyExists(rc, 'processed') and IsBoolean(rc.processed)>
@@ -73,11 +74,9 @@
 		<div id="feedback" class="alert alert-#local.class#">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			<cfif rc.processed>
-				<!--- <strong>Yep!</strong> That worked just fine. --->
-				#application.rbFactory.getKeyValue(session.rb,'comments.message.confirmation')#
+				#rc.$.rbKey('comments.message.confirmation')#
 			<cfelse>
-				<!--- <strong>Oh snap!</strong> Something went wrong. --->
-				#application.rbFactory.getKeyValue(session.rb,'comments.message.error')#
+				#rc.$.rbKey('comments.message.error')#
 			</cfif>
 		</div>
 	</cfif>
@@ -86,8 +85,8 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<ul class="nav nav-tabs">
-				<li<cfif !rc.isapproved> class="active"</cfif>><a href="#buildURL(action='cComments.default', querystring='isapproved=0')#"><i class="icon-bell"></i> #application.rbFactory.getKeyValue(session.rb,'comments.pending')#</a></li>
-				<li<cfif rc.isapproved> class="active"</cfif>><a href="#buildURL(action='cComments.default', querystring='isapproved=1')#"><i class="icon-ok"></i> #application.rbFactory.getKeyValue(session.rb,'comments.approved')#</a></li>
+				<li<cfif !rc.isapproved> class="active"</cfif>><a href="#buildURL(action='cComments.default', querystring='isapproved=0')#"><i class="icon-bell"></i> #rc.$.rbKey('comments.pending')#</a></li>
+				<li<cfif rc.isapproved> class="active"</cfif>><a href="#buildURL(action='cComments.default', querystring='isapproved=1')#"><i class="icon-ok"></i> #rc.$.rbKey('comments.approved')#</a></li>
 			</ul>
 		</div>
 	</div>
@@ -102,13 +101,13 @@
 				<thead>
 					<tr>
 						<th>
-							<a id="checkall" href="##" title="#application.rbFactory.getKeyValue(session.rb,'comments.selectall')#"><i class="icon-check"></i></a>
+							<a id="checkall" href="##" title="#rc.$.rbKey('comments.selectall')#"><i class="icon-check"></i></a>
 						</th>
 						<th>
-							<a href="./?sortby=entered&amp;sortdirection=#rc.sortdirlink#&amp;isapproved=#rc.isapproved#&amp;nextn=#Val(rc.nextn)#" title="#application.rbFactory.getKeyValue(session.rb,'comments.sortbydatetime')#"><i class="icon-calendar"></i> / <i class="icon-time"></i></a>
+							<a href="#buildURL(action='#rc.muraAction#', querystring='sortby=entered&sortdirection=#rc.sortdirlink#&isapproved=#rc.isapproved#&nextn=#Val(rc.nextn)#')#" title="#rc.$.rbKey('comments.sortbydatetime')#"><i class="icon-calendar"></i> / <i class="icon-time"></i></a>
 						</th>
 						<th class="var-width">
-							<a href="./?sortby=name&amp;sortdirection=#rc.sortdirlink#&amp;isapproved=#rc.isapproved#&amp;nextn=#Val(rc.nextn)#" title="#application.rbFactory.getKeyValue(session.rb,'comments.sortbyname')#"><i class="icon-user"></i></a>
+							<a href="#buildURL(action='#rc.muraAction#', querystring='sortby=name&sortdirection=#rc.sortdirlink#&isapproved=#rc.isapproved#&nextn=#Val(rc.nextn)#')#" title="#rc.$.rbKey('comments.sortbyname')#"><i class="icon-user"></i></a>
 						</th>
 						<th>&nbsp;</th>
 					</tr>
@@ -142,13 +141,13 @@
 			<i class="icon-calendar"></i>&nbsp;&nbsp;#DateFormat(local.item.getEntered(), 'yyyy.mm.dd')#&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-time"></i> #TimeFormat(local.item.getEntered(), 'hh:mm:ss tt')#
 		</div>
 		<div class="pull-right">
-			<a href="##" class="btn" data-dismiss="modal"><i class="icon-undo"></i> #application.rbFactory.getKeyValue(session.rb,'comments.cancel')#</a>
+			<a href="##" class="btn" data-dismiss="modal"><i class="icon-undo"></i> #rc.$.rbKey('comments.cancel')#</a>
 			<cfif rc.isapproved>
-				<a href="#buildURL(action='cComments.disapprove', querystring='commentid=#local.item.getCommentID()#&isapproved=#rc.isapproved#&nextn=#rc.nextn#')#" class="btn btn-warning" onclick="return confirm('Disapprove Comment?',this.href);"><i class="icon-ban-circle"></i> #application.rbFactory.getKeyValue(session.rb,'comments.disapprove')#</a>
+				<a href="#buildURL(action='cComments.disapprove', querystring='commentid=#local.item.getCommentID()#&isapproved=#rc.isapproved#&nextn=#rc.nextn#')#" class="btn btn-warning" onclick="return confirm('Disapprove Comment?',this.href);"><i class="icon-ban-circle"></i> #rc.$.rbKey('comments.disapprove')#</a>
 			<cfelse>
-				<a href="#buildURL(action='cComments.approve', querystring='commentid=#local.item.getCommentID()#&isapproved=#rc.isapproved#&nextn=#rc.nextn#')#" class="btn btn-success" onclick="return confirm('Approve Comment?',this.href);"><i class="icon-ok"></i> #application.rbFactory.getKeyValue(session.rb,'comments.approve')#</a>
+				<a href="#buildURL(action='cComments.approve', querystring='commentid=#local.item.getCommentID()#&isapproved=#rc.isapproved#&nextn=#rc.nextn#')#" class="btn btn-success" onclick="return confirm('Approve Comment?',this.href);"><i class="icon-ok"></i> #rc.$.rbKey('comments.approve')#</a>
 			</cfif>
-			<a href="#buildURL(action='cComments.delete', querystring='commentid=#local.item.getCommentID()#&isapproved=#rc.isapproved#&nextn=#rc.nextn#')#" class="btn btn-danger" onclick="return confirm('Delete Comment?',this.href);"><i class="icon-trash"></i> #application.rbFactory.getKeyValue(session.rb,'comments.delete')#</a>
+			<a href="#buildURL(action='cComments.delete', querystring='commentid=#local.item.getCommentID()#&isapproved=#rc.isapproved#&nextn=#rc.nextn#')#" class="btn btn-danger" onclick="return confirm('Delete Comment?',this.href);"><i class="icon-trash"></i> #rc.$.rbKey('comments.delete')#</a>
 		</div>
 	</div>
 </div>
@@ -181,7 +180,6 @@
 									<a href="mailto:#HTMLEditFormat(local.item.getEmail())#" title="#HTMLEditFormat(local.item.getEmail())#"><i class="icon-envelope"></i></a>
 									<a href="##comment-#local.item.getCommentID()#" data-toggle="modal" title="Comments"><i class="icon-comments"></i></a>
 								</div>
-								
 							</td>
 
 							<!--- ACTIONS --->
@@ -194,7 +192,6 @@
 
 								<a href="#buildURL(action='cComments.delete', querystring='commentid=#local.item.getCommentID()#&isapproved=#rc.isapproved#&nextn=#rc.nextn#')#" title="Delete" onclick="return confirmDialog('Delete Comment?',this.href);"><i class="icon-trash" title="Delete"></i></a>
 							</td>
-
 						</tr>
 					</cfloop>
 					<!--- /@END RECORDS --->
@@ -210,17 +207,17 @@
 					<cfif rc.isapproved>
 						<button type="button" class="btn btn-warning" id="btnDisapproveComments">
 							<i class="icon-ban-circle"></i> 
-							#application.rbFactory.getKeyValue(session.rb,'comments.disapproveselectedcomments')#
+							#rc.$.rbKey('comments.disapproveselectedcomments')#
 						</button>
 					<cfelse>
 						<button type="button" class="btn btn-success" id="btnApproveComments">
 							<i class="icon-ok"></i> 
-							#application.rbFactory.getKeyValue(session.rb,'comments.approveselectedcomments')#
+							#rc.$.rbKey('comments.approveselectedcomments')#
 						</button>
 					</cfif>
 					<button type="button" class="btn btn-danger" id="btnDeleteComments">
 						<i class="icon-trash"></i> 
-						#application.rbFactory.getKeyValue(session.rb,'comments.deleteselectedcomments')#
+						#rc.$.rbKey('comments.deleteselectedcomments')#
 					</button>
 				</div>
 			</div>
@@ -241,7 +238,7 @@
 							<li><a href="#buildURL(action='cComments.default', querystring='nextn=250&isapproved=#rc.isapproved#')#">250</a></li>
 							<li><a href="#buildURL(action='cComments.default', querystring='nextn=500&isapproved=#rc.isapproved#')#">500</a></li>
 							<li><a href="#buildURL(action='cComments.default', querystring='nextn=1000&isapproved=#rc.isapproved#')#">1000</a></li>
-							<li><a href="#buildURL(action='cComments.default', querystring='nextn=100000&isapproved=#rc.isapproved#')#">#application.rbFactory.getKeyValue(session.rb,'comments.all')#</a></li>
+							<li><a href="#buildURL(action='cComments.default', querystring='nextn=100000&isapproved=#rc.isapproved#')#">#rc.$.rbKey('comments.all')#</a></li>
 						</ul>
 					</div>
 				</div>
@@ -253,9 +250,6 @@
 		<!--- PAGINATION --->
 		<cfif rc.itComments.pageCount() gt 1>
 			<div id="paginationWrapper" class="row-fluid">
-				<!--- <div class="span3">
-					#val(rc.pageno)# of #rc.itComments.pageCount()# total pages
-				</div> --->
 				<div class="span12">
 					<div class="pagination paginationWrapper">
 						<ul>
@@ -312,7 +306,7 @@
 				// APPROVE
 				$('##btnApproveComments').click(function() {
 					confirmDialog(
-						'Are you sure you want to APPROVE the selected comments?'
+						'#rc.$.rbKey("comments.message.confirm.approve")#'
 						,function(){
 							actionModal(
 								function(){
@@ -329,7 +323,7 @@
 				// DISAPPROVE
 				$('##btnDisapproveComments').click(function() {
 					confirmDialog(
-						'Are you sure you want to DISAPPROVE the selected comments?'
+						'#rc.$.rbKey("comments.message.confirm.disapprove")#'
 						,function(){
 							actionModal(
 								function(){
@@ -346,7 +340,7 @@
 				// DELETE
 				$('##btnDeleteComments').click(function() {
 					confirmDialog(
-						'Are you sure you want to DELETE the selected comments?'
+						'#rc.$.rbKey("comments.message.confirm.delete")#'
 						,function(){
 							actionModal(
 								function(){
@@ -363,18 +357,19 @@
 		</script>
 
 	<cfelse>
+
 		<div class="row-fluid">
 			<div class="span12">
 				<div class="alert alert-info">
-					<!--- <p>No comments are <strong><cfif rc.isapproved>approved<cfelse>pending</cfif></strong> at this time &hellip; carry on.</p> --->
 					<cfif rc.isapproved>
-						<p>#application.rbFactory.getKeyValue(session.rb,'comments.message.nocommentsapproved')#</p>
+						<p>#rc.$.rbKey('comments.message.nocommentsapproved')#</p>
 					<cfelse>
-						<p>#application.rbFactory.getKeyValue(session.rb,'comments.message.nocommentspending')#</p>
+						<p>#rc.$.rbKey('comments.message.nocommentspending')#</p>
 					</cfif>
 				</div>
 			</div>
 		</div>
+
 	</cfif>
 
 	<script type="text/javascript">
@@ -382,5 +377,5 @@
 			$('##feedback').delay(4000).fadeOut(1500); // MESSAGING : auto-hide after 4 secs.
 		});
 	</script>
-
+</div>
 </cfoutput>

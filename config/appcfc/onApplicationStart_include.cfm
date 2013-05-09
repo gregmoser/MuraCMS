@@ -184,8 +184,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 			variables.serviceFactory.addBean('validationService', new hyrule.system.core.Hyrule() );
 
-			variables.serviceFactory.addBean('commentService', new admin.core.model.services.comment());
-
 			variables.serviceFactory.addAlias("scriptProtectionFilter","Portcullis");
 			variables.serviceFactory.addAlias("eventManager","pluginManager");
 			variables.serviceFactory.addAlias("permUtility","permission");
@@ -225,6 +223,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			variables.serviceFactory.addAlias("contentSourceMap","contentSourceMapBean");
 
 			application.serviceFactory=variables.serviceFactory;
+			application.serviceFactory.addBean('commentService', new admin.core.model.services.comment());
 		</cfscript>
 
 		<cfset variables.tracer.commitTracepoint(variables.tracepoint)>

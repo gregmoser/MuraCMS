@@ -74,11 +74,6 @@ component persistent="false" accessors="true" output="false" extends="controller
 		if ( !variables.permUtility.getModulePerm('00000000000000000000000000000000000',rc.siteid) ) {
 			secure(rc);
 		}
-
-		// easy access to site attributes
-		rc.settingsManager = getSettingsManager();
-		rc.siteBean = rc.settingsManager.getSite(rc.siteid);
-		rc.siteName = rc.siteBean.getSite();
 	}
 
 	// *********************************  PAGES  *******************************************
@@ -92,8 +87,8 @@ component persistent="false" accessors="true" output="false" extends="controller
 		param name='rc.isapproved' default=false;
 
 		rc.siteid = StructKeyExists(session, 'siteid') ? session.siteid : 'default';
-
 		rc.sortdirlink = rc.sortdirection == 'asc' ? 'desc' : 'asc';
+		rc.sortby = !ListFindNoCase('entered,name', rc.sortby) ? 'entered' : rc.sortby;
 		rc.itComments = getCommentService().getCommentsIterator(argumentCollection=rc);
 
 		// Pagination Setup
