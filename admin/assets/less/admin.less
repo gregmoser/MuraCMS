@@ -180,7 +180,11 @@ div.tooltip {
 		content: "\f05a";
 		color: @warningBorder;
 		/* text-shadow: 0 1px 1px rgba(255,255,255,.15); */
-		}
+	}
+
+#alertDialog.alert:before {
+		content: '';
+	}
 
 .alert-success {
 	
@@ -296,7 +300,15 @@ img.fmImage {
 		}
 	
 	}
-	
+
+#commentsManagerWrapper {
+	.btn-success, .btn-danger, .btn-warning {
+		color: white;
+	}
+	.mura-table-grid i.icon-calendar {
+		font-size: 14px;
+	}
+}	
 /* @end */
 
 } /* End .mura */
