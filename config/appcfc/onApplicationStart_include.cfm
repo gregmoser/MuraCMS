@@ -223,7 +223,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			variables.serviceFactory.addAlias("contentSourceMap","contentSourceMapBean");
 
 			application.serviceFactory=variables.serviceFactory;
-			application.serviceFactory.addBean('commentService', new admin.core.model.services.comment());
 		</cfscript>
 
 		<cfset variables.tracer.commitTracepoint(variables.tracepoint)>

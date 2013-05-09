@@ -60,10 +60,10 @@ component persistent="false" accessors="true" output="false" extends="mura.cfobj
 	property name='configBean';
 	property name='debug';
 
-	public any function init() {
-		setContentManager(getBean('contentManager'));
-		setConfigBean(getBean('configBean'));
-		setDebug(true);
+	public any function init(required contentManager, required configBean) {
+		setContentManager(arguments.contentManager);
+		setConfigBean(arguments.configBean);
+		setDebug(getConfigBean().getDebuggingEnabled());
 		return this;
 	}
 

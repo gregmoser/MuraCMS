@@ -56,16 +56,7 @@
 */
 component persistent="false" accessors="true" output="false" extends="controller" {
 
-	property name='framework';
-	property name='commentService';
-
-	public void function setCommentService(commentService) {
-		variables.commentService=arguments.commentService;
-	}
-
-	public any function getSettingsManager() {
-		return variables.settingsManager;
-	}
+	property name='contentCommentManager';
 
 
 	public any function before(required struct rc) {
@@ -89,7 +80,7 @@ component persistent="false" accessors="true" output="false" extends="controller
 		rc.siteid = StructKeyExists(session, 'siteid') ? session.siteid : 'default';
 		rc.sortdirlink = rc.sortdirection == 'asc' ? 'desc' : 'asc';
 		rc.sortby = !ListFindNoCase('entered,name', rc.sortby) ? 'entered' : rc.sortby;
-		rc.itComments = getCommentService().getCommentsIterator(argumentCollection=rc);
+		rc.itComments = getContentCommentManager().getCommentsIterator(argumentCollection=rc);
 
 		// Pagination Setup
 		rc.nextn = Val(rc.nextn);
@@ -127,10 +118,6 @@ component persistent="false" accessors="true" output="false" extends="controller
 				rc.endPage = rc.totalPages;
 			}
 		}
-
-		// recordcounts
-		//rc.countApproved = getCommentService().getComments(siteid=rc.siteid, isapproved=true, returnCountOnly=true);
-		//rc.countDisapproved = getCommentService().getComments(siteid=rc.siteid, isapproved=false, returnCountOnly=true);;
 	}
 
 
@@ -145,11 +132,11 @@ component persistent="false" accessors="true" output="false" extends="controller
 				local.arr = ListToArray(rc.ckupdate);
 				for ( local.i=1; local.i <= ArrayLen(local.arr); local.i++ ) {
 					switch ( rc.bulkedit ) {
-						case 'approve' : getCommentService().approve(local.arr[local.i]);
+						case 'approve' : getContentCommentManager().approve(local.arr[local.i]);
 							break;
-						case 'disapprove' : getCommentService().disapprove(local.arr[local.i]);
+						case 'disapprove' : getContentCommentManager().disapprove(local.arr[local.i]);
 							break;
-						case 'delete' : getCommentService().delete(local.arr[local.i]);
+						case 'delete' : getContentCommentManager().delete(local.arr[local.i]);
 							break;
 						default : break;
 					}
@@ -166,7 +153,7 @@ component persistent="false" accessors="true" output="false" extends="controller
 	public void function approve(required struct rc) {
 		rc.processed = false;
 		if ( StructKeyExists(arguments.rc, 'commentid') ) {
-			rc.processed = getCommentService().approve(arguments.rc.commentid);
+			rc.processed = getContentCommentManager().approve(arguments.rc.commentid);
 		}
 		getFW().redirect(action='cComments.default', preserve='processed,isapproved,siteid');
 	}
@@ -175,7 +162,7 @@ component persistent="false" accessors="true" output="false" extends="controller
 	public void function disapprove(required struct rc) {
 		rc.processed = false;
 		if ( StructKeyExists(arguments.rc, 'commentid') ) {
-			rc.processed = getCommentService().disapprove(arguments.rc.commentid);
+			rc.processed = getContentCommentManager().disapprove(arguments.rc.commentid);
 		}
 		getFW().redirect(action='cComments.default', preserve='processed,isapproved,siteid');
 	}
@@ -184,7 +171,7 @@ component persistent="false" accessors="true" output="false" extends="controller
 	public void function delete(required struct rc) {
 		rc.processed = false;
 		if ( StructKeyExists(arguments.rc, 'commentid') ) {
-			rc.processed = getCommentService().delete(arguments.rc.commentid);
+			rc.processed = getContentCommentManager().delete(arguments.rc.commentid);
 		}
 		getFW().redirect(action='cComments.default', preserve='processed,isapproved,siteid');
 	}
