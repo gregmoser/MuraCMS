@@ -618,73 +618,74 @@ select * from tplugins order by #arguments.orderby#
 	<cfdirectory action="list" directory="#baseDir#" name="rsRequirements">
 	<cfloop query="rsRequirements">
 		<cfif rsRequirements.type eq "dir" and rsRequirements.name neq '.svn'>	
-			<cfset m=listFirst(rsRequirements.name,"_")>
-			<cfset mHash=hash(m)>
-			<cfset currentConfig=getPluginXML(listLast(rsRequirements.name,"_"))>
-
-			<cfif not isDefined("currentConfig.plugin.createmapping.xmlText")
-				or yesNoFormat(currentConfig.plugin.createmapping.xmlText)>
-				<cfif not isNumeric(m) and not structKeyExists(done,mHash)>
-					<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfset this.mappings["/#m#"] = variables.BaseDir & "/plugins/#rsRequirements.name#">')>
-					<cfset done[mHash]=true>
-				</cfif>
-			</cfif>
-		
-			<cfset currentDir="#baseDir#/#rsRequirements.name#">
 			<cftry>
+				<cfset m=listFirst(rsRequirements.name,"_")>
+				<cfset mHash=hash(m)>
+				<cfset currentConfig=getPluginXML(listLast(rsRequirements.name,"_"))>
+					
+				<cfif not isDefined("currentConfig.plugin.createmapping.xmlText")
+					or yesNoFormat(currentConfig.plugin.createmapping.xmlText)>
+					<cfif not isNumeric(m) and not structKeyExists(done,mHash)>
+						<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfset this.mappings["/#m#"] = variables.BaseDir & "/plugins/#rsRequirements.name#">')>
+						<cfset done[mHash]=true>
+					</cfif>
+				</cfif>
+				
+				<cfset currentDir="#baseDir#/#rsRequirements.name#">
+				
 				<cfif isDefined("currentConfig.plugin.mappings.mapping") and arrayLen(currentConfig.plugin.mappings.mapping)>
-				<cfloop from="1" to="#arrayLen(currentConfig.plugin.mappings.mapping)#" index="m">
-				<cfif structkeyExists(currentConfig.plugin.mappings.mapping[m].xmlAttributes,"directory")
-				and len(currentConfig.plugin.mappings.mapping[m].xmlAttributes.directory)
-				and structkeyExists(currentConfig.plugin.mappings.mapping[m].xmlAttributes,"name")
-				and len(currentConfig.plugin.mappings.mapping[m].xmlAttributes.name)>
-					<cfset p=currentConfig.plugin.mappings.mapping[m].xmlAttributes.directory>
-					<cfif listFind("/,\",left(p,1))>
-						<cfif len(p) gt 1>
-							<cfset p=right(p,len(p)-1)>
-						<cfelse>
-							<cfset p="">
+					<cfloop from="1" to="#arrayLen(currentConfig.plugin.mappings.mapping)#" index="m">
+						<cfif structkeyExists(currentConfig.plugin.mappings.mapping[m].xmlAttributes,"directory")
+						and len(currentConfig.plugin.mappings.mapping[m].xmlAttributes.directory)
+						and structkeyExists(currentConfig.plugin.mappings.mapping[m].xmlAttributes,"name")
+						and len(currentConfig.plugin.mappings.mapping[m].xmlAttributes.name)>
+							<cfset p=currentConfig.plugin.mappings.mapping[m].xmlAttributes.directory>
+							<cfif listFind("/,\",left(p,1))>
+								<cfif len(p) gt 1>
+									<cfset p=right(p,len(p)-1)>
+								<cfelse>
+									<cfset p="">
+								</cfif>
+							</cfif>
+							<cfset currentPath=currentDir & "/" & p>
+							<cfif len(p) and directoryExists(currentPath)>
+								<cfset pluginmapping=currentConfig.plugin.mappings.mapping[m].xmlAttributes.name>
+								<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfif not structKeyExists(this.mappings,"/#pluginmapping#")><cfset this.mappings["/#pluginmapping#"] = variables.BaseDir & "/plugins/#rsRequirements.name#/#p#"></cfif>')>
+							</cfif>
 						</cfif>
-					</cfif>
-					<cfset currentPath=currentDir & "/" & p>
-					<cfif len(p) and directoryExists(currentPath)>
-						<cfset pluginmapping=currentConfig.plugin.mappings.mapping[m].xmlAttributes.name>
-						<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfif not structKeyExists(this.mappings,"/#pluginmapping#")><cfset this.mappings["/#pluginmapping#"] = variables.BaseDir & "/plugins/#rsRequirements.name#/#p#"></cfif>')>
-					</cfif>
+					</cfloop>
 				</cfif>
-				</cfloop>
-			</cfif>
-			<cfif isDefined("currentConfig.plugin.customtagpaths.xmlText") and len(currentConfig.plugin.customtagpaths.xmlText)>
-				<cfloop list="#currentConfig.plugin.customtagpaths.xmlText#" index="p">
-				<cfif listFind("/,\",left(p,1))>
-					<cfif len(p) gt 1>
-						<cfset p=right(p,len(p)-1)>
-					<cfelse>
-						<cfset p="">
-					</cfif>
+				<cfif isDefined("currentConfig.plugin.customtagpaths.xmlText") and len(currentConfig.plugin.customtagpaths.xmlText)>
+					<cfloop list="#currentConfig.plugin.customtagpaths.xmlText#" index="p">
+						<cfif listFind("/,\",left(p,1))>
+							<cfif len(p) gt 1>
+								<cfset p=right(p,len(p)-1)>
+							<cfelse>
+								<cfset p="">
+							</cfif>
+						</cfif>
+						<cfset currentPath=currentDir & "/" & p>
+						<cfif len(p) and directoryExists(currentPath)>
+							<cfset variables.fileWriter.appendFile(file="#baseDir#/cfapplication.cfm", output='<cfset this.customtagpaths = listAppend(this.customtagpaths,BaseDir & "/plugins/#rsRequirements.name#/#p#")>')>
+						</cfif>
+					</cfloop>
 				</cfif>
-				<cfset currentPath=currentDir & "/" & p>
-				<cfif len(p) and directoryExists(currentPath)>
-					<cfset variables.fileWriter.appendFile(file="#baseDir#/cfapplication.cfm", output='<cfset this.customtagpaths = listAppend(this.customtagpaths,BaseDir & "/plugins/#rsRequirements.name#/#p#")>')>
+				<cfif isDefined("currentConfig.plugin.ormcfclocation.xmlText") and len(currentConfig.plugin.ormcfclocation.xmlText)>
+					<cfloop list="#currentConfig.plugin.ormcfclocation.xmlText#" index="p">
+						<cfif listFind("/,\",left(p,1))>
+							<cfif len(p) gt 1>
+								<cfset p=right(p,len(p)-1)>
+							<cfelse>
+								<cfset p="">
+							</cfif>
+						</cfif>
+						<cfset currentPath=currentDir & "/" & p>
+						<cfdump var="#currentpath#">
+						<cfif len(p) and directoryExists(currentPath)>
+							<cfset variables.fileWriter.appendFile(file="#baseDir#/cfapplication.cfm", output='<cfset arrayAppend(this.ormsettings.cfclocation,"/plugins/#rsRequirements.name#/#p#")>')>
+						</cfif>
+					</cfloop>
 				</cfif>
-				</cfloop>
-			</cfif>
-			<cfif isDefined("currentConfig.plugin.ormcfclocation.xmlText") and len(currentConfig.plugin.ormcfclocation.xmlText)>
-				<cfloop list="#currentConfig.plugin.ormcfclocation.xmlText#" index="p">
-				<cfif listFind("/,\",left(p,1))>
-					<cfif len(p) gt 1>
-						<cfset p=right(p,len(p)-1)>
-					<cfelse>
-						<cfset p="">
-					</cfif>
-				</cfif>
-				<cfset currentPath=currentDir & "/" & p>
-				<cfdump var="#currentpath#">
-				<cfif len(p) and directoryExists(currentPath)>
-					<cfset variables.fileWriter.appendFile(file="#baseDir#/cfapplication.cfm", output='<cfset arrayAppend(this.ormsettings.cfclocation,"/plugins/#rsRequirements.name#/#p#")>')>
-				</cfif>
-				</cfloop>
-			</cfif>
 			<cfcatch></cfcatch>
 			</cftry>
 		</cfif>
@@ -1214,7 +1215,7 @@ select * from tplugins order by #arguments.orderby#
 	<cfset var pluginCFC="/">
 
 	<!--- check to see is the plugin.cfc exists --->
-	<cfif fileExists(ExpandPath("/plugins") & "/" & pluginConfig.getDirectory() & "/plugin/plugin.cfc")>	
+	<cfif fileExists(variables.configBean.getPluginDir() & "/" & pluginConfig.getDirectory() & "/plugin/plugin.cfc")>	
 		<cfset pluginCFC=createObject("component","plugins.#pluginConfig.getDirectory()#.plugin.plugin") />
 		
 		<!--- only call the methods if they have been defined --->
