@@ -926,7 +926,7 @@ select * from tplugins order by #arguments.orderby#
 	<cfset var rsCheck="">
 	
 	<cfif len(arguments.args.package)>
-		<cfquery>
+		<cfquery name="rsCheck">
 				select moduleID from tplugins
 				where package=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.package#"/>
 				and moduleID<><cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.moduleID#"/>
