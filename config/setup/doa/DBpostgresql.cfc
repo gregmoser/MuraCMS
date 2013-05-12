@@ -1,5 +1,5 @@
 <!--- Microsoft SQL specific DB functions (bsoylu 6/5/2010)  --->
-<cfcomponent hint="implements Microsoft SQL Server specific database functions" extends="DBController">
+<cfcomponent hint="implements PostgreSQL specific database functions" extends="DBController">
 
 	<cffunction name="fDBCreate" returntype="String"  access="package" hint="creates a blank database. return empty string if success, or error message.">
 		<cfargument name="DatasourceName" default="#Application.ApplicationName#" required="false" type="string" hint="name of the datasource through which we will need to connect.">
@@ -36,7 +36,7 @@
 		<cfargument name="GWPassword" required="true"  type="string" hint="password for coldfusion or Railo">
 		<cfargument name="DatasourceName" default="#Application.ApplicationName#" type="string" hint="name of the desired datasource. will default to application name.">
 		<cfargument name="DatabaseServer" required="false"  type="string" hint="name of the database server,required for oracle,mysql,mssql,postgresql">
-		<cfargument name="DatabasePort" default="1433" displayname="" required="false"  type="numeric" hint="will use default port for each database if not provided">
+		<cfargument name="DatabasePort" default="5432" displayname="" required="false"  type="numeric" hint="will use default port for each database if not provided">
 		<cfargument name="DatabaseName" default="#Application.ApplicationName#" required="false"  type="string" hint="name of the database to connect to, will default to application name.">
 		<cfargument name="UserName" required="false"  type="string" hint="username is needed for mysql,oracle,mssql,postgresql">
 		<cfargument name="Password" required="false"  type="string" hint="password is needed for mysql,oracle,mssql,postgresql">
@@ -59,7 +59,7 @@
 	</cffunction>	
 	
 	
-	<!--- create DS in ColdFusion for MySQL (bsoylu 6/6/2010)  --->
+	<!--- create DS in ColdFusion for PostgreSQL (bsoylu 6/6/2010)  --->
 	<cffunction name="fDSCreateAdobe" access="private" returntype="String"  hint="creates datasource connection, returns empty string or error">
 		<cfargument name="GWPassword" required="true"  type="string" hint="password for coldfusion or Railo">
 		<cfargument name="DatasourceName" default="#Application.ApplicationName#" type="string" hint="name of the desired datasource. will default to application name.">
@@ -99,19 +99,20 @@
 					if (Arguments.bCreateDB) {
 						//create datasource	wihtout database reference	
 						stcArgs.database = "";			//empty database parameter first				
-						oDS.setMSSQL(argumentCollection=stcArgs);
+						oDS.setPostgreSQL(argumentCollection=stcArgs);
 						// (bsoylu 6/6/2010) now call the createDB function
 						stcA2.DatasourceName = Arguments.DatasourceName;
 						stcA2.DataBaseName = Arguments.DatabaseName;
+						stcA2.sOptions = "ENCODING 'UTF8'";
 						sErr=fDBCreate(argumentCollection=stcA2);	
 						//now update datasource to point to database
 						if (sErr IS "") {
 							stcArgs.database = Arguments.DatabaseName;
-							oDS.setMSSQL(argumentCollection=stcArgs);
+							oDS.setPostgreSQL(argumentCollection=stcArgs);
 						}				
 					} else {
 						//create DS
-						oDS.setMSSQL(argumentCollection=stcArgs);
+						oDS.setPostgreSQL(argumentCollection=stcArgs);
 					};
 				} catch (ANY e) {
 					sErr = e.message & "--" & e.detail;	
@@ -134,7 +135,7 @@
 		<cfargument name="Description" required="false"  type="string" hint="any descriptive text">
 		<cfargument name="bCreateDB" default="Yes" required="false"  type="boolean" hint="should the database be created at the same time, default = Yes">
 		
-		<cfset var sErr = CreateObject("component","DBmssql_railo").fDSCreateRailoPackage(argumentCollection=arguments)>
+		<cfset var sErr = CreateObject("component","DBpostgresql_railo").fDSCreateRailoPackage(argumentCollection=arguments)>
 		
 		<cfreturn sErr>
 		

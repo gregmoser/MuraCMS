@@ -368,7 +368,7 @@ ExtendSetID in(<cfloop from="1" to="#setLen#" index="s">
 			)
 			values (
 			<cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.baseID#">,
-			<cfqueryparam cfsqltype="cf_sql_varchar"  value="#rs.attributeID#">,
+			<cfqueryparam cfsqltype="cf_sql_integer"  value="#rs.attributeID#">,
 			<cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.data.siteID#">,
 			<cfqueryparam cfsqltype="cf_sql_varchar"  value="#left(theValue,255)#">,
 			
@@ -911,11 +911,11 @@ and tclassextendattributes.type='File'
 <cffunction name="getExtendedAttributeList" output="false" returntype="query">
 <cfargument name="siteID">
 <cfargument name="baseTable" required="true" default="tcontent">
-<cfargument name="activeOnly" requierd="true" default="false">
+<cfargument name="activeOnly" required="true" default="false">
 	<cfset var rs="">
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
-		select tclassextend.type, tclassextend.subType, tclassextendattributes.attributeID, tclassextend.baseTable, tclassextend.baseKeyField, tclassextend.dataTable, tclassextendattributes.name attribute
+		select tclassextend.type, tclassextend.subType, tclassextendattributes.attributeID, tclassextend.baseTable, tclassextend.baseKeyField, tclassextend.dataTable, tclassextendattributes.name AS attribute
 		from tclassextendattributes 
 		inner join tclassextendsets on (tclassextendsets.extendSetID=tclassextendattributes.extendSetID)
 		inner join tclassextend on (tclassextendsets.subTypeID=tclassextend.subTypeID)
@@ -993,6 +993,18 @@ and tclassextendattributes.type='File'
 										and tcontent.active=1)
 				where attributeValue is not null
 				</cfcase>
+				<cfcase value="postgresql">
+				update tclassextenddata
+
+				set datetimevalue=null,
+					numericvalue=null,
+					stringvalue=null
+
+				from tcontent
+				where tclassextenddata.baseID=tcontent.contentHistID
+					and tcontent.active=1
+					and attributeValue is not null
+				</cfcase>
 				<cfcase value="oracle">
 				update tclassextenddata 				
 				set datetimevalue=null,
@@ -1028,6 +1040,16 @@ and tclassextendattributes.type='File'
 				inner join tcontent on (tclassextenddata.baseID=tcontent.contentHistID
 										and tcontent.active=1)
 				where attributeValue is not null							
+				</cfcase>
+				<cfcase value="postgresql">
+				update tclassextenddata
+
+				set stringvalue=left(attributeValue,255)
+
+				from tcontent
+				where tclassextenddata.baseID=tcontent.contentHistID
+					and tcontent.active=1
+					and attributeValue is not null
 				</cfcase>
 				<cfcase value="oracle">
 				update tclassextenddata 				
@@ -1067,6 +1089,19 @@ and tclassextendattributes.type='File'
 					inner join tcontent on (tclassextenddata.baseID=tcontent.contentHistID
 											and tcontent.active=1)
 					where isDate(subString(stringvalue,6,19))=1
+					</cfcase>
+					<cfcase value="postgresql">
+					update tclassextenddata
+
+					set datetimevalue=subString(stringvalue from 6 for 19)::timestamp
+
+					from tclassextendattributes,
+						tcontent
+					where tclassextendattributes.attributeID=tclassextenddata.attributeID
+						and tclassextendattributes.validation='date'
+						and tclassextenddata.baseID=tcontent.contentHistID
+						and tcontent.active=1
+						and subString(stringvalue from 6 for 19) ~ '^[12][0-9]{3}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$'
 					</cfcase>
 					<cfcase value="oracle">
 					update tclassextenddata 				
@@ -1120,6 +1155,19 @@ and tclassextendattributes.type='File'
 											and tcontent.active=1)
 					where isNumeric(stringvalue)=1
 					</cfcase>
+					<cfcase value="postgresql">
+					update tclassextenddata
+
+					set numericvalue=stringvalue::real
+
+					from tclassextendattributes,
+						tcontent
+					where tclassextendattributes.attributeID=tclassextenddata.attributeID
+						and tclassextendattributes.validation='numeric'
+						and tclassextenddata.baseID=tcontent.contentHistID
+						and tcontent.active=1
+						and stringvalue ~ '^[-]?([0-9]+[.]?[0-9]*|[.][0-9]+)$'
+					</cfcase>
 					<cfcase value="oracle">
 					update tclassextenddata 				
 					set numericvalue=cast(stringvalue as NUMBER)
@@ -1158,6 +1206,13 @@ and tclassextendattributes.type='File'
 					stringvalue=null
 				where attributeValue is not null
 				</cfcase>
+				<cfcase value="postgresql">
+				update tclassextenddatauseractivity
+				set datetimevalue=null,
+					numericvalue=null,
+					stringvalue=null
+				where attributeValue is not null
+				</cfcase>
 				<cfcase value="oracle">
 				update tclassextenddatauseractivity
 				set datetimevalue=null,
@@ -1176,6 +1231,11 @@ and tclassextendattributes.type='File'
 				where attributeValue is not null
 				</cfcase>
 				<cfcase value="mssql">
+				update tclassextenddatauseractivity
+				set stringvalue=left(attributeValue,255)
+				where attributeValue is not null
+				</cfcase>
+				<cfcase value="postgresql">
 				update tclassextenddatauseractivity
 				set stringvalue=left(attributeValue,255)
 				where attributeValue is not null
@@ -1207,6 +1267,16 @@ and tclassextendattributes.type='File'
 					inner join tclassextendattributes on (tclassextendattributes.attributeID=tclassextenddatauseractivity.attributeID
 														and  tclassextendattributes.validation='date')
 					where isDate(subString(stringvalue,6,19))=1
+					</cfcase>
+					<cfcase value="postgresql">
+					update tclassextenddatauseractivity
+
+					set datetimevalue=subString(stringvalue from 6 for 19)::timestamp
+
+					from tclassextendattributes
+					where tclassextendattributes.attributeID=tclassextenddatauseractivity.attributeID
+						and tclassextendattributes.validation='date'
+						and subString(stringvalue from 6 for 19) ~ '^[12][0-9]{3}\-(0[1-9]|1[0-2])\-(0[1-9]|[12][0-9]|3[01]) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$'
 					</cfcase>
 					<cfcase value="oracle">
 					update tclassextenddatauseractivity 				
@@ -1251,6 +1321,16 @@ and tclassextendattributes.type='File'
 					inner join tclassextendattributes on (tclassextendattributes.attributeID=tclassextenddatauseractivity.attributeID
 														and  tclassextendattributes.validation='numeric')
 					where isNumeric(stringvalue)=1
+					</cfcase>
+					<cfcase value="postgresql">
+					update tclassextenddatauseractivity
+
+					set numericvalue=stringvalue::real
+
+					from tclassextendattributes
+					where tclassextendattributes.attributeID=tclassextenddatauseractivity.attributeID
+						and tclassextendattributes.validation='numeric'
+						and stringvalue ~ '^[-]?([0-9]+[.]?[0-9]*|[.][0-9]+)$'
 					</cfcase>
 					<cfcase value="oracle">
 					update tclassextenddatauseractivity 				

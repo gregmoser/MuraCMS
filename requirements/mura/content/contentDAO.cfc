@@ -1240,7 +1240,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	</cfif>
 	order by entered desc
 	<cfif dbType eq "nuodb" and arguments.size>fetch #arguments.size#</cfif>
-	<cfif dbType eq "mysql" and arguments.size>limit #arguments.size#</cfif>
+	<cfif listfind("mysql,postgresql", dbType) and arguments.size>limit #arguments.size#</cfif>
 	<cfif dbType eq "oracle" and arguments.size>) where ROWNUM <=#arguments.size# </cfif>
 	</cfquery>
 	

@@ -367,7 +367,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		order by #variables.instance.table#.#variables.instance.sortBy# #variables.instance.sortDirection#
 	</cfif>
 	
-	<cfif dbType eq "mysql" and variables.instance.maxItems>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /> </cfif>
+	<cfif listfind("mysql,postgresql", dbType) and variables.instance.maxItems>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /> </cfif>
 	<cfif dbType eq "oracle" and variables.instance.maxItems>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /> </cfif>
 
 	</cfquery>

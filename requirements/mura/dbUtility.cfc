@@ -66,7 +66,7 @@
 <cffunction name="tableExists" output="false">
 	<cfargument name="table" default="#variables.table#">
 
-	<cfif not structKeyExists(variables.tableLookUp,arguments.table)>
+	<cfif not structKeyExists(variables.tableLookUp,arguments.table) or variables.tableLookUp[arguments.table] eq false>
 		<cfset variables.tableLookUp[arguments.table]=structKeyExists(tables(),arguments.table)>
 	</cfif>
 	<cfreturn variables.tableLookUp[arguments.table]>
@@ -210,6 +210,11 @@
 			ALTER TABLE #arguments.table# DROP COLUMN #arguments.column#
 			</cfquery>
 		</cfcase>
+		<cfcase value="postgresql">
+			<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+			ALTER TABLE #arguments.table# DROP COLUMN #arguments.column#
+			</cfquery>
+		</cfcase>
 		<cfcase value="oracle">
 			<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
 			ALTER TABLE #arguments.table# DROP COLUMN #arguments.column#
@@ -302,6 +307,23 @@
 						,PRIMARY KEY(#arguments.column#)
 					</cfif>
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8
+				</cfif>
+			</cfquery>
+		</cfcase>
+		<cfcase value="postgresql">
+			<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+				<cfif not hasTable>
+					CREATE TABLE #arguments.table# (
+						#arguments.column# <cfif arguments.autoincrement>SERIAL<cfelse>#transformDataType(arguments.datatype,arguments.length)#</cfif> <cfif not arguments.nullable>NOT NULL</cfif> <cfif not arguments.autoincrement> DEFAULT <cfif arguments.default eq 'null' or listFindNoCase('int,smallint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
+					)
+				<cfelse>
+					ALTER TABLE #arguments.table# ADD COLUMN #arguments.column# <cfif arguments.autoincrement>SERIAL<cfelse>#transformDataType(arguments.datatype,arguments.length)#</cfif>;
+					<cfif not arguments.nullable>
+					ALTER TABLE #arguments.table# ALTER COLUMN #arguments.column# SET NOT NULL;
+					</cfif>
+					<cfif not arguments.autoincrement>
+					ALTER TABLE #arguments.table# ALTER COLUMN #arguments.column# SET DEFAULT <cfif arguments.default eq 'null' or listFindNoCase('int,smallint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif>;
+					</cfif>
 				</cfif>
 			</cfquery>
 		</cfcase>
@@ -426,6 +448,17 @@
 					ALTER TABLE #arguments.table# MODIFY COLUMN #arguments.column# <cfif arguments.autoincrement>INT(10) NOT NULL AUTO_INCREMENT<cfelse>#transformDataType(arguments.datatype,arguments.length)# <cfif not arguments.nullable> not null </cfif> default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
 				</cfquery>
 			</cfcase>
+			<cfcase value="postgresql">
+				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+					ALTER TABLE #arguments.table# ALTER COLUMN #arguments.column# TYPE <cfif arguments.autoincrement>SERIAL<cfelse>#transformDataType(arguments.datatype,arguments.length)#</cfif>;
+					<cfif not arguments.nullable>
+					ALTER TABLE #arguments.table# ALTER COLUMN #arguments.column# SET NOT NULL;
+					</cfif>
+					<cfif not arguments.autoincrement>
+					ALTER TABLE #arguments.table# ALTER COLUMN #arguments.column# SET DEFAULT <cfif arguments.default eq 'null' or listFindNoCase('int,smallint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif>;
+					</cfif>
+				</cfquery>
+			</cfcase>
 			<cfcase value="nuodb">
 				<cfset tempName="F" & left(hash(arguments.column),15)>
 				<cfif columnExists(table=arguments.table,column=tempName)>
@@ -510,6 +543,11 @@
 				<cfset columnData=columnMetaData(argumentCollection=arguments)>
 				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
 					ALTER TABLE #arguments.table# change #arguments.column# #arguments.newcolumn# <cfif columnData.autoincrement>INT(10) NOT NULL AUTO_INCREMENT<cfelse>#transformDataType(columnData.datatype,columnData.length)# <cfif not columnData.nullable> not null </cfif> default <cfif columnData.default eq 'null' or listFindNoCase('int,tinyint',columnData.datatype)>#columnData.default#<cfelse>'#columnData.default#'</cfif></cfif>
+				</cfquery>
+			</cfcase>
+			<cfcase value="postgresql">
+				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+					ALTER TABLE #arguments.table# RENAME COLUMN #arguments.column# TO #arguments.newcolumn#
 				</cfquery>
 			</cfcase>
 			<cfcase value="nuodb">
@@ -631,6 +669,37 @@
 				</cfcase>
 				<cfcase value="double">
 					<cfreturn "double">
+				</cfcase>
+			</cfswitch>
+		</cfcase>
+		<cfcase value="postgresql">
+			<cfswitch expression="#arguments.datatype#">
+				<cfcase value="varchar,string">
+					<cfreturn "varchar(#arguments.length#)">
+				</cfcase>
+				<cfcase value="char">
+					<cfreturn "char(#arguments.length#)">
+				</cfcase>
+				<cfcase value="int">
+					<cfreturn "integer">
+				</cfcase>
+				<cfcase value="tinyint">
+					<cfreturn "smallint">
+				</cfcase>
+				<cfcase value="date,datetime,timestamp">
+					<cfreturn "timestamp">
+				</cfcase>
+				<cfcase value="text">
+					<cfreturn "text">
+				</cfcase>
+				<cfcase value="longtext">
+					<cfreturn "text">
+				</cfcase>
+				<cfcase value="float">
+					<cfreturn "real">
+				</cfcase>
+				<cfcase value="double">
+					<cfreturn "double precision">
 				</cfcase>
 			</cfswitch>
 		</cfcase>
@@ -839,6 +908,11 @@
 				CREATE INDEX #transformIndexName(argumentCollection=arguments)# ON #arguments.table# (#arguments.column#)
 				</cfquery>
 			</cfcase>
+			<cfcase value="postgresql">
+				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+				CREATE INDEX #transformIndexName(argumentCollection=arguments)# ON #arguments.table# (#arguments.column#)
+				</cfquery>
+			</cfcase>
 			<cfcase value="oracle">
 				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
 				CREATE INDEX #transformIndexName(argumentCollection=arguments)# ON #arguments.table# (#arguments.column#)
@@ -869,6 +943,11 @@
 				DROP INDEX #transformIndexName(argumentCollection=arguments)# on #arguments.table#
 				</cfquery>
 			</cfcase>
+			<cfcase value="postgresql">
+				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+				DROP INDEX #transformIndexName(argumentCollection=arguments)# on #arguments.table#
+				</cfquery>
+			</cfcase>
 			<cfcase value="oracle,nuodb">
 				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
 				DROP INDEX #transformIndexName(argumentCollection=arguments)#
@@ -885,7 +964,7 @@
 	<cfargument name="column">
 	<cfargument name="table" default="#variables.table#">
 	<cfswitch expression="#variables.configBean.getDbType()#">
-			<cfcase value="mssql,mysql">
+			<cfcase value="mssql,mysql,postgresql">
 				<cfreturn rereplace(replace("IX_#arguments.table#_#arguments.column#",",","ALL"),"[[:space:]]","","All")>
 			</cfcase>
 			<cfcase value="oracle">
@@ -985,6 +1064,7 @@
 	<cfquery name="rsCheck" dbtype="query">
 		select * from rsCheck where lower(rsCheck.INDEX_NAME) like 'primary'
 		or lower(rsCheck.INDEX_NAME) like 'pk_%'
+		or lower(rsCheck.INDEX_NAME) like '%_pkey'
 	</cfquery>
 
 	<cfreturn rsCheck.recordcount>
@@ -1023,6 +1103,12 @@
 				</cfquery>
 			</cfcase>
 			<cfcase value="mysql">
+				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+					ALTER TABLE #arguments.table#
+	    			ADD PRIMARY KEY (#arguments.column#)
+				</cfquery>
+			</cfcase>
+			<cfcase value="postgresql">
 				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
 					ALTER TABLE #arguments.table#
 	    			ADD PRIMARY KEY (#arguments.column#)
