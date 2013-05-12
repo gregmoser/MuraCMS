@@ -235,6 +235,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfcase value="mysql">
 				<cfset this.ormSettings.dialect = "MySQL" />
 			</cfcase>
+			<cfcase value="postgresql">
+				<cfset this.ormSettings.dialect = "PostgreSQL" />
+			</cfcase>
 			<cfcase value="oracle">
 				<cfset this.ormSettings.dialect = "Oracle10g" />
 			</cfcase>

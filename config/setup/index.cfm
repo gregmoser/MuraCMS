@@ -319,6 +319,18 @@ to your own modified versions of Mura CMS.
                   </cfif>
                 </cfloop>
               </cfcase>
+				<cfcase value="postgresql" delimiters=",">
+				  <cfset aSql = ListToArray(sql, ';')>
+				  <!--- loop over items --->
+				  <cfloop index="x" from="1" to="#arrayLen(aSql) - 1#">
+					<!--- we placed a small check here to skip empty rows --->
+					<cfif len( trim( aSql[x] ) )>
+					  <cfquery datasource="#FORM.production_datasource#" username="#FORM.production_dbusername#" password="#FORM.production_dbpassword#">
+						#keepSingleQuotes(aSql[x])#
+					  </cfquery>
+					</cfif>
+				  </cfloop>
+				</cfcase>
             </cfswitch>
             <!--- update the domain to be local to the domain the server is being installed on --->
             <cfquery datasource="#FORM.production_datasource#" username="#FORM.production_dbusername#" password="#FORM.production_dbpassword#">
@@ -638,11 +650,12 @@ to your own modified versions of Mura CMS.
               <option value="mysql" <cfif FORM.production_dbtype IS "mysql">selected</cfif>>MySQL</option>
               <option value="mssql" <cfif FORM.production_dbtype IS "mssql">selected</cfif>>MSSQL</option>
               <option value="oracle" <cfif FORM.production_dbtype IS "oracle">selected</cfif>>Oracle</option>
+			  <option value="postgresql" <cfif FORM.production_dbtype IS "postgresql">selected</cfif>>PostgreSQL</option>
             </select>
           </div>
         </div>
         <div class="control-group">
-          <label class="control-label"><a href="" rel="tooltip" data-original-title="For MySQL and MS SQL Server, Mura can create the database and DSNs. You can create a database and use your own DSNs by setting this option to No." onClick="fHandleAutoCreateChange()">Auto Create Database <i class="icon-question-sign"></i></a></label>
+          <label class="control-label"><a href="" rel="tooltip" data-original-title="For MySQL, PostgreSQL and MS SQL Server, Mura can create the database and DSNs. You can create a database and use your own DSNs by setting this option to No." onClick="fHandleAutoCreateChange()">Auto Create Database <i class="icon-question-sign"></i></a></label>
           <div class="controls">
             <label class="inline radio">
               <input type="radio" name="auto_create" value="Yes" id="auto_create_on"  onclick="javascript:fHandleAutoCreateChange()">

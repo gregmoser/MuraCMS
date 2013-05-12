@@ -339,6 +339,8 @@
 		<cfcase value="random">
 			<cfif dbType eq "mysql">
 		        order by   rand()
+			<cfelseif dbType eq "postgresql">
+		        order by   random()
 		    <cfelseif dbType eq "mssql">
 		        order by  newID()
 		    <cfelseif dbType eq "oracle">
@@ -353,7 +355,7 @@
 		</cfswitch>
 	</cfif>
 	
-	<cfif dbType eq "mysql" and getMaxItems()>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#getMaxItems()#" /> </cfif>
+	<cfif listfind("mysql,postgresql", dbType) and getMaxItems()>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#getMaxItems()#" /> </cfif>
 	<cfif dbType eq "oracle" and getMaxItems()>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#getMaxItems()#" /> </cfif>
 	</cfquery>
 	

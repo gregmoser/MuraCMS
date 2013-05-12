@@ -16,6 +16,11 @@
 	ALTER TABLE tcontent ADD COLUMN majorVersion int(11) NULL
 	</cfquery>
 </cfcase>
+<cfcase value="postgresql">
+	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+	ALTER TABLE tcontent ADD COLUMN majorVersion integer NULL
+	</cfquery>
+</cfcase>
 <cfcase value="nuodb">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontent ADD COLUMN majorVersion int NULL
@@ -50,6 +55,11 @@
 <cfcase value="mysql">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontent ADD COLUMN minorVersion int(11) NULL
+	</cfquery>
+</cfcase>
+<cfcase value="postgresql">
+	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+	ALTER TABLE tcontent ADD COLUMN minorVersion integer NULL
 	</cfquery>
 </cfcase>
 <cfcase value="nuodb">
@@ -88,6 +98,11 @@
 	ALTER TABLE tcontentstats ADD COLUMN majorVersion int(11) NULL
 	</cfquery>
 </cfcase>
+<cfcase value="postgresql">
+	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+	ALTER TABLE tcontentstats ADD COLUMN majorVersion integer NULL
+	</cfquery>
+</cfcase>
 <cfcase value="nuodb">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontentstats ADD COLUMN majorVersion int NULL
@@ -122,6 +137,11 @@
 <cfcase value="mysql">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontentstats ADD COLUMN minorVersion int(11) NULL
+	</cfquery>
+</cfcase>
+<cfcase value="postgresql">
+	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+	ALTER TABLE tcontentstats ADD COLUMN minorVersion integer NULL
 	</cfquery>
 </cfcase>
 <cfcase value="nuodb">
@@ -160,6 +180,11 @@
 	ALTER TABLE tcontentstats ADD COLUMN lockID char(35) default NULL
 	</cfquery>
 </cfcase>
+<cfcase value="postgresql">
+	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+	ALTER TABLE tcontentstats ADD COLUMN lockID char(35) default NULL
+	</cfquery>
+</cfcase>
 <cfcase value="nuodb">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontentstats ADD COLUMN lockID char(35) default NULL
@@ -187,6 +212,11 @@
 	</cfquery>
 </cfcase>
 <cfcase value="mysql">
+	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+	ALTER TABLE tcontentassignments ADD COLUMN type varchar(50) default NULL
+	</cfquery>
+</cfcase>
+<cfcase value="postgresql">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontentassignments ADD COLUMN type varchar(50) default NULL
 	</cfquery>
@@ -227,6 +257,11 @@
 	ALTER TABLE tcontent ADD COLUMN expires datetime default NULL
 	</cfquery>
 </cfcase>
+<cfcase value="postgresql">
+	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+	ALTER TABLE tcontent ADD COLUMN expires timestamp default NULL
+	</cfquery>
+</cfcase>
 <cfcase value="nuodb">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontent ADD COLUMN expires timestamp default NULL
@@ -254,6 +289,11 @@
 	</cfquery>
 </cfcase>
 <cfcase value="mysql">
+	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+	ALTER TABLE tcontentcomments ADD COLUMN remoteID char(35) default NULL
+	</cfquery>
+</cfcase>
+<cfcase value="postgresql">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontentcomments ADD COLUMN remoteID char(35) default NULL
 	</cfquery>
@@ -292,6 +332,11 @@
 <cfcase value="mysql">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontentcomments MODIFY column url varchar(255)
+	</cfquery>
+</cfcase>
+<cfcase value="postgresql">
+	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+	ALTER TABLE tcontentcomments ALTER COLUMN url TYPE varchar(255)
 	</cfquery>
 </cfcase>
 <cfcase value="nuodb">

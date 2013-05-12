@@ -330,7 +330,7 @@ Mura CMS.
 
 			order by deliveryDate desc
 			
-			<cfif dbType eq "mysql">limit #arguments.limit#</cfif>
+			<cfif listfind("mysql,postgresql", dbType)>limit #arguments.limit#</cfif>
 			<cfif dbType eq "oracle">) where ROWNUM <=#arguments.limit# </cfif>
 		</cfquery>
 		<cfreturn rs />

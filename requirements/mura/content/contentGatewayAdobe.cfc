@@ -351,6 +351,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset var f = ""/>
 			<cfset var doKids =false />
 			<cfset var dbType=variables.configBean.getDbType() />
+			<cfset var likeCi=variables.configBean.getDbLikeCi() />
 			<cfset var sortOptions="menutitle,title,lastupdate,releasedate,orderno,displayStart,created,rating,comment,credits,type,subtype">
 			<cfset var isExtendedSort=(not listFindNoCase(sortOptions,arguments.sortBy))>
 			<cfset var nowAdjusted="">
@@ -435,8 +436,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							)
 					  </cfif>
 					  <cfif arguments.keywords neq ''>
-					  AND (tcontent.body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"/>
-					  		OR tcontent.title like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"/>)
+					  AND (tcontent.body #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"/>
+					  		OR tcontent.title #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"/>)
 					  </cfif>
  					
 					   AND (
@@ -511,8 +512,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					  
 					  <cfif arguments.keywords neq ''>
 					  AND 
-					  (tcontent.body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"/>
-					  		OR tcontent.title like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"/>)
+					  (tcontent.body #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"/>
+					  		OR tcontent.title #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"/>)
 					  </cfif>
  					
 					   AND (
@@ -588,7 +589,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfdefaultcase>
 				</cfswitch>
 						
-				<cfif dbType eq "mysql" and arguments.size>limit #arguments.size#</cfif>
+				<cfif listfind("mysql,postgresql", dbType) and arguments.size>limit #arguments.size#</cfif>
 				<cfif dbType eq "nuodb" and arguments.size>fetch #arguments.size#</cfif>
 				<cfif dbType eq "oracle" and arguments.size>) where ROWNUM <=#arguments.size# </cfif>
 
@@ -1047,6 +1048,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var sortOptions="menutitle,title,lastupdate,releasedate,orderno,displayStart,created,rating,comment,credits,type,subtype">
 		<cfset var isExtendedSort=(not listFindNoCase(sortOptions,arguments.sortBy))>
 		<cfset var dbType=variables.configBean.getDbType() />
+		<cfset var likeCi=variables.configBean.getDbLikeCi() />
 		<cfset var tableModifier="">
 
 		<cfif dbtype eq "MSSQL">
@@ -1098,7 +1100,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				or tcontent.Type = 'Gallery') 
 		
 		<cfif arguments.searchString neq "">
-			and (tcontent.menuTitle like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.searchString#%"/>)
+			and (tcontent.menuTitle #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.searchString#%"/>)
 		</cfif>	
 	
 		group by tcontent.ContentHistID, tcontent.ContentID, tcontent.Approved, tcontent.filename, tcontent.Active, tcontent.Type, tcontent.subtype, tcontent.OrderNo, tcontent.ParentID, 
@@ -1342,7 +1344,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfset var rsPrivateSearch = "">
 	<cfset var kw = trim(arguments.keywords)>
-	
+	<cfset var likeCi=variables.configBean.getDbLikeCi() />
+
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPrivateSearch',maxrows=1000)#">
 	SELECT tcontent.ContentHistID, tcontent.ContentID, tcontent.Approved, tcontent.filename, tcontent.Active, tcontent.Type, tcontent.OrderNo, tcontent.ParentID, 
 	tcontent.Title, tcontent.menuTitle, tcontent.lastUpdate, tcontent.lastUpdateBy, tcontent.lastUpdateByID, tcontent.Display, tcontent.DisplayStart, 
@@ -1388,20 +1391,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfelse>
 						
 						and
-						(tcontent.Title like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
-						or tcontent.menuTitle like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
-						or tcontent.summary like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
+						(tcontent.Title #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
+						or tcontent.menuTitle #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
+						or tcontent.summary #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
 						or 
 								(
 									tcontent.type not in ('Link','File')
-									and tcontent.body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+									and tcontent.body #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 								)
 						or tcontent.contenthistid in (
 								select distinct tcontent.contenthistid from tclassextenddata 
 								inner join tcontent on (tclassextenddata.baseid=tcontent.contenthistid)
 								where tcontent.active=1
 								and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
-								and tclassextenddata.attributeValue like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+								and tclassextenddata.attributeValue #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%">
 							))
 						and not (
 						tcontent.Title = <cfqueryparam cfsqltype="cf_sql_varchar" value="#kw#"/>
@@ -1489,7 +1492,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var w = "">
 	<cfset var c = "">
 	<cfset var categoryListLen=listLen(arguments.categoryID)>
-	
+	<cfset var likeCi=variables.configBean.getDbLikeCi() />
+
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPublicSearch',maxrows=1000)#">
 	<!--- Find direct matches with no releasedate --->
 	
@@ -1559,22 +1563,22 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfloop>
 					--->
 					and
-							(tcontent.Title like  <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
-							or tcontent.menuTitle like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
-							or tcontent.metaKeywords like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
-							or tcontent.summary like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"> 
+							(tcontent.Title #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							or tcontent.menuTitle #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							or tcontent.metaKeywords #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							or tcontent.summary #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 							or (
 									tcontent.type not in ('Link','File')
-									and tcontent.body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+									and tcontent.body #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 								)
-							or tcontent.credits like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							or tcontent.credits #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 
 							or tcontent.contenthistid in (
 								select distinct tcontent.contenthistid from tclassextenddata 
 								inner join tcontent on (tclassextenddata.baseid=tcontent.contenthistid)
 								where tcontent.active=1
 								and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
-								and tclassextenddata.attributeValue like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+								and tclassextenddata.attributeValue #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 							))
 				</cfif>
 				
@@ -1587,7 +1591,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							inner join tcontentcategories 
 							ON (tcontentcategoryassign.categoryID=tcontentcategories.categoryID)
 							where (<cfloop from="1" to="#categoryListLen#" index="c">
-									tcontentcategories.path like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#listgetat(arguments.categoryID,c)#%"/> 
+									tcontentcategories.path like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#listgetat(arguments.categoryID,c)#%"/>
 									<cfif c lt categoryListLen> or </cfif>
 									</cfloop>) 
 					  )
@@ -1666,24 +1670,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfloop>
 					--->
 					and
-							(tcontent.Title like  <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							(tcontent.Title #likeCi#  <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 							
-							or tcontent.menuTitle like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
-							or tcontent.metaKeywords like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
-							or tcontent.summary like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%"> 
+							or tcontent.menuTitle #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							or tcontent.metaKeywords #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							or tcontent.summary #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 							or 
 								(
 									tcontent.type not in ('Link','File')
-									and tcontent.body like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+									and tcontent.body #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 								)
-							or tcontent.credits like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+							or tcontent.credits #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 
 							or tcontent.contenthistid in (
 								select distinct tcontent.contenthistid from tclassextenddata 
 								inner join tcontent on (tclassextenddata.baseid=tcontent.contenthistid)
 								where tcontent.active=1
 								and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
-								and tclassextenddata.attributeValue like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
+								and tclassextenddata.attributeValue #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 							))
 				</cfif>
 				
@@ -1891,7 +1895,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	order by lastupdate desc
 	
-	<cfif dbType eq "mysql" and arguments.limit>limit #arguments.limit#</cfif>
+	<cfif listfind("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
 	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=#arguments.limit# </cfif>
 	</cfquery>
 	
@@ -1924,7 +1928,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	order by lastEntered desc
 	
-	<cfif dbType eq "mysql" and arguments.limit>limit #arguments.limit#</cfif>
+	<cfif listfind("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
 	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=#arguments.limit# </cfif>
 	</cfquery>
 	

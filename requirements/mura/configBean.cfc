@@ -500,6 +500,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn this>
 </cffunction>
 
+<cffunction name="getDbLikeCi" returntype="any" access="public" output="false" hint="Return the case-insensitive LIKE keyword according to the db type">
+	<cfif getDbType eq "postgresql">
+		<cfreturn "ILIKE" />
+	<cfelse>
+		<cfreturn "LIKE" />
+	</cfif>
+</cffunction>
+
 <cffunction name="getDbPassword" returntype="any" access="public" output="false">
 	<cfargument name="mode" default="" />
 	<cfreturn variables.instance.dbPassword />
@@ -905,6 +913,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			CREATE INDEX IX_#arguments.table#_#arguments.column# ON #arguments.table# (#arguments.column#)
 			</cfquery>
 		</cfcase>
+		<cfcase value="postgresql">
+			<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+			CREATE INDEX IX_#arguments.table#_#arguments.column# ON #arguments.table# (#arguments.column#)
+			</cfquery>
+		</cfcase>
 		<cfcase value="oracle">
 			<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 			CREATE INDEX #right("IX_#arguments.table#_#arguments.column#",30)# ON #arguments.table# (#arguments.column#)
@@ -946,6 +959,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		DROP INDEX IX_#arguments.table#_#arguments.column# on #arguments.table#
 		</cfquery>
 	</cfcase>
+	<cfcase value="postgresql">
+		<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+		DROP INDEX IX_#arguments.table#_#arguments.column# on #arguments.table#
+		</cfquery>
+	</cfcase>
 	<cfcase value="oracle">
 		<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 		DROP INDEX IX_#arguments.table#_#arguments.column#
@@ -981,6 +999,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfquery>
 	</cfcase>
 	<cfcase value="mysql">
+		<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
+		ALTER TABLE #arguments.table# DROP COLUMN #arguments.column#
+		</cfquery>
+	</cfcase>
+	<cfcase value="postgresql">
 		<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 		ALTER TABLE #arguments.table# DROP COLUMN #arguments.column#
 		</cfquery>
