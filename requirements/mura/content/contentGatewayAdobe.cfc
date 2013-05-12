@@ -589,7 +589,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfdefaultcase>
 				</cfswitch>
 						
-				<cfif listfind("mysql,postgresql", dbType) and arguments.size>limit #arguments.size#</cfif>
+				<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.size>limit #arguments.size#</cfif>
 				<cfif dbType eq "nuodb" and arguments.size>fetch #arguments.size#</cfif>
 				<cfif dbType eq "oracle" and arguments.size>) where ROWNUM <=#arguments.size# </cfif>
 
@@ -1895,7 +1895,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	order by lastupdate desc
 	
-	<cfif listfind("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
 	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=#arguments.limit# </cfif>
 	</cfquery>
 	
@@ -1928,7 +1928,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	order by lastEntered desc
 	
-	<cfif listfind("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
 	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=#arguments.limit# </cfif>
 	</cfquery>
 	

@@ -229,7 +229,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		ORDER BY  theAvg desc, theCount desc 
 	
-	<cfif listfind("mysql,postgresql", dbType) and arguments.limit>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#"></cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#"></cfif>
 	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=1 </cfif>
 	</cfquery>
 		

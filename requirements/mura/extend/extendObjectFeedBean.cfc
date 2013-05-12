@@ -355,7 +355,7 @@
 		</cfswitch>
 	</cfif>
 	
-	<cfif listfind("mysql,postgresql", dbType) and getMaxItems()>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#getMaxItems()#" /> </cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and getMaxItems()>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#getMaxItems()#" /> </cfif>
 	<cfif dbType eq "oracle" and getMaxItems()>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#getMaxItems()#" /> </cfif>
 	</cfquery>
 	

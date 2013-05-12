@@ -151,7 +151,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tcontent.menuTitle,tcontent.LastUpdate,tcontent.parentID ,tcontent.targetParams,tfiles.fileEXT  
 	order by hits desc
 	
-	<cfif listfind("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
 	<cfif dbType eq "oracle" and arguments.limit>)  where ROWNUM <=#arguments.limit#</cfif>
 	</cfquery>
 	
@@ -338,7 +338,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	Group By tsessiontracking.keywords
 	order by keywordCount desc
 	
-	<cfif listfind("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
 	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=#arguments.limit#</cfif>
 	</cfquery>
 	
@@ -426,7 +426,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	Group By tsessiontracking.referer
 	order by referals desc
 	
-	<cfif listfind("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
 	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=#arguments.limit#</cfif>
 	</cfquery>
 	
