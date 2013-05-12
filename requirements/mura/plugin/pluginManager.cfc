@@ -140,7 +140,12 @@ and tplugins.deployed=1
 </cfquery>
 
 <cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsScripts2')#">
-select tplugins.name, tplugins.package, tplugins.directory, tpluginscripts.moduleID, tplugins.pluginID, tpluginscripts.runat, tpluginscripts.scriptfile, cast('' as varchar(10)) as siteID, tpluginscripts.docache,tplugins.loadPriority from tpluginscripts
+select tplugins.name, tplugins.package, tplugins.directory, tpluginscripts.moduleID, tplugins.pluginID, tpluginscripts.runat, tpluginscripts.scriptfile, 
+<cfif variables.configBean.getDbType() eq 'postgresql'>
+	cast('' as varchar(25))
+<cfelse>
+	''
+</cfif> as siteID, tpluginscripts.docache,tplugins.loadPriority from tpluginscripts
 inner join tplugins on (tpluginscripts.moduleID=tplugins.moduleID)
 where tpluginscripts.runat in ('onGlobalLogin','onGlobalRequestStart','onApplicationLoad','onGlobalError','onGlobalSessionStart','onGlobalSessionEnd')
 and tplugins.deployed=1
