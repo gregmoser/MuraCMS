@@ -81,10 +81,13 @@
 			stcArgs.name=  Arguments.DatasourceName;
 			stcArgs.host = Arguments.DatabaseServer;
 			stcArgs.port = Arguments.DatabasePort;
-			stcArgs.database = Arguments.DatabaseName;			
+			stcArgs.database = LCase(Arguments.DatabaseName);
 			stcArgs.username = Arguments.UserName;  
 			stcArgs.password = Arguments.Password;
 			stcArgs.description=Arguments.Description;
+			stcArgs.create = true;
+			stcArgs.alter = true;
+			stcArgs.drop = true;
 			stcArgs.selectmethod = "direct";
 			//stcArgs.url = "jdbc:mysql://" & stcArgs.host & ":" & stcArgs.port & "/" & stcArgs.database;
 			//stcArgs.class= "com.mysql.jdbc.Driver";
@@ -102,12 +105,12 @@
 						oDS.setPostgreSQL(argumentCollection=stcArgs);
 						// (bsoylu 6/6/2010) now call the createDB function
 						stcA2.DatasourceName = Arguments.DatasourceName;
-						stcA2.DataBaseName = Arguments.DatabaseName;
+						stcA2.DataBaseName = LCase(Arguments.DatabaseName);
 						stcA2.sOptions = "ENCODING 'UTF8'";
 						sErr=fDBCreate(argumentCollection=stcA2);	
 						//now update datasource to point to database
 						if (sErr IS "") {
-							stcArgs.database = Arguments.DatabaseName;
+							stcArgs.database = LCase(Arguments.DatabaseName);
 							oDS.setPostgreSQL(argumentCollection=stcArgs);
 						}				
 					} else {
