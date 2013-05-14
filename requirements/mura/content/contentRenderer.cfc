@@ -971,6 +971,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="indexFile" type="string" required="true" default="">
 	<cfargument name="complete" type="boolean" required="true" default="false">
 	<cfargument name="showMeta" type="string" required="true" default="0">
+	<cfargument name="bean" hint="The contentBean that link is being generated for">
 	
 	<cfset var href=""/>
 	<cfset var tp=""/>
