@@ -58,6 +58,9 @@ component persistent="false" accessors="true" output="false" extends="controller
 
 	property name='contentCommentManager';
 
+	public void function setContentCommentManager(required contentCommentManager) {
+		variables.contentCommentManager = arguments.contentCommentManager;
+	}
 
 	public any function before(required struct rc) {
 		param name='rc.siteid' default=session.siteid;
