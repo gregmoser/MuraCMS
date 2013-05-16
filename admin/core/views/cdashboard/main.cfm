@@ -93,7 +93,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfif application.contentManager.getRecentCommentsQuery(session.siteID,1,false).recordCount>
 <div id="recentComments"<cfif started> class="divide"</cfif>>
-<h2><i class="icon-comments"></i> #application.rbFactory.getKeyValue(session.rb,"dashboard.comments")# <span><a href="?muraAction=cDashboard.recentComments&siteID=#session.siteID#">(#application.rbFactory.getKeyValue(session.rb,"dashboard.comments.last100")#)</a></span></h2>
+<h2><i class="icon-comments"></i> #application.rbFactory.getKeyValue(session.rb,"dashboard.comments")# <span><a href="?muraAction=cComments.default&siteID=#session.siteID#">(#application.rbFactory.getKeyValue(session.rb,"dashboard.viewall")#)</a></span></h2>
 <span id="recentCommentsData"></span>
 </div>
 <script type="text/javascript">dashboardManager.loadRecentComments('#JSStringFormat(rc.siteid)#');</script>
