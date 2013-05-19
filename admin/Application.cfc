@@ -130,8 +130,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 	
 	function setupApplication(){
-		var local = structNew();
-		
+
 		include "../config/appcfc/onApplicationStart_include.cfm";
 	
 		if(not structKeyExists(application,"muraAdmin") or not hasBeanFactory()){
@@ -201,7 +200,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		var page="";
 		var i="";
 		var site="";
-		var local = structNew();
 		
 		include "../config/appcfc/onRequestStart_include.cfm";
 				
@@ -389,21 +387,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 
 	function setupSession(){
-		var local = structNew();
 		include "../config/appcfc/onSessionStart_include.cfm";
 	}
 
 	include "../config/appcfc/onSessionEnd_method.cfm";
 	
 	function onError(exception,eventname){
-	  	var local = structNew();
 		include "../config/appcfc/onError_include.cfm";
 	}
 
 	include "../config/appcfc/onMissingTemplate_method.cfm";
 
 	function onRequestEnd(targetPage){
-	  	var local = structNew();
 		if(isdefined("request.event")){
 			application.pluginManager.announceEvent("onAdminRequestEnd",request.event);
 			include "../config/appcfc/onRequestEnd_include.cfm";
