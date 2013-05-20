@@ -253,7 +253,7 @@ Notes:
 		
 									<!--- Show the reviewer info --->
 									<h6>
-										<cfif len(productReview.getReviewerName())>
+										<cfif not isNull(productReview.getReviewerName()) and len(productReview.getReviewerName())>
 											<em>#productReview.getReviewerName()#</em>
 										<cfelse>
 											<em>Anonymous</em>
@@ -261,7 +261,7 @@ Notes:
 									</h6>
 									
 									<!--- Show the actual Review --->
-									<p>#productReview.getReview()#</p>
+									<p>#productReview.getFormattedValue('review')#</p>
 									
 								</article>
 								
@@ -285,7 +285,7 @@ Notes:
 						<cfif $.slatwall.hasSuccessfulAction( "public:product.addProductReview" )>
 							
 							<!--- Show success Message --->
-							<p class="success">Your product review was successfully added. <cfif not $.slatwall.product.setting('productAutoApproveReviewsFlag')>Please note that products reviews are reviewed by our staff before being published to the site.</cfif></p>
+							<p class="success">Your product review was successfully added. <cfif not $.slatwall.product().setting('productAutoApproveReviewsFlag')>Please note that products reviews are reviewed by our staff before being published to the site.</cfif></p>
 							
 						<cfelse>
 							
@@ -372,12 +372,14 @@ Notes:
 							<!--- End: Add Product Review Form --->
 							
 						</cfif>
+						
 					</div>
 				</div>
 			</div>
 		</div>
 		<!--- End: Add Product Review Example --->
-			
+		
+		
 		<hr />
 			
 		<!--- Start: Related Products Example --->
