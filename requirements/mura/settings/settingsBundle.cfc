@@ -1372,6 +1372,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="name" type="string" required="true">
 		<cfargument name="value" type="any" required="true">
 		<cfset var temp="">
+		<cfset var i = "">
 		
 		<cfif isQuery(arguments.value) and application.configBean.getDBType() eq "Oracle">
 			<cfset arguments.value=variables.utility.fixOracleClobs(arguments.value)>
@@ -1379,6 +1380,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfset variables.data["#name#"]=arguments.value>
 		<cfwddx action="cfml2wddx" input="#arguments.value#" output="temp">
+		
+		<!--- replace lower, non-printable ascii chars --->
+		<cfloop from="1" to="31" index="i">
+			<cfset temp = replace(temp, chr(i), "", "all")>
+		</cfloop>
+		
 		<cffile action="write" output="#temp#" file="#variables.backupDir#wddx_#arguments.name#.xml"  charset="utf-8">
 	</cffunction>
 
