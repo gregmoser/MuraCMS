@@ -181,6 +181,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 												ipAddress=request.remoteAddr);
 				}		
 				
+				/*
 				if(isDefined("cookie")){
 					application.scriptProtectionFilter.scan(
 												object=cookie,
@@ -189,6 +190,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 												useTagFilter=true,
 												useWordFilter=true);
 				}
+				*/
 			}
 			
 		}
