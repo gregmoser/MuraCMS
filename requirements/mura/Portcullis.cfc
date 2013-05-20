@@ -34,8 +34,8 @@
 	 
 	<!---Start of settings--->
 	<cfset variables.instance={}>
-	<cfset variables.instance.log = not StructKeyExists(SERVER,"bluedragon")/>	
-	<cfset variables.instance.ipBlock = not StructKeyExists(SERVER,"bluedragon")/>										<!---Requires variables.instance.log set to true--->
+	<cfset variables.instance.log = true/>	
+	<cfset variables.instance.ipBlock = true/>										<!---Requires variables.instance.log set to true--->
 	<cfset variables.instance.allowedAttempts = 10/>
 	<cfset variables.instance.blockTime = 86400/> 									<!---In Seconds, 86400 seconds equals 1 day--->
 	<cfset variables.instance.keepInnerText = false/> 								<!---Keep any text within a blocked tag--->
@@ -44,7 +44,7 @@
 	<cfset variables.instance.checkReferer = true/> 								<!---For form variables only--->
 	<cfset variables.instance.safeReferers = ""/> 									<!---Comma delimited list of sites that can send submit form variables to this site--->
 	<cfset variables.instance.exceptionFields = "comments,summary,body,tags,title,menutitle,description,notes"/>							 	<!---Comma delimited list of fields not to scan--->
-	<cfset variables.instance.allowJSAccessCookies = false/>						<!---Turn off Javascript access to cookies with the HttpOnly attribute - supported by only some browsers--->					
+	<cfset variables.instance.allowJSAccessCookies = true/>						<!---Turn off Javascript access to cookies with the HttpOnly attribute - supported by only some browsers--->					
 	<cfset variables.instance.blockCRLF = true/>									<!---Block CRLF (carriage return line feed) hacks, this particular hack has limited abilities so this could be overkill--->
 	
 	<cfset variables.instance.sqlFilter = "select,insert,update,delete,create,drop,alter,declare,execute,--,xp_,sp_sqlexecute,table_cursor,cast\(,exec\(,eval\(,information_schema"/>
@@ -163,7 +163,7 @@
 				<cfset itemname = REReplaceNoCase(item,nameregex,"","All")>
 				<!---<cfif temp.detected eq true><cfset detected = detected + 1/></cfif>  // We're not going to take note of CRLFs since it's very likely benign--->
 				<cfif objectname eq "cookie" and variables.instance.allowJSAccessCookies eq false>
-					<cfheader name="Set-Cookie" value="#itemname#=#temp.cleanText#;HttpOnly">
+					<cfheader name="Set-Cookie" value="#itemname#=#temp.cleanText#;HttpOnly;path=/">
 				<cfelse>
 					<cfset "#objectname#.#itemname#" = temp.cleanText/>
 				</cfif>
@@ -179,7 +179,7 @@
 					<cfset itemname = REReplaceNoCase(item,nameregex,"","All")>
 					<cfif temp.detected eq true><cfset detected = detected + 1/></cfif>
 					<cfif objectname eq "cookie" and variables.instance.allowJSAccessCookies eq false>
-						<cfheader name="Set-Cookie" value="#itemname#=#temp.cleanText#;HttpOnly">
+						<cfheader name="Set-Cookie" value="#itemname#=#temp.cleanText#;HttpOnly;path=/">
 					<cfelse>
 						<cfset "#objectname#.#itemname#" = temp.cleanText/>
 					</cfif>

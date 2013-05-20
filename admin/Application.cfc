@@ -165,30 +165,32 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				request.remoteAddr = CGI.REMOTE_ADDR;
 			}
 
-			if(isDefined("url")){
-				application.scriptProtectionFilter.scan(
-											object=url,
-											objectname="url",
-											ipAddress=request.remoteAddr,
-											useTagFilter=true,
-											useWordFilter=true);
+			if(application.configBean.getScriptProtect()){
+				if(isDefined("url")){
+					application.scriptProtectionFilter.scan(
+												object=url,
+												objectname="url",
+												ipAddress=request.remoteAddr,
+												useTagFilter=true,
+												useWordFilter=true);
+				}
+				if(isDefined("form")){
+					application.scriptProtectionFilter.scan(
+												object=form,
+												objectname="form",
+												ipAddress=request.remoteAddr);
+				}		
+				
+				if(isDefined("cookie")){
+					application.scriptProtectionFilter.scan(
+												object=cookie,
+												objectname="cookie",
+												ipAddress=request.remoteAddr,
+												useTagFilter=true,
+												useWordFilter=true);
+				}
 			}
-			if(isDefined("form")){
-				application.scriptProtectionFilter.scan(
-											object=form,
-											objectname="form",
-											ipAddress=request.remoteAddr);
-			}
-			/*
-			if(isDefined("cookie")){
-				application.scriptProtectionFilter.scan(
-											object=cookie,
-											objectname="cookie",
-											ipAddress=request.remoteAddr,
-											useTagFilter=true,
-											useWordFilter=true);
-			}
-			*/
+			
 		}
 
 		super.onRequestStart(argumentCollection=arguments);

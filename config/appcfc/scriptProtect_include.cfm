@@ -16,7 +16,6 @@
 									ipAddress=request.remoteAddr,
 									useTagFilter=true)>
 	</cfif>
-	<!---
 	<cfif isDefined("cookie")>
 		<cfset application.scriptProtectionFilter.scan(
 									object=cookie,
@@ -25,7 +24,6 @@
 									useTagFilter=true,
 									useWordFilter=true)>
 	</cfif>
-	--->
 	<cfif application.scriptProtectionFilter.isBlocked(request.remoteAddr) eq true>
 		<cfset application.eventManager.announceEvent("onGlobalThreatDetect",createObject("component","mura.event"))>
 	</cfif> 
