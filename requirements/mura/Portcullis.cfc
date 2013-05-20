@@ -127,7 +127,7 @@
 					<cfset itemname = REReplaceNoCase(item,nameregex,"","All")>
 					<cfif temp.detected eq true><cfset detected = detected + 1/></cfif>
 					<cfif objectname eq "cookie" and variables.instance.allowJSAccessCookies eq false>
-						<cfheader name="Set-Cookie" value="#itemname#=#temp.cleanText#;HttpOnly">
+						<cfheader name="Set-Cookie" value="#itemname#=#temp.cleanText#;HttpOnly;path=/">
 					<cfelse>
 						<cfset "#objectname#.#itemname#" = temp.cleanText/>
 					</cfif>
@@ -147,7 +147,7 @@
 					<cfset itemname = REReplaceNoCase(item,nameregex,"","All")>
 					<cfif temp.detected eq true><cfset detected = detected + 1/></cfif>
 					<cfif objectname eq "cookie" and variables.instance.allowJSAccessCookies eq false>
-						<cfheader name="Set-Cookie" value="#itemname#=#temp.cleanText#;HttpOnly">
+						<cfheader name="Set-Cookie" value="#itemname#=#temp.cleanText#;HttpOnly;path=/">
 					<cfelse>
 						<cfset "#objectname#.#itemname#" = temp.cleanText/>
 					</cfif>
