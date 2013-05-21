@@ -147,7 +147,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	function onRequestStart(){
 		try{
-		if(isDefined('application.scriptProtectionFilter')){
+		if(isDefined('application.scriptProtectionFilter') and application.configBean.getScriptProtect()){
 
 			variables.remoteIPHeader=application.configBean.getValue("remoteIPHeader");
 			
