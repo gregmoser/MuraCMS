@@ -210,7 +210,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		include "../config/appcfc/onRequestStart_include.cfm";
 				
 		if(right(cgi.script_name, Len("index.cfm")) NEQ "index.cfm" and right(cgi.script_name, Len("error.cfm")) NEQ "error.cfm" AND right(cgi.script_name, 3) NEQ "cfc"){
-			location(url="index.cfm" addtoken="false");
+			location(url="index.cfm", addtoken="false");
 		}
 		
 		request.context.currentURL="index.cfm";
@@ -322,13 +322,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		if(session.mura.isLoggedIn and structKeyExists(session,"siteArray") and not arrayLen(session.siteArray)){
 			if(not listFind(session.mura.memberships,'S2IsPrivate')){
-				location(url="#application.configBean.getContext()#/" addtoken="false");
+				location(url="#application.configBean.getContext()#/", addtoken="false");
 			} else if(not len(request.context.muraAction)
 					or (
 							len(request.context.muraAction) 
 							and not listfindNoCase("clogin,cMessage,cEditprofile",listLast(listFirst(request.context.muraAction,"."),":") )
 						)){
-				location(url="#application.configBean.getContext()#/admin/index.cfm?muraAction=cMessage.noaccess" addtoken="false");
+				location(url="#application.configBean.getContext()#/admin/index.cfm?muraAction=cMessage.noaccess", addtoken="false");
 			}
 		}
 		
@@ -384,7 +384,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				page='#cgi.script_name#?#cgi.QUERY_STRING#';
 			}
 			
-			location(addtoken="false" url="https://#listFirst(cgi.http_host,":")##page#");
+			location(addtoken="false", url="https://#listFirst(cgi.http_host,":")##page#");
 		}
 		
 		application.rbFactory.setAdminLocale();

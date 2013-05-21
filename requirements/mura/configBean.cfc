@@ -501,7 +501,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="getDbLikeCi" returntype="any" access="public" output="false" hint="Return the case-insensitive LIKE keyword according to the db type">
-	<cfif getDbType eq "postgresql">
+	<cfif getDbType() eq "postgresql">
 		<cfreturn "ILIKE" />
 	<cfelse>
 		<cfreturn "LIKE" />
