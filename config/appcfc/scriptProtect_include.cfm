@@ -16,25 +16,24 @@
 									ipAddress=request.remoteAddr,
 									useTagFilter=true)>
 	</cfif>
-	</cfif>
 	<cfif isDefined("cgi")>
 		<cfset application.scriptProtectionFilter.scan(
 									object=cgi,
 									objectname="cgi",
 									ipAddress=request.remoteAddr,
 									useTagFilter=true,
-									useWordFilter=true)>
+									useWordFilter=true,
+									fixValues=false)>
 	</cfif>
-	<!---
 	<cfif isDefined("cookie")>
 		<cfset application.scriptProtectionFilter.scan(
 									object=cookie,
 									objectname="cookie",
 									ipAddress=request.remoteAddr,
 									useTagFilter=true,
-									useWordFilter=true)>
+									useWordFilter=true,
+									fixValues=false)>
 	</cfif>
-	--->
 	<cfif application.scriptProtectionFilter.isBlocked(request.remoteAddr) eq true>
 		<cfset application.eventManager.announceEvent("onGlobalThreatDetect",createObject("component","mura.event"))>
 	</cfif> 

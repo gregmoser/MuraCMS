@@ -2031,6 +2031,7 @@ select * from tplugins order by #arguments.orderby#
 <cfset rc.jsLib=arguments.jsLib>
 <cfset rc.jsLibLoaded=arguments.jsLibLoaded>
 <cfset rc.renderMuraAlerts=false>
+<cfset rc.$=getBean('$').init(session.siteid)>
 
 <cfif arguments.compactDisplay>
 	<cfset layoutTemplate = "compact" />

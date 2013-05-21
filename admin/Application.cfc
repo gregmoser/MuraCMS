@@ -146,6 +146,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 
 	function onRequestStart(){
+		try{
 		if(isDefined('application.scriptProtectionFilter')){
 
 			variables.remoteIPHeader=application.configBean.getValue("remoteIPHeader");
@@ -186,21 +187,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 												objectname="cgi",
 												ipAddress=request.remoteAddr,
 												useTagFilter=true,
-												useWordFilter=true);
-				}		
-				/*
+												useWordFilter=true,
+												fixValues=false);
+				}			
 				if(isDefined("cookie")){
 					application.scriptProtectionFilter.scan(
 												object=cookie,
 												objectname="cookie",
 												ipAddress=request.remoteAddr,
 												useTagFilter=true,
-												useWordFilter=true);
+												useWordFilter=true,
+												fixValues=false);
 				}
-				*/
+				
 			}
 			
 		}
+	} catch(e any){}
 
 		super.onRequestStart(argumentCollection=arguments);
 	}
