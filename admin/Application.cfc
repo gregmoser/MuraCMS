@@ -184,7 +184,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					application.scriptProtectionFilter.scan(
 												object=cgi,
 												objectname="cgi",
-												ipAddress=request.remoteAddr);
+												ipAddress=request.remoteAddr,
+												useTagFilter=true,
+												useWordFilter=true);
 				}		
 				/*
 				if(isDefined("cookie")){

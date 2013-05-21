@@ -22,7 +22,8 @@
 									object=cgi,
 									objectname="cgi",
 									ipAddress=request.remoteAddr,
-									useTagFilter=true)>
+									useTagFilter=true,
+									useWordFilter=true)>
 	</cfif>
 	<!---
 	<cfif isDefined("cookie")>
