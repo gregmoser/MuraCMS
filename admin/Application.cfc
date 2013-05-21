@@ -179,8 +179,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 												object=form,
 												objectname="form",
 												ipAddress=request.remoteAddr);
+				}	
+				if(isDefined("cgi")){
+					application.scriptProtectionFilter.scan(
+												object=cgi,
+												objectname="cgi",
+												ipAddress=request.remoteAddr);
 				}		
-				
 				/*
 				if(isDefined("cookie")){
 					application.scriptProtectionFilter.scan(
