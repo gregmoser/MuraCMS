@@ -196,6 +196,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		variables.instance.errors['#local.error.getProperty()#']=local.error.getMessage();
 	}
 	*/
+	
 	return this;
 	</cfscript>
 </cffunction>

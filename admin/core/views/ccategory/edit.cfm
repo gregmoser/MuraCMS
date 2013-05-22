@@ -51,7 +51,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfinclude template="dsp_secondary_menu.cfm">
 
-#application.utility.displayErrors(rc.categoryBean.getErrors())#
+<cfif not structIsEmpty(rc.categoryBean.getErrors())>
+  <p class="alert alert-error">#application.utility.displayErrors(rc.categoryBean.getErrors())#</p>
+</cfif>
 
 <span id="msg">
 #application.pluginManager.renderEvent("onCategoryEditMessageRender", event)#

@@ -182,7 +182,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				new mura.fileWriter(mode=775,tempDir=application.configBean.getTempDir())
 			);
 
-			variables.serviceFactory.addBean('validationService', new hyrule.system.core.Hyrule() );
+			//variables.serviceFactory.addBean('validationService', new hyrule.system.core.Hyrule() );
 
 			variables.serviceFactory.addAlias("scriptProtectionFilter","Portcullis");
 			variables.serviceFactory.addAlias("eventManager","pluginManager");
@@ -242,7 +242,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfset application.appAutoUpdated=false>
 				
-		<cfset variables.serviceList="utility,pluginManager,validationService,settingsManager,contentManager,eventManager,contentRenderer,contentUtility,contentGateway,categoryManager,clusterManager,contentServer,changesetManager,scriptProtectionFilter,permUtility,emailManager,loginManager,mailinglistManager,userManager,dataCollectionManager,advertiserManager,feedManager,sessionTrackingManager,favoriteManager,raterManager,dashboardManager,autoUpdater">
+		<cfset variables.serviceList="utility,pluginManager,settingsManager,contentManager,eventManager,contentRenderer,contentUtility,contentGateway,categoryManager,clusterManager,contentServer,changesetManager,scriptProtectionFilter,permUtility,emailManager,loginManager,mailinglistManager,userManager,dataCollectionManager,advertiserManager,feedManager,sessionTrackingManager,favoriteManager,raterManager,dashboardManager,autoUpdater">
 		
 		<!--- These application level services use the beanServicePlaceHolder to lazy load the bean --->
 		<cfloop list="#variables.serviceList#" index="variables.i">			

@@ -57,20 +57,20 @@ Mura CMS.
 
 	<cfproperty name="emailID" type="string" default="" required="true" />
 	<cfproperty name="siteID" type="string" default="" required="true" />
-	<cfproperty name="subject" type="string" default="" required="true" />
-	<cfproperty name="bodyHTML" type="string" default="" required="true" />
-	<cfproperty name="bodyText" type="string" default="" required="true" />
-	<cfproperty name="format" type="string" default="" required="true" />
-	<cfproperty name="createdDate" type="date" default="" required="true" />
-	<cfproperty name="deliveryDate" type="date" default="" required="true" />
-	<cfproperty name="status" type="string" default="" required="true" />
-	<cfproperty name="groupID" type="string" default="" required="true" />
-	<cfproperty name="lastUpdate" type="date" default="" required="true" />
-	<cfproperty name="lastUpdateBy" type="string" default="" required="true" />
-	<cfproperty name="LastUpdateByID" type="string" default="" required="true" />
+	<cfproperty name="subject" type="string" default=""/>
+	<cfproperty name="bodyHTML" type="string" default=""/>
+	<cfproperty name="bodyText" type="string" default=""/>
+	<cfproperty name="format" type="string" default=""/>
+	<cfproperty name="createdDate" type="date" default=""/>
+	<cfproperty name="deliveryDate" type="date" default=""/>
+	<cfproperty name="status" type="string" default=""/>
+	<cfproperty name="groupID" type="string" default=""/>
+	<cfproperty name="lastUpdate" type="date" default=""/>
+	<cfproperty name="lastUpdateBy" type="string" default=""/>
+	<cfproperty name="LastUpdateByID" type="string" default=""/>
 	<cfproperty name="numberSent" type="numeric" default="0" required="true" />
-	<cfproperty name="replyTo" type="string" default="" required="true" />
-	<cfproperty name="fromLabel" type="string" default="" required="true" />
+	<cfproperty name="replyTo" type="string" default=""/>
+	<cfproperty name="fromLabel" type="string" default=""/>
 	<cfproperty name="template" type="string" default="" />
 
 	<cffunction name="Init" access="public" output="false" returntype="any">

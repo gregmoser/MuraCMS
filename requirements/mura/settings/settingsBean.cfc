@@ -47,23 +47,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfcomponent extends="mura.bean.beanExtendable" output="false">
  
 <cfproperty name="siteID" type="string" default="" required="true" />
-<cfproperty name="site" type="string" default="" required="true" />
-<cfproperty name="tagLine" type="string" default="" required="true" />
+<cfproperty name="site" type="string" default=""/>
+<cfproperty name="tagLine" type="string" default=""/>
 <cfproperty name="pageLimit" type="string" default="1000" required="true" />
 <cfproperty name="locking" type="string" default="none" required="true" />
-<cfproperty name="domain" type="string" default="" required="true" />
-<cfproperty name="stagingDomain" type="string" default="" required="true" />
-<cfproperty name="domainAlias" type="string" default="" required="true" />
+<cfproperty name="domain" type="string" default=""/>
+<cfproperty name="stagingDomain" type="string" default=""/>
+<cfproperty name="domainAlias" type="string" default=""/>
 <cfproperty name="enforcePrimaryDomain" type="int" default="0" required="true" />
-<cfproperty name="contact" type="string" default="" required="true" />
-<cfproperty name="mailServerIP" type="string" default="" required="true" />
+<cfproperty name="contact" type="string" default=""/>
+<cfproperty name="mailServerIP" type="string" default=""/>
 <cfproperty name="mailServerSMTPPort" type="string" default="25" required="true" />
 <cfproperty name="mailServerPOPPort" type="string" default="110" required="true" />
 <cfproperty name="mailserverTLS" type="string" default="false" required="true" />
 <cfproperty name="mailserverSSL" type="string" default="false" required="true" />
-<cfproperty name="mailServerUsername" type="string" default="" required="true" />
-<cfproperty name="mailServerUsernameEmail" type="string" default="" required="true" />
-<cfproperty name="mailServerPassword" type="string" default="" required="true" />
+<cfproperty name="mailServerUsername" type="string" default=""/>
+<cfproperty name="mailServerUsernameEmail" type="string" default=""/>
+<cfproperty name="mailServerPassword" type="string" default=""/>
 <cfproperty name="useDefaultSMTPServer" type="numeric" default="1" required="true" />
 <cfproperty name="EmailBroadcaster" type="numeric" default="0" required="true" />
 <cfproperty name="EmailBroadcasterLimit" type="numeric" default="0" required="true" />
@@ -79,17 +79,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="columnNames" type="string" default="Left Column^Main Content^Right Column" required="true" />
 <cfproperty name="ExtranetPublicReg" type="numeric" default="0" required="true" />
 <cfproperty name="primaryColumn" type="numeric" default="2" required="true" />
-<cfproperty name="contactName" type="string" default="" required="true" />
-<cfproperty name="contactAddress" type="string" default="" required="true" />
-<cfproperty name="contactCity" type="string" default="" required="true" />
-<cfproperty name="contactState" type="string" default="" required="true" />
-<cfproperty name="contactZip" type="string" default="" required="true" />
-<cfproperty name="contactEmail" type="string" default="" required="true" />
-<cfproperty name="contactPhone" type="string" default="" required="true" />
-<cfproperty name="publicUserPoolID" type="string" default="" required="true" />
-<cfproperty name="privateUserPoolID" type="string" default="" required="true" />
-<cfproperty name="advertiserUserPoolID" type="string" default="" required="true" />
-<cfproperty name="displayPoolID" type="string" default="" required="true" />
+<cfproperty name="contactName" type="string" default=""/>
+<cfproperty name="contactAddress" type="string" default=""/>
+<cfproperty name="contactCity" type="string" default=""/>
+<cfproperty name="contactState" type="string" default=""/>
+<cfproperty name="contactZip" type="string" default=""/>
+<cfproperty name="contactEmail" type="string" default=""/>
+<cfproperty name="contactPhone" type="string" default=""/>
+<cfproperty name="publicUserPoolID" type="string" default=""/>
+<cfproperty name="privateUserPoolID" type="string" default=""/>
+<cfproperty name="advertiserUserPoolID" type="string" default=""/>
+<cfproperty name="displayPoolID" type="string" default=""/>
 <cfproperty name="feedManager" type="numeric" default="0" required="true" />
 <cfproperty name="largeImageHeight" type="string" default="AUTO" required="true" />
 <cfproperty name="largeImageWidth" type="numeric" default="600" required="true" />
@@ -97,26 +97,26 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="smallImageWidth" type="numeric" default="80" required="true" />
 <cfproperty name="mediumImageHeight" type="string" default="180" required="true" />
 <cfproperty name="mediumImageWidth" type="numeric" default="180" required="true" />
-<cfproperty name="sendLoginScript" type="string" default="" required="true" />
-<cfproperty name="mailingListConfirmScript" type="string" default="" required="true" />
-<cfproperty name="reminderScript" type="string" default="" required="true" />
-<cfproperty name="ExtranetPublicRegNotify" type="string" default="" required="true" />
-<cfproperty name="exportLocation" type="string" default="" required="true" />
-<cfproperty name="loginURL" type="string" default="" required="true" />
-<cfproperty name="editProfileURL" type="string" default="" required="true" />
+<cfproperty name="sendLoginScript" type="string" default=""/>
+<cfproperty name="mailingListConfirmScript" type="string" default=""/>
+<cfproperty name="reminderScript" type="string" default=""/>
+<cfproperty name="ExtranetPublicRegNotify" type="string" default=""/>
+<cfproperty name="exportLocation" type="string" default=""/>
+<cfproperty name="loginURL" type="string" default=""/>
+<cfproperty name="editProfileURL" type="string" default=""/>
 <cfproperty name="commentApprovalDefault" type="numeric" default="1" required="true" />
 <cfproperty name="display" type="numeric" default="1" required="true" />
-<cfproperty name="lastDeployment" type="date" default="" required="true" />
-<cfproperty name="accountActivationScript" type="string" default="" required="true" />
-<cfproperty name="googleAPIKey" type="string" default="" required="true" />
-<cfproperty name="siteLocale" type="string" default="" required="true" />
+<cfproperty name="lastDeployment" type="date" default=""/>
+<cfproperty name="accountActivationScript" type="string" default=""/>
+<cfproperty name="googleAPIKey" type="string" default=""/>
+<cfproperty name="siteLocale" type="string" default=""/>
 <cfproperty name="hasChangesets" type="numeric" default="0" required="true" />
-<cfproperty name="theme" type="string" default="" required="true" />
-<cfproperty name="javaLocale" type="string" default="" required="true" /> 
+<cfproperty name="theme" type="string" default=""/>
+<cfproperty name="javaLocale" type="string" default=""/> 
 <cfproperty name="orderno" type="numeric" default="0" required="true" />
 <cfproperty name="enforceChangesets" type="numeric" default="0" required="true" />
-<cfproperty name="contentApprovalScript" type="string" default="" required="true" />
-<cfproperty name="contentRejectionScript" type="string" default="" required="true" />
+<cfproperty name="contentApprovalScript" type="string" default=""/>
+<cfproperty name="contentRejectionScript" type="string" default=""/>
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	

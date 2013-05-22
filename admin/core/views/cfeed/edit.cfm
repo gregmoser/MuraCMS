@@ -164,7 +164,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfinclude template="dsp_secondary_menu.cfm">
 </cfif>
 
-#application.utility.displayErrors(rc.feedBean.getErrors())#
+<cfif not structIsEmpty(rc.feedBean.getErrors())>
+  <p class="alert alert-error">#application.utility.displayErrors(rc.feedBean.getErrors())#</p>
+</cfif>
 
 <cfif rc.compactDisplay eq "true" and not isObjectInstance>
 <p class="alert">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.globallyappliednotice")#</p>
@@ -747,7 +749,10 @@ jQuery(document).ready(function(){
 
 <cfinclude template="dsp_secondary_menu.cfm">
 
-#application.utility.displayErrors(rc.feedBean.getErrors())#
+<cfif not structIsEmpty(rc.feedBean.getErrors())>
+  <p class="alert alert-error">#application.utility.displayErrors(rc.feedBean.getErrors())#</p>
+</cfif>
+
 <cfif rc.feedID neq ''>
 <ul class="navTask nav nav-pills">
 <cfif rc.compactDisplay eq "true">

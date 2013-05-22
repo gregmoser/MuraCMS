@@ -48,52 +48,52 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfproperty name="feedID" type="string" default="" required="true" />
 <cfproperty name="siteID" type="string" default="" required="true" />
-<cfproperty name="dateCreated" type="date" default="" required="true" />
-<cfproperty name="lastUpdate" type="date" default="" required="true" />
-<cfproperty name="lastUpdateBy" type="string" default="" required="true" />
-<cfproperty name="name" type="string" default="" required="true" />
-<cfproperty name="altName" type="string" default="" required="true" />
+<cfproperty name="dateCreated" type="date" default=""/>
+<cfproperty name="lastUpdate" type="date" default=""/>
+<cfproperty name="lastUpdateBy" type="string" default=""/>
+<cfproperty name="name" type="string" default=""/>
+<cfproperty name="altName" type="string" default=""/>
 <cfproperty name="lang" type="string" default="en-us" required="true" />
 <cfproperty name="isActive" type="numeric" default="1" required="true" />
 <cfproperty name="showNavOnly" type="numeric" default="1" required="true" />
 <cfproperty name="showExcludeSearch" type="numeric" default="0" required="true" />
 <cfproperty name="isPublic" type="numeric" default="0" required="true" />
 <cfproperty name="isDefault" type="numeric" default="0" required="true" />
-<cfproperty name="description" type="string" default="" required="true" />
-<cfproperty name="contentID" type="string" default="" required="true" />
-<cfproperty name="categoryID" type="string" default="" required="true" />
+<cfproperty name="description" type="string" default=""/>
+<cfproperty name="contentID" type="string" default=""/>
+<cfproperty name="categoryID" type="string" default=""/>
 <cfproperty name="maxItems" type="numeric" default="20" required="true" />
 <cfproperty name="allowHTML" type="numeric" default="1" required="true" />
 <cfproperty name="isFeaturesOnly" type="numeric" default="0" required="true" />
 <cfproperty name="restricted" type="numeric" default="0" required="true" />
-<cfproperty name="restrictGroups" type="string" default="" required="true" />
+<cfproperty name="restrictGroups" type="string" default=""/>
 <cfproperty name="version" type="string" default="RSS 2.0" required="true" />
-<cfproperty name="channelLink" type="string" default="" required="true" />
+<cfproperty name="channelLink" type="string" default=""/>
 <cfproperty name="type" type="string" default="local" required="true" />
 <cfproperty name="sortBy" type="string" default="lastUpdate" required="true" />
 <cfproperty name="sortDirection" type="string" default="desc" required="true" />
-<cfproperty name="parentID" type="string" default="" required="true" />
+<cfproperty name="parentID" type="string" default=""/>
 <cfproperty name="nextN" type="numeric" default="20" required="true" />
 <cfproperty name="displayName" type="numeric" default="0" required="true" />
 <cfproperty name="displayRatings" type="numeric" default="0" required="true" />
 <cfproperty name="displayComments" type="numeric" default="0" required="true" />
 <cfproperty name="displayKids" type="numeric" default="0" required="true" />
 <cfproperty name="isNew" type="numeric" default="0" required="true" />
-<cfproperty name="params" type="query" default="" required="true" />
-<cfproperty name="remoteID" type="string" default="" required="true" />
-<cfproperty name="remoteSourceURL" type="string" default="" required="true" />
-<cfproperty name="remotePubDAte" type="string" default="" required="true" />
+<cfproperty name="params" type="query" default=""/>
+<cfproperty name="remoteID" type="string" default=""/>
+<cfproperty name="remoteSourceURL" type="string" default=""/>
+<cfproperty name="remotePubDAte" type="string" default="" />
 <cfproperty name="imageSize" type="string" default="small" required="true" />
 <cfproperty name="imageHeight" type="string" default="AUTO" required="true" />
 <cfproperty name="imageWidth" type="string" default="AUTO" required="true" />
 <cfproperty name="displayList" type="string" default="Title,Date,Image,Summary,Tags,Credits" required="true" />
 <cfproperty name="liveOnly" type="numeric" default="1" required="true" />
-<cfproperty name="bean" type="string" default="content" required="true" />
-<cfproperty name="viewalllabel" type="string" default="" required="true" />
-<cfproperty name="viewalllink" type="string" default="View All" required="true" />
+<cfproperty name="bean" type="string" default="content" />
+<cfproperty name="viewalllabel" type="string" default="" />
+<cfproperty name="viewalllink" type="string" default="View All" />
 <cfproperty name="autoimport" type="numeric" default="0" required="true" />
 <cfproperty name="isLocked" type="numeric" default="0" required="true" />
-<cfproperty name="cssClass" type="string" default="" required="true" />
+<cfproperty name="cssClass" type="string" default="" />
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	<cfset super.init(argumentCollection=arguments)>

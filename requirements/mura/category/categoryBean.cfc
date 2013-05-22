@@ -49,25 +49,25 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfproperty name="categoryID" type="string" default="" required="true" />
 <cfproperty name="siteID" type="string" default="" required="true" />
-<cfproperty name="dateCreated" type="date" default="" required="true" />
-<cfproperty name="lastUpdate" type="date" default="" required="true" />
-<cfproperty name="lastUpdateBy" type="string" default="" required="true" />
-<cfproperty name="name" type="string" default="" required="true" />
-<cfproperty name="isInterestGroup" type="numeric" default="1" required="true" />
-<cfproperty name="parentID" type="string" default="" required="true" />
-<cfproperty name="isActive" type="numeric" default="1" required="true" />
-<cfproperty name="isOpen" type="numeric" default="1" required="true" />
-<cfproperty name="note" type="string" default="" required="true" />
-<cfproperty name="sortBy" type="string" default="orderno" required="true" />
-<cfproperty name="sortDirection" type="string" default="asc" required="true" />
-<cfproperty name="restrictGroups" type="string" default="" required="true" />
+<cfproperty name="dateCreated" type="date" default="" />
+<cfproperty name="lastUpdate" type="date" default="" />
+<cfproperty name="lastUpdateBy" type="string" default="" />
+<cfproperty name="name" type="string" default="" required="true"/>
+<cfproperty name="isInterestGroup" type="numeric" default="1" required="true"/>
+<cfproperty name="parentID" type="string" default=""  />
+<cfproperty name="isActive" type="numeric" default="1" required="true"/>
+<cfproperty name="isOpen" type="numeric" default="1" />
+<cfproperty name="note" type="string" default="" />
+<cfproperty name="sortBy" type="string" default="orderno" required="true"/>
+<cfproperty name="sortDirection" type="string" default="asc" required="true"/>
+<cfproperty name="restrictGroups" type="string" default=""/>
 <cfproperty name="path" type="string" default="" required="true" />
-<cfproperty name="remoteID" type="string" default="" required="true" />
-<cfproperty name="remoteSourceURL" type="string" default="" required="true" />
-<cfproperty name="remotePubDate" type="date" default="" required="true" />
-<cfproperty name="URLtitle" type="string" default="" required="true" />
-<cfproperty name="filename" type="string" default="" required="true" />
-<cfproperty name="isNew" type="numeric" default="1" required="true" />
+<cfproperty name="remoteID" type="string" default="" />
+<cfproperty name="remoteSourceURL" type="string" default="" />
+<cfproperty name="remotePubDate" type="date" default="" />
+<cfproperty name="URLtitle" type="string" default="" />
+<cfproperty name="filename" type="string" default="" />
+<cfproperty name="isNew" type="numeric" default="1" required="true"/>
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	

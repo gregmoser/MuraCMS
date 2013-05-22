@@ -3,15 +3,15 @@
 <cfproperty name="changesetID" type="string" default="" required="true" />
 <cfproperty name="siteID" type="string" default="" required="true" />
 <cfproperty name="name" type="string" default="" required="true" />
-<cfproperty name="created" type="date" default="" required="true" />
-<cfproperty name="description" type="string" default="" required="true" />
-<cfproperty name="publishDate" type="date" default="" required="true" />
+<cfproperty name="created" type="date" default="" />
+<cfproperty name="description" type="string" default="" />
+<cfproperty name="publishDate" type="date" default="" />
 <cfproperty name="published" type="numeric" default="0" required="true" />
-<cfproperty name="remoteID" type="string" default="" required="true" />
-<cfproperty name="remoteSourceURL" type="string" default="" required="true" />
-<cfproperty name="remotePubDate" type="date" default="" required="true" />
-<cfproperty name="lastUpdate" type="date" default="" required="true" />
-<cfproperty name="lastUpdateBy" type="string" default="" required="true" />
+<cfproperty name="remoteID" type="string" default="" />
+<cfproperty name="remoteSourceURL" type="string" default="" />
+<cfproperty name="remotePubDate" type="date" default="" />
+<cfproperty name="lastUpdate" type="date" default="" />
+<cfproperty name="lastUpdateBy" type="string" default="" />
 <cfproperty name="isNew" type="numeric" default="1" required="true" />
 
 <cffunction name="init" output="false">
