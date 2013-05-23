@@ -49,9 +49,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="errors" type="struct" persistent="false" />
 <cfproperty name="isNew" type="numeric" persistent="false" default="0"/>
 <cfproperty name="fromMuraCache" type="boolean" default="false" persistent="false"/>
-<cfproperty name="instanceID" type="char" persistent="false"/>
+<cfproperty name="instanceID" type="string" persistent="false"/>
 
 <cfset variables.properties={}>
+<cfset variables.validations={}>
 
 <cffunction name="init" output="false">
 	<cfset super.init(argumentCollection=arguments)>
@@ -60,6 +61,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.isNew=1/>
 	<cfset variables.instance.errors=structNew()/>
 	<cfset variables.instance.fromMuraCache = false />
+
 	<cfif not structKeyExists(variables.instance,"instanceID")>
 		<cfset variables.instance.instanceID=createUUID()>
 	</cfif>
@@ -188,17 +190,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="validate" access="public" output="false">
 	<cfscript>
-	/*
-	variables.instance.errors=structnew();
+	variables.instance.errors=getBean('validationService').validate(this);
 
-	local.errors=getBean('validationService').validate(this).getErrors();
-
-	//writeDump(var= local.errors,abort=true);
-	for(local.error in local.errors){
-		variables.instance.errors['#local.error.getProperty()#']=local.error.getMessage();
-	}
-	*/
-	
 	return this;
 	</cfscript>
 </cffunction>
@@ -264,15 +257,33 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			       	 			prop.dataType="varchar";
 			       	 		}
 			       	 	}	 	
-			      }
-			    } 
-			} 
+			     	 }
+			    	} 
+				} 
 
+			}	
 		}
-	}
 		//writeDump(var=variables.properties,abort=true);
 		
 		return variables.properties;
+	}
+
+
+	function getValidations(){
+		if(structIsEmpty(variables.validations)){
+			variables.validations.properties={};
+
+			var props=getProperties();
+			for(var prop in props){
+				variables.validations.properties[prop]=[props[prop]];
+			}
+		}
+		return variables.validations;
+	}
+
+	function setValidations(validations){
+		variables.validations=arguments.validations;
+		return this;
 	}
 </cfscript>
 

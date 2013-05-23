@@ -180,26 +180,28 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 												object=form,
 												objectname="form",
 												ipAddress=request.remoteAddr);
-				}	
-				if(isDefined("cgi")){
-					application.scriptProtectionFilter.scan(
-												object=cgi,
-												objectname="cgi",
-												ipAddress=request.remoteAddr,
-												useTagFilter=true,
-												useWordFilter=true,
-												fixValues=false);
-				}			
-				if(isDefined("cookie")){
-					application.scriptProtectionFilter.scan(
-												object=cookie,
-												objectname="cookie",
-												ipAddress=request.remoteAddr,
-												useTagFilter=true,
-												useWordFilter=true,
-												fixValues=false);
 				}
-				
+				try{	
+					if(isDefined("cgi")){
+						application.scriptProtectionFilter.scan(
+													object=cgi,
+													objectname="cgi",
+													ipAddress=request.remoteAddr,
+													useTagFilter=true,
+													useWordFilter=true,
+													fixValues=false);
+					}			
+					if(isDefined("cookie")){
+						application.scriptProtectionFilter.scan(
+													object=cookie,
+													objectname="cookie",
+													ipAddress=request.remoteAddr,
+													useTagFilter=true,
+													useWordFilter=true,
+													fixValues=false);
+					}
+				} catch(e any){}
+					
 			}
 			
 		}

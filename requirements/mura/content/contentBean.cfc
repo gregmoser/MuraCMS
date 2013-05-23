@@ -96,7 +96,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="featureStart" type="date" default=""/>
 <cfproperty name="featureStop" type="date" default=""/>
 <cfproperty name="fileID" type="string" default=""/>
-<cfproperty name="fileSize" type="numeric" default="0" required="true" />
+<cfproperty name="fileSize" type="any" default="0" />
 <cfproperty name="fileExt" type="string" default=""/>
 <cfproperty name="contentType" type="string" default=""/>
 <cfproperty name="contentSubType" type="string" default=""/>
@@ -123,8 +123,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="majorVersion" type="numeric" default="0" required="true" />
 <cfproperty name="minorVersion" type="numeric" default="0" required="true" />
 <cfproperty name="expires" type="date" default=""/>
-<cfproperty name="assocFilename" type="date" default=""/>
-<cfproperty name="displayInterval" type="string" default="Daily" required="true" />
+<cfproperty name="assocFilename" type="string" default=""/>
+<cfproperty name="displayInterval" type="string" default="Daily" />
 <cfproperty name="requestID" type="string" default=""/>
 <cfproperty name="approvalStatus" type="string" default=""/>
 <cfproperty name="approvalGroupID" type="string" default=""/>

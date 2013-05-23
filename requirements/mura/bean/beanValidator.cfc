@@ -29,12 +29,12 @@
 							if(structKeyExists(rule, "conditions")) {
 								constraintDetails.conditions = rule.conditions;
 							}
-							if(structKeyExists(rule, "message")) {
-								constraintDetails.message = rule.message;
-							}
 							if(structKeyExists(rule, "rbkey")) {
 								constraintDetails.rbkey = rule.rbkey;
+							} else if(structKeyExists(rule, "message")) {
+								constraintDetails.message = rule.message;
 							}
+							
 							arrayAppend(contextValidations[ property ], constraintDetails);
 						}
 					}
@@ -112,6 +112,8 @@
 		if(!isBoolean(arguments.context) || arguments.context) {
 			// Get the valdiations for this context
 			var contextValidations = getValidationsByContext(object=arguments.object, context=arguments.context);
+
+			//writeDump(var=contextValidations,abort=true);
 			
 			// Loop over each property in the validations for this context
 			for(var propertyIdentifier in contextValidations) {
@@ -130,7 +132,7 @@
 						
 						// Now if a condition was meet we can actually test the individual validation rule
 						if(conditionMeet) {
-							validateConstraint(object=arguments.object, propertyIdentifier=propertyIdentifier, constraintDetails=contextValidations[ propertyIdentifier ][c], errorsStruct=errorStruct, context=arguments.context);	
+							validateConstraint(object=arguments.object, propertyIdentifier=propertyIdentifier, constraintDetails=contextValidations[ propertyIdentifier ][c], errorsStruct=errorsStruct, context=arguments.context);	
 						}
 					}	
 				//}
@@ -142,19 +144,22 @@
 	
 	
 	public any function validateConstraint(required any object, required string propertyIdentifier, required struct constraintDetails, required any errorsStruct, required string context) {
-		if(!structKeyExists(variables, "validate_#arguments.constraintDetails.constraintType#")) {
-			throw("You have an error in the #arguments.object.getClassName()#.json validation file.  You have a constraint defined for '#arguments.propertyIdentifier#' that is called '#arguments.constraintDetails.constraintType#' which is not a valid constraint type");
-		}
-		
-		var isValid = invokeMethod("validate_#arguments.constraintDetails.constraintType#", {object=arguments.object, propertyIdentifier=arguments.propertyIdentifier, constraintValue=arguments.constraintDetails.constraintValue});	
-					
-		if(!isValid) {
-			if(structKeyExist(arguments.constraintDetails,'rbkey')){
-				arguments.errorsStruct[arguments.propertyIdentifier]=getBean('settingsManager').getSite(arguments.object.getSiteID()).getRBFactory().getKey(arguments.constraintDetails.rbkey);
-			} else {
-				arguments.errorsStruct[arguments.propertyIdentifier]=arguments.constraintDetails.message;
+		if(structKeyExists(variables, "validate_#arguments.constraintDetails.constraintType#")) {
+			var isValid = invokeMethod("validate_#arguments.constraintDetails.constraintType#", {object=arguments.object, propertyIdentifier=arguments.propertyIdentifier, constraintValue=arguments.constraintDetails.constraintValue});	
+						
+			if(!isValid) {
+				if(structKeyExists(arguments.constraintDetails,'rbkey')){
+					arguments.errorsStruct[arguments.propertyIdentifier]=getBean('settingsManager').getSite(arguments.object.getSiteID()).getRBFactory().getKey(arguments.constraintDetails.rbkey);
+				} else if(structKeyExists(arguments.constraintDetails,'message')){
+					arguments.errorsStruct[arguments.propertyIdentifier]=arguments.constraintDetails.message;
+				} else {
+					arguments.errorsStruct[arguments.propertyIdentifier]="The property name '#arguments.propertyIdentifier#' is not valid";
+				}
+
+				//writeDump(var=constraintDetails,abort=true);
 			}
 		}
+	
 	}
 	
 	
@@ -170,15 +175,16 @@
 	
 	public boolean function validate_dataType(required any object, required string propertyIdentifier, required any constraintValue) {
 		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
+
 		if(listFindNoCase("any,array,binary,boolean,component,creditCard,date,time,email,eurodate,float,numeric,guid,integer,query,range,regex,regular_expression,ssn,social_security_number,string,telephone,url,uuid,usdate,zipcode",arguments.constraintValue)) {
-			if(isNull(propertyValue) || isValid(arguments.constraintValue, propertyValue)) {
+			if(isNull(propertyValue) || isValid(arguments.constraintValue, propertyValue) || (arguments.constraintValue == 'Date' && propertyValue == '')) {
 				return true;
 			}
-		} else {
-			throw("The validation file: #arguments.object.getClassName()#.json has an incorrect dataType constraint value of '#arguments.constraintValue#' for one of it's properties.  Valid values are: any,array,binary,boolean,component,creditCard,date,time,email,eurodate,float,numeric,guid,integer,query,range,regex,regular_expression,ssn,social_security_number,string,telephone,url,uuid,usdate,zipcode");
+		//} else {
+			//throw("The validation file: #arguments.object.getClassName()#.json has an incorrect dataType constraint value of '#arguments.constraintValue#' for one of it's properties.  Valid values are: any,array,binary,boolean,component,creditCard,date,time,email,eurodate,float,numeric,guid,integer,query,range,regex,regular_expression,ssn,social_security_number,string,telephone,url,uuid,usdate,zipcode");
 		}
 		
-		return false;
+		return true;
 	}
 	
 	public boolean function validate_minValue(required any object, required string propertyIdentifier, required numeric constraintValue) {

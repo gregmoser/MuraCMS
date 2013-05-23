@@ -182,7 +182,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				new mura.fileWriter(mode=775,tempDir=application.configBean.getTempDir())
 			);
 
-			//variables.serviceFactory.addBean('validationService', new hyrule.system.core.Hyrule() );
+			variables.serviceFactory.addBean('validationService',new mura.bean.beanValidator());
 
 			variables.serviceFactory.addAlias("scriptProtectionFilter","Portcullis");
 			variables.serviceFactory.addAlias("eventManager","pluginManager");
