@@ -51,6 +51,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="fromMuraCache" type="boolean" default="false" persistent="false"/>
 <cfproperty name="instanceID" type="char" persistent="false"/>
 
+<cfset variables.properties={}>
+
 <cffunction name="init" output="false">
 	<cfset super.init(argumentCollection=arguments)>
 	<cfset variables.instance=structNew()>
@@ -222,5 +224,56 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.lastUpdateBy = left(trim(arguments.lastUpdateBy),50) />
 	<cfreturn this>
 </cffunction>
+
+<cfscript>
+	function getProperties(){
+		
+		if(structIsEmpty(variables.properties)){
+			var md={};
+			var pname='';
+			var i='';
+			var prop={};
+			var md=getMetaData(this);
+			
+			//writeDump(var=md,abort=true);
+
+			for (md; 
+			    structKeyExists(md, "extends"); 
+			    md = md.extends) 
+			  { 
+
+			    if (structKeyExists(md, "properties")) 
+			    { 
+			      for (i = 1; 
+			           i <= arrayLen(md.properties); 
+			           i++) 
+			      { 
+			        pName = md.properties[i].name; 
+
+			        if(!structkeyExists(properties,pName)){
+			       	 	variables.properties[pName]=md.properties[i];
+			       	 	prop=variables.properties[pName];
+
+			       	 	if(!structKeyExists(prop,"dataType")){
+			       	 		if(structKeyExists(prop,"ormtype")){
+			       	 			prop.dataType=prop.ormtype;
+			       	 		} else if(structKeyExists(prop,"type")){
+			       	 			prop.dataType=prop.type;
+			       	 		} else {
+			       	 			prop.type="string";
+			       	 			prop.dataType="varchar";
+			       	 		}
+			       	 	}	 	
+			      }
+			    } 
+			} 
+
+		}
+	}
+		//writeDump(var=variables.properties,abort=true);
+		
+		return variables.properties;
+	}
+</cfscript>
 
 </cfcomponent>
