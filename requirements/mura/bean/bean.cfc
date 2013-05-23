@@ -190,7 +190,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="validate" access="public" output="false">
 	<cfscript>
-	variables.instance.errors=getBean('validationService').validate(this);
+	variables.instance.errors=getBean('beanValidator').validate(this);
 
 	return this;
 	</cfscript>
