@@ -88,7 +88,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="imageWidth" type="string" default="AUTO" required="true" />
 <cfproperty name="displayList" type="string" default="Title,Date,Image,Summary,Tags,Credits" required="true" />
 <cfproperty name="liveOnly" type="numeric" default="1" required="true" />
-<cfproperty name="bean" type="string" default="content" />
+<cfproperty name="beanClass" type="string" default="content" />
 <cfproperty name="viewalllabel" type="string" default="" />
 <cfproperty name="viewalllink" type="string" default="View All" />
 <cfproperty name="autoimport" type="numeric" default="0" required="true" />
