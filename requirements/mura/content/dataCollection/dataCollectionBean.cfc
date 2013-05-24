@@ -3,6 +3,21 @@ component extends="mura.bean.bean"{
 	property name='formID' required=true dataType='string';
 	property name='siteID' required=true dataType='string';
 
+	function set(data){
+		if(isQuery(arguments.data)){
+			arguments.data=getBean('utility').queryRowToStruct(arguments.data);
+		}
+
+		if(structKeyExists(arguments.data,'data') && isWDDX(arguments.data.data)){
+			var formdata=variables.dataCollectionManager._deserializeWDDX(arguments.data.data);
+			structDelete(arguments.data, data);
+			structAppend(arguments.data,formdata,true);
+		}
+
+		super.set(arguments.data);
+
+	}
+
 	function validate(){
 
 

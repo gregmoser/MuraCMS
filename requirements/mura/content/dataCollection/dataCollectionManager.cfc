@@ -342,4 +342,11 @@ order by tformresponsepackets.entered asc
 	<cfset getBean("contentManager").purgeContentCache(contentBean=arguments.contentBean)>
 
 </cffunction>
+
+<cffunction name="_deserializeWDDX" output="false">
+	<cfargument name="wddx">
+	<cfwddx action="wddx2cfml" input="#arguments.wddx#" output="local.data">
+	<cfreturn local.data>
+
+</cffunction>
 </cfcomponent>
