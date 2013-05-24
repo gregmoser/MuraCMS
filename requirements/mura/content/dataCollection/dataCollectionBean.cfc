@@ -1,6 +1,7 @@
-component extends="mura.bean"{
+component extends="mura.bean.bean"{
 	
 	property name='formID' required=true dataType='string';
+	property name='siteID' required=true dataType='string';
 
 	function validate(){
 
@@ -20,6 +21,10 @@ component extends="mura.bean"{
 
 	function getFormBean(){
 		return getBean('content').loadBy(contentID=getValue('formID'),siteID=getValue('siteID'));
+	}
+
+	function setContentID(contentID){
+		variables.instance.formid=arguments.contentID;
 	}
 
 	function setDataCollectionManager(dataCollectionManager){
