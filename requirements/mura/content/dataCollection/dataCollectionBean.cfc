@@ -18,11 +18,6 @@ component extends="mura.bean.bean"{
 
 	}
 
-	function validate(){
-
-
-	}
-
 	function getValidations(){
 		var content=getFormBean();
 		var validations={properties={}};
@@ -47,7 +42,7 @@ component extends="mura.bean.bean"{
 				}
 
 				if(len(prop.isrequired)){
-					arrayAppend(rules,{isrequired=true,message=message});
+					arrayAppend(rules,{required=true,message=message});
 				}
 
 				if(len(prop.validateType)){
