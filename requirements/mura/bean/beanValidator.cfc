@@ -29,9 +29,9 @@
 							if(structKeyExists(rule, "conditions")) {
 								constraintDetails.conditions = rule.conditions;
 							}
-							if(structKeyExists(rule, "rbkey")) {
+							if(structKeyExists(rule, "rbkey") and len(rule.rbkey)) {
 								constraintDetails.rbkey = rule.rbkey;
-							} else if(structKeyExists(rule, "message")) {
+							} else if(structKeyExists(rule, "message") and len(rule.message)) {
 								constraintDetails.message = rule.message;
 							}
 							

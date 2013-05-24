@@ -14,7 +14,7 @@ component extends="mura.bean.bean"{
 			structAppend(arguments.data,formdata,true);
 		}
 
-		super.set(arguments.data);
+		return super.set(arguments.data);
 
 	}
 
@@ -25,12 +25,44 @@ component extends="mura.bean.bean"{
 
 	function getValidations(){
 		var content=getFormBean();
+		var validations={properties={}};
+		var i=1;
+		var prop={};
+		var rules=[];
+		var message='';
 
 		if(isJSON(content.getBody())){
+			var formDef=deserializeJSON(content.getBody());
 
-		} else {
-			return {properties={}};
+			for(i=1;i lte arrayLen(formDef.form.fieldOrder);i=i+1){
+				prop=formDef.form.fields[formDef.form.fieldOrder[i]];
+				rules=[];
+
+				if(len(prop.validateMessage)){
+					message=prop.validateMessage;
+				}
+
+				if(len(prop.validateRegex)){
+					arrayAppend(rules,{'regex'=prop.validateRegex,message=message});
+				}
+
+				if(len(prop.isrequired)){
+					arrayAppend(rules,{isrequired=true,message=message});
+				}
+
+				if(len(prop.validateType)){
+					arrayAppend(rules,{dataType=prop.validateType,message=message});
+				}
+
+				if(arrayLen(rules)){
+					validations.properties[prop.name]=rules;
+				}
+
+			}
+
 		}
+
+		return validations;
 
 	}
 
