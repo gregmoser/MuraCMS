@@ -132,8 +132,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfif variables.acceptdata>
 	<cfscript>
-		$.event('firstname','');
-
 		formErrors=$.getBean('dataCollectionBean').set($.event().getAllValues())
 		.validate()
 		.getErrors();
