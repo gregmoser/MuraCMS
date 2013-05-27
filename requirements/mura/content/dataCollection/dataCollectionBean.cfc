@@ -46,7 +46,7 @@ modified version; it is your choice whether to do so, or to make such modified v
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 */
 component extends="mura.bean.bean"{
-	
+
 	property name='formID' required=true dataType='string';
 	property name='siteID' required=true dataType='string';
 
@@ -117,6 +117,10 @@ component extends="mura.bean.bean"{
 		variables.instance.formid=arguments.contentID;
 	}
 
+	function setObjectID(objectID){
+		variables.instance.formid=arguments.objectID;
+	}
+
 	function setDataCollectionManager(dataCollectionManager){
 		variables.dataCollectionManager=arguments.dataCollectionManager;
 	}
@@ -137,4 +141,4 @@ component extends="mura.bean.bean"{
 		return this;
 	}
 
-}
+}}
