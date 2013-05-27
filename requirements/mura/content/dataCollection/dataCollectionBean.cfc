@@ -141,4 +141,4 @@ component extends="mura.bean.bean"{
 		return this;
 	}
 
-}}
+}
