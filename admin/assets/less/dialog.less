@@ -45,11 +45,13 @@
 	version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS. */
 
 // Modal Dialog
+@import "variables.less";
 @import "../bootstrap/less/mixins.less";
 @import "mixins.less";
-@import "variables.less";
 @import "dropdowns.less";
 @import "fonts.less";
+
+.mura {
 
 #frontEndToolsModalContainer {
  /* position: [Set in dialog.js]; */
@@ -342,10 +344,10 @@
 	outline: 0 !important;
 	text-shadow: 0 -1px 0 rgba(0,0,0,.9) !important;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-}
+	}
 
-#frontEndTools i {
-	color:@black !important;
+#frontEndTools > ul > a > i {
+	color: @white !important;
 	font-size: 16px !important;
 	text-shadow: 0 1px 0 rgba(255,255,255,.15) !important;
 	position: relative !important;
@@ -355,20 +357,24 @@
 	padding-bottom: 0 !important;
 	line-height: 1 !important;
 	overflow: visible !important;
-}
+	
+	&.icon-ok-sign {
+		color: green !important;
+		}
+	}
 
 #frontEndTools > #adminSiteManager i {
 	width: 1.3em !important;
-}
+	}
 
 #frontEndTools > ul > li a:hover {
 	color: @white !important;
-}
+	}
 
 #frontEndTools > ul > li > a:hover > i {
 	color: @gray !important;
 	text-shadow: 0 -1px 0 rgba(0,0,0,1) !important;
-}
+	}
 
 #frontEndTools > ul > li#adminWelcome {
 	float: right !important;
@@ -378,7 +384,7 @@
 	font-size: 11px !important;
 	line-height: 30px !important;
 	color: @gray !important;
-}
+	}
 
 #frontEndTools > ul > li#adminLogOut {
 	float: right !important;
@@ -386,7 +392,7 @@
 	padding: 4px 0 0 0 !important;
 	text-align: center !important;
 	border: 0 !important;
-}
+	}
 
 #frontEndTools > ul > li#adminLogOut > a {
 	display: block !important;
@@ -400,14 +406,14 @@
 	background: #898989 !important;
 	.box-shadow(0 0 4px rgba(0,0,0,.75) inset) !important;
 	text-shadow: 0 1px 0 rgba(255,255,255,.2) !important;
-}
+	}
 
 #frontEndTools > ul > li#adminLogOut i {
 	font-size: 13px !important;
 	color: darken(@grayDark,10%) !important;
 	line-height: 14px !important;
 	height: 16px !important;
-}
+	}
 
 #frontEndTools ul li#adminLogOut a:hover {
 	
@@ -425,7 +431,7 @@
 	font-style: normal !important;
 	background: transparent !important;
 	border: 0 !important;
-}
+	}
 
 #frontEndTools > ul > li#adminSave > a {
 	position: relative !important;
@@ -451,15 +457,15 @@
 		> i {
 			color: @blueDarker !important;
 			text-shadow: 0 1px 0 rgba(255,255,255,0.15) !important;
-		}
+			}
 		
-	}
+		}
 	
 	.caret {
 		border-top-color: @blueDarker !important;
 		margin: 9px 0 0 4px !important;
 		}
-}
+	}
 	
 #frontEndTools > ul > li.dropdown .dropdown-menu {
 		
@@ -505,25 +511,25 @@
 		li > a:hover i {
 			color: @blue !important;
 			}
-}
+	}
 
 #frontEndTools > ul > li#adminEditPage .dropdown-menu {
 	.border-top-radius(0) !important;
-}
+	}
 
 #frontEndTools ul li.dropdown-submenu a {
 	max-width: 180px !important;
 	.text-overflow();
-}
+	}
 
 #frontEndTools ul li.dropdown-submenu > a:after {
 	border-left-color: @grayLight !important;
 	margin-top: 1px !important;
 	margin-right: 0 !important;
 	margin-left: -5px !important;
-}
+	}
 
-body .mura-editable {
+body > .mura-editable {
 
 		position: relative !important;
 		min-height: 20px !important;
@@ -574,15 +580,13 @@ body .mura-editable {
 			
 			}
 	}
+} // End .mura
 	
-// CK Editor	
-		
-.editableObject .cke_editable form { border: 0 !important; padding: 0 !important;}
-	
+// CK Editor			
+.editableObject .cke_editable form { border: 0 !important; padding: 0 !important;}	
 .mura-edit-mode #frontEndTools > ul > li.dropdown:hover > ul.dropdown-menu { display: block !important; }
 
 // Z-Indexes
-
 #frontEndToolsModalContainer { z-index: 99999; }
 #shadowbox_container { z-index: 499997; }
 #shadowbox_overlay { z-index: 499996; }
