@@ -669,7 +669,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	</cfquery>
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsList')#">
-	select tcontent.contenthistid from tcontent
+	select tcontent.contenthistid,tcontent.active from tcontent
 	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid) 
 	where tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" /> 
 	and tcontent.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#" />
@@ -707,6 +707,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			<cfif not ap.getIsNew()>
 				<cfset ap.delete()>
 			</cfif>
+			<cfset deleteVersionedObjects(rslist.contenthistid)>
 		</cfloop>
 		
 		<cfquery>
@@ -726,6 +727,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		siteid='#arguments.siteid#'
 		and contenthistid in (<cfloop query="rslist"><cfqueryparam cfsqltype="cf_sql_varchar" value="#rslist.contentHistID#" /> <cfif rslist.currentrow lt rslist.recordcount>,</cfif></cfloop>)
 		</cfquery>
+
 	</cfif>
 
 	<cfset deleteOldSourceMaps(argumentCollection=arguments)>
@@ -756,6 +758,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		
 		<cfloop query="rslist">
 			<cfset variables.configBean.getClassExtensionManager().deleteExtendedData(rslist.contentHistID)/>
+			<cfset deleteVersionedObjects(rslist.contenthistid)>
 		</cfloop>
 		
 		<cfquery>
@@ -1010,7 +1013,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	
 	<!--- get Versions and delete extended data --->
 	<cfquery name="rslist">
-	select contentHistID FROM tcontent where siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getsiteid()#"/> and 
+	select contentHistID,active FROM tcontent where siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getsiteid()#"/> and 
 	ContentID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getcontentid()#"/>
 	</cfquery>
 	
@@ -1019,6 +1022,11 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfset ap=getBean('approvalRequest').loadBy(contenthistid=rslist.contenthistid)>
 		<cfif not ap.getIsNew()>
 			<cfset ap.delete()>
+		</cfif>
+
+		<!--- only delete if not active so that the data is available if restored from trash --->
+		<cfif not rslist.active>
+			<cfset deleteVersionedObjects(rslist.contenthistid)>
 		</cfif>
 	</cfloop>
 	<!--- --->
@@ -1341,4 +1349,32 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	</cfquery>
 
 </cffunction>
+
+<cffunction name="deleteVersionedObject" output="false">
+	<cfargument name="contenthistid">
+	<cfargument name="contentid">
+	<cfargument name="siteid">
+
+	<cfset var it="">
+	<cfset var i="">
+	<cfset var bean="">
+
+	<cfloop list="#getServiceFactory().getVersionedBeans()#" index="i">
+		<cfif structKeyExists(arguments, "contentid")>
+			<cfset it=getBean(i).loadBy(contentid=arguments.contentid,siteid=arguments.siteid,returnformat='iterator')>
+		<cfelse>
+			<cfset it=getBean(i).loadBy(contenthistid=arguments.contenthistid,returnformat='iterator')>
+		</cfif>
+
+		<cfloop condition="it.hasNext()">
+			<cfset bean=it.next()>
+			<cfif not bean.getIsNew()>
+				<cfset bean.delete()>
+			</cfif>
+		</cfloop>
+		
+	</cfloop>
+
+</cffunction>
+
 </cfcomponent>

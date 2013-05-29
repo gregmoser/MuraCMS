@@ -47,7 +47,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfcomponent extends="mura.cfobject" output="false">
 	<cfset this.TreeLevelList="Page,Folder,Calendar,Link,File,Gallery">
 	<cfset this.ExtendableList="Page,Folder,Calendar,Link,File,Gallery,Component">
-	
+	<cfset this.versionObjects="">
+
 	<cffunction name="init" access="public" returntype="any" output="false">
 		<cfargument name="configBean" type="any" required="yes"/>
 		<cfargument name="contentGateway" type="any" required="yes"/>
@@ -1614,8 +1615,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset variables.contentDAO.deleteObjectsHist(arguments.data.contenthistid,arguments.data.siteid) />
 		<cfset variables.contentDAO.deleteCategoryHist(arguments.data.contenthistid,arguments.data.siteid) />
 		<cfset variables.contentDAO.deleteExtendDataHist(arguments.data.contenthistid,arguments.data.siteid) />
-		<cfset variables.contentDAO.deleteContentAssignments(arguments.data.contenthistid,arguments.data.siteid,'expire') />
-		
+		<cfset variables.contentDAO.deleteContentAssignments(arguments.data.contenthistid,arguments.data.siteID,'expire') />
+		<cfset variables.contentDAO.deleteVersionedObjects(arguments.data.contenthistid) />
+
 		<cfif  ListFindNoCase(this.TreeLevelList,versionBean.getType())>
 			<cfset variables.pluginManager.announceEvent("onAfterContentDeleteVersion",pluginEvent)>
 		</cfif>		
