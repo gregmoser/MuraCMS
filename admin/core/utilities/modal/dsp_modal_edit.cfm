@@ -194,32 +194,32 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfif $.content('active') gt 0 and  $.content('approved')  gt 0>
 							<cfif len($.content('approvalStatus'))>
 								<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-									<i class="icon-ok-sign"></i> 
+									<i class="icon-ok-circle status-published"></i> 
 									<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
 									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
 								</a>
 							<cfelse>
 								<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-									<i class="icon-ok-sign"></i> 
+									<i class="icon-ok-circle status-published"></i> 
 									<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
 									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
 								</a>
 							</cfif>				
 						<cfelseif len($.content('approvalStatus')) and $.content().requiresApproval() >
 							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-								<i class="icon-ok-sign"></i> 
+								<i class="icon-exclamation-sign status-req-approval"></i> 
 								<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
 								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#$.content('approvalstatus')#")#
 							</a>
 						<cfelseif $.content('approved') lt 1>
 							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-								<i class="icon-ok-sign"></i> 
+								<i class="icon-thumbs-up status-draft-approved"></i> 
 								<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
 								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
 							</a>
 						<cfelse>
 							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-								<i class="icon-ok-sign"></i> 
+								<i class="icon-book status-archived"></i> 
 								<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
 								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
 							</a>

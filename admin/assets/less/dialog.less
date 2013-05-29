@@ -332,12 +332,12 @@
 
 #frontEndTools ul > li > a {
 	display: block !important;
-	color: rgba(255,255,255,1) !important;
+	color: @gray !important;
 	background: transparent !important;
 	font-size: 12px !important;
 	line-height: 29px !important;
 	height: 30px !important;
-	padding: 0 1.25em 0 .75em !important;
+	padding: 0 .75em !important;
 	text-decoration: none !important;
 	font-weight: normal !important;
 	font-style: normal !important;
@@ -346,9 +346,9 @@
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 	}
 
-#frontEndTools > ul > a > i {
-	color: @white !important;
-	font-size: 16px !important;
+#frontEndTools > ul > li > a > i {
+	color: lighten(@grayDark,10%) !important;
+	font-size: 18px !important;
 	text-shadow: 0 1px 0 rgba(255,255,255,.15) !important;
 	position: relative !important;
 	top: 2px !important;
@@ -359,7 +359,7 @@
 	overflow: visible !important;
 	
 	&.icon-ok-sign {
-		color: green !important;
+		color: #4fc200 !important;
 		}
 	}
 
@@ -368,11 +368,11 @@
 	}
 
 #frontEndTools > ul > li a:hover {
-	color: @white !important;
+	color: @gray !important;
 	}
 
 #frontEndTools > ul > li > a:hover > i {
-	color: @gray !important;
+	color: @white !important;
 	text-shadow: 0 -1px 0 rgba(0,0,0,1) !important;
 	}
 
