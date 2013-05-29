@@ -106,7 +106,7 @@ Notes:
 		<!--- START CEHECKOUT EXAMPLE 1 --->
 		<div class="row">
 			<div class="span12">
-				<h3>Checkout Example ( 3 Step Process: Account - Fulfillment - Payment )</h3>
+				<h3>Checkout Example ( 3/4 Step Process: Account-Fulfillment-Payment-Confirm )</h3>
 			</div>
 		</div>
 		
@@ -151,7 +151,6 @@ Notes:
 				    					</div>
 				  					</div>
 									
-									
 									<!--- Password --->
 									<div class="control-group">
 				    					<label class="control-label" for="rating">Password</label>
@@ -166,7 +165,7 @@ Notes:
 									<!--- Login Button --->
 									<div class="control-group">
 				    					<div class="controls">
-				      						<button type="submit" class="btn">Login Account</button>
+				      						<button type="submit" class="btn btn-primary">Login & Continue</button>
 				    					</div>
 				  					</div>
 									
@@ -340,9 +339,9 @@ Notes:
 									</div>
 									
 									<!--- Create Button --->
-									<div class="control-group">
+									<div class="control-group pull-right">
 				    					<div class="controls">
-				      						<button type="submit" class="btn">Create Account</button>
+				      						<button type="submit" class="btn btn-primary">Create Account & Continue</button>
 				    					</div>
 				  					</div>
 									
@@ -361,41 +360,65 @@ Notes:
 						<!--- START: FULFILLMENT --->
 						<h4>Step 2 - Fulfillment Details</h4>
 						
-						<!--- Setup a fulfillment index, so that when the form is submitted all of the data is is compartmentalized --->
-						<cfset orderFulfillmentIndex = 0 />
+						<form action="?s=1" method="post">
+											
+							<!--- Hidden slatAction to trigger a cart update with the new fulfillment information --->
+							<input type="hidden" name="slatAction" value="public:cart.update" />
 						
-						<!--- We loop over the orderFulfillments and check if they are processable --->
-						<cfloop array="#$.slatwall.cart().getOrderFulfillments()#" index="orderFulfillment">
+							<!--- Setup a fulfillment index, so that when the form is submitted all of the data is is compartmentalized --->
+							<cfset orderFulfillmentIndex = 0 />
 							
-							<!--- We need to check if this order fulfillment is one that needs to be updated, by checking if it is already processable or by checking if it has errors --->
-							<cfif not orderFulfillment.isProcessable( context="placeOrder" ) or orderFulfillment.hasErrors()>
-								<div class="row">
+							<!--- We loop over the orderFulfillments and check if they are processable --->
+							<cfloop array="#$.slatwall.cart().getOrderFulfillments()#" index="orderFulfillment">
+								
+								<!--- We need to check if this order fulfillment is one that needs to be updated, by checking if it is already processable or by checking if it has errors --->
+								<cfif not orderFulfillment.isProcessable( context="placeOrder" ) or orderFulfillment.hasErrors()>
 									
-									<!---[DEVELOPER NOTES]																		
-																																
-										Based on the fulfillmentMethodType we will display different form elements for the		
-										end user to fill out.  The 'auto' fulifllment method type and 'download' fulfillment	
-										method type, have no values that need to get input and that is why you don't see		
-										them in the conditionals below.															
-																																
-									--->
-									
-									<!--- EMAIL --->
-									<cfif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "email">
-											
-									<!--- PICKUP --->
-									<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "pickup">
-									
-									<!--- SHIPPING --->
-									<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "shipping">
+									<div class="row">
 										
-										<!--- Increment the orderFulfillment index so that we can update multiple order fulfillments at once --->
-										<cfset orderFulfillmentIndex++ />
+										<!---[DEVELOPER NOTES]																		
+																																	
+											Based on the fulfillmentMethodType we will display different form elements for the		
+											end user to fill out.  The 'auto' fulifllment method type and 'download' fulfillment	
+											method type, have no values that need to get input and that is why you don't see		
+											them in the conditionals below.															
+																																	
+										--->
 										
-										<form action="?s=1" method="post">
+										<!--- EMAIL --->
+										<cfif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "email">
 											
-											<!--- Hidden slatAction to trigger a cart update with the new fulfillment information --->
-											<input type="hidden" name="slatAction" value="public:cart.update" />
+											<!--- Email Address --->
+											<div class="control-group">
+						    					<label class="control-label" for="rating">Email Address</label>
+						    					<div class="controls">
+						    						
+													<sw:formField type="text" name="orderFulfillments[#orderFulfillmentIndex#].emailAddress" valueObject="#orderFulfillment#" valueObjectProperty="emailAddress" class="span4" />
+													<sw:errorDisplay object="#orderFulfillment#" errorName="emailAddress" />
+													
+						    					</div>
+						  					</div>
+											
+										<!--- PICKUP --->
+										<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "pickup">
+											
+											<!--- Pickup Location --->
+											<div class="control-group">
+						    					<label class="control-label" for="rating">Pickup Location</label>
+						    					<div class="controls">
+						    						
+													<sw:formField type="select" name="orderFulfillments[#orderFulfillmentIndex#].pickupLocation.locationID" valueObject="#orderFulfillment#" valueObjectProperty="pickupLocation" valueOptions="#orderFulfillment.getPickupLocationOptions()#" class="span4" />
+													<sw:errorDisplay object="#orderFulfillment#" errorName="pickupLocation" />
+													
+						    					</div>
+						  					</div>
+										
+										<!--- SHIPPING --->
+										<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "shipping">
+											
+											<!--- Increment the orderFulfillment index so that we can update multiple order fulfillments at once --->
+											<cfset orderFulfillmentIndex++ />
+											<input type="hidden" name="orderFulfillments[#orderFulfillmentIndex#].orderFulfillmentID" value="#orderFulfillment.getOrderFulfillmentID()#" />
 											
 											<div class="span4">
 												<h5>Shipping Address</h5>
@@ -408,7 +431,7 @@ Notes:
 								    					<label class="control-label" for="rating">Select Existing Address</label>
 								    					<div class="controls">
 								    						
-															<sw:formField type="select" name="orderFulfillment[#orderFulfillmentIndex#].accountAddress.accountAddressID" valueObject="#orderFulfillment#" valueObjectProperty="accountAddress" valueOptions="#orderFulfillment.getAccountAddressOptions()#" class="span4" />
+															<sw:formField type="select" name="orderFulfillments[#orderFulfillmentIndex#].accountAddress.accountAddressID" valueObject="#orderFulfillment#" valueObjectProperty="accountAddress" valueOptions="#orderFulfillment.getAccountAddressOptions()#" class="span4" />
 															<sw:errorDisplay object="#orderFulfillment#" errorName="accountAddress" />
 															
 								    					</div>
@@ -431,33 +454,25 @@ Notes:
 													
 													<!--- Start: Shipping Method Example 1 --->
 													<div class="control-group">
-								    					<label class="control-label" for="rating">Shipping Method Example 1</label>
+								    					<label class="control-label" for="rating">Shipping Method Example</label>
 								    					<div class="controls">
 								    						
-															<sw:formField type="select" name="orderFulfillment[#orderFulfillmentIndex#].shippingMethod.shippingMethodID" valueObject="#orderFulfillment#" valueObjectProperty="shippingMethod" valueOptions="#orderFulfillment.getShippingMethodOptions()#" />
+															<!--- OPTIONAL: You can use this formField display to show options as a select box
+															<sw:formField type="select" name="orderFulfillments[#orderFulfillmentIndex#].shippingMethod.shippingMethodID" valueObject="#orderFulfillment#" valueObjectProperty="shippingMethod" valueOptions="#orderFulfillment.getShippingMethodOptions()#" class="span4" />
+															--->
+															
+															<sw:formField type="radiogroup" name="orderFulfillments[#orderFulfillmentIndex#].shippingMethod.shippingMethodID" valueObject="#orderFulfillment#" valueObjectProperty="shippingMethod" valueOptions="#orderFulfillment.getShippingMethodOptions()#" />
 															<sw:errorDisplay object="#orderFulfillment#" errorName="shippingMethod" />
 															
 								    					</div>
 								  					</div>
 													<!--- End: Shipping Method Example 1 --->
 														
-													<!--- Start: Shipping Method Example 2 --->
-													<div class="control-group">
-								    					<label class="control-label" for="rating">Shipping Method Example 2</label>
-								    					<div class="controls">
-								    						
-															<sw:formField type="radioGroup" name="orderFulfillment[#orderFulfillmentIndex#].shippingMethod.shippingMethodID" valueObject="#orderFulfillment#" valueObjectProperty="shippingMethod" valueOptions="#orderFulfillment.getShippingMethodOptions()#" />
-															<sw:errorDisplay object="#orderFulfillment#" errorName="shippingMethod" />
-															
-								    					</div>
-								  					</div>
-													<!--- End: Shipping Method Example 2 --->
-														
 												<!--- If there is only 1 shipping method option that comes back, then we can just tell the customer how there order will be shipped --->
 												<cfelseif arrayLen(orderFulfillment.getShippingMethodOptions()) and len(orderFulfillment.getShippingMethodOptions()[1]['value'])>
 												
 													<!--- We should still pass the shipping method as a hidden value --->
-													<input type="hidden" name="" value="" />
+													<input type="hidden" name="orderFulfillments[#orderFulfillmentIndex#].shippingMethod.shippingMethodID" value="#orderFulfillment.getShippingMethodOptions()[1]['value']#" />
 													
 													<p>This order will be shipped via: #orderFulfillment.getShippingMethodOptions()[1].getShippingMethodRate().getShippingMethod().getShippingMethodName()# ( #orderFulfillment.getShippingMethodOptions()[1].getFormattedValue('totalCharge')# )</p>
 													
@@ -484,35 +499,251 @@ Notes:
 												<div class="control-group pull-right">
 													<div class="controls">
 														<!--- Continue, just submits the form --->
-														<button type="submit" class="btn">Continue</button>
+														<button type="submit" class="btn btn-primary">Save & Continue</button>
 													</div>
 												</div>
 											</div>
-										</form>
-									</cfif>
+											
+										</cfif>
+										
+									</div>
 									
-								</div>
-							</cfif>
+								</cfif>
+								
+							</cfloop>
 							
-						</cfloop>
+						</form>
 						<!--- END: FULFILLMENT --->
 							
 <!--- ============= PAYMENT ============================================== --->
 					<cfelseif listFindNoCase(orderRequirementsList, "payment")>
+					
+						<!--- get the eligable payment methods for this order --->
+						<cfset eligiblePaymentMethods = $.slatwall.cart().getEligiblePaymentMethodDetails() />
 						
 						<!--- START: PAYMENT --->
 						<h4>Step 3 - Payment Details</h4>
 						
-						<div class="row">
-							<div class="span4">
-								<h5>Billing Address</h5>
-							</div>
-							<div class="span4">
-								<h5>Credit Card Info</h5>
+						<br />
+						<!--- Display existing order payments --->
+						<cfif arrayLen($.slatwall.cart().getOrderPayments())>
+							<h5>Payments Applied</h5>
+							<table class="table">
+								<tr>
+									<th>Payment Details</th>
+									<th>Amount</th>
+									<th>&nbsp;</th>
+								</tr>
+								<cfloop array="#$.slatwall.cart().getOrderPayments()#" index="orderPayment">
+									<tr>
+										<td>#orderPayment.getSimpleRepresentation()#</td>
+										<td>#orderPayment.getAmount()#</td>
+										<td><a href="?slatAction=public:cart.removeOrderPayment&orderPaymentID=#orderPayment.getOrderPaymentID#">Remove</a></td>
+									</tr>
+								</cfloop>
+							</table>
+						</cfif>
+						
+						<!--- Payment Method Nav Tabs --->
+						<ul class="nav nav-tabs" id="myTab">
+							
+							<!--- This first variables here is only used to define the 'active' tab for bootstrap css to take over --->
+							<cfset first = true />
+							
+							<!--- If the user has "AccountPaymentMethods" then we can first display a tab that allows them to select from existing payment methods ---> 
+							<cfif arrayLen($.slatwall.account().getAccountPaymentMethods())>
+								<li class="active"><a href="##account-payment-methods" data-toggle="tab">Use Saved Payment Info</a></li>
+								<cfset first = false />
+							</cfif>
+							
+							<!--- Loop over all of the eligible payment methods --->
+							<cfloop array="#eligiblePaymentMethods#" index="paymentDetails">
+								<li class="#iif(first, de('active'), de(''))#"><a href="##tab#paymentDetails.paymentMethod.getPaymentMethodID()#" data-toggle="tab">Pay with #paymentDetails.paymentMethod.getPaymentMethodName()#</a></li>
+								<cfset first = false />
+							</cfloop>
+						</ul>
+						
+						<!--- Setup the addOrderPayment entity so that it can be used for each of these --->
+						<cfset addOrderPaymentObj = $.slatwall.cart().getProcessObject("addOrderPayment") />
+						
+						<!--- Payment Tab Content --->
+						<div class="tab-content">
+							
+							<!--- This first variables here is only used to define the 'active' tab for bootstrap css to take over --->
+							<cfset first = true />
+							
+							<!--- If the user has "AccountPaymentMethods" then we can first display a tab that allows them to select from existing payment methods ---> 
+							<cfif arrayLen($.slatwall.account().getAccountPaymentMethods())>
+								<div class="tab-pane active" id="account-payment-methods">
+									<form action="?s=1" method="post">
+												
+										<!--- Hidden slatAction to trigger a cart update with the new fulfillment information --->
+										<input type="hidden" name="slatAction" value="public:cart.addOrderPayment" />
+										
+										<cfset apmFirst = true />
+										
+										<!--- Loop over all of the account payment methods and display them as a radio button to select --->
+										<cfloop array="#$.slatwall.account().getAccountPaymentMethods()#" index="accountPaymentMethod">
+											
+											<input type="radio" name="accountPaymentMethodID" value="#accountPaymentMethod.getAccountPaymentMethodID()#" <cfif apmFirst>checked="checked" <cfset ampFirst = false /></cfif>/>
+											
+											<!--- CASH --->
+											<cfif accountPaymentMethod.getPaymentMethod().getPaymentMethodType() eq "cash">
+												#accountPaymentMethod.getSimpleRepresentation()#
+												<hr />
+											<!--- CHECK --->
+											<cfelseif accountPaymentMethod.getPaymentMethod().getPaymentMethodType() eq "check">
+												#accountPaymentMethod.getSimpleRepresentation()#
+												<hr />
+											<!--- CREDIT CARD --->
+											<cfelseif accountPaymentMethod.getPaymentMethod().getPaymentMethodType() eq "creditCard">
+												#accountPaymentMethod.getSimpleRepresentation()#
+												<hr />
+											<!--- GIFT CARD --->
+											<cfelseif accountPaymentMethod.getPaymentMethod().getPaymentMethodType() eq "giftCard">
+												#accountPaymentMethod.getSimpleRepresentation()#
+												<hr />
+											<!--- TERM PAYMENT --->
+											<cfelseif accountPaymentMethod.getPaymentMethod().getPaymentMethodType() eq "termPayment">
+												#accountPaymentMethod.getSimpleRepresentation()#
+												<hr />
+											</cfif>
+										</cfloop>
+										
+										<!--- This button will just add the order payment, but not actually process the order --->
+										<button type="submit" class="btn">Apply Payment Method</button>
+										
+										<!--- Clicking this button will not only add the payment, but it will also attempt to place the order. --->
+										<button type="submit" class="btn btn-primary" name="slatAction" value="public:cart.placeOrder">Apply Payment Method & Place Order</button>
+									</form>
+								</div>
+								<cfset first = false />
+							</cfif>
+							
+							<!--- Loop over all of the eligible payment methods --->
+							<cfloop array="#eligiblePaymentMethods#" index="paymentDetails">
 								
-							</div>
+								<div class="tab-pane#iif(first, de(' active'), de(''))#" id="tab#paymentDetails.paymentMethod.getPaymentMethodID()#">
+									
+									<form action="?s=1" method="post">
+												
+										<!--- Hidden slatAction to trigger a cart update with the new fulfillment information --->
+										<input type="hidden" name="slatAction" value="public:cart.addOrderPayment" />
+										
+										<!--- Hidden value to identify the type of payment method this is --->
+										<input type="hidden" name="paymentMethod.paymentMethodID" value="#paymentDetails.paymentMethod.getPaymentMethodID()#" />
+										
+										<!--- CASH --->
+										<cfif paymentDetails.paymentMethod.getPaymentMethodType() eq "cash">
+											
+										<!--- CHECK --->
+										<cfelseif paymentDetails.paymentMethod.getPaymentMethodType() eq "check">
+											
+										<!--- CREDIT CARD --->
+										<cfelseif paymentDetails.paymentMethod.getPaymentMethodType() eq "creditCard">
+											<div class="row">
+												<div class="span4">
+													<h5>Billing Address</h5>
+													
+													<sw:addressForm id="newBillingAddress" address="#addOrderPaymentObj.getNewOrderPayment().getBillingAddress()#" fieldNamePrefix="newOrderPayment.billingAddress." fieldClass="span4" />
+												</div>
+												<div class="span4">
+													<h5>Credit Card Info</h5>
+													
+													<!--- Credit Card Number --->
+													<div class="control-group">
+								    					<label class="control-label" for="rating">Credit Card Number</label>
+								    					<div class="controls">
+								    						
+															<sw:formField type="text" name="newOrderPayment.creditCardNumber" valueObject="#addOrderPaymentObj.getNewOrderPayment()#" valueObjectProperty="creditCardNumber" class="span4" />
+															<sw:errorDisplay object="#addOrderPaymentObj.getNewOrderPayment()#" errorName="newOrderPayment" />
+															
+								    					</div>
+								  					</div>
+													
+													<!--- Name on Credit Card --->
+													<div class="control-group">
+								    					<label class="control-label" for="rating">Name on Card</label>
+								    					<div class="controls">
+								    						
+															<sw:formField type="text" name="newOrderPayment.nameOnCreditCard" valueObject="#addOrderPaymentObj.getNewOrderPayment()#" valueObjectProperty="nameOnCreditCard" class="span4" />
+															<sw:errorDisplay object="#addOrderPaymentObj.getNewOrderPayment()#" errorName="nameOnCreditCard" />
+															
+								    					</div>
+								  					</div>
+													
+													<!--- Security & Expiration Row --->
+													<div class="row">
+														
+														<div class="span2">
+															
+															<!--- Security Code --->
+															<div class="control-group">
+										    					<label class="control-label" for="rating">Security Code</label>
+										    					<div class="controls">
+										    						
+																	<sw:formField type="text" name="newOrderPayment.securityCode" valueObject="#addOrderPaymentObj.getNewOrderPayment()#" valueObjectProperty="securityCode" class="span2" />
+																	<sw:errorDisplay object="#addOrderPaymentObj.getNewOrderPayment()#" errorName="securityCode" />
+																	
+										    					</div>
+										  					</div>
+															
+														</div>
+														
+														
+														<div class="span2">
+															
+															<!--- Expiration --->	
+															<div class="control-group">
+										    					<label class="control-label pull-right" for="rating">Expiration ( MM / YYYY )</label>
+										    					<div class="controls pull-right">
+										    						
+																	<sw:formField type="select" name="newOrderPayment.expirationMonth" valueObject="#addOrderPaymentObj.getNewOrderPayment()#" valueObjectProperty="expirationMonth" valueOptions="#addOrderPaymentObj.getNewOrderPayment().getExpirationMonthOptions()#" class="span1" />
+																	<sw:formField type="select" name="newOrderPayment.expirationYear" valueObject="#addOrderPaymentObj.getNewOrderPayment()#" valueObjectProperty="expirationYear" valueOptions="#addOrderPaymentObj.getNewOrderPayment().getExpirationYearOptions()#" class="span1" />
+																	<sw:errorDisplay object="#addOrderPaymentObj.getNewOrderPayment()#" errorName="expirationMonth" />
+																	<sw:errorDisplay object="#addOrderPaymentObj.getNewOrderPayment()#" errorName="expirationYear" />
+																	
+										    					</div>
+										  					</div>
+															
+														</div>
+													</div>
+													<br />
+													<p>Amount:<br />
+													#$.slatwall.formatValue(paymentDetails.maximumAmount, 'currency')# <a href="##">Split Payment</a>
+													</p>
+												</div>
+											</div>
+										<!--- GIFT CARD --->
+										<cfelseif paymentDetails.paymentMethod.getPaymentMethodType() eq "giftCard">
+											
+										<!--- TERM PAYMENT --->
+										<cfelseif paymentDetails.paymentMethod.getPaymentMethodType() eq "termPayment">
+											
+										</cfif>
+										
+										<div class="control-group pull-right">
+											<div class="controls">
+												<!--- This button will just add the order payment, but not actually process the order --->
+												<button type="submit" class="btn">Add Payment & Review</button>
+												
+												<!--- Clicking this button will not only add the payment, but it will also attempt to place the order. --->
+												<button type="submit" class="btn btn-primary" name="slatAction" value="public:cart.placeOrder">Add Payment & Place Order</button>
+											</div>
+										</div>
+									</form>
+								</div>
+								
+								<cfset first = false />
+							</cfloop>
 						</div>
+						
 						<!--- END: PAYMENT --->
+							
+<!--- ============= CONFIRMATION ============================================== --->
+					<cfelseif not len(orderRequirementsList)>
+						<h4>Step 4 - Confirmation</h4>
+						
 						
 					</cfif>
 						
@@ -527,7 +758,7 @@ Notes:
 					<hr />
 					
 					<!--- Account Details --->
-					<cfif not $.slatwall.cart().getAccount().isNew() and not listFindNoCase(orderRequirementsList, "account")>
+					<cfif not listFindNoCase(orderRequirementsList, "account") and not $.slatwall.cart().getAccount().isNew()>
 						<h5>Account Details</h5>
 						
 						<p>
@@ -546,6 +777,62 @@ Notes:
 						</p>
 						
 						<hr />
+					</cfif>
+					
+					<!--- Fulfillment Details --->
+					<cfif not listFindNoCase(orderRequirementsList, "account") and not $.slatwall.cart().getAccount().isNew()>
+						<h5>Fulfillment Details</h5>
+						<cfloop array="#$.slatwall.cart().getOrderFulfillments()#" index="orderFulfillment">
+							<p>
+								<!--- Fulfillment Method --->
+								<strong>#orderFulfillment.getFulfillmentMethod().getFulfillmentMethodName()# - #arrayLen(orderFulfillment.getOrderFulfillmentItems())# Item(s)</strong><br />
+								
+								<!--- EMAIL --->
+								<cfif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "email">
+									Email Address: #orderFulfillment.getEmailAddress()#<br />
+									
+								<!--- PICKUP --->
+								<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "pickup">
+									Pickup Location: #orderFulfillment.getPickupLocation().getLocationName()#
+									
+								<!--- SHIPPING --->
+								<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "shipping">
+									<cfif not isNull(orderFulfillment.getAddress().getName())>
+										#orderFulfillment.getAddress().getName()#<br />
+									</cfif>
+									<cfif not isNull(orderFulfillment.getAddress().getCompany())>
+										#orderFulfillment.getAddress().getCompany()#<br />
+									</cfif>
+									<cfif not isNull(orderFulfillment.getAddress().getStreetAddress())>
+										#orderFulfillment.getAddress().getStreetAddress()#<br />
+									</cfif>
+									<cfif not isNull(orderFulfillment.getAddress().getStreet2Address())>
+										#orderFulfillment.getAddress().getStreet2Address()#<br />
+									</cfif>
+									<cfif not isNull(orderFulfillment.getAddress().getLocality())>
+										#orderFulfillment.getAddress().getLocality()#<br />
+									</cfif>
+									<cfif not isNull(orderFulfillment.getAddress().getCity()) and not isNull(orderFulfillment.getAddress().getStateCode()) and not isNull(orderFulfillment.getAddress().getPostalCode())>
+										#orderFulfillment.getAddress().getCity()#, #orderFulfillment.getAddress().getStateCode()# #orderFulfillment.getAddress().getPostalCode()#<br />
+									<cfelse>
+										<cfif not isNull(orderFulfillment.getAddress().getCity())>
+											#orderFulfillment.getAddress().getCity()#<br />
+										</cfif>
+										<cfif not isNull(orderFulfillment.getAddress().getStateCode())>
+											#orderFulfillment.getAddress().getStateCode()#<br />
+										</cfif>
+										<cfif not isNull(orderFulfillment.getAddress().getPostalCode())>
+											#orderFulfillment.getAddress().getPostalCode()#<br />
+										</cfif>
+									</cfif>
+									<cfif not isNull(orderFulfillment.getAddress().getCountryCode())>
+										#orderFulfillment.getAddress().getCountryCode()#<br />
+									</cfif>
+								</cfif>
+							</p>
+							
+							<hr />
+						</cfloop>
 					</cfif>
 					
 					<!--- Order Totals --->
