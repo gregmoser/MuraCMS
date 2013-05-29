@@ -210,6 +210,20 @@ component extends="mura.bean.bean" {
 		return variables.table;
 	}
 
+	function getBundleable(){
+		if(not len(variables.bundleable)){
+			var md=getMetaData(this);
+
+			if(structKeyExists(md,'bundleable')){
+				variables.bundleable=md.bundleable;
+			} else {
+				variables.bundleable=false;
+			}
+			
+		}
+		return variables.bundleable;
+	}
+
 	function getPrimaryKey(){
 		return variables.primaryKey;
 	}
@@ -752,12 +766,49 @@ component extends="mura.bean.bean" {
 			feed.setSiteID(getValue('siteID'));
 		}
 
-		return feed;
-		
+		return feed;	
 	}
 
 	function getIterator(){		
 		return getBean('beanIterator').setBeanClass(variables.beanClass);
 	}
 
+	function toBundle(bundle,siteid){
+		var qs=new Query();
+		
+		if(!hasProperty('siteid') && structKeyExists(arguments,'siteid')){
+			arguments.bundle.setValue("rs" * getTable(),qs.execute(sql="select * form #getTable()#").getResult());
+		} else {
+			qs.setSQL("select * form #getTable()# where siteid = :siteid");
+			qs.addParam(cfsqltype="cf_sql_varchar",value=arguments.siteid);
+			arguments.bundle.setValue("rs" * getTable(),qs.getResult());
+		}
+		return this;
+	}
+
+	function fromBundle(bundle,keyFactory,siteid){
+		var rs=arguments.bundle.getValue('rs' & getTable());
+		var item='';
+		var prop='';
+
+		if(rs.recordcount){
+			var it=getIterator().setQuery(rs);
+
+			while (it.hasNext()){
+				item=it.next();
+
+				for(prop in getProperties()){
+					if(isValid('uuid',item.getValue(prop))){
+						item.setValue(prop,arguments.keyFactory.get(item.getValue(prop)));
+					}
+
+				}
+
+				item.save();
+			
+			}
+
+
+		}
+	}
 }
