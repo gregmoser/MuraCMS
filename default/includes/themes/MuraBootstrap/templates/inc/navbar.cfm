@@ -9,7 +9,7 @@
 					<span class="icon-bar"></span>
 				</a>
 				<a class="brand" href="#$.createHREF(filename='')#">
-					#HTMLEditFormat($.siteConfig('site'))#
+					<i class="icon-bullseye"></i> #HTMLEditFormat($.siteConfig('site'))#
 				</a>
 				
 				<cfif $.currentUser().isLoggedIn()>
