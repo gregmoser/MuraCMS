@@ -48,8 +48,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 component extends="mura.bean.di1" {
 
 	variables.versionedBeans='';
+	variables.bundleableBeans='';
 
-	public any function declareBean( string beanName, string dottedPath, boolean isSingleton = true ) {
+	public any function declareBean( string beanName, string dottedPath, boolean isSingleton = true) {
 		
 		try{
 			var tmpObj=evaluate("new #arguments.dottedPath#()");
@@ -57,7 +58,14 @@ component extends="mura.bean.di1" {
 			var tmpObj={};
 		}
 
-		if(structKeyExists(tmpObj,'hasProperty') && tmpObj.hasProperty('contenthistid') && not listFindNoCase(variables.versionedBeans,arguments.beanName)){
+		var md=getMetaData(tmpObj);
+
+		if(structKeyExists(tmpObj, "bundleable") && tmpObj.bundleable && !listFindNoCase(variables.bundleableBeans,arguments.beanName)){
+			variables.bundleableBeans=listAppend(variables.bundleableBeans,arguments.beanName);
+			arguments.isSingleton=false;
+		}
+
+		if(structKeyExists(tmpObj,'hasProperty') && tmpObj.hasProperty('contenthistid') && !listFindNoCase(variables.versionedBeans,arguments.beanName)){
 			variables.versionedBeans=listAppend(variables.versionedBeans,arguments.beanName);
 			arguments.isSingleton=false;
 		}
@@ -73,6 +81,10 @@ component extends="mura.bean.di1" {
 
 	function getVersionedBeans(){
 		return variables.versionedBeans;
+	}
+
+	function getBundleableBeans(){
+		return variables.bundleableBeans;
 	}
 
 }

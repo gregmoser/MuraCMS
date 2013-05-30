@@ -130,6 +130,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset arguments.moduleID=listAppend(arguments.moduleID,rstplugins.moduleID)>
 			</cfloop>
 		</cfif>
+
+
+		<!--- BEGIN BUNDLEABLE CUSTOM OBJECTS --->
+		<cfif structKeyExists(arguments, "bundle")>
+			<cfset var bundleablebeans=arguments.getValue("bundleablebeans")>	
+			<cfif len(bundleablebeans)>
+				<cfset var bb="">
+
+				<cfloop list="#bundleablebeans#" index="bb">
+					<cfif getServiceFactory().containsBean(bb)>
+						<cfset getBean(bb).fromBundle(bundle=this,keyFactory=arguments.keyFactory,siteid=arguments.toSiteID)>
+					</cfif>
+				</cfloop>
+			</cfif>
+		</cfif>
+		
+		<!--- END BUNDLEABLE CUSTOM OBJECTS --->
 		
 		<cfif len(arguments.toSiteID) and arguments.contentMode neq "none">
 			<cfset getToWorkSite(argumentCollection=arguments)>

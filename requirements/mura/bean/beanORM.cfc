@@ -797,6 +797,10 @@ component extends="mura.bean.bean" {
 			while (it.hasNext()){
 				item=it.next();
 
+				if(structKeyExists(arguments, "siteid") && len(arguments.siteid) && item.hasProperty('siteid')){
+					item.setValue('siteid',arguments.siteid);
+				}
+
 				for(prop in getProperties()){
 					if(isValid('uuid',item.getValue(prop))){
 						item.setValue(prop,arguments.keyFactory.get(item.getValue(prop)));

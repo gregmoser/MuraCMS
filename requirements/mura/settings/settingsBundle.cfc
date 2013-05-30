@@ -1287,7 +1287,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 		
 		<!--- END FORM DATA --->
+
+		<!--- BEGIN BUNDLEABLE CUSTOM OBJECTS --->
+		<cfset setValue("bundleablebeans",getServiceFactory().getBundleable)>
 		
+		<cfif len(getServiceFactory().getdleableBeansBun())>
+			<cfset var bb="">
+
+			<cfloop list="#getServiceFactory().getBundleableBeans()#" index="bb">
+				<cfset getBean(bb).toBundle(bundle=this,siteid=arguments.siteid)>
+			</cfloop>
+		</cfif>
+		<!--- END BUNDLEABLE CUSTOM OBJECTS --->
+
 		<cfset setValue("sincedate",arguments.sincedate)>
 		<cfset setValue("bundledate",now())>
 		
