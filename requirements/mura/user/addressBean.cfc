@@ -97,6 +97,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.isNew=0 />
 	<cfset variables.instance.type="Address" />
 	<cfset variables.instance.subType="Default" />
+
+	<cfset variables.primaryKey = 'addressid'>
+	<cfset variables.beanClass = 'address'>
 	
 	<cfreturn this />
 </cffunction>

@@ -1350,7 +1350,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 
 </cffunction>
 
-<cffunction name="deleteVersionedObject" output="false">
+<cffunction name="deleteVersionedObjects" output="false">
 	<cfargument name="contenthistid">
 	<cfargument name="contentid">
 	<cfargument name="siteid">
@@ -1359,21 +1359,51 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfset var i="">
 	<cfset var bean="">
 
-	<cfloop list="#getServiceFactory().getVersionedBeans()#" index="i">
-		<cfif structKeyExists(arguments, "contentid")>
-			<cfset it=getBean(i).loadBy(contentid=arguments.contentid,siteid=arguments.siteid,returnformat='iterator')>
-		<cfelse>
-			<cfset it=getBean(i).loadBy(contenthistid=arguments.contenthistid,returnformat='iterator')>
-		</cfif>
-
-		<cfloop condition="it.hasNext()">
-			<cfset bean=it.next()>
-			<cfif not bean.getIsNew()>
-				<cfset bean.delete()>
+	<cfif len(application.objectMappings.versionedBeans)>
+		<cfloop list="#application.objectMappings.versionedBeans#" index="i">
+			<cfif structKeyExists(arguments, "contentid")>
+				<cfset it=getBean(i).loadBy(contentid=arguments.contentid,siteid=arguments.siteid,returnformat='iterator')>
+			<cfelse>
+				<cfset it=getBean(i).loadBy(contenthistid=arguments.contenthistid,returnformat='iterator')>
 			</cfif>
+
+			<cfloop condition="it.hasNext()">
+				<cfset bean=it.next()>
+				<cfif not bean.getIsNew()>
+					<cfset bean.delete()>
+				</cfif>
+			</cfloop>
+			
 		</cfloop>
-		
-	</cfloop>
+	</cfif>
+
+</cffunction>
+
+
+<cffunction name="persistVersionedObjects" output="false">
+	<cfargument name="contenthistid">
+	<cfargument name="preserveid">
+
+	<cfset var it="">
+	<cfset var i="">
+	<cfset var bean="">
+
+	<cfif len(application.objectMappings.versionedBeans)>
+		<cfloop list="#application.objectMappings.versionedBeans#" index="i">
+			
+			<cfset it=getBean(i).loadBy(contenthistid=arguments.preserveid,returnformat='iterator')>
+			
+			<cfloop condition="it.hasNext()">
+				<cfset bean=it.next()>
+				<cfif not bean.getIsNew()>
+					<cfset bean.setContentHistID(arguments.preserveID)>
+					<cfset bean.setValue(bean.getPrimaryKey(),createUUID())>
+					<cfset bean.save()>
+				</cfif>
+			</cfloop>
+			
+		</cfloop>
+	</cfif>
 
 </cffunction>
 

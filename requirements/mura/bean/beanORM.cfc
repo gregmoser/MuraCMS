@@ -49,18 +49,15 @@ component extends="mura.bean.bean" {
 
 	function init(){
 		super.init();
-		variables.table="";
-		variables.primaryKey="";
-		variables.properties={};
 		variables.dbUtility="";
 		variables.beanClass="";
 		variables.addObjects=[];
 		variables.removeObjects=[];
-		variables.synthedFunctions={};
-		getProperties();
+		
+		var props=getProperties();
 
-		for(var prop in variables.properties){
-			prop=variables.properties[prop];
+		for(var prop in props){
+			prop=props[prop];
 
 			if(structKeyExists(prop,"type") and listFindNoCase("struct,array",prop.type)){
 				if(prop.type eq "struct"){
@@ -104,78 +101,6 @@ component extends="mura.bean.bean" {
 
 	}
 
-	function OnMissingMethod(MissingMethodName,MissingMethodArguments){
-		var prefix=left(arguments.MissingMethodName,3);
-
-		if(len(arguments.MissingMethodName)){
-
-			if(structKeyExists(variables.synthedFunctions,arguments.MissingMethodName)){
-				try{
-
-					if(not structKeyExists(arguments,'MissingMethodArguments')){
-						arguments.MissingMethodArguments={};
-					}
-
-					if(structKeyExists(variables.synthedFunctions[arguments.MissingMethodName],'args')){
-						
-						if(structKeyExists(variables.synthedFunctions[arguments.MissingMethodName].args,'cfc')){
-							var bean=getBean(variables.synthedFunctions[arguments.MissingMethodName].args.cfc);
-							
-							if(variables.synthedFunctions[arguments.MissingMethodName].args.functionType eq 'getEntity'){
-								variables.synthedFunctions[arguments.MissingMethodName].args.loadKey=bean.getPrimaryKey();
-							} else {
-								variables.synthedFunctions[arguments.MissingMethodName].args.loadKey=variables.synthedFunctions[arguments.MissingMethodName].args.fkcolumn;
-							}
-
-							structAppend(arguments.MissingMethodArguments,synthArgs(variables.synthedFunctions[arguments.MissingMethodName].args),true);
-						}
-					}
-
-					return evaluate(variables.synthedFunctions[arguments.MissingMethodName].exp);
-
-				} catch(any err){
-					if(request.muratransaction){
-						transactionRollback();
-					}				
-					writeDump(var=variables.synthedFunctions[arguments.MissingMethodName]);
-					writeDump(var=err,abort=true);
-				}
-			} 
-
-			if(listFindNoCase("set,get",prefix) and len(arguments.MissingMethodName) gt 3){
-				var prop=right(arguments.MissingMethodName,len(arguments.MissingMethodName)-3);	
-				
-				if(prefix eq "get"){
-					return getValue(prop);
-				} 
-
-				if(not structIsEmpty(arguments.MissingMethodArguments)){
-					return setValue(prop,arguments.MissingMethodArguments[1]);
-				} else {
-					throw(message="The method '#arguments.MissingMethodName#' requires a propery value");
-				}
-					
-			} else {
-				throw(message="The method '#arguments.MissingMethodName#' is not defined");
-			}
-		} else {
-			return "";
-		}
-	}
-
-	private function synthArgs(args){
-		var returnArgs={
-				"#translatePropKey(args.loadkey)#"=getValue(translatePropKey(args.fkcolumn)),
-				returnFormat=args.returnFormat
-			};
-
-		if(structKeyExists(args,'prop') and structKeyExists(variables.properties[args.prop],'orderby')){
-			returnArgs.orderby=variables.properties[args.prop].orderby;
-		}
-
-		return returnArgs;
-	}
-
 	function set(data){
 		if(isdefined('preLoad')){
 			evaluate('preLoad()');
@@ -204,28 +129,16 @@ component extends="mura.bean.bean" {
 	}
 
 	function getTable(){
-		if(not len(variables.table)){
-			variables.table=getMetaData(this).table;
-		}
-		return variables.table;
+		//writeDump(var=application.objectMappings[variables.beanClass],abort=true);
+		return application.objectMappings[variables.beanClass].table;
 	}
 
 	function getBundleable(){
-		if(not len(variables.bundleable)){
-			var md=getMetaData(this);
-
-			if(structKeyExists(md,'bundleable')){
-				variables.bundleable=md.bundleable;
-			} else {
-				variables.bundleable=false;
-			}
-			
-		}
-		return variables.bundleable;
+		return application.objectMappings[variables.beanClass].bundleable;
 	}
 
 	function getPrimaryKey(){
-		return variables.primaryKey;
+		return application.objectMappings[variables.beanClass].primaryKey;
 	}
 
 	function getColumns(){
@@ -260,31 +173,42 @@ component extends="mura.bean.bean" {
 		return this;
 	}
 
-	private function translatePropKey(property){
-		if(arguments.property eq 'primaryKey'){
-			return getPrimaryKey();
-		}
-		return arguments.property;
-	}
-
-
 	function getProperties(){
 		
-		if(structIsEmpty(variables.properties)){
-			var md={};
+		getBeanClass();
+
+		if(!isdefined('application.objectMappings.#variables.beanClass#.properties')){
 			var pname='';
 			var i='';
 			var prop={};
 			var md=getMetaData(this);
-			
-			variables.table=md.table;
-			variables.beanClass=listLast(md.name,'.');
+			var loadKey="";
 
-			if(right(variables.beanClass,4) eq "bean"){
-				variables.beanClass=left(variables.beanClass,len(variables.beanClass)-4);
-			}
+			param name="application.objectMappings.#variables.beanClass#" default={};
+			application.objectMappings[variables.beanClass].properties={};
+			application.objectMappings[variables.beanClass].functions={};
+			application.objectMappings[variables.beanClass].primarykey="";
+			application.objectMappings[variables.beanClass].table=md.table;
 			
-			//writeDump(var=md,abort=true);
+			if(structKeyExists(md,'versioned') && md.versioned){
+				application.objectMappings[variables.beanClass].versioned=true;
+
+				if(not listFindNoCase(application.objectMappings.versionedBeans, variables.beanClass)){
+					application.objectMappings.versionedBeans=listAppend(application.objectMappings.versionedBeans, variables.beanClass);
+				}
+			} else {
+				application.objectMappings[variables.beanClass].versioned=false;
+			}
+
+			if(structKeyExists(md,'bundleable') && md.bundleable){
+				application.objectMappings[variables.beanClass].bundleable=md.bundleable;
+
+				if(not listFindNoCase(application.objectMappings.bundleableBeans, variables.beanClass)){
+					application.objectMappings.bundleableBeans=listAppend(application.objectMappings.bundleableBeans, variables.beanClass);
+				}
+			} else {
+				application.objectMappings[variables.beanClass].bundleable=false;
+			}
 
 			for (md; 
 			    structKeyExists(md, "extends"); 
@@ -299,17 +223,19 @@ component extends="mura.bean.bean" {
 			      { 
 			        pName = md.properties[i].name; 
 
-			        if(!structkeyExists(properties,pName)){
-			       	 	variables.properties[pName]=md.properties[i];
-			       	 	prop=variables.properties[pName];
-			       	 	prop.table=variables.table;
+			        //writeDump(var=pname,abort=true);
+
+			        if(!structkeyExists(application.objectMappings[variables.beanClass].properties,pName)){
+			       	 	application.objectMappings[variables.beanClass].properties[pName]=md.properties[i];
+			       	 	prop=application.objectMappings[variables.beanClass].properties[pName];
+			       	 	prop.table=application.objectMappings[variables.beanClass].table;
 
 			       	 	if(!structKeyExists(prop,"fieldtype")){
 			       	 		prop.fieldType="";
 			       	 	} 
 
 			       	 	if(prop.fieldtype eq 'id'){
-			       	 		variables.primaryKey=prop.name;
+			       	 		application.objectMappings[variables.beanClass].primaryKey=prop.name;
 			       	 		setPropAsIDColumn(prop);
 			       	 	}
 
@@ -342,28 +268,61 @@ component extends="mura.bean.bean" {
 			       	 		prop.column=prop.fkcolumn;
 
 			       	 		if(prop.fieldtype eq 'one-to-many'){
-			       	 			//getBean("#prop.cfc#").loadBy(argumentCollection=structAppend(arguments.MissingMethodArguments,synthArgs(variables.synthedFunctions["has#prop.name#"].args),false)).recordcount
-				       	 		variables.synthedFunctions['get#prop.name#Iterator']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="iterator",functionType='getEntityIterator'}};
-				       	 		variables.synthedFunctions['get#prop.name#Query']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='getEntityQuery'}};
-				       	 		variables.synthedFunctions['has#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='hasEntity'}};
-				       	 		variables.synthedFunctions['add#prop.name#']={exp='addObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='addEntity'}};
-				       	 		variables.synthedFunctions['remove#prop.name#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='removeEntity'}};
+			       	 			//getBean("#prop.cfc#").loadBy(argumentCollection=structAppend(arguments.MissingMethodArguments,synthArgs(application.objectMappings[variables.beanClass].functions["has#prop.name#"].args),false)).recordcount
+				       	 		application.objectMappings[variables.beanClass].functions['get#prop.name#Iterator']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="iterator",functionType='getEntityIterator'}};
+				       	 		application.objectMappings[variables.beanClass].functions['get#prop.name#Query']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='getEntityQuery'}};
+				       	 		application.objectMappings[variables.beanClass].functions['has#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='hasEntity'}};
+				       	 		application.objectMappings[variables.beanClass].functions['add#prop.name#']={exp='addObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='addEntity'}};
+				       	 		application.objectMappings[variables.beanClass].functions['remove#prop.name#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='removeEntity'}};
+
+				       	 		if(listFindNoCase('content,user,feed,category,address,site,comment',prop.name)){
+				       	 			param name="application.objectMappings.#prop.cfc#" default={};
+				       	 			param name="application.objectMappings.#prop.cfc#.functions" default={};
+
+				       	 			application.objectMappings[prop.cfc].functions['get#variables.beanClass#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.beanClass,fkcolumn="#prop.fkcolumn#",cfc="#variables.beanClass#",returnFormat="this",functionType='getEntity'}};
+				       	 			//application.objectMappings[prop.cfc].functions['set#variables.beanClass#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getValue("#prop.fkcolumn#"))',args={prop=variables.beanClass,functionType='setEntity'}};
+				       	 		
+				       	 		}
+
+				       	 		
 
 					       	 	if(structKeyExists(prop,"singularname")){
-					       	 		variables.synthedFunctions['get#prop.singularname#Iterator']=variables.synthedFunctions['get#prop.name#Iterator'];
-					       	 		variables.synthedFunctions['get#prop.singularname#Query']=variables.synthedFunctions['get#prop.name#Query'];
-					       	 		variables.synthedFunctions['add#prop.singularname#']=variables.synthedFunctions['add#prop.name#'];
-					       	 		variables.synthedFunctions['has#prop.singularname#']=variables.synthedFunctions['has#prop.name#'];
-					       	 		variables.synthedFunctions['remove#prop.singularname#']=variables.synthedFunctions['remove#prop.name#'];
+					       	 		application.objectMappings[variables.beanClass].functions['get#prop.singularname#Iterator']=application.objectMappings[variables.beanClass].functions['get#prop.name#Iterator'];
+					       	 		application.objectMappings[variables.beanClass].functions['get#prop.singularname#Query']=application.objectMappings[variables.beanClass].functions['get#prop.name#Query'];
+					       	 		application.objectMappings[variables.beanClass].functions['add#prop.singularname#']=application.objectMappings[variables.beanClass].functions['add#prop.name#'];
+					       	 		application.objectMappings[variables.beanClass].functions['has#prop.singularname#']=application.objectMappings[variables.beanClass].functions['has#prop.name#'];
+					       	 		application.objectMappings[variables.beanClass].functions['remove#prop.singularname#']=application.objectMappings[variables.beanClass].functions['remove#prop.name#'];
 					       	 	}
 			       	 		} else if (prop.fieldtype eq 'many-to-one' or prop.fieldtype eq 'one-to-one'){
 			       	 			if(prop.fkcolumn eq 'siteid'){
-			       	 				variables.synthedFunctions['get#prop.name#']={exp='getBean("settingsManager").getSite(getValue("siteID"))',args={prop=prop.name,functionType='getEntity'}};
-			       	 				variables.synthedFunctions['set#prop.name#']={exp='setValue("siteID",arguments.MissingMethodArguments[1].getSiteID()))',args={prop=prop.name,functionType='setEntity'}};
+			       	 				application.objectMappings[variables.beanClass].functions['get#prop.name#']={exp='getBean("settingsManager").getSite(getValue("siteID"))',args={prop=prop.name,functionType='getEntity'}};
+			       	 				application.objectMappings[variables.beanClass].functions['set#prop.name#']={exp='setValue("siteID",arguments.MissingMethodArguments[1].getSiteID()))',args={prop=prop.name,functionType='setEntity'}};
 			       	 			} else {
-			       	 				variables.synthedFunctions['get#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="#prop.fkcolumn#",cfc="#prop.cfc#",returnFormat="this",functionType='getEntity'}};
-			       	 				variables.synthedFunctions['set#prop.name#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getPrimaryKey())',args={prop=prop.name,functionType='setEntity'}};
+			       	 				application.objectMappings[variables.beanClass].functions['get#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="#prop.fkcolumn#",cfc="#prop.cfc#",returnFormat="this",functionType='getEntity'}};
+			       	 				application.objectMappings[variables.beanClass].functions['set#prop.name#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getPrimaryKey())',args={prop=prop.name,functionType='setEntity'}};
 			       	 			}
+   	 			
+   	 							
+			       	 			if(listFindNoCase('content,user,feed,category,address,site,comment',prop.name)){
+			       	 				
+			       	 				param name="application.objectMappings.#prop.cfc#" default={};
+					       	 		param name="application.objectMappings.#prop.cfc#.functions" default={};
+
+			       	 				if(prop.fieldtype eq 'many-to-one'){
+
+			       	 					application.objectMappings[prop.cfc].functions['get#variables.beanClass#Iterator']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.beanClass,fkcolumn=prop.fkcolumn,cfc="#variables.beanClass#",returnFormat="iterator",functionType='getEntityIterator'}};
+				       	 				application.objectMappings[prop.cfc].functions['get#variables.beanClass#Query']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.beanClass,fkcolumn=prop.fkcolumn,cfc="#variables.beanClass#",returnFormat="query",functionType='getEntityQuery'}};
+				       	 				//application.objectMappings[prop.cfc].functions['has#variables.beanClass#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={prop=variables.beanClass,fkcolumn=prop.fkcolumn,cfc="#variables.beanClass#",returnFormat="query",functionType='hasEntity'}};
+				       	 				//application.objectMappings[prop.cfc].functions['add#variables.beanClass#']={exp='addObject(arguments.MissingMethodArguments[1])',args={prop=variables.beanClass,functionType='addEntity'}};
+				       	 				//application.objectMappings[prop.cfc].functions['remove#variables.beanClass#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={prop=variables.beanClass,functionType='removeEntity'}};
+
+			       	 				} else {
+					       	 			
+					       	 			application.objectMappings[prop.cfc].functions['get#variables.beanClass#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.beanClass,fkcolumn="#prop.fkcolumn#",cfc="#variables.beanClass#",returnFormat="this",functionType='getEntity'}};
+					       	 			//application.objectMappings[prop.cfc].functions['set#variables.beanClass#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getValue("#prop.fkcolumn#"))',args={prop=variables.beanClass,functionType='setEntity'}};
+				       	 			}
+			       	 			}
+			       	 			
 			       	 		}
 
 			       	 		if(not structKeyExists(prop,'cascade')){
@@ -385,11 +344,16 @@ component extends="mura.bean.bean" {
 			    } 
 			} 
 
+			getValidations();
+
+			//getServiceFactory().declareBean(beanName=variables.beanClass,dottedPath=md.name,isSingleton=false);
 		}
 
-		//writeDump(var=variables.properties,abort=true);
+		//abort;
 		
-		return variables.properties;
+		//writeDump(var=application.objectMappings[variables.beanClass].properties,abort=true);
+		
+		return application.objectMappings[variables.beanClass].properties;
 	}
 
 	private function setPropAsIDColumn(prop){
@@ -745,18 +709,6 @@ component extends="mura.bean.bean" {
 
 	function clone(){
 		return getBean(variables.beanClass).setAllValues(structCopy(getAllValues()));
-	}
-
-	function hasProperty(property){
-		var props=getProperties();
-
-		for(var prop in props){
-			if(props[prop].column eq arguments.property){
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	function getFeed(){		

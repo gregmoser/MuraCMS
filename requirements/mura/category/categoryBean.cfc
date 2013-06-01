@@ -96,6 +96,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.isNew=1 />
 	
 	<cfset variables.kids = arrayNew(1) />
+	<cfset variables.primaryKey = 'categoryid'>
+	<cfset variables.beanClass = 'category'>
 
 	<cfreturn this />
 </cffunction>

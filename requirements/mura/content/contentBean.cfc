@@ -231,6 +231,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfset variables.kids = arrayNew(1) />
 	<cfset variables.displayRegions = structNew()>
+	<cfset variables.primaryKey = 'contenthistid'>
+	<cfset variables.beanClass = 'content'>
 	
 	<cfreturn this />
 </cffunction>

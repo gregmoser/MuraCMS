@@ -40,6 +40,9 @@
 		<cfset variables.instance.LastUpdateBy = "" />
 		<cfset variables.instance.LastUpdateByID = "" />
 	</cfif>
+
+	<cfset variables.primaryKey = 'changesetID'>
+	<cfset variables.beanClass = 'changeset'>
 	
 	<cfreturn this>
 </cffunction>

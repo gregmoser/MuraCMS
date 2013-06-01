@@ -942,6 +942,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfset variables.ClassExtensionManager.preserveExtendedData(newBean.getcontentHistID(),currentBean.getContentHistID(),arguments.data,"tclassextenddata", newBean.getType(), newBean.getSubType())/>
 					</cfif>
 				</cfif>
+
+				<cfif not newBean.getIsNew()>
+					<cfset variables.contentDAO.persistVersionedObjects(newBean.getContentHistID(),currentBean.getContentHistID())>
+				</cfif>
 				
 				<!--- Category Persistence --->	
 				<cfif not newBean.getIsNew() and isdefined("arguments.data.mode") and arguments.data.mode eq 'import'>

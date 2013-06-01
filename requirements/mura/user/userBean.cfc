@@ -145,6 +145,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.tablist="" />
 	<cfset variables.instance.newFile="" />
 	<cfset variables.newAddresses = arrayNew(1) />
+
+	<cfset variables.primaryKey = 'userid'>
+	<cfset variables.beanClass = 'user'>
 	
 	<cfreturn this />
 </cffunction>

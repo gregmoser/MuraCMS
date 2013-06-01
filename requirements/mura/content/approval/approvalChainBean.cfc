@@ -7,8 +7,8 @@ component extends="mura.bean.beanORM"  table="tapprovalchains"{
     property name="lastupdate" type="timestamp";
     property name="lastupdateby" type="string" length=50;
     property name="lastupdatebyid" type="string" dataType="char" length=35;
-    property name="memberships" singularname="membership" fieldtype="one-to-many" cfc="approvalChainMembershipBean" orderby="orderno asc" cascade="delete";
-    property name="requests" singularname="request" fieldtype="one-to-many" cfc="approvalRequestBean" orderby="created asc" cascade="delete";
+    property name="memberships" singularname="membership" fieldtype="one-to-many" cfc="approvalChainMembership" orderby="orderno asc" cascade="delete";
+    property name="requests" singularname="request" fieldtype="one-to-many" cfc="approvalRequest" orderby="created asc" cascade="delete";
     property name="site" fieldtype="many-to-one" cfc="site" fkcolumn="siteID";
 
 

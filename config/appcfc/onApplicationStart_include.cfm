@@ -101,6 +101,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfset application.appInitialized=false>
 		<cfset request.muraShowTrace=true>
+		<cfset application.objectMappings={}>
+		<cfset application.objectMappings.bundleableBeans="">
+		<cfset application.objectMappings.versionedBeans="">
 		
 		<cfset variables.iniPath = "#variables.basedir#/config/settings.ini.cfm" />
 		

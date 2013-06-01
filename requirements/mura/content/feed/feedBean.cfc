@@ -150,6 +150,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.autoimport=0 />
 	<cfset variables.instance.isLocked=0 />
 	<cfset variables.instance.cssClass="" />
+
+	<cfset variables.primaryKey = 'feedid'>
+	<cfset variables.beanClass = 'feed'>
 	
 	<cfreturn this />
 </cffunction>

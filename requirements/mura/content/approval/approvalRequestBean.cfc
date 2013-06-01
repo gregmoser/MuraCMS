@@ -3,12 +3,12 @@ component extends="mura.bean.beanORM"  table="tapprovalrequests"{
 	property name="requestID" fieldtype="id";
     property name="created" type="timestamp";
     property name="status" type="String" default="Pending";
-    property name="approvalChain" fieldtype="many-to-one" cfc="approvalChainBean" fkcolumn="chainID";
-    property name="content" fieldtype="many-to-one" cfc="contentBean" fkcolumn="contentHistID";
+    property name="approvalChain" fieldtype="one-to-one" cfc="approvalChain" fkcolumn="chainID";
+    property name="content" fieldtype="one-to-one" cfc="content" fkcolumn="contentHistID";
     property name="user" fieldtype="many-to-one" cfc="user" fkcolumn="userID";
-    property name="site" fieldtype="many-to-one" cfc="settingBean" fkcolumn="siteID";
+    property name="site" fieldtype="many-to-one" cfc="site" fkcolumn="siteID";
     property name="group" fieldtype="many-to-one" cfc="user" fkcolumn="groupID";
-    property name="actions" singularname="action" fieldtype="one-to-many" cfc="approvalActionBean" orderby="created asc" cascade="delete";
+    property name="actions" singularname="action" fieldtype="one-to-many" cfc="approvalAction" orderby="created asc" cascade="delete";
 
     function approve(comments){
     	

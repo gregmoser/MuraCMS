@@ -92,6 +92,9 @@ Mura CMS.
 		<cfset variables.instance.ReplyTo="" />
 		<cfset variables.instance.FromLabel="" />
 		<cfset variables.instance.template="" />
+
+		<cfset variables.primaryKey = 'emailid'>
+		<cfset variables.beanClass = 'email'>
 			
 		<cfreturn this />
 	</cffunction>
