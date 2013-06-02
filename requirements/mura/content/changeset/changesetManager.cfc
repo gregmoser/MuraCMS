@@ -458,7 +458,7 @@
 
 <cffunction name="getFeed" access="public" returntype="any" output="false">
 <cfargument name="siteID">
-	<cfreturn getBean("beanFeed").setBeanClass('changeset').setTable('tchangesets')>
+	<cfreturn getBean("beanFeed").setEntityName('changeset').setTable('tchangesets')>
 </cffunction>
 
 <cffunction name="rollback" output="false">

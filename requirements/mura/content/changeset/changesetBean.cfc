@@ -42,7 +42,7 @@
 	</cfif>
 
 	<cfset variables.primaryKey = 'changesetID'>
-	<cfset variables.beanClass = 'changeset'>
+	<cfset variables.entityName = 'changeset'>
 	
 	<cfreturn this>
 </cffunction>

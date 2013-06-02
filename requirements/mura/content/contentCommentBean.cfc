@@ -85,7 +85,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.isNew=1/>
 
 	<cfset variables.primaryKey = 'commentid'>
-	<cfset variables.beanClass = 'comment'>
+	<cfset variables.entityName = 'comment'>
 
 	<cfreturn this />
 </cffunction>

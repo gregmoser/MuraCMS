@@ -88,7 +88,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="imageWidth" type="string" default="AUTO" required="true" />
 <cfproperty name="displayList" type="string" default="Title,Date,Image,Summary,Tags,Credits" required="true" />
 <cfproperty name="liveOnly" type="numeric" default="1" required="true" />
-<cfproperty name="beanClass" type="string" default="content" />
+<cfproperty name="entityName" type="string" default="content" />
 <cfproperty name="viewalllabel" type="string" default="" />
 <cfproperty name="viewalllink" type="string" default="View All" />
 <cfproperty name="autoimport" type="numeric" default="0" required="true" />
@@ -143,7 +143,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.displayList="Date,Title,Image,Summary,Credits,Tags" />
 	<cfset variables.instance.liveOnly=1 />
 	<cfset variables.instance.activeOnly=1 />
-	<cfset variables.instance.beanClass="content" />
+	<cfset variables.instance.entityName="content" />
 	<cfset variables.instance.table="tcontent">
 	<cfset variables.instance.viewalllink="" />
 	<cfset variables.instance.viewalllabel="" />
@@ -152,7 +152,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.cssClass="" />
 
 	<cfset variables.primaryKey = 'feedid'>
-	<cfset variables.beanClass = 'feed'>
+	<cfset variables.entityName = 'feed'>
 	
 	<cfreturn this />
 </cffunction>

@@ -206,7 +206,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.contentRejectionScript=""/>
 	
 	<cfset variables.primaryKey = 'siteid'>
-	<cfset variables.beanClass = 'site'>
+	<cfset variables.entityName = 'site'>
 
 	<cfreturn this />
 </cffunction>

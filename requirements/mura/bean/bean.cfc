@@ -53,7 +53,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfset variables.properties={}>
 <cfset variables.validations={}>
-<cfset variables.beanClass="">
+<cfset variables.entityName="">
 <cfset variables.primaryKey="">
 
 <cffunction name="init" output="false">
@@ -78,38 +78,38 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		if(len(arguments.MissingMethodName)){
 
-			if(variables.beanClass != ''  && isdefined('application.objectMappings.#variables.beanClass#.functions.#arguments.MissingMethodName#')){
+			if(variables.entityName != ''  && isdefined('application.objectMappings.#variables.entityName#.functions.#arguments.MissingMethodName#')){
 				try{
 
 					if(not structKeyExists(arguments,'MissingMethodArguments')){
 						arguments.MissingMethodArguments={};
 					}
 
-					if(structKeyExists(application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName],'args')){
+					if(structKeyExists(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName],'args')){
 						
-						if(structKeyExists(application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName].args,'cfc')){
-							var bean=getBean(application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName].args.cfc);
+						if(structKeyExists(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args,'cfc')){
+							var bean=getBean(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.cfc);
 							//writeDump(var=bean.getProperties());
-							if(application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName].args.functionType eq 'getEntity'){
-								application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName].args.loadKey=bean.getPrimaryKey();
+							if(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.functionType eq 'getEntity'){
+								application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.loadKey=bean.getPrimaryKey();
 							} else {
-								application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName].args.loadKey=application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName].args.fkcolumn;
+								application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.loadKey=application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.fkcolumn;
 							}
 
-							structAppend(arguments.MissingMethodArguments,synthArgs(application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName].args),true);
+							structAppend(arguments.MissingMethodArguments,synthArgs(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args),true);
 						}
 					}
 
 
 					//writeDump(var=arguments.MissingMethodArguments);
-					//writeDump(var=application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName].exp,abort=true);
-					return evaluate(application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName].exp);
+					//writeDump(var=application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].exp,abort=true);
+					return evaluate(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].exp);
 
 				} catch(any err){
 					if(request.muratransaction){
 						transactionRollback();
 					}				
-					writeDump(var=application.objectMappings[variables.beanClass].functions[arguments.MissingMethodName]);
+					writeDump(var=application.objectMappings[variables.entityName].functions[arguments.MissingMethodName]);
 					writeDump(var=err,abort=true);
 				}
 			} 
@@ -292,17 +292,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfscript>
 
 	function getProperties(){
-		getBeanClass();
+		getEntityName();
 
-		if(!isdefined('application.objectMappings.#variables.beanClass#.properties')){
+		if(!isdefined('application.objectMappings.#variables.entityName#.properties')){
 			var md={};
 			var pname='';
 			var i='';
 			var prop={};
 			var md=getMetaData(this);
 
-			param name="application.objectMappings.#variables.beanClass#" default={};
-			application.objects[variables.beanClass].properties={};
+			param name="application.objectMappings.#variables.entityName#" default={};
+			application.objects[variables.entityName].properties={};
 			
 			//writeDump(var=md,abort=true);
 
@@ -319,9 +319,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			      { 
 			        pName = md.properties[i].name; 
 
-			        if(!structkeyExists(application.objectMappings[variables.beanClass].properties,pName)){
-			       	 	application.objectMappings[variables.beanClass].properties[pName]=md.properties[i];
-			       	 	prop=application.objectMappings[variables.beanClass].properties[pName];
+			        if(!structkeyExists(application.objectMappings[variables.entityName].properties,pName)){
+			       	 	application.objectMappings[variables.entityName].properties[pName]=md.properties[i];
+			       	 	prop=application.objectMappings[variables.entityName].properties[pName];
 
 			       	 	if(!structKeyExists(prop,"dataType")){
 			       	 		if(structKeyExists(prop,"ormtype")){
@@ -340,34 +340,34 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			}
 
 			if(hasProperty('contenthistid')){
-				application.objectMappings[variables.beanClass].versioned=true;
+				application.objectMappings[variables.entityName].versioned=true;
 			} else {
-				application.objectMappings[variables.beanClass].versioned=false;
+				application.objectMappings[variables.entityName].versioned=false;
 			}
 			
 			getValidations();	
 		}
 		//writeDump(var=variables.properties,abort=true);
 		
-		return application.objectMappings[variables.beanClass].properties;
+		return application.objectMappings[variables.entityName].properties;
 	}
 
-	function getBeanClass(){
-		if(!len(variables.beanClass)){
+	function getEntityName(){
+		if(!len(variables.entityName)){
 			var md=getMetaData(this);
 
 			if(structKeyExists(md,'entityName')){
-				variables.beanClass=md.entityName;
+				variables.entityName=md.entityName;
 			} else {
-				variables.beanClass=listLast(md.name,".");
+				variables.entityName=listLast(md.name,".");
 
-				if(right(variables.beanClass,4) eq "bean"){
-					variables.beanClass=left(variables.beanClass,len(variables.beanClass)-4);
+				if(right(variables.entityName,4) eq "bean"){
+					variables.entityName=left(variables.entityName,len(variables.entityName)-4);
 				}
 			}
 		}
 
-		return variables.beanClass;
+		return variables.entityName;
 
 	}
 
@@ -384,17 +384,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 
 	function getValidations(){
-		getBeanClass();
+		getEntityName();
 
 		if(structIsEmpty(variables.validations)){
 			
-			if(!isDefined('application.objectMappings.#variables.beanClass#.validations')){
+			if(!isDefined('application.objectMappings.#variables.entityName#.validations')){
 			
 				param name="application.objectMappings" default={};
-				param name="application.objectMappings.#variables.beanClass#" default={};
+				param name="application.objectMappings.#variables.entityName#" default={};
 				
-				application.objectMappings[variables.beanClass].validations={};
-				application.objectMappings[variables.beanClass].validations.properties={};
+				application.objectMappings[variables.entityName].validations={};
+				application.objectMappings[variables.entityName].validations.properties={};
 
 				var props=getProperties();
 				var rules=[];
@@ -411,13 +411,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					}
 					
 					if(arrayLen(rules)){
-						application.objectMappings[variables.beanClass].validations.properties[prop]=rules;
+						application.objectMappings[variables.entityName].validations.properties[prop]=rules;
 					}
 				}
 
 			}
 
-			return application.objectMappings[variables.beanClass].validations;
+			return application.objectMappings[variables.entityName].validations;
 		}
 		return variables.validations;
 	}
@@ -428,12 +428,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 
 	function getFuntions(){
-		bc=getBeanClasss();
+		bc=getEntityName();
 
-		param name="application.objectMappings.#variables.beanClass#" default={};
-		param name="application.objectMappings.#variables.beanClass#.functions" default={};
+		param name="application.objectMappings.#variables.entityName#" default={};
+		param name="application.objectMappings.#variables.entityName#.functions" default={};
 
-		return application.objectMappings[variables.beanClass].functions;
+		return application.objectMappings[variables.entityName].functions;
 	}
 </cfscript>
 

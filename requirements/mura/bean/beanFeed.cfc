@@ -46,7 +46,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 --->
 <cfcomponent extends="mura.bean.bean" output="false">
 
-	<cfproperty name="beanClass" type="string" default="" />
+	<cfproperty name="entityName" type="string" default="" />
 	<cfproperty name="table" type="string" default="" />
 	<cfproperty name="keyField" type="string" default="" />
 	<cfproperty name="nextN" type="numeric" default="0" required="true" />
@@ -61,7 +61,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset super.init(argumentCollection=arguments)>
 	
 	<cfset variables.instance.siteID="">
-	<cfset variables.instance.beanClass=""/>
+	<cfset variables.instance.entityName=""/>
 	<cfset variables.instance.table="">
 	<cfset variables.instance.keyField="">
 	<cfset variables.instance.sortBy="" />
@@ -102,8 +102,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var i="">
 
 	<cfif not len(variables.instance.tableFieldList)>
-		<cfset variables.instance.tableFieldLookUp=variables.configBean.getValue("#variables.instance.beanClass#FieldLookUp")>
-		<cfset variables.instance.tableFieldList=variables.configBean.getValue("#variables.instance.beanClass#FieldList
+		<cfset variables.instance.tableFieldLookUp=variables.configBean.getValue("#variables.instance.entityName#FieldLookUp")>
+		<cfset variables.instance.tableFieldList=variables.configBean.getValue("#variables.instance.entityName#FieldList
 			")>
 		<cfif not len(variables.instance.tableFieldList)>
 			<cfset variables.instance.tableFieldLookUp=structNew()>
@@ -112,8 +112,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfloop list="#variables.instance.tableFieldlist#" index="i">
 				<cfset variables.instance.tableFieldLookUp["#i#"]=true>
 			</cfloop>
-			<cfset variables.configBean.setValue("#variables.instance.beanClass#FieldLookUp",variables.instance.tableFieldLookUp)>
-			<cfset variables.configBean.setValue("#variables.instance.beanClass#FieldList",variables.instance.tableFieldlist)>
+			<cfset variables.configBean.setValue("#variables.instance.entityName#FieldLookUp",variables.instance.tableFieldLookUp)>
+			<cfset variables.configBean.setValue("#variables.instance.entityName#FieldList",variables.instance.tableFieldlist)>
 		</cfif>
 	</cfif>
 </cffunction>
@@ -379,13 +379,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rs=getQuery()>
 	<cfset var it=''>
 
-	<cfif getServiceFactory().containsBean("#variables.instance.beanClass#Iterator")>
-		<cfset it=getBean("#variables.instance.beanClass#Iterator")>
+	<cfif getServiceFactory().containsBean("#variables.instance.entityName#Iterator")>
+		<cfset it=getBean("#variables.instance.entityName#Iterator")>
 	<cfelse>
 		<cfset it=getBean("beanIterator")>
 	</cfif>
 
-	<cfset it.setBeanClass(getValue('beanClass'))>
+	<cfset it.setEntityName(getValue('entityName'))>
 
 	<cfset it.setQuery(rs,variables.instance.nextN)>
 	<cfreturn it>

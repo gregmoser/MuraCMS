@@ -94,7 +94,7 @@ Mura CMS.
 		<cfset variables.instance.template="" />
 
 		<cfset variables.primaryKey = 'emailid'>
-		<cfset variables.beanClass = 'email'>
+		<cfset variables.entityName = 'email'>
 			
 		<cfreturn this />
 	</cffunction>

@@ -65,7 +65,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.type=2>
 	<cfset variables.instance.categoryID="">
 	<cfset variables.instance.siteID="">
-	<cfset variables.instance.beanClass="user">
+	<cfset variables.instance.entityName="user">
 	<cfset variables.instance.sortBy="lname" />
 	<cfset variables.instance.sortDirection="asc" />
 	<cfset variables.instance.table="tusers">

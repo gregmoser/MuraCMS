@@ -147,7 +147,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.newAddresses = arrayNew(1) />
 
 	<cfset variables.primaryKey = 'userid'>
-	<cfset variables.beanClass = 'user'>
+	<cfset variables.entityName = 'user'>
 	
 	<cfreturn this />
 </cffunction>
