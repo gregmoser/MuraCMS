@@ -426,6 +426,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		variables.validations=arguments.validations;
 		return this;
 	}
+
+	function getFuntions(){
+		bc=getBeanClasss();
+
+		param name="application.objectMappings.#variables.beanClass#" default={};
+		param name="application.objectMappings.#variables.beanClass#.functions" default={};
+
+		return application.objectMappings[variables.beanClass].functions;
+	}
 </cfscript>
 
 </cfcomponent>
