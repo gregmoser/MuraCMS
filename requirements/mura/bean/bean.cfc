@@ -78,38 +78,38 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		if(len(arguments.MissingMethodName)){
 
-			if(variables.entityName != ''  && isdefined('application.objectMappings.#variables.entityName#.functions.#arguments.MissingMethodName#')){
+			if(variables.entityName != ''  && isdefined('application.objectMappings.#variables.entityName#.synthedFunctions.#arguments.MissingMethodName#')){
 				try{
 
 					if(not structKeyExists(arguments,'MissingMethodArguments')){
 						arguments.MissingMethodArguments={};
 					}
 
-					if(structKeyExists(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName],'args')){
+					if(structKeyExists(application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName],'args')){
 						
-						if(structKeyExists(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args,'cfc')){
-							var bean=getBean(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.cfc);
+						if(structKeyExists(application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName].args,'cfc')){
+							var bean=getBean(application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName].args.cfc);
 							//writeDump(var=bean.getProperties());
-							if(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.functionType eq 'getEntity'){
-								application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.loadKey=bean.getPrimaryKey();
+							if(application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName].args.functionType eq 'getEntity'){
+								application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName].args.loadKey=bean.getPrimaryKey();
 							} else {
-								application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.loadKey=application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args.fkcolumn;
+								application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName].args.loadKey=application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName].args.fkcolumn;
 							}
 
-							structAppend(arguments.MissingMethodArguments,synthArgs(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].args),true);
+							structAppend(arguments.MissingMethodArguments,synthArgs(application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName].args),true);
 						}
 					}
 
 
 					//writeDump(var=arguments.MissingMethodArguments);
-					//writeDump(var=application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].exp,abort=true);
-					return evaluate(application.objectMappings[variables.entityName].functions[arguments.MissingMethodName].exp);
+					//writeDump(var=application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName].exp,abort=true);
+					return evaluate(application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName].exp);
 
 				} catch(any err){
 					if(request.muratransaction){
 						transactionRollback();
 					}				
-					writeDump(var=application.objectMappings[variables.entityName].functions[arguments.MissingMethodName]);
+					writeDump(var=application.objectMappings[variables.entityName].synthedFunctions[arguments.MissingMethodName]);
 					writeDump(var=err,abort=true);
 				}
 			} 
@@ -427,13 +427,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		return this;
 	}
 
-	function getFuntions(){
+	function getSynthedFunctions(){
 		bc=getEntityName();
 
 		param name="application.objectMappings.#variables.entityName#" default={};
-		param name="application.objectMappings.#variables.entityName#.functions" default={};
+		param name="application.objectMappings.#variables.entityName#.synthedFunctions" default={};
 
-		return application.objectMappings[variables.entityName].functions;
+		return application.objectMappings[variables.entityName].synthedFunctions;
 	}
 </cfscript>
 

@@ -183,10 +183,11 @@ component extends="mura.bean.bean" {
 			var prop={};
 			var md=getMetaData(this);
 			var loadKey="";
-
+			var dottedPath=md.fullname;
+			
 			param name="application.objectMappings.#variables.entityName#" default={};
 			application.objectMappings[variables.entityName].properties={};
-			application.objectMappings[variables.entityName].functions={};
+			application.objectMappings[variables.entityName].synthedFunctions={};
 			application.objectMappings[variables.entityName].primarykey="";
 			application.objectMappings[variables.entityName].table=md.table;
 			
@@ -268,58 +269,58 @@ component extends="mura.bean.bean" {
 			       	 		prop.column=prop.fkcolumn;
 
 			       	 		if(prop.fieldtype eq 'one-to-many'){
-			       	 			//getBean("#prop.cfc#").loadBy(argumentCollection=structAppend(arguments.MissingMethodArguments,synthArgs(application.objectMappings[variables.entityName].functions["has#prop.name#"].args),false)).recordcount
-				       	 		application.objectMappings[variables.entityName].functions['get#prop.name#Iterator']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="iterator",functionType='getEntityIterator'}};
-				       	 		application.objectMappings[variables.entityName].functions['get#prop.name#Query']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='getEntityQuery'}};
-				       	 		application.objectMappings[variables.entityName].functions['has#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='hasEntity'}};
-				       	 		application.objectMappings[variables.entityName].functions['add#prop.name#']={exp='addObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='addEntity'}};
-				       	 		application.objectMappings[variables.entityName].functions['remove#prop.name#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='removeEntity'}};
+			       	 			//getBean("#prop.cfc#").loadBy(argumentCollection=structAppend(arguments.MissingMethodArguments,synthArgs(application.objectMappings[variables.entityName].synthedFunctions["has#prop.name#"].args),false)).recordcount
+				       	 		application.objectMappings[variables.entityName].synthedFunctions['get#prop.name#Iterator']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="iterator",functionType='getEntityIterator'}};
+				       	 		application.objectMappings[variables.entityName].synthedFunctions['get#prop.name#Query']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='getEntityQuery'}};
+				       	 		application.objectMappings[variables.entityName].synthedFunctions['has#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={prop=prop.name,fkcolumn="primaryKey",cfc="#prop.cfc#",returnFormat="query",functionType='hasEntity'}};
+				       	 		application.objectMappings[variables.entityName].synthedFunctions['add#prop.name#']={exp='addObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='addEntity'}};
+				       	 		application.objectMappings[variables.entityName].synthedFunctions['remove#prop.name#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='removeEntity'}};
 
 				       	 		if(listFindNoCase('content,user,feed,category,address,site,comment',prop.name)){
 				       	 			param name="application.objectMappings.#prop.cfc#" default={};
-				       	 			param name="application.objectMappings.#prop.cfc#.functions" default={};
+				       	 			param name="application.objectMappings.#prop.cfc#.synthedFunctions" default={};
 
-				       	 			application.objectMappings[prop.cfc].functions['get#variables.entityName#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.entityName,fkcolumn="#prop.fkcolumn#",cfc="#variables.entityName#",returnFormat="this",functionType='getEntity'}};
-				       	 			//application.objectMappings[prop.cfc].functions['set#variables.entityName#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getValue("#prop.fkcolumn#"))',args={prop=variables.entityName,functionType='setEntity'}};
+				       	 			application.objectMappings[prop.cfc].synthedFunctions['get#variables.entityName#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.entityName,fkcolumn="#prop.fkcolumn#",cfc="#variables.entityName#",returnFormat="this",functionType='getEntity'}};
+				       	 			//application.objectMappings[prop.cfc].synthedFunctions['set#variables.entityName#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getValue("#prop.fkcolumn#"))',args={prop=variables.entityName,functionType='setEntity'}};
 				       	 		
 				       	 		}
 
 				       	 		
 
 					       	 	if(structKeyExists(prop,"singularname")){
-					       	 		application.objectMappings[variables.entityName].functions['get#prop.singularname#Iterator']=application.objectMappings[variables.entityName].functions['get#prop.name#Iterator'];
-					       	 		application.objectMappings[variables.entityName].functions['get#prop.singularname#Query']=application.objectMappings[variables.entityName].functions['get#prop.name#Query'];
-					       	 		application.objectMappings[variables.entityName].functions['add#prop.singularname#']=application.objectMappings[variables.entityName].functions['add#prop.name#'];
-					       	 		application.objectMappings[variables.entityName].functions['has#prop.singularname#']=application.objectMappings[variables.entityName].functions['has#prop.name#'];
-					       	 		application.objectMappings[variables.entityName].functions['remove#prop.singularname#']=application.objectMappings[variables.entityName].functions['remove#prop.name#'];
+					       	 		application.objectMappings[variables.entityName].synthedFunctions['get#prop.singularname#Iterator']=application.objectMappings[variables.entityName].synthedFunctions['get#prop.name#Iterator'];
+					       	 		application.objectMappings[variables.entityName].synthedFunctions['get#prop.singularname#Query']=application.objectMappings[variables.entityName].synthedFunctions['get#prop.name#Query'];
+					       	 		application.objectMappings[variables.entityName].synthedFunctions['add#prop.singularname#']=application.objectMappings[variables.entityName].synthedFunctions['add#prop.name#'];
+					       	 		application.objectMappings[variables.entityName].synthedFunctions['has#prop.singularname#']=application.objectMappings[variables.entityName].synthedFunctions['has#prop.name#'];
+					       	 		application.objectMappings[variables.entityName].synthedFunctions['remove#prop.singularname#']=application.objectMappings[variables.entityName].synthedFunctions['remove#prop.name#'];
 					       	 	}
 			       	 		} else if (prop.fieldtype eq 'many-to-one' or prop.fieldtype eq 'one-to-one'){
 			       	 			if(prop.fkcolumn eq 'siteid'){
-			       	 				application.objectMappings[variables.entityName].functions['get#prop.name#']={exp='getBean("settingsManager").getSite(getValue("siteID"))',args={prop=prop.name,functionType='getEntity'}};
-			       	 				application.objectMappings[variables.entityName].functions['set#prop.name#']={exp='setValue("siteID",arguments.MissingMethodArguments[1].getSiteID()))',args={prop=prop.name,functionType='setEntity'}};
+			       	 				application.objectMappings[variables.entityName].synthedFunctions['get#prop.name#']={exp='getBean("settingsManager").getSite(getValue("siteID"))',args={prop=prop.name,functionType='getEntity'}};
+			       	 				application.objectMappings[variables.entityName].synthedFunctions['set#prop.name#']={exp='setValue("siteID",arguments.MissingMethodArguments[1].getSiteID()))',args={prop=prop.name,functionType='setEntity'}};
 			       	 			} else {
-			       	 				application.objectMappings[variables.entityName].functions['get#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="#prop.fkcolumn#",cfc="#prop.cfc#",returnFormat="this",functionType='getEntity'}};
-			       	 				application.objectMappings[variables.entityName].functions['set#prop.name#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getPrimaryKey())',args={prop=prop.name,functionType='setEntity'}};
+			       	 				application.objectMappings[variables.entityName].synthedFunctions['get#prop.name#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=prop.name,fkcolumn="#prop.fkcolumn#",cfc="#prop.cfc#",returnFormat="this",functionType='getEntity'}};
+			       	 				application.objectMappings[variables.entityName].synthedFunctions['set#prop.name#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getPrimaryKey())',args={prop=prop.name,functionType='setEntity'}};
 			       	 			}
    	 			
    	 							
 			       	 			if(listFindNoCase('content,user,feed,category,address,site,comment',prop.name)){
 			       	 				
 			       	 				param name="application.objectMappings.#prop.cfc#" default={};
-					       	 		param name="application.objectMappings.#prop.cfc#.functions" default={};
+					       	 		param name="application.objectMappings.#prop.cfc#.synthedFunctions" default={};
 
 			       	 				if(prop.fieldtype eq 'many-to-one'){
 
-			       	 					application.objectMappings[prop.cfc].functions['get#variables.entityName#Iterator']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.entityName,fkcolumn=prop.fkcolumn,cfc="#variables.entityName#",returnFormat="iterator",functionType='getEntityIterator'}};
-				       	 				application.objectMappings[prop.cfc].functions['get#variables.entityName#Query']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.entityName,fkcolumn=prop.fkcolumn,cfc="#variables.entityName#",returnFormat="query",functionType='getEntityQuery'}};
-				       	 				//application.objectMappings[prop.cfc].functions['has#variables.entityName#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={prop=variables.entityName,fkcolumn=prop.fkcolumn,cfc="#variables.entityName#",returnFormat="query",functionType='hasEntity'}};
-				       	 				//application.objectMappings[prop.cfc].functions['add#variables.entityName#']={exp='addObject(arguments.MissingMethodArguments[1])',args={prop=variables.entityName,functionType='addEntity'}};
-				       	 				//application.objectMappings[prop.cfc].functions['remove#variables.entityName#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={prop=variables.entityName,functionType='removeEntity'}};
+			       	 					application.objectMappings[prop.cfc].synthedFunctions['get#variables.entityName#Iterator']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.entityName,fkcolumn=prop.fkcolumn,cfc="#variables.entityName#",returnFormat="iterator",functionType='getEntityIterator'}};
+				       	 				application.objectMappings[prop.cfc].synthedFunctions['get#variables.entityName#Query']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.entityName,fkcolumn=prop.fkcolumn,cfc="#variables.entityName#",returnFormat="query",functionType='getEntityQuery'}};
+				       	 				//application.objectMappings[prop.cfc].synthedFunctions['has#variables.entityName#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments).recordcount',args={prop=variables.entityName,fkcolumn=prop.fkcolumn,cfc="#variables.entityName#",returnFormat="query",functionType='hasEntity'}};
+				       	 				//application.objectMappings[prop.cfc].synthedFunctions['add#variables.entityName#']={exp='addObject(arguments.MissingMethodArguments[1])',args={prop=variables.entityName,functionType='addEntity'}};
+				       	 				//application.objectMappings[prop.cfc].synthedFunctions['remove#variables.entityName#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={prop=variables.entityName,functionType='removeEntity'}};
 
 			       	 				} else {
 					       	 			
-					       	 			application.objectMappings[prop.cfc].functions['get#variables.entityName#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.entityName,fkcolumn="#prop.fkcolumn#",cfc="#variables.entityName#",returnFormat="this",functionType='getEntity'}};
-					       	 			//application.objectMappings[prop.cfc].functions['set#variables.entityName#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getValue("#prop.fkcolumn#"))',args={prop=variables.entityName,functionType='setEntity'}};
+					       	 			application.objectMappings[prop.cfc].synthedFunctions['get#variables.entityName#']={exp='bean.loadBy(argumentCollection=arguments.MissingMethodArguments)',args={prop=variables.entityName,fkcolumn="#prop.fkcolumn#",cfc="#variables.entityName#",returnFormat="this",functionType='getEntity'}};
+					       	 			//application.objectMappings[prop.cfc].synthedFunctions['set#variables.entityName#']={exp='setValue("#prop.fkcolumn#",arguments.MissingMethodArguments[1].getValue(arguments.MissingMethodArguments[1].getValue("#prop.fkcolumn#"))',args={prop=variables.entityName,functionType='setEntity'}};
 				       	 			}
 			       	 			}
 			       	 			
@@ -346,7 +347,7 @@ component extends="mura.bean.bean" {
 
 			getValidations();
 
-			//getServiceFactory().declareBean(beanName=variables.entityName,dottedPath=md.name,isSingleton=false);
+			getServiceFactory().declareBean(beanName=variables.entityName,dottedPath=dottedPath,isSingleton=false);
 		}
 
 		//abort;
