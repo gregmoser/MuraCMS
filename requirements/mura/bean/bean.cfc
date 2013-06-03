@@ -144,11 +144,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				returnFormat=arguments.args.returnFormat
 			};
 
-		//writeDump(var=application.objectMappings[arguments.args.cfc].properties,abort=true);
-
-		if(structKeyExists(arguments.args,'prop') 
-			and isDefined('application.objectMappings.#arguments.args.cfc#.properties.#arguments.args.prop#.orderby')){
-			returnArgs.orderby=application.objectMappings[arguments.args.cfc].properties[arguments.args.prop].orderby;
+		if(isDefined('application.objectMappings.#getEntityName()#.properties.#arguments.args.prop#.orderby')){
+			returnArgs.orderby=application.objectMappings[getEntityName()].properties[arguments.args.prop].orderby;
 		}
 
 		return returnArgs;

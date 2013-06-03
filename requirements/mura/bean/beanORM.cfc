@@ -184,6 +184,7 @@ component extends="mura.bean.bean" versioned=false {
 			var md=getMetaData(this);
 			var loadKey="";
 			var dottedPath=md.fullname;
+			var synthArgs={};
 			
 			param name="application.objectMappings.#variables.entityName#" default={};
 			application.objectMappings[variables.entityName].properties={};
