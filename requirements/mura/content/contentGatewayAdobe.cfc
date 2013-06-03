@@ -990,7 +990,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="getApprovals" output="false">
 	<cfargument name="siteID"  type="string" />
-	<cfargument name="userID"  type="string"  required="true" default="#session.mura.userID#"/>
+	<cfargument name="membershipids"  type="string"  required="true" default="#session.mura.membershipids#"/>
 	<cfargument name="limit" type="numeric" required="true" default="100000000">
 	<cfargument name="startDate" type="string" required="true" default="">
 	<cfargument name="stopDate" type="string" required="true" default="">
@@ -1002,7 +1002,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	SELECT DISTINCT draft.contentHistID,module.Title AS module, draft.ModuleID, draft.SiteID, draft.ParentID, draft.Type, draft.subtype, draft.MenuTitle, draft.Filename, draft.ContentID,
 	 module.SiteID, draft.SiteID, draft.SiteID, draft.targetparams,draft.lastUpdate,
 	 draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
-	 tapprovalrequests.status AS approvalStatus
+	 tapprovalrequests.status AS approvalStatus, draft.displayStart, tchangesets.publishDate
 	FROM  tcontent draft INNER JOIN tcontent module ON (
 														draft.ModuleID = module.ContentID
 														and draft.siteid=module.siteID
@@ -1016,12 +1016,65 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		LEFT JOIN tcontentstats on (draft.contentID=tcontentstats.contentID 
 								and draft.siteID=tcontentstats.siteID
 								)
+		LEFT JOIN tchangesets on (draft.changesetid=tchangesets.changesetid)
 		INNER JOIN tapprovalrequests on (tapprovalrequests.contenthistid=draft.contenthistid)
 	WHERE (draft.active=0 or draft.active=1 and draft.approved=0 )
 	and tapprovalrequests.status = 'Pending'
 	<cfif not getCurrentUser().isAdminUser() and not getCurrentUser().isSuperUser()>
-		and tapprovalrequests.groupid in (<cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#session.mura.membershipids#">)
+		and tapprovalrequests.groupid in (<cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#arguments.membershipids#">)
 	</cfif>
+	<cfif isdate(arguments.stopDate)>and active.lastUpdate <=  <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.stopDate),month(arguments.stopDate),day(arguments.stopDate),23,59,0)#"></cfif>
+	<cfif isdate(arguments.startDate)>and active.lastUpdate >= <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.startDate),month(arguments.startDate),day(arguments.startDate),0,0,0)#"></cfif>
+	GROUP BY module.Title, active.ModuleID, active.ParentID, active.Type, active.subType,
+	active.MenuTitle, active.Filename, active.ContentID, draft.IsNav, module.SiteID, 
+	draft.SiteID, active.targetparams, draft.lastUpdate,
+	draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
+	tapprovalrequests.status
+	</cfquery>
+
+	<cfquery name="rs" dbtype="query" maxrows="#arguments.limit#">
+	select * from rs
+	order by #arguments.sortBy# #arguments.sortDirection#
+	</cfquery>
+
+	<cfreturn rs>
+
+</cffunction>
+
+<cffunction name="getSubmissions" output="false">
+	<cfargument name="siteID"  type="string" />
+	<cfargument name="userID"  type="string"  required="true" default="#session.mura.userID#"/>
+	<cfargument name="limit" type="numeric" required="true" default="100000000">
+	<cfargument name="startDate" type="string" required="true" default="">
+	<cfargument name="stopDate" type="string" required="true" default="">
+	<cfargument name="sortBy" type="string" required="true" default="lastUpdate">
+	<cfargument name="sortDirection" type="string" required="true" default="desc">
+	<cfset var rs="">
+
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
+	SELECT DISTINCT draft.contentHistID,module.Title AS module, draft.ModuleID, draft.SiteID, draft.ParentID, draft.Type, draft.subtype, draft.MenuTitle, draft.Filename, draft.ContentID,
+	 module.SiteID, draft.SiteID, draft.SiteID, draft.targetparams,draft.lastUpdate,
+	 draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
+	 tapprovalrequests.status AS approvalStatus, draft.displayStart, tchangesets.publishDate
+	FROM  tcontent draft INNER JOIN tcontent module ON (
+														draft.ModuleID = module.ContentID
+														and draft.siteid=module.siteID
+														)
+		LEFT JOIN tcontent active ON ( 
+										draft.ContentID = active.ContentID 
+										and active.approved=1
+										and draft.siteid=active.siteID
+									)
+		LEFT join tfiles on draft.fileID=tfiles.fileID
+		LEFT JOIN tcontentstats on (draft.contentID=tcontentstats.contentID 
+								and draft.siteID=tcontentstats.siteID
+								)
+		LEFT JOIN tchangesets on (draft.changesetid=tchangesets.changesetid)
+		INNER JOIN tapprovalrequests on (tapprovalrequests.contenthistid=draft.contenthistid)
+	WHERE (draft.active=0 or draft.active=1 and draft.approved=0 )
+	and tapprovalrequests.status = 'Pending'
+	and tapprovalrequests.userid = <cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#arguments.userid#">
+
 	<cfif isdate(arguments.stopDate)>and active.lastUpdate <=  <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.stopDate),month(arguments.stopDate),day(arguments.stopDate),23,59,0)#"></cfif>
 	<cfif isdate(arguments.startDate)>and active.lastUpdate >= <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.startDate),month(arguments.startDate),day(arguments.startDate),0,0,0)#"></cfif>
 	GROUP BY module.Title, active.ModuleID, active.ParentID, active.Type, active.subType,

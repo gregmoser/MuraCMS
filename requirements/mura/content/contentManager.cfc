@@ -224,7 +224,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="siteid" type="string"/>
 		<cfset var rs ="" />
 		
-		<cfset rs=variables.contentGateway.getApprovals(arguments.siteid) />
+		<cfset rs=variables.contentGateway.getApprovals(argumentCollection=arguments) />
 		
 		<cfreturn rs />
 	</cffunction>
@@ -232,6 +232,22 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cffunction name="getApprovalsIterator" access="public" returntype="query" output="false">
 		<cfargument name="siteid" type="string"/>
 		<cfset var rs=getApprovalsQuery(argumentCollection=arguments) />
+		<cfset var it=getBean('contentIterator')>		
+		<cfreturn it />
+	</cffunction>
+
+	<cffunction name="getSubmissionsQuery" access="public" returntype="query" output="false">
+		<cfargument name="siteid" type="string"/>
+		<cfset var rs ="" />
+		
+		<cfset rs=variables.contentGateway.getSubmissions(argumentCollection=arguments) />
+		
+		<cfreturn rs />
+	</cffunction>
+
+	<cffunction name="getSubmissionsIterator" access="public" returntype="query" output="false">
+		<cfargument name="siteid" type="string"/>
+		<cfset var rs=getSubmissionsQuery(argumentCollection=arguments) />
 		<cfset var it=getBean('contentIterator')>		
 		<cfreturn it />
 	</cffunction>

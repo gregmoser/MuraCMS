@@ -199,6 +199,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </ul>
 </div>
 
+<!---
 <cfset rsList=application.dashboardManager.getDraftList(rc.siteID,session.mura.userID,5) />
 <div id="drafts" class="well">
 <h2>#application.rbFactory.getKeyValue(session.rb,"dashboard.draftsforreview")#</h2>
@@ -211,6 +212,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 </ul>
 </div>
+--->
 </cfoutput>
 <cfset rsPluginScripts=application.pluginManager.getScripts("onDashboardSidebarBottom",rc.siteID)>
 <cfoutput query="rsPluginScripts" group="pluginID">

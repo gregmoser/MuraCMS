@@ -52,6 +52,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	//data=structNew();
 	
 	$=application.serviceFactory.getBean("MuraScope");
+
+	if(!listFindNoCase('myexpires,expires',$.event('report')) && $.event('sortby') == 'expiration'){
+		$.event('sortby','lastupdate');
+	} else if(!listFindNoCase('mysubmissions,myapprovals',$.event('report')) && $.event('sortby') == 'deadline'){
+		$.event('sortby','lastupdate');
+	}
 	
 	session.flatViewArgs["#rc.siteID#"].moduleid=$.event("moduleid");
 	session.flatViewArgs["#rc.siteID#"].sortBy=$.event("sortby");
@@ -90,8 +96,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		feed.setCategoryID($.event("categoryID"));	
 	}
 	
-	if(len($.event("sortBy"))){
-		feed.setSortBy($.event("sortBy"));	
+	if(!(listFindNoCase('myapprovals,mysubmissions',$.event("report")) && $.event("sortby") == 'deadline')){
+		feed.setSortBy($.event("sortBy"));
+	} else {
+		feed.setSortBy("lastupdate");
 	}
 	
 	if(len($.event("sortDirection"))){
@@ -123,6 +131,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		//writeDump(var=feed.getQuery(),abort=true);
 	} else if($.event('report') eq "myapprovals"){
 		drafts=$.getBean("contentManager").getApprovalsQuery($.event("siteID"));
+		//writeDump(var=subList,abort=true);
+		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
+		feed.setActiveOnly(0);
+	} else if($.event('report') eq "mysubmissions"){
+		drafts=$.getBean("contentManager").getSubmissionsQuery($.event("siteID"));
 		//writeDump(var=subList,abort=true);
 		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
 		feed.setActiveOnly(0);
@@ -161,29 +174,52 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 */
 </cfscript>
 
-<cfif iterator.getRecordcount() and listFindNoCase('mydrafts',$.event('report'))>
-	<cfset rs=iterator.getQuery()>
+<cfif iterator.getRecordcount()>
 
-	<cfset queryAddColumn(rs, "approvalStatus", 'varchar', [])>
+	<cfif listFindNoCase('mysubmissions,myapprovals',$.event('report'))>
+		<cfset rs=iterator.getQuery()>
+
+		<cfset queryAddColumn(rs, "approvalStatus", 'varchar', [])>
+		<cfset queryAddColumn(rs, "deadline", 'datetime', [])>
+
+			<cfloop query="rs">
+				<cfquery name="rstemp" dbtype="query">
+					select max(lastupdate) as maxLastUpdate,max(displayStart) as maxDisplayStart,max(publishDate) as maxPublishDate from drafts 
+					where contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#rs.contentid#">
+				</cfquery>
+
+				<cfset querySetCell(rs, "lastupdate", rstemp.maxLastUpdate, rs.currentrow)>
+				<cfset querySetCell(rs, "approvalStatus", 'Pending', rs.currentrow)>
+
+				<cfif isDate(rstemp.maxpublishDate)>
+					<cfset querySetCell(rs, "deadline", rstemp.maxpublishDate, rs.currentrow)>
+				<cfelseif isDate(rstemp.displayStart)>
+					<cfset querySetCell(rs, "deadline", rstemp.maxdisplayStart, rs.currentrow)>
+				</cfif>
+				
+			</cfloop>
+			<cfif $.event('sortby') eq 'lastupdate'>
+				<cfquery name="rs" dbtype="query">
+					select * from rs order by lastupdate #feed.getSortDirection()#
+				</cfquery>
+			<cfelseif $.event('sortby') eq 'deadline'>
+				<cfquery name="rs" dbtype="query">
+					select * from rs order by deadline #feed.getSortDirection()#
+				</cfquery>
+			</cfif>
+			
+			<cfset iterator.setQuery(rs,feed.getNextN())>
+	<cfelseif listFindNoCase('mydrafts',$.event('report'))>
+		<cfset rs=iterator.getQuery()>
 
 		<cfloop query="rs">
 			<cfquery name="rstemp" dbtype="query">
 				select max(lastupdate) as mostrecent from drafts 
 				where contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#rs.contentid#">
 			</cfquery>
-
-			<cfset querySetCell(rs, "lastupdate", rstemp.mostrecent, rs.currentrow)>
-
-			<cfquery name="rstemp" dbtype="query">
-				select contentid from drafts 
-				where contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#rs.contentid#"> 
-				and approvalStatus='Pending'
-			</cfquery>
-		
-			<cfif rstemp.recordcount>
-				<cfset querySetCell(rs, "approvalStatus", 'Pending', rs.currentrow)>
-			</cfif>
 			
+			<cfset querySetCell(rs, "lastupdate", rstemp.mostrecent, rs.currentrow)>
+				
 		</cfloop>
 		<cfif $.event('sortby') eq 'lastupdate'>
 			<cfquery name="rs" dbtype="query">
@@ -192,7 +228,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 		
 		<cfset iterator.setQuery(rs,feed.getNextN())>
-	
+	</cfif>	
 </cfif>
 
 <cfset iterator.setPage($.event('page'))>
@@ -242,6 +278,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<li><a href="" data-sortby="created"<cfif $.event("sortBy") eq "created"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.created")#</a></li>
 			<!---<li><a href="" data-sortby="releasedate"<cfif $.event("sortBy") eq "releasedate"> class="active"</cfif>>Release Date</a></li>--->
 			<li><a href="" data-sortby="menutitle"<cfif $.event("sortBy") eq "menutitle"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.title")#</a></li>
+			<cfif listfindNoCase('mysubmissions,myapprovals',$.event('report'))>
+				<li><a href="" data-sortby="deadline"<cfif $.event("sortBy") eq "deadline"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.deadline")#</a></li>
+			</cfif>
+			<cfif listfindNoCase('myexpires,expires',$.event('report'))>
+				<li><a href="" data-sortby="expiration"<cfif $.event("sortBy") eq "expiration"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.expiration")#</a></li>
+			</cfif>
 		</ul>
 	</div>
 
@@ -354,7 +396,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 
 			<h2>
-				<cfif not listFindNoCase('none,read',verdict) or $.event('report') eq 'mydrafts'>
+				<cfif not listFindNoCase('none,read',verdict) or listFindNoCase('myapprovals,mysubmissions',$.event('report'))>
 					<a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.edit')#" class="draftprompt" href="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">#HTMLEditFormat(item.getMenuTitle())#
 						<!---
 						<cfif $.event('report') eq 'mydrafts'>
@@ -369,7 +411,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							)
 						</cfif>	
 						--->
-						<cfif $.event('report') eq 'mydrafts'>
+						<cfif listFindNoCase('myapprovals,mysubmissions',$.event('report'))>
 							(
 							<cfif item.getApprovalStatus() eq 'Pending'>
 								#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#
@@ -453,6 +495,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#</a></li>
 			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#</a></li>
 			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#</a></li>
+			<li><a href="" data-report="mysubmissions"<cfif $.event("report") eq "mysubmissions"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mysubmissions")#</a></li>
 			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#</a></li>
 			<li><a href="" data-report="expires"<cfif $.event("report") eq "expires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.expires")#</a></li>
 			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#</a></li>
