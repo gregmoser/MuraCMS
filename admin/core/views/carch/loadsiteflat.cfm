@@ -125,19 +125,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		}catch(any e)
 			{writeDump(var=e,abort=true);}
 		*/
-		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(drafts.contentID));
+		feed.addParam(field="tcontent.contenthistid",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
 		//feed.setActiveOnly(0);
 
 		//writeDump(var=feed.getQuery(),abort=true);
 	} else if($.event('report') eq "myapprovals"){
 		drafts=$.getBean("contentManager").getApprovalsQuery($.event("siteID"));
+		//writeDump(var=drafts,abort=true);
 		//writeDump(var=subList,abort=true);
-		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
+		feed.addParam(field="tcontent.contenthistid",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
 		feed.setActiveOnly(0);
 	} else if($.event('report') eq "mysubmissions"){
 		drafts=$.getBean("contentManager").getSubmissionsQuery($.event("siteID"));
 		//writeDump(var=subList,abort=true);
-		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
+		feed.addParam(field="tcontent.contenthistid",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
 		feed.setActiveOnly(0);
 	}
 	
@@ -180,7 +181,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset rs=iterator.getQuery()>
 
 		<cfset queryAddColumn(rs, "approvalStatus", 'varchar', [])>
-		<cfset queryAddColumn(rs, "deadline", 'datetime', [])>
+		<cfset queryAddColumn(rs, "deadline", 'timestamp', [])>
 
 			<cfloop query="rs">
 				<cfquery name="rstemp" dbtype="query">
@@ -193,7 +194,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 				<cfif isDate(rstemp.maxpublishDate)>
 					<cfset querySetCell(rs, "deadline", rstemp.maxpublishDate, rs.currentrow)>
-				<cfelseif isDate(rstemp.displayStart)>
+				<cfelseif isDate(rstemp.maxdisplayStart)>
 					<cfset querySetCell(rs, "deadline", rstemp.maxdisplayStart, rs.currentrow)>
 				</cfif>
 				
@@ -239,6 +240,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cftry>
 
 </cfsilent>
+
 <div class="row-fluid">
 	<cfsilent>
 <cfsavecontent variable="pagination">
