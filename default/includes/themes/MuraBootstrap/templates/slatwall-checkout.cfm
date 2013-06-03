@@ -106,7 +106,7 @@ Notes:
 		<!--- START CEHECKOUT EXAMPLE 1 --->
 		<div class="row">
 			<div class="span12">
-				<h3>Checkout Example ( 3/4 Step Process: Account-Fulfillment-Payment-Confirm )</h3>
+				<h3>Checkout Example ( 3 or 4 Step Process: Account-Fulfillment-Payment-Confirm )</h3>
 			</div>
 		</div>
 		
@@ -179,7 +179,7 @@ Notes:
 								<!--- Sets up the account login processObject --->
 								<cfset forgotPasswordObj = $.slatwall.getAccount().getProcessObject('forgotPassword') />
 								
-								<!--- Start: Login Form --->
+								<!--- Start: Forgot Password Form --->
 								<form action="?s=1" method="post">
 									
 									<!--- This hidden input is what tells slatwall to try and login the account --->
@@ -204,7 +204,7 @@ Notes:
 				  					</div>
 									
 								</form>
-								<!--- End: Login Form --->
+								<!--- End: Forgot Password Form --->
 								
 							</div>
 							
@@ -535,6 +535,7 @@ Notes:
 									<th>&nbsp;</th>
 								</tr>
 								<cfloop array="#$.slatwall.cart().getOrderPayments()#" index="orderPayment">
+									<cfdump var="#orderPayment.getErrors()#" />
 									<tr>
 										<td>#orderPayment.getSimpleRepresentation()#</td>
 										<td>#orderPayment.getAmount()#</td>
@@ -625,6 +626,8 @@ Notes:
 									<form action="?s=1" method="post">
 										
 										<!--- Hidden value to identify the type of payment method this is --->
+										<input type="hidden" name="newOrderPayment.orderPaymentID" value="" />
+										<input type="hidden" name="newOrderPayment.order.orderID" value="#$.slatwall.cart().getOrderID()#" />
 										<input type="hidden" name="newOrderPayment.paymentMethod.paymentMethodID" value="#paymentDetails.paymentMethod.getPaymentMethodID()#" />
 										
 										<!--- CASH --->
@@ -888,8 +891,10 @@ Notes:
 			</div>
 			
 		<!--- No Items In Cart --->
-		<cfelse>
+		<cfelseif $.slatwall.hasSessionValue('confirmationOrderID')>
 			
+			<cfset confirmationOrder = $.slatwall.getService('orderService').getOrder( $.slatwall.getSessionValue('confirmationOrderID') ) />
+			 
 			<div class="row">
 				<div class="span12">
 					<p>There are no items in your cart.</p>
