@@ -155,20 +155,98 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		</cfsilent>
 		<cfoutput>
+		<div class="mura">
 			<img src="#application.configBean.getContext()#/admin/assets/images/logo_small_feTools.png" id="frontEndToolsHandle" onclick="if (document.getElementById('frontEndTools').style.display == 'none') { createCookie('FETDISPLAY','',5); } else { createCookie('FETDISPLAY','none',5); } toggleAdminToolbar();" />
 			<div id="frontEndTools" style="display: #Cookie.fetDisplay#">
 
-				<ul>
+				<ul id="tools-status">
+				<li id="adminStatus">
+						<cfif $.content('active') gt 0 and  $.content('approved')  gt 0>
+							<cfif len($.content('approvalStatus'))>
+								<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook# title="#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#">
+									<i class="icon-ok-circle status-published"></i> 
+									<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
+									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
+								</a>
+							<cfelse>
+								<a href="#variables.approvalrequestlink#" data-configurator="true" title="#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#" #variables.targetHook#>
+									<i class="icon-ok-circle status-published"></i> 
+									<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
+									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
+								</a>
+							</cfif>
+							
+							<!--- wildcard: approved, published --->			
+						<cfelseif len($.content('approvalStatus')) and $.content().requiresApproval() >
+							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
+								<i class="icon-warning-sign status-req-approval"></i> 
+								<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
+								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#$.content('approvalstatus')#")#
+							</a>
+						<cfelseif $.content('approved') lt 1>
+							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
+								<i class="icon-file-alt status-draft"></i> 
+								<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
+								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
+							</a>
+						<cfelse>
+							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
+								<i class="icon-book status-archived"></i> 
+								<!--- #application.rbFactory.getKeyValue(session.rb,'layout.status')#: --->
+								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
+							</a>
+						</cfif>
+					</li>
+					
+					<cfif listFindNoCase('editor,author',request.r.perm) or listFind(session.mura.memberships,'S2') >
+						<li id="adminSave" class="dropdown" style="display:none">
+							<a href="" class="dropdown-toggle" onclick="return false;">
+								<i class="icon-ok-sign"></i> Save</a>
+							<ul class="dropdown-menu">
+								<cfif (request.r.perm  eq 'editor' or listFind(session.mura.memberships,'S2')) and not variables.$.siteConfig('EnforceChangesets')><li class="mura-inline-save" data-approved="1" data-changesetid=""><a><i class="icon-ok"></i> 
+									<cfif $.content().requiresApproval()>
+										#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.sendforapproval"))#
+									<cfelse>
+										#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.publish"))#
+									</cfif></a></li></cfif>
+								<cfif listFindNoCase('editor,author',request.r.perm) or listFind(session.mura.memberships,'S2') ><li><a class="mura-inline-save" data-approved="0" data-changesetid=""><i class="icon-ok"></i>  #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savedraft"))#</a></li></cfif>
+								<cfif variables.$.siteConfig('HasChangesets') and (request.r.perm  eq 'editor' or listFind(session.mura.memberships,'S2')) >
+									<li class="dropdown-submenu"><a href=""><i class="icon-ok"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savetochangeset"))#</a>			
+										<cfset currentChangeset=application.changesetManager.read(variables.$.content('changesetID'))>
+										<cfset changesets=application.changesetManager.getIterator(siteID=variables.$.event('siteid'),published=0,publishdate=now(),publishDateOnly=false)>
+										<ul class="dropdown-menu">
+											<cfif changesets.hasNext()>
+											<cfloop condition="changesets.hasNext()">
+												<cfset changeset=changesets.next()>
+												<li>
+													<a class="mura-inline-save" data-approved="0" data-changesetid="#changeset.getChangesetID()#">#HTMLEditFormat(changeset.getName())#</a>
+												</li>
+											</cfloop>
+											<cfelse>
+												<li>
+													<a class="mura-inline-cancel">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.noneavailable"))#</a>
+												</li>
+											</cfif>
+										</ul>
+									</li>
+								</cfif>
+								<li><a class="mura-inline-cancel"><i class="icon-ban-circle"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.cancel"))#</a></li>
+							</ul>
+						</li>
+					</ul>
+					</cfif>
+					
 				<cfif not request.contentBean.getIsNew()>
+				<ul id="tools-version">
 					<cfif ListFindNoCase('editor,author',request.r.perm) or listFind(session.mura.memberships,'S2')>
-						<li id="adminEditPage" class="dropdown"><a class="dropdown-toggle"><i class="icon-pencil"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.edit')#</a>
+						<li id="adminEditPage" class="dropdown"><a class="dropdown-toggle"><i class="icon-pencil"></i><!--- #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.edit')# ---></a>
 							<ul class="dropdown-menu">
 								<li id="adminFullEdit">
-									<a href="#variables.editLink#" #variables.targetHook#><i class="icon-pencil"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.edit-full')#</a>
+									<a href="#variables.editLink#" #variables.targetHook#><i class="icon-pencil"></i>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.edit-full')#</a>
 								</li>
 								<cfif this.showInlineEditor>	
 								<li id="adminQuickEdit">
-									<a onclick="return muraInlineEditor.init();"><i class="icon-bolt"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.edit-quick')#</a>
+									<a onclick="return muraInlineEditor.init();"><i class="icon-bolt"></i>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.edit-quick')#</a>
 								</li>
 								</cfif>
 							</ul>				
@@ -177,69 +255,39 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 					<cfif ListFindNoCase('editor,author',request.r.perm) or listFind("Page,Folder,Calendar,Gallery,File,Link",request.contentBean.getType())>
 														
-							<li id="adminAddContent"><a href="#variables.newLink#" #variables.targethook# data-configurator="true"><i class="icon-plus"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.add')#</a>
+							<li id="adminAddContent"><a href="#variables.newLink#" title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.add')#" #variables.targethook# data-configurator="true"><i class="icon-plus"></i><!--- #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.add')# ---></a>
 						</li>
 					</cfif>
 
 					<cfif ListFindNoCase('editor,author',request.r.perm)>
-						<li id="adminVersionHistory"><a href="#variables.historyLink#" #variables.targethook#><i class="icon-book"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.versionhistory')#</a></li>
+						<li id="adminVersionHistory"><a href="#variables.historyLink#" title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.versionhistory')#" #variables.targethook#><i class="icon-book"></i><!--- #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.versionhistory')# ---></a></li>
 					</cfif>
 
 					<cfif (request.r.perm eq 'editor' or listFind(session.mura.memberships,'S2')) and request.contentBean.getFilename() neq "" and not request.contentBean.getIslocked()>
-						<li id="adminDelete"><a href="#variables.deleteLink#" onclick="return confirm('#jsStringFormat(application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontentrecursiveconfirm'),request.contentBean.getMenutitle()))#');"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.delete')#</a></li>
+						<li id="adminDelete"><a href="#variables.deleteLink#" title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.delete')#" onclick="return confirm('#jsStringFormat(application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deletecontentrecursiveconfirm'),request.contentBean.getMenutitle()))#');"><i class="icon-remove-sign"></i><!--- #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.delete')# ---></a></li>
 					</cfif>
-
-					<li id="adminStatus">
-						<cfif $.content('active') gt 0 and  $.content('approved')  gt 0>
-							<cfif len($.content('approvalStatus'))>
-								<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-									<i class="icon-ok"></i> 
-									#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
-									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
-								</a>
-							<cfelse>
-								<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-									<i class="icon-ok"></i> 
-									#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
-									#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
-								</a>
-							</cfif>				
-						<cfelseif len($.content('approvalStatus')) and $.content().requiresApproval() >
-							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-								<i class="icon-ok"></i> 
-								#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
-								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#$.content('approvalstatus')#")#
-							</a>
-						<cfelseif $.content('approved') lt 1>
-							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-								<i class="icon-ok"></i> 
-								#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
-								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
-							</a>
-						<cfelse>
-							<a href="#variables.approvalrequestlink#" data-configurator="true" #variables.targetHook#>
-								<i class="icon-ok"></i> 
-								#application.rbFactory.getKeyValue(session.rb,'layout.status')#:
-								#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
-							</a>
-						</cfif>
+				</ul>
+				
+				<ul id="tools-changesets">
+					<li id="cs-title"><i>CS</i> October Version</li>
+					<li class="dropdown">
+						<a href="" class="dropdown-toggle"><i class="icon-list"></i></a>
+						<ul class="dropdown-menu">
+							<li><a href="">Item 1</a></li>
+							<li><a href="">Item 2</a></li>
+							<li><a href="">Item 3</a></li>
+							<li><a href="">Item 4</a></li>
+						</ul>
 					</li>
-
-					<cfif listFind(session.mura.memberships,'S2IsPrivate')><li id="adminSiteManager"><a href="#variables.adminLink#" target="admin"><i class="icon-list-alt"></i> #application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#</a></li>
-					</cfif>
-	
-					
-				<cfelse>
-					<cfif listFind(session.mura.memberships,'S2IsPrivate')>
-						<li id="adminSiteManager404"><a href="#adminLink#" target="admin">
-							<i class="icon-list-alt"></i> #application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#</a>
-						</li>
-					</cfif>	
-				</cfif>
-				<li id="adminLogOut"><a href="?doaction=logout"><i class="icon-signout"></i>#application.rbFactory.getKeyValue(session.rb,'layout.logout')#</a></li>
+					<li><i class="icon-ul"></i></li>
+				</ul>
+				
+			<ul id="tools-user">
+				<li id="adminLogOut"><a href="?doaction=logout" title="#application.rbFactory.getKeyValue(session.rb,'layout.logout')#"><i class="icon-signout"></i>#application.rbFactory.getKeyValue(session.rb,'layout.logout')#</a></li>
 				<li id="adminWelcome">#application.rbFactory.getKeyValue(session.rb,'layout.welcome')#, #HTMLEditFormat("#session.mura.fname# #session.mura.lname#")#.</li>
 				<cfif listFindNoCase('editor,author',request.r.perm) or listFind(session.mura.memberships,'S2') >
-				<li id="adminSave" class="dropdown" style="display:none">
+				<!---
+<li id="adminSave" class="dropdown" style="display:none">
 					<a href="" class="dropdown-toggle" onclick="return false;">
 						<i class="icon-ok-sign"></i> Save</a>
 					<ul class="dropdown-menu">
@@ -273,10 +321,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<li><a class="mura-inline-cancel"><i class="icon-ban-circle"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.cancel"))#</a></li>
 					</ul>
 				</li>
+--->
+				<cfif listFind(session.mura.memberships,'S2IsPrivate')><li id="adminSiteManager"><a href="#variables.adminLink#" title="#application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#" target="admin"><i class="icon-list-alt"></i><!---  #application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')# ---></a></li>
+					</cfif>
+	
+					
+				<cfelse>
+					<cfif listFind(session.mura.memberships,'S2IsPrivate')>
+						<li id="adminSiteManager404"><a href="#adminLink#" title="#application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#" target="admin">
+							<i class="icon-list-alt"></i> #application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#</a>
+						</li>
+					</cfif>	
+				</cfif>
 				</ul>
 				</cfif>
 				
 			</div>
+		</div>
 		</cfoutput>
 	</cfif>
 

@@ -45,11 +45,13 @@
 	version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS. */
 
 // Modal Dialog
+@import "variables.less";
 @import "../bootstrap/less/mixins.less";
 @import "mixins.less";
-@import "variables.less";
 @import "dropdowns.less";
 @import "fonts.less";
+
+.mura {
 
 #frontEndToolsModalContainer {
  /* position: [Set in dialog.js]; */
@@ -291,84 +293,151 @@
 #frontEndTools > ul {
 	min-height: 30px !important;
 	list-style: none !important;
-	margin: 0 0 0 37px !important;
+	margin: 0 !important;
 	padding: 0 !important;
-	border-right: 0 solid hsla(0,0,.33,.85) !important;
-	border-left: 1px solid hsla(0,0,.19,.85) !important;
+	border-right: 1px solid hsla(0,0,.19,.85) !important;
 	overflow: visible !important;
+	float: left !important;
+	
+	&:first-child {
+		margin: 0 0 0 51px !important;
+		border-left: 1px solid hsla(0,0,.33,.85) !important;
+	}
+	
+	&:last-child {
+		float: right !important;
+	}
 }
 
 #frontEndTools > ul > li {
 	color: rgba(255,255,255,.85) !important;
 	float: left !important;
-	line-height: 30px !important;
-	margin:0 !important;
-	padding: 0 !important;
+	line-height: 22px !important;
+	min-height: 22px !important;
+	margin: 0 !important;
+	padding: 4px 2px !important;
 	list-style: none !important;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 	font-weight: normal !important;
 	font-style: normal !important;
+	font-size: 12px !important;
 	text-shadow: rgba(0,0,0,.8) 0px -1px 0px !important;
 	background: none !important;
 	text-shadow: 0 -1px 0 rgba(0,0,0,1) !important;
-	border-left: 1px solid hsla(0,0,.33,.85) !important;
-	border-right: 1px solid hsla(0,0,.19,.85) !important;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 	overflow: visible !important;
+	
+	&:first-child {
+		border-left: 0 solid hsla(0,0,.19,.85) !important;
+		padding-left: 1em !important;
+		}
+	
+	&:last-child {
+		border-right: 1px solid hsla(0,0,.33,.85) !important;
+		padding-right: 1em !important;
+		}
 	
 	&.dropdown > a > .caret {
 		margin: 12px 0 0 4px !important;
 		}
 }
 
-#frontEndTools > ul > li:first-child {
-	border-left: 0 !important;
+#frontEndTools > #tools-status > li {
+	padding-right: 1em !important;
+	border-right: 1px solid hsla(0,0,.33,.85) !important;
 }
 
-#frontEndTools > ul > li#adminSiteManager, #frontEndTools > ul > li#adminSiteManager404 {
+/*
+#frontEndTools > ul li:first-child {
+	border-left: 0 !important;
+}
+*/
+
+#frontEndTools > ul li#adminSiteManager, #frontEndTools > ul > li#adminSiteManager404 {
 	border-right: 0 !important;
 }
 
-#frontEndTools ul > li > a {
+#frontEndTools > ul > li > a {
 	display: block !important;
-	color: rgba(255,255,255,1) !important;
-	background: transparent !important;
+	color: @gray !important;
+	background: #ccc !important;
+	background: rgba(255,255,255,.2) !important;
+	.border-radius(3px);
 	font-size: 12px !important;
-	line-height: 29px !important;
-	height: 30px !important;
-	padding: 0 1.25em 0 .75em !important;
+	line-height: 24px !important;
+	height: 20px !important;
+	line-height: 20px !important;
+	padding: 1px 3px !important;
 	text-decoration: none !important;
 	font-weight: normal !important;
 	font-style: normal !important;
 	outline: 0 !important;
 	text-shadow: 0 -1px 0 rgba(0,0,0,.9) !important;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-}
+	}
 
-#frontEndTools i {
-	color:@black !important;
+#frontEndTools > ul > li > a > i {
+	color: @grayDarker !important;
 	font-size: 16px !important;
 	text-shadow: 0 1px 0 rgba(255,255,255,.15) !important;
 	position: relative !important;
 	top: 2px !important;
-	width: 1.1em !important;
+	width: 1em !important;
 	padding-top: 0 !important;
 	padding-bottom: 0 !important;
-	line-height: 1 !important;
+	line-height: .8 !important;
 	overflow: visible !important;
+	
+	&.icon-ok-circle {
+		//color: #70F706 !important;
+		/* text-shadow: 0px 0px 6px rgba(122,248,5,0.55) !important; */
+		}
+	
+	//&.icon-plus {
+	//	top: 3px !important;
+	//	}
+	
+	}
+	
+#frontEndTools > #tools-changesets > #cs-title > i {
+	color: @grayDarker !important;
+	background: #ccc !important;
+	background: rgba(255,255,255,.2) !important;
+	font-size: 11px !important;
+	font-weight: bold !important;
+	font-style: normal !important;
+	text-align: center;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+	text-shadow: 0 1px 0 rgba(255,255,255,.15) !important;
+	letter-spacing: -1px;
+	position: relative !important;
+	padding: 3px 4px 3px 3px !important;
+	line-height: .8 !important;
+	overflow: visible !important;
+	.border-radius(18px);
+	margin-right: .25em;
+	}
+
+#frontEndTools > #tools-user {
+	
+	> li {
+	
+	}
+	
 }
 
 #frontEndTools > #adminSiteManager i {
 	width: 1.3em !important;
-}
+	}
 
 #frontEndTools > ul > li a:hover {
-	color: @white !important;
-}
+	color: @gray !important;
+	}
 
 #frontEndTools > ul > li > a:hover > i {
-	color: @gray !important;
+	color: @white !important;
 	text-shadow: 0 -1px 0 rgba(0,0,0,1) !important;
-}
+	
+	}
 
 #frontEndTools > ul > li#adminWelcome {
 	float: right !important;
@@ -378,7 +447,7 @@
 	font-size: 11px !important;
 	line-height: 30px !important;
 	color: @gray !important;
-}
+	}
 
 #frontEndTools > ul > li#adminLogOut {
 	float: right !important;
@@ -386,7 +455,7 @@
 	padding: 4px 0 0 0 !important;
 	text-align: center !important;
 	border: 0 !important;
-}
+	}
 
 #frontEndTools > ul > li#adminLogOut > a {
 	display: block !important;
@@ -400,16 +469,16 @@
 	background: #898989 !important;
 	.box-shadow(0 0 4px rgba(0,0,0,.75) inset) !important;
 	text-shadow: 0 1px 0 rgba(255,255,255,.2) !important;
-}
+	}
 
 #frontEndTools > ul > li#adminLogOut i {
 	font-size: 13px !important;
 	color: darken(@grayDark,10%) !important;
 	line-height: 14px !important;
 	height: 16px !important;
-}
+	}
 
-#frontEndTools ul li#adminLogOut a:hover {
+#frontEndTools > ul li#adminLogOut a:hover {
 	
 }
 
@@ -425,7 +494,7 @@
 	font-style: normal !important;
 	background: transparent !important;
 	border: 0 !important;
-}
+	}
 
 #frontEndTools > ul > li#adminSave > a {
 	position: relative !important;
@@ -451,15 +520,15 @@
 		> i {
 			color: @blueDarker !important;
 			text-shadow: 0 1px 0 rgba(255,255,255,0.15) !important;
-		}
+			}
 		
-	}
+		}
 	
 	.caret {
 		border-top-color: @blueDarker !important;
 		margin: 9px 0 0 4px !important;
 		}
-}
+	}
 	
 #frontEndTools > ul > li.dropdown .dropdown-menu {
 		
@@ -498,32 +567,32 @@
 		i {
 			color: @grayDark !important;
 			top: 0px !important;
-			font-size: 12px !important;
+			font-size: 16px !important;
 			margin-right: 2px !important;
 			}
 		
 		li > a:hover i {
 			color: @blue !important;
 			}
-}
+	}
 
 #frontEndTools > ul > li#adminEditPage .dropdown-menu {
 	.border-top-radius(0) !important;
-}
+	}
 
-#frontEndTools ul li.dropdown-submenu a {
+#frontEndTools > ul li.dropdown-submenu a {
 	max-width: 180px !important;
 	.text-overflow();
-}
+	}
 
-#frontEndTools ul li.dropdown-submenu > a:after {
+#frontEndTools > ul li.dropdown-submenu > a:after {
 	border-left-color: @grayLight !important;
 	margin-top: 1px !important;
 	margin-right: 0 !important;
 	margin-left: -5px !important;
-}
+	}
 
-body .mura-editable {
+body > .mura-editable {
 
 		position: relative !important;
 		min-height: 20px !important;
@@ -574,15 +643,13 @@ body .mura-editable {
 			
 			}
 	}
+} // End .mura
 	
-// CK Editor	
-		
-.editableObject .cke_editable form { border: 0 !important; padding: 0 !important;}
-	
+// CK Editor			
+.editableObject .cke_editable form { border: 0 !important; padding: 0 !important;}	
 .mura-edit-mode #frontEndTools > ul > li.dropdown:hover > ul.dropdown-menu { display: block !important; }
 
 // Z-Indexes
-
 #frontEndToolsModalContainer { z-index: 99999; }
 #shadowbox_container { z-index: 499997; }
 #shadowbox_overlay { z-index: 499996; }
