@@ -1,4 +1,4 @@
-component extends="mura.bean.beanORM" table="tapprovalactions" {
+component extends="mura.bean.beanORM" table="tapprovalactions" entityname="approvalAction"{
 
 	property name="actiontID" fieldtype="id";
     property name="actionType" ormtype="varchar" length="50" default="";

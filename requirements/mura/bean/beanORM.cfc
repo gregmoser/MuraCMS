@@ -347,7 +347,7 @@ component extends="mura.bean.bean" {
 
 			getValidations();
 
-			getServiceFactory().declareBean(beanName=variables.entityName,dottedPath=dottedPath,isSingleton=false);
+			//getServiceFactory().declareBean(beanName=variables.entityName,dottedPath=dottedPath,isSingleton=false);
 		}
 
 		//abort;

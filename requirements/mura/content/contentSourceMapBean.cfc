@@ -1,4 +1,4 @@
-component extends="mura.bean.beanORM" table="tcontentsourcemaps" {
+component extends="mura.bean.beanORM" table="tcontentsourcemaps" entityname="contentSourceMap"{
 
     property name="mapid" fieldtype="id";
     property name="activeContent" fieldtype="one-to-one" cfc="content" fkcolumn="contentid";

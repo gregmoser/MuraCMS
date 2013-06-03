@@ -1,4 +1,4 @@
-component extends="mura.bean.beanORM"  table="tapprovalmemberships" {
+component extends="mura.bean.beanORM"  table="tapprovalmemberships" entityname="approvalChainMembership"{
 
 	property name="membershipID" fieldtype="id";
     property name="orderno" type="int" default="1";

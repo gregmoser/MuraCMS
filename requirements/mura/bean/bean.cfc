@@ -353,6 +353,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 
 	function getEntityName(){
+
 		if(!len(variables.entityName)){
 			var md=getMetaData(this);
 
@@ -361,7 +362,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			} else {
 				variables.entityName=listLast(md.name,".");
 
-				if(right(variables.entityName,4) eq "bean"){
+				if(variables.entityName != 'bean' && right(variables.entityName,4) eq "bean"){
 					variables.entityName=left(variables.entityName,len(variables.entityName)-4);
 				}
 			}
