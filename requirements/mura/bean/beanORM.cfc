@@ -129,8 +129,11 @@ component extends="mura.bean.bean" versioned=false {
 	}
 
 	function getTable(){
-		//writeDump(var=application.objectMappings[variables.entityName],abort=true);
 		return application.objectMappings[variables.entityName].table;
+	}
+
+	function hasTable(){
+		return structKeyExists(application.objectMappings[variables.entityName],'table');
 	}
 
 	function getBundleable(){
@@ -142,10 +145,14 @@ component extends="mura.bean.bean" versioned=false {
 	}
 
 	function getColumns(){
-		if(!getDbUtility().tableExists()){
-			checkSchema();
+		if(hasTable()){
+			if(!getDbUtility().tableExists()){
+				checkSchema();
+			}
+			return getDbUtility().columns();
+		} else {
+			return {};
 		}
-		return getDbUtility().columns();
 	}
 
 	function getSite(){
@@ -155,16 +162,17 @@ component extends="mura.bean.bean" versioned=false {
 	function checkSchema(){
 		var props=getProperties();
 
-		for(var prop in props){
-			table=props[prop].table;
-			if(props[prop].persistent){
-				getDbUtility().addColumn(argumentCollection=props[prop]);
+		if(hasTable()){
+			for(var prop in props){
+				if(props[prop].persistent){
+					getDbUtility().addColumn(argumentCollection=props[prop]);
 
-				if(structKeyExists(props[prop],"fieldtype")){
-					if(props[prop].fieldtype eq "id"){
-						getDbUtility().addPrimaryKey(argumentCollection=props[prop]);
-					} else if ( listFindNoCase('one-to-many,many-to-one',props[prop].fieldtype) ){
-						getDbUtility().addIndex(argumentCollection=props[prop]);
+					if(structKeyExists(props[prop],"fieldtype")){
+						if(props[prop].fieldtype eq "id"){
+							getDbUtility().addPrimaryKey(argumentCollection=props[prop]);
+						} else if ( listFindNoCase('one-to-many,many-to-one',props[prop].fieldtype) ){
+							getDbUtility().addIndex(argumentCollection=props[prop]);
+						}
 					}
 				}
 			}
@@ -190,7 +198,6 @@ component extends="mura.bean.bean" versioned=false {
 			application.objectMappings[variables.entityName].properties={};
 			application.objectMappings[variables.entityName].synthedFunctions={};
 			application.objectMappings[variables.entityName].primarykey="";
-			application.objectMappings[variables.entityName].table=md.table;
 			
 			if(structKeyExists(md,'versioned') && md.versioned){
 				application.objectMappings[variables.entityName].versioned=true;
@@ -214,6 +221,10 @@ component extends="mura.bean.bean" versioned=false {
 
 			if(structKeyExists(md,'orderby')){
 				application.objectMappings[variables.entityName].orderby=md.orderby;
+			}
+
+			if(structKeyExists(md,'table')){
+				application.objectMappings[variables.entityName].table=md.table;
 			}
 
 			for (md; 
