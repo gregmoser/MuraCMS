@@ -146,6 +146,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		if(isDefined('application.objectMappings.#getEntityName()#.properties.#arguments.args.prop#.orderby')){
 			returnArgs.orderby=application.objectMappings[getEntityName()].properties[arguments.args.prop].orderby;
+		} else if(isDefined('application.objectMappings.#arguments.args.cfc#.orderby')){
+			returnArgs.orderby=application.objectMappings[arguments.args.cfc].orderby;
 		}
 
 		return returnArgs;

@@ -84,6 +84,5 @@
   <input type=hidden name="chainID" value="#chain.getchainID()#">
 </div>
 </form>
-<cfdump var="#chain.getMembershipQUery()#">
 <cfinclude template="js.cfm">
 </cfoutput>

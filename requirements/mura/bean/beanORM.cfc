@@ -212,6 +212,10 @@ component extends="mura.bean.bean" versioned=false {
 				application.objectMappings[variables.entityName].bundleable=false;
 			}
 
+			if(structKeyExists(md,'orderby')){
+				application.objectMappings[variables.entityName].orderby=md.orderby;
+			}
+
 			for (md; 
 			    structKeyExists(md, "extends"); 
 			    md = md.extends) 
