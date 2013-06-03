@@ -130,7 +130,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfcase>
 					</cfswitch>
 					<cfif rc.originalfuseaction eq 'hist'>	
-					<cfif rc.perm neq 'none'>
+					<cfif rc.perm neq 'none' and application.configBean.getPurgeDrafts() or (listFind(session.mura.memberships,'Admin;#application.settingsManager.getSite(rc.siteid).getPrivateUserPoolID()#;0') or listFind(session.mura.memberships,'S2'))>
 						<a class="btn" href="index.cfm?muraAction=cArch.update&action=deletehistall&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactdisplay)#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearversionhistoryconfirm'))#',this.href)"><i class="icon-remove-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearversionhistory')#</a>
 					</cfif>
 					<cfelse>
