@@ -269,9 +269,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</ul>
 				
 				<ul id="tools-changesets">
-					<li id="cs-title"><i>CS</i> October Version</li>
+					<li id="cs-title" class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown"><i>CS</i>October Version</a>
+						<ul class="dropdown-menu">
+							<li><a href="">Item 1</a></li>
+							<li><a href="">Item 2</a></li>
+							<li><a href="">Item 3</a></li>
+							<li><a href="">Item 4</a></li>
+						</ul>							
+					</li>
 					<li class="dropdown">
-						<a href="" class="dropdown-toggle"><i class="icon-list"></i></a>
+						<a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-list"></i></a>
 						<ul class="dropdown-menu">
 							<li><a href="">Item 1</a></li>
 							<li><a href="">Item 2</a></li>
@@ -279,8 +286,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							<li><a href="">Item 4</a></li>
 						</ul>
 					</li>
-					<li><i class="icon-ul"></i></li>
+					
+					<!--- I can't figure out how to trigger the tooltip but here are the icons for each status:
+						In Selected Changeset - icon-check
+						In Earlier Changeset - icon-code-fork
+						Not in a Changeset - icon-ban-circle --->
+					<li><a href="" data-toggle="tooltip" title="first tooltip"><i class="icon-check"></i></a></li>
 				</ul>
+				
+				<cfif listFind(session.mura.memberships,'S2IsPrivate')>
+				<ul id="adminSiteManager"><li><a href="#variables.adminLink#" title="#application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#" target="admin"><i class="icon-list-alt"></i><!---  #application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')# ---></a></li></ul>
+				</cfif>
 				
 			<ul id="tools-user">
 				<li id="adminLogOut"><a href="?doaction=logout" title="#application.rbFactory.getKeyValue(session.rb,'layout.logout')#"><i class="icon-signout"></i>#application.rbFactory.getKeyValue(session.rb,'layout.logout')#</a></li>
@@ -321,11 +337,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<li><a class="mura-inline-cancel"><i class="icon-ban-circle"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.cancel"))#</a></li>
 					</ul>
 				</li>
---->
-				<cfif listFind(session.mura.memberships,'S2IsPrivate')><li id="adminSiteManager"><a href="#variables.adminLink#" title="#application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#" target="admin"><i class="icon-list-alt"></i><!---  #application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')# ---></a></li>
-					</cfif>
-	
-					
+--->					
 				<cfelse>
 					<cfif listFind(session.mura.memberships,'S2IsPrivate')>
 						<li id="adminSiteManager404"><a href="#adminLink#" title="#application.rbFactory.getKeyValue(session.rb,'layout.sitemanager')#" target="admin">
