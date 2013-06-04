@@ -88,15 +88,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					where moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#rc.ModuleID#">
 				</cfquery>
 
+				<!---
 				<cfif len(rsLocation.location)>
 					<cfset location=rsLocation.location>
 				<cfelse>
 					<cfif structKeyExists(rc.pluginXML.plugin.displayobjects.xmlAttributes,"location")>
 						<cfset location=rc.pluginXML.plugin.displayobjects.xmlAttributes.location>
 					<cfelse>
+				--->
 						<cfset location="global">
+				
+				<!---
 					</cfif>
 				</cfif>
+				--->
 
 				<cfif structKeyExists(rc.pluginXML.plugin.settings,"setting")>
 					<cfset settingsLen=arraylen(rc.pluginXML.plugin.settings.setting)/>
@@ -214,7 +219,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								</ul>
 							</div>
 						</div>
-
+						<!---
 						<div class="span3">
 							<label class="control-label">Display Objects Location</label>
 							<div class="controls">
@@ -236,6 +241,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								</div>
 							</div>
 						</span>
+						--->
 					</div>
 				</div>
 			<cfelse>

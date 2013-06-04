@@ -383,7 +383,9 @@ select * from tplugins order by #arguments.orderby#
 			<cfset pluginXML=getPluginXML(modID)>
 			<cfset rsPlugin=getPlugin(modID)>
 			
+			<!---
 			<cfset deployArgs.location="global">
+			--->
 			<cfset deployArgs.overwrite="false">
 			
 			<cfif structKeyExists(pluginXML.plugin,"package") and len(pluginXML.plugin.package.xmlText)>
@@ -552,11 +554,15 @@ select * from tplugins order by #arguments.orderby#
 				<cfset displayObject.setModuleID(modID) />
 				<cfset displayObject.setName(pluginXML.plugin.displayobjects.displayobject[i].xmlAttributes.name) />
 				<cfset displayObject.loadByName() />
+				<!---
 				<cfif structKeyExists(pluginXML.plugin.displayobjects.xmlAttributes,"location")>
 					<cfset displayObject.setLocation(pluginXML.plugin.displayobjects.xmlAttributes.location) />
 				<cfelse>
+				--->
 					<cfset displayObject.setLocation("global") />
+				<!---
 				</cfif>
+				--->
 				<cfif structKeyExists(pluginXML.plugin.displayobjects.displayobject[i].xmlAttributes,"displayobjectfile")>
 					<cfset displayObject.setDisplayObjectFile(pluginXML.plugin.displayobjects.displayobject[i].xmlAttributes.displayobjectfile) />
 				<cfelse>
@@ -987,12 +993,7 @@ select * from tplugins order by #arguments.orderby#
 	<cfset arguments.args.package=rereplace(arguments.args.package,"[^a-zA-Z0-9\-_]","","ALL")>
 	
 	<cfif len(arguments.args.package)>
-		 <cfif structKeyExists(pluginXML.plugin,"directoryFormat") 
-		 		and pluginXML.plugin.directoryFormat.xmlText eq "packageOnly">
-		 	<cfset directory=arguments.args.package>
-		<cfelse>
-			<cfset directory="#arguments.args.package#_#pluginConfig.getPluginID()#">
-		</cfif>
+		<cfset directory=arguments.args.package>
 	<cfelse>
 		<cfset directory=pluginConfig.getPluginID()>
 	</cfif>
@@ -1051,12 +1052,13 @@ select * from tplugins order by #arguments.orderby#
 	
 	<cfquery>
 	update tplugindisplayobjects 
-	set location=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.location#">
+	set location='global'
 	where moduleID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.args.moduleID#">
 	</cfquery>
 	
 	<cfset loadPlugins() />
 
+	<!---
 	<cfif arguments.args.location eq "local" and structKeyExists(arguments.args,"siteAssignID") and len(arguments.args.siteAssignID)>
 		<cfquery name="rsObjects" dbType="query">
 		select * from variables.rsDisplayObjects
@@ -1084,6 +1086,7 @@ select * from tplugins order by #arguments.orderby#
 		</cfloop>
 		</cfif>
 	</cfif>
+	--->
 	
 	<cfif not isDefined("arguments.args.autoDeploy") or arguments.args.autoDeploy>
 		<cfset pluginConfig=getConfig(arguments.args.moduleID,'',false) />
@@ -1887,11 +1890,11 @@ select * from tplugins order by #arguments.orderby#
 		<cfif rsDisplayObject.recordcount>
 		<cftry>
 		<cfif listLast(rsDisplayObject.displayobjectfile,".") neq "cfm">
-			<cfif rsDisplayObject.location neq "local">
+			<!---<cfif rsDisplayObject.location neq "local">
 				<cfset componentPath="plugins.#rsDisplayObject.directory#.#rsDisplayObject.displayobjectfile#">
-			<cfelse>
+			<cfelse>--->
 				<cfset componentPath="#variables.configBean.getWebRootMap()#.#event.getSite().getDisplayPoolID()#.includes.plugins.#rsDisplayObject.directory#.#rsDisplayObject.displayobjectfile#">
-			</cfif>
+			<!---</cfif>--->
 			<cfset eventHandler=getComponent(componentPath, rsDisplayObject.pluginID, event.getValue('siteID'),rsDisplayObject.docache)>
 			<cfset tracePoint=initTracePoint("#getMetaData(eventHandler).name#.#rsDisplayObject.displaymethod#")>
 			<cfsavecontent variable="theDisplay1">
