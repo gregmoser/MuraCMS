@@ -71,19 +71,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfquery name="rsDrafts" dbtype="query">
 	select distinct contentid from rsDrafts
 </cfquery>
-<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mydrafts&siteID=#session.siteid#&sortby=lastupdate&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mydrafts")# (#rsDrafts.recordcount#)</a>
+<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mydrafts&siteID=#session.siteid#&sortby=lastupdate&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mydrafts")# <span class="badge badge-important">#rsDrafts.recordcount#</span></a>
 
 <cfset rsDrafts=$.getBean('contentManager').getSubmissionsQuery(session.siteid)>
 <cfquery name="rsDrafts" dbtype="query">
 	select distinct contentid from rsDrafts
 </cfquery>
-<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mysubmissions&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mysubmissions")# (#rsDrafts.recordcount#)</a>
+<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mysubmissions&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mysubmissions")# <span class="badge badge-important">#rsDrafts.recordcount#</span></a>
 
 <cfset rsDrafts=$.getBean('contentManager').getApprovalsQuery(session.siteid)>
 <cfquery name="rsDrafts" dbtype="query">
 	select distinct contentid from rsDrafts
 </cfquery>
-<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=myapprovals&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.myapprovals")# (#rsDrafts.recordcount#)</a>
+<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=myapprovals&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.myapprovals")# <span class="badge badge-important">#rsDrafts.recordcount#</span></a>
 
 <cfif $.siteConfig('hasChangesets')
 	and application.permUtility.getModulePerm('00000000000000000000000000000000014',rc.siteid) 
@@ -104,7 +104,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif rsChangesets.recordcount>	
 		<div class="btn-group">
 		  <a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
-		    #application.rbFactory.getKeyValue(session.rb,"dashboard.pendingchangesets")# (#totalpending.totalpending#)
+		    #application.rbFactory.getKeyValue(session.rb,"dashboard.pendingchangesets")# <span class="badge badge-important">#totalpending.totalpending#</span>
 		    <span class="caret"></span>
 		  </a>
 		  <ul class="dropdown-menu">
@@ -112,7 +112,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<li>
 					<a href="./?muraAction=cChangesets.assignments&changesetID=#rsChangesets.changesetID#&siteid=#session.siteid#">
 						#HTMLEditFormat(rsChangesets.name)#
-						<cfif isDate(rsChangesets.publishDate)> (#LSDateFormat(rsChangesets.publishDate,session.dateKeyFormat)#)</cfif> (#rsChangesets.pending#)
+						<cfif isDate(rsChangesets.publishDate)> (#LSDateFormat(rsChangesets.publishDate,session.dateKeyFormat)#)</cfif> <span class="badge badge-important">#rsChangesets.pending#</span>
 					</a>
 				</li>
 			</cfloop>
