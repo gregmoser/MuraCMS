@@ -45,8 +45,9 @@
 	version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS. */
 
 // Modal Dialog
+@import "../bootstrap/less/bootstrap.less";
 @import "variables.less";
-@import "../bootstrap/less/mixins.less";
+//@import "../bootstrap/less/mixins.less";
 @import "mixins.less";
 @import "dropdowns.less";
 @import "fonts.less";
@@ -660,6 +661,14 @@
 			
 			}
 	}
+	
+#draft-prompt table {
+	.table;
+	.table-bordered;
+	.table-condensed;
+	//.table-striped;
+	font-size: 11px !important;
+}
 	
 // CK Editor			
 .editableObject .cke_editable form { border: 0 !important; padding: 0 !important;}	

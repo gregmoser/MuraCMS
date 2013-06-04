@@ -51,7 +51,74 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfsavecontent variable="draftprompdata.message">
 	<cfoutput>
 		<div id="draft-prompt">
-			<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.dialog')#</p>
+		<p class="alert alert-info">#application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.dialog')#</p>
+			<table>
+				<thead>
+					<tr>
+						<th colspan="4">Published Version</th>
+					</tr>
+				</thead>
+				<tbody>
+					<td>Lorem Ipsum Dolor Site Amet</td>
+					<td>6/5/13 9:18 AM</td>
+					<td>R. Thompson</td>
+					<td><i class="icon-pencil"></i></td>
+				</tbody>
+			</table>
+			<table>
+				<thead>
+					<tr>
+						<th colspan="4">Latest Draft</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Lorem Ipsum Dolor Site Amet</td>
+						<td>6/5/13 9:18 AM</td>
+						<td>R. Thompson</td>
+						<td><i class="icon-pencil"></i></td>
+					</tr>
+				</tbody>
+			</table>
+			<table>	
+				<thead>
+					<tr>
+						<th colspan="4">Change Sets</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Lorem Ipsum Dolor Site Amet</td>
+						<td>6/5/13 9:18 AM</td>
+						<td>R. Thompson</td>
+						<td><i class="icon-pencil"></i></td>
+					</tr>
+				</tbody>
+			</table>
+			<table>	
+				<thead>
+					<tr>
+						<th colspan="4">Awaiting Approval</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Lorem Ipsum Dolor Site Amet</td>
+						<td>6/5/13 9:18 AM</td>
+						<td>R. Thompson</td>
+						<td><i class="icon-pencil"></i></td>
+					</tr>
+				</tbody>
+			</table>
+					
+						
+		
+		
+		
+		
+		
+		
+			<p class="alert alert-info">#application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.dialog')#</p>
 				<a href="##" class="btn btn-large btn-block draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#"><!--- <i class="icon-pencil"></i>  --->#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#</a>
 			<cfif draftprompdata.hasdraft>
 			<a href="##" class="btn btn-large btn-block draft-prompt-option" data-contenthistid="#draftprompdata.historyid#"><!--- <i class="icon-pencil"></i>  --->
@@ -64,7 +131,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 			<cfif draftprompdata.pendingchangesets.recordcount>
 			
-			<!---
+
 <div class="btn-group btn-block">
 			  <a class="btn btn-large btn-block dropdown-toggle" data-toggle="dropdown" style="font-size: 14px !important;" href="##">
 			    Edit a Version in a Change Set
@@ -78,7 +145,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfloop>
 			 </ul>
 			</div>
---->
+			
 			<h1><!--- <i class="icon-arrow-right"></i>  --->#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.editversioninchangeset')#</h1>
 				<cfloop query="draftprompdata.pendingchangesets">
 					<a href="##" class="draft-prompt-option btn btn-large btn-block" data-contenthistid="#draftprompdata.pendingchangesets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangesets.changesetName)#
@@ -105,11 +172,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			 </ul>
 			</div>
 --->
-			<h1><!--- <i class="icon-arrow-right"></i>  --->#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.theseversionsapproval')#</h1>
+			<!---<h1><!--- <i class="icon-arrow-right"></i>  --->#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.theseversionsapproval')#</h1>
 				<cfloop query="draftprompdata.yourapprovals">
 					<a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" class="draft-prompt-approval btn btn-large btn-block">#LSDateFormat(draftprompdata.yourapprovals.lastupdate)# #LSTimeFormat(draftprompdata.yourapprovals.lastupdate,"medium")#
 					</a>
-				</cfloop>	
+				</cfloop>--->	
 			</cfif>
 		</div>
 	</cfoutput>
