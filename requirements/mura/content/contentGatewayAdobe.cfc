@@ -1018,7 +1018,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								)
 		LEFT JOIN tchangesets on (draft.changesetid=tchangesets.changesetid)
 		INNER JOIN tapprovalrequests on (tapprovalrequests.contenthistid=draft.contenthistid)
-	WHERE (draft.active=0 or draft.active=1 and draft.approved=0 )
+	WHERE 
+	draft.siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#">
+	and (draft.active=0 or draft.active=1 and draft.approved=0 )
 	and tapprovalrequests.status = 'Pending'
 	<cfif not getCurrentUser().isAdminUser() and not getCurrentUser().isSuperUser()>
 		and tapprovalrequests.groupid in (<cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#arguments.membershipids#">)
@@ -1071,7 +1073,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								)
 		LEFT JOIN tchangesets on (draft.changesetid=tchangesets.changesetid)
 		INNER JOIN tapprovalrequests on (tapprovalrequests.contenthistid=draft.contenthistid)
-	WHERE (draft.active=0 or draft.active=1 and draft.approved=0 )
+	WHERE 
+	draft.siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#">
+	and (draft.active=0 or draft.active=1 and draft.approved=0 )
 	and tapprovalrequests.status = 'Pending'
 	and tapprovalrequests.userid = <cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#arguments.userid#">
 

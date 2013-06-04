@@ -125,7 +125,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		}catch(any e)
 			{writeDump(var=e,abort=true);}
 		*/
-		feed.addParam(field="tcontent.contenthistid",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
+		feed.addParam(field="tcontent.contentid",datatype="varchar",condition="in",criteria=valuelist(drafts.contentid));
 		//feed.setActiveOnly(0);
 
 		//writeDump(var=feed.getQuery(),abort=true);
@@ -205,7 +205,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfquery>
 			<cfelseif $.event('sortby') eq 'deadline'>
 				<cfquery name="rs" dbtype="query">
-					select * from rs order by deadline #feed.getSortDirection()#
+					select * from rs order by deadline #feed.getSortDirection()#, lastupdate #feed.getSortDirection()#
 				</cfquery>
 			</cfif>
 			
