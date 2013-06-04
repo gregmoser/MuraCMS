@@ -2257,9 +2257,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif cb.getActive()>
 			<cfif history.recordcount or data.pendingchangesets.recordcount>
 				<cfquery name="newDraft" dbtype="query">
-					select contenthistid, lastupdate, approvalStatus from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
+					select contenthistid, menutitle, lastupdate, lastupdateby, approvalStatus from history where lastUpdate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#cb.getLastUpdate()#"> 
 					union 
-					select contenthistid, lastupdate, approvalStatus from data.pendingchangesets
+					select contenthistid, menutitle, lastupdate, lastupdateby, approvalStatus from data.pendingchangesets
 				</cfquery>
 
 				<cfif listFindNoCase('Author,Editor',data.verdict)>
@@ -2276,10 +2276,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 			
 				<cfquery name="data.yourapprovals" dbtype="query">
-					select contenthistid, lastupdate, approvalStatus, approvalGroupID, '' changesetID, '' changesetName from history
+					select contenthistid, menutitle, lastupdate, lastupdateby, approvalStatus, approvalGroupID, '' changesetID, '' changesetName from history
 					where approvalStatus='Pending'
 					union 
-					select contenthistid, lastupdate, approvalStatus, approvalGroupID, changesetID, changesetName from data.pendingchangesets
+					select contenthistid, menutitle, lastupdate, lastupdateby, approvalStatus, approvalGroupID, changesetID, changesetName from data.pendingchangesets
 					where approvalStatus='Pending'
 				</cfquery>
 

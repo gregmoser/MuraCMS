@@ -215,7 +215,8 @@
 
 			CKEDITOR.disableAutoInline=true;
 			muraInlineEditor.inited=true;
-			$('##adminSave').fadeIn();	
+			$('##adminSave').show();
+			$('##adminStatus').hide();		
 			$('.mura-editable').removeClass('inactive');
 
 			$('.mura-editable-attribute').each(
