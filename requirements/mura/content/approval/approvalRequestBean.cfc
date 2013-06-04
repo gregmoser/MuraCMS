@@ -1,4 +1,4 @@
-component extends="mura.bean.beanORM"  table="tapprovalrequests" entityname="approvalRequest" bundlealbe=true {
+component extends="mura.bean.beanORM"  table="tapprovalrequests" entityname="approvalRequest" bundleable=true {
 
 	property name="requestID" fieldtype="id";
     property name="created" type="timestamp";
