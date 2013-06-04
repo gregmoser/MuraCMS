@@ -354,7 +354,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 
 	if(structkeyExists(rc,'refreshFlatview')){
-		structAppend(session.flatViewArgs["#session.siteid#"], url, true);
+		session.flatViewArgs["#session.siteid#"].report=rc.report;
+		session.flatViewArgs["#session.siteid#"].sortby=rc.sortby;
 	}
 	
 	if(not structKeyExists(session.flatViewArgs["#session.siteid#"],"moduleid")){

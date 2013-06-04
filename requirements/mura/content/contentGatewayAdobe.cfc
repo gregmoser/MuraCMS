@@ -820,12 +820,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsDraftList')#">
 	
-	SELECT DISTINCT draft.contenthistid, tmodule.Title AS module, active.ModuleID, active.SiteID, active.ParentID, active.Type, active.subtype, active.MenuTitle, active.Filename, active.ContentID,
-	 tmodule.SiteID, draft.SiteID, active.SiteID, active.targetparams, draft.lastUpdate,
+	SELECT DISTINCT draft.contenthistid, module.Title AS module, active.ModuleID, active.SiteID, active.ParentID, active.Type, active.subtype, active.MenuTitle, active.Filename, active.ContentID,
+	 module.SiteID, draft.SiteID, active.SiteID, active.targetparams, draft.lastUpdate,
 	 draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	 tapprovalrequests.status AS approvalStatus
 	FROM tcontent active INNER JOIN tcontent draft ON active.ContentID = draft.ContentID
-	INNER JOIN tcontent tmodule ON draft.ModuleID = tmodule.ContentID
+	INNER JOIN tcontent module ON (draft.ModuleID = module.ContentID and draft.siteid = module.siteid)
 	INNER JOIN tcontentassignments ON (active.contentID=tcontentassignments.contentID and tcontentassignments.type='draft')
 	LEFT join tfiles on active.fileID=tfiles.fileID
 	LEFT JOIN tcontentstats on (draft.contentID=tcontentstats.contentID 
@@ -833,7 +833,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								)
 	LEFT JOIN tapprovalrequests on (tapprovalrequests.contenthistid=draft.contenthistid 
 				and tapprovalrequests.requestid is null)
-	WHERE draft.active=0 
+	WHERE
+	draft.active=0 
 	AND active.active=1 
 	AND draft.lastUpdate>active.lastupdate 
 	and draft.changesetID is null
@@ -847,15 +848,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	tapprovalrequests.status
 	HAVING --->
-	and tmodule.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> AND draft.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>  AND active.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
+	and module.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> AND draft.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>  AND active.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 	
 	union 
 	
-	SELECT DISTINCT draft.contenthistid,tmodule.Title AS module, draft.ModuleID, draft.SiteID, draft.ParentID, draft.Type, draft.subtype, draft.MenuTitle, draft.Filename, draft.ContentID,
-	 tmodule.SiteID, draft.SiteID, draft.SiteID, draft.targetparams,draft.lastUpdate,
+	SELECT DISTINCT draft.contenthistid,module.Title AS module, draft.ModuleID, draft.SiteID, draft.ParentID, draft.Type, draft.subtype, draft.MenuTitle, draft.Filename, draft.ContentID,
+	 draft.SiteID, draft.SiteID, draft.targetparams,draft.lastUpdate,
 	 draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	 tapprovalrequests.status AS approvalStatus
-	FROM  tcontent draft INNER JOIN tcontent tmodule ON draft.ModuleID = tmodule.ContentID
+	FROM  tcontent draft INNER JOIN tcontent module ON (draft.ModuleID = module.ContentID and draft.siteid = module.siteid)
 		   INNER JOIN tcontentassignments ON (draft.contentID=tcontentassignments.contentID and tcontentassignments.type='draft')
 			LEFT JOIN tcontent active ON draft.ContentID = active.ContentID and active.approved=1
 			LEFT join tfiles on draft.fileID=tfiles.fileID
@@ -879,24 +880,25 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	tapprovalrequests.status
 	HAVING --->
-	and tmodule.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> AND draft.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
+	and module.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> AND draft.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 	
 	
 	union
 	
-	SELECT DISTINCT draft.contenthistid, tmodule.Title AS module, active.ModuleID, active.SiteID, active.ParentID, active.Type, active.subtype, active.MenuTitle, active.Filename, active.ContentID,
-	 tmodule.SiteID, draft.SiteID, active.SiteID, active.targetparams, draft.lastUpdate,
+	SELECT DISTINCT draft.contenthistid, module.Title AS module, active.ModuleID, active.SiteID, active.ParentID, active.Type, active.subtype, active.MenuTitle, active.Filename, active.ContentID,
+	 module.SiteID, draft.SiteID, active.SiteID, active.targetparams, draft.lastUpdate,
 	 draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	 tapprovalrequests.status AS approvalStatus
 	FROM tcontent active INNER JOIN tcontent draft ON active.ContentID = draft.ContentID
-	INNER JOIN tcontent tmodule ON draft.ModuleID = tmodule.ContentID
+	INNER JOIN tcontent module ON (draft.ModuleID = module.ContentID and draft.siteid = module.siteid)
 	LEFT join tfiles on active.fileID=tfiles.fileID
 	LEFT JOIN tcontentstats on (draft.contentID=tcontentstats.contentID 
 								and draft.siteID=tcontentstats.siteID
 								)
 	LEFT JOIN tapprovalrequests on (tapprovalrequests.contenthistid=draft.contenthistid 
 				and tapprovalrequests.requestid is null)
-	WHERE draft.active=0 
+	WHERE 
+	draft.active=0 
 	AND active.active=1 
 	AND draft.lastUpdate>active.lastupdate 
 	and draft.changesetID is null
@@ -910,7 +912,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	tapprovalrequests.status
 	HAVING--->
-	and  tmodule.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>  AND draft.SiteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> AND active.SiteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
+	and  module.SiteID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>  AND draft.SiteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> AND active.SiteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 	
 	union 
 	
@@ -918,7 +920,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	 module.SiteID, draft.SiteID, draft.SiteID, draft.targetparams,draft.lastUpdate,
 	 draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	 tapprovalrequests.status AS approvalStatus
-	FROM  tcontent draft INNER JOIN tcontent module ON draft.ModuleID = module.ContentID
+	FROM  tcontent draft INNER JOIN tcontent module ON (draft.ModuleID = module.ContentID and draft.siteid = module.siteid)
 			LEFT JOIN tcontent active ON draft.ContentID = active.ContentID and active.approved=1
 			LEFT join tfiles on draft.fileID=tfiles.fileID
 			LEFT JOIN tcontentstats on (draft.contentID=tcontentstats.contentID 

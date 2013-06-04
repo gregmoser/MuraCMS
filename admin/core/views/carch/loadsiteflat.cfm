@@ -108,38 +108,36 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	if($.event('report') eq "lockedfiles"){
 		feed.addParam(field="tcontentstats.lockid",condition=">",criteria="");	
+	
 	} else if($.event('report') eq "mylockedfiles"){
 		feed.addParam(field="tcontentstats.lockid",condition="=",criteria=$.currentUser("userID"));
+	
 	} else if($.event('report') eq "expires"){
 		feed.addParam(field="tcontent.expires",datatype="date",condition="<=",criteria=dateAdd("m",1,now()));
 		feed.addParam(field="tcontent.expires",datatype="date",condition=">",criteria=dateAdd("m",-12,now()));		
+	
 	} else if($.event('report') eq "myexpires"){
 		subList=$.getBean("contentManager").getExpiringContent($.event("siteID"),$.currentUser("userID"));
 		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contentID));
+	
 	} else if($.event('report') eq "mydrafts"){
 		drafts=$.getBean("contentManager").getDraftList($.event("siteID"));
 		//writeDump(var=drafts,abort=true);
-		/*
-		try {
-		approvals=new Query(dbtype='query',sql="select * from subList where approvalStatus='Pending'").execute().getResult();
-		}catch(any e)
-			{writeDump(var=e,abort=true);}
-		*/
 		feed.addParam(field="tcontent.contentid",datatype="varchar",condition="in",criteria=valuelist(drafts.contentid));
-		//feed.setActiveOnly(0);
-
+		feed.setLiveOnly(0);
 		//writeDump(var=feed.getQuery(),abort=true);
 	} else if($.event('report') eq "myapprovals"){
 		drafts=$.getBean("contentManager").getApprovalsQuery($.event("siteID"));
 		//writeDump(var=drafts,abort=true);
-		//writeDump(var=subList,abort=true);
-		feed.addParam(field="tcontent.contenthistid",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
-		feed.setActiveOnly(0);
+		feed.addParam(field="tcontent.contentid",datatype="varchar",condition="in",criteria=valuelist(drafts.contentid));
+		feed.setLiveOnly(0);
+
 	} else if($.event('report') eq "mysubmissions"){
 		drafts=$.getBean("contentManager").getSubmissionsQuery($.event("siteID"));
 		//writeDump(var=subList,abort=true);
-		feed.addParam(field="tcontent.contenthistid",datatype="varchar",condition="in",criteria=valuelist(drafts.contenthistid));
-		feed.setActiveOnly(0);
+		feed.addParam(field="tcontent.contentid",datatype="varchar",condition="in",criteria=valuelist(drafts.contentid));
+		feed.setLiveOnly(0);
+
 	}
 	
 	if(len($.event("keywords"))){	
