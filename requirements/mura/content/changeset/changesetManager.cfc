@@ -202,7 +202,7 @@
 	</cfif>
 	order by 
 	<cfif structKeyExists(arguments,"sortBy") and arguments.sortBy eq "PublishDate">
-	publishDate asc, name
+	publishDate desc, name
 	<cfelse>
 	published, name
 	</cfif>
