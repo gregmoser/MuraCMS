@@ -121,7 +121,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contentID));
 	
 	} else if($.event('report') eq "mydrafts"){
-		drafts=$.getBean("contentManager").getDraftList($.event("siteID"));
+		drafts=$.getBean("contentManager").getDraftList(siteid=$.event("siteID"), startdate=dateAdd('m',-3,now()));
 		//writeDump(var=drafts,abort=true);
 		feed.addParam(field="tcontent.contentid",datatype="varchar",condition="in",criteria=valuelist(drafts.contentid));
 		feed.setLiveOnly(0);

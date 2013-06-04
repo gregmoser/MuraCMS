@@ -215,7 +215,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="siteid" type="string"/>
 		<cfset var rs ="" />
 		
-		<cfset rs=variables.contentGateway.getDraftList(arguments.siteid) />
+		<cfset rs=variables.contentGateway.getDraftList(argumentCollection=arguments) />
 		
 		<cfreturn rs />
 	</cffunction>
