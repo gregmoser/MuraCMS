@@ -348,8 +348,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfparam name="session.flatViewArgs" default="#structNew()#">
 
 <cfscript>
+
 	if(not structKeyExists(session.flatViewArgs,session.siteid)){
 		session.flatViewArgs["#session.siteid#"]=structNew();
+	}
+
+	if(structkeyExists(rc,'refreshFlatview')){
+		structAppend(session.flatViewArgs["#session.siteid#"], url, true);
 	}
 	
 	if(not structKeyExists(session.flatViewArgs["#session.siteid#"],"moduleid")){
