@@ -404,10 +404,9 @@
 #frontEndTools > ul#tools-changesets {
 
 	> li#cs-title > a {
-		padding-right: 2em !important;
-		}
-
-	> li#cs-title > a > i {
+		padding-right: 4px !important;
+		
+		& > i {
 		background: @grayDarker !important;
 		background: rgba(0,0,0,.35) !important;
 		font-size: 10px !important;
@@ -422,9 +421,17 @@
 		line-height: .8 !important;
 		overflow: visible !important;
 		.border-radius(18px);
-		margin-right: .25em;
+		margin-right: 4px;
+		}
+		
+		& .caret {
+			border-top-color: rgba(255,255,255,.25) !important;
+			margin-left: 3px !important;
+			margin-right: 3px !important;
+			margin-top: 9px !important;
 		}
 	}
+}
 
 #frontEndTools > #adminSiteManager  {
 
@@ -599,7 +606,10 @@
 	margin-left: -5px !important;
 	}
 
-body > .mura-editable {
+} // End .mura
+
+
+.mura-editable {
 
 		position: relative !important;
 		min-height: 20px !important;
@@ -650,7 +660,6 @@ body > .mura-editable {
 			
 			}
 	}
-} // End .mura
 	
 // CK Editor			
 .editableObject .cke_editable form { border: 0 !important; padding: 0 !important;}	
