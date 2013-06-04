@@ -61,6 +61,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	$(document).ready(function(){setToolTips('.add-content-ui');});
 </script>
 </cfif>
+<div class="mura">
 <div class="add-content-ui">
 <ul>
 <cfif rc.ptype neq 'Gallery'>
@@ -122,6 +123,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 </cfif> 
   </ul>
+</div>
 </div>
 </cfoutput>
 
