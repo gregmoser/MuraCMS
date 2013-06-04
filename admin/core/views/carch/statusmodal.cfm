@@ -63,6 +63,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfoutput>
 <cfif rc.mode eq 'frontend'>
 	<h2>#application.rbFactory.getKeyValue(session.rb,'layout.status')#</h2>
+<div class="well">
 	<!---
 	<cfif requiresApproval>
 		<h2>#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#content.getApprovalStatus()#"))#</h2>
@@ -79,55 +80,70 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	--->
 </cfif>
-
-<strong>Created By:</strong>  <cfif not user.getIsNew()>#HTMLEditFormat(user.getFullName())# <cfelse> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.na")# </cfif></br>
-<strong>Created:</strong> #LSDateFormat(parseDateTime(content.getLastUpdate()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(content.getLastUpdate()),"short")#</br>
-
-<strong>Status:</strong>
-	<cfif content.getactive() gt 0 and content.getapproved() gt 0>
-		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
-	<cfelseif len(content.getApprovalStatus()) and requiresApproval >
-		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#content.getApprovalStatus()#")#
-	<cfelseif content.getapproved() lt 1>
-		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
-	<cfelse>
-		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
-	</cfif></br>
-
-<cfif $.siteConfig('hasChangesets')>
-	<cfset changeset=$.getBean('changeset').loadBy(changesetID=content.getChangesetID())>
-	<strong>Change Set:</strong> <cfif changeset.getIsNew()>Not Assigned<cfelse>#HTMLEditFormat(changeset.getName())#</cfif><br/>
-</cfif>
-<cfif requiresApproval>
-	<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending'>
-		<strong>Waiting For Group:</strong> #HTMLEditFormat(group.getGroupName())#</br>
-	</cfif>
-
-	<cfif actions.hasNext()>
-		<cfloop condition="actions.hasNext()">
-			<cfset action=actions.next()>
-			<dl>
-				<dt>#UCase(action.getActionType())# by #HTMLEditFormat(action.getUser().getFullName())# on #LSDateFormat(parseDateTime(action.getCreated()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(action.getCreated()),"short")#</dt>
-				<cfif len(action.getComments())>
-					#HTMLEditFormat(action.getComments())#
-				</cfif>
-			</dl>
-		</cfloop>
-	</cfif>
-
-	<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending' and (listfindNoCase(session.mura.membershipids,approvalRequest.getGroupID()) or $.currentUser().isAdminUser() or $.currentUser().isSuperUser())>
-		<strong>Action</strong></br>
-		<input class="approval-action" id="approval-approve" name="approval-action"type="radio" value="Approve" checked/> Approve</br>
-		<input class="approval-action" id="approval-reject" name="approval-action" type="radio" value="Reject" checked/> Reject</br>
-		<strong>Comments</strong></br>
-		<textarea id="approval-comments"></textarea></br></br>
-		<input type="button" class="btn" value="Apply" onclick="applyApprovalAction('#approvalRequest.getRequestID()#',$('input:radio[name=approval-action]:checked').val(),$('##approval-comments').val(),'#approvalRequest.getSiteID()#');"/>
-	</cfif>
-</cfif>
-
+<!--- <div class="well"> --->
+<ul>
+	<li>
+		<strong>Created By:</strong>  <cfif not user.getIsNew()>#HTMLEditFormat(user.getFullName())# <cfelse> #application.rbFactory.getKeyValue(session.rb,"sitemanager.content.na")# </cfif>
+	</li>
+	<li>
+		<strong>Created:</strong> #LSDateFormat(parseDateTime(content.getLastUpdate()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(content.getLastUpdate()),"short")#
+	</li>
+		
+		<li><strong>Status:</strong>
+			<cfif content.getactive() gt 0 and content.getapproved() gt 0>
+				#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.published")#
+			<cfelseif len(content.getApprovalStatus()) and requiresApproval >
+				#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.#content.getApprovalStatus()#")#
+			<cfelseif content.getapproved() lt 1>
+				#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.draft")#
+			<cfelse>
+				#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
+			</cfif></li>
+		
+		<cfif $.siteConfig('hasChangesets')>
+			<cfset changeset=$.getBean('changeset').loadBy(changesetID=content.getChangesetID())>
+			<li><strong>Change Set:</strong> <cfif changeset.getIsNew()>Not Assigned<cfelse>#HTMLEditFormat(changeset.getName())#</cfif></li>
+		</cfif>
+		<cfif requiresApproval>
+			<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending'>
+				<li><strong>Waiting For Group:</strong> #HTMLEditFormat(group.getGroupName())#</li>
+			</cfif>
+	</ul>
+		
+			<cfif actions.hasNext()>
+				<cfloop condition="actions.hasNext()">
+					<cfset action=actions.next()>
+					<dl>
+						<dt>#UCase(action.getActionType())# by #HTMLEditFormat(action.getUser().getFullName())# on #LSDateFormat(parseDateTime(action.getCreated()),session.dateKeyFormat)# #LSTimeFormat(parseDateTime(action.getCreated()),"short")#</dt>
+						<cfif len(action.getComments())>
+							<dd>#HTMLEditFormat(action.getComments())#</dd>
+						</cfif>
+					</dl>
+				</cfloop>
+			</cfif>
+		
+			<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending' and (listfindNoCase(session.mura.membershipids,approvalRequest.getGroupID()) or $.currentUser().isAdminUser() or $.currentUser().isSuperUser())>
+				<dl>
+				<dt>Action</dt>
+				<dd>
+					<label class="radio inline">
+						<input class="approval-action" id="approval-approve" name="approval-action"type="radio" value="Approve" checked/> Approve 
+					</label>
+					<label class="radio inline">
+						<input class="approval-action" id="approval-reject" name="approval-action" type="radio" value="Reject" checked/> Reject
+					</label>
+				</dd>
+				<dt>Comments</dt>
+				<dd><textarea id="approval-comments" rows="4"></textarea></dd>
+				<input type="button" class="btn" value="Apply" onclick="applyApprovalAction('#approvalRequest.getRequestID()#',$('input:radio[name=approval-action]:checked').val(),$('##approval-comments').val(),'#approvalRequest.getSiteID()#');"/></dd>
+				</dl>
+			</cfif>
+		</cfif>
+<!--- </div> --->
 
 
 <cfif rc.mode eq 'frontend'>
+</div>
 	<cfif not content.getApproved() and requiresApproval>
 		<script>
 		function applyApprovalAction(requestid,action,comment,siteid){
