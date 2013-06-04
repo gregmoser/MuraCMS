@@ -2789,7 +2789,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				}
 			}
 			
-			return '<div class="mura-editable inactive#inline#">
+			return '<div class="mura mura-editable inactive#inline#">
 						<label class="mura-editable-label">#ucase(arguments.label)#</label>
 						<div contenteditable="false" id="mura-editable-attribute-#arguments.attribute#" class="mura-editable inactive mura-editable-attribute#inline#" #dataString#>#arguments.value#</div>
 					</div>';
