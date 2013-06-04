@@ -1333,7 +1333,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rsPendingChangeSets = "">
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPendingChangeSets')#">
-	select tcontent.menutitle, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.lastupdatebyid, tcontent.active, tcontent.approved, tcontent.lastupdate, 
+	select tcontent.menutitle, tcontent.contentid, tcontent.contenthistid, tcontent.fileID, tcontent.type, tcontent.lastupdateby, tcontent.lastupdatebyid, tcontent.active, tcontent.approved, tcontent.lastupdate, content.lastupdateby,
 	tcontent.display, tcontent.displaystart, tcontent.displaystop, tcontent.moduleid, tcontent.isnav, tcontent.notes,tcontent.isfeature,tcontent.inheritObjects,tcontent.filename,
 	tcontent.targetParams,tcontent.releaseDate,tcontent.path, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID,tapprovalrequests.groupid approvalGroupID,
 	tchangesets.publishDate changesetPublishDate,tchangesets.changesetName,tchangesets.changesetID
