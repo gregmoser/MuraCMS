@@ -84,6 +84,43 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfquery>
 <a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mysubmissions&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mysubmissions")# (#rsDrafts.recordcount#)</a>
 
+<cfif $.siteConfig('hasChangesets')
+	and application.permUtility.getModulePerm('00000000000000000000000000000000014',rc.siteid) 
+	and application.permUtility.getModulePerm('00000000000000000000000000000000000',rc.siteid)>
+
+	<cfset rsChangesets=application.changesetManager.getQuery(siteID=$.event('siteID'),published=0,sortby="PublishDate")>
+	
+	<cfset queryAddColumn(rsChangesets, "pending", 'integer', [])>
+
+	<cfloop query="rsChangesets">
+		<cfset querySetCell(rsChangesets, "pending", $.getBean('changesetManager').hasPendingApprovals(rsChangesets.changesetid), rsChangesets.currentrow)>
+	</cfloop>
+
+	<cfquery name="totalpending" dbtype="query">
+		select sum(pending) as totalpending from rsChangesets
+	</cfquery>
+
+	<cfif rsChangesets.recordcount>	
+		<div class="btn-group">
+		  <a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
+		    #application.rbFactory.getKeyValue(session.rb,"dashboard.pendingchangesets")# (#totalpending.totalpending#)
+		    <span class="caret"></span>
+		  </a>
+		  <ul class="dropdown-menu">
+		   	<cfloop query="rsChangesets">
+				<li>
+					<a href="./?muraAction=cChangesets.assignments&changesetID=#rsChangesets.changesetID#&siteid=#session.siteid#">
+						#HTMLEditFormat(rsChangesets.name)#
+						<cfif isDate(rsChangesets.publishDate)> (#LSDateFormat(rsChangesets.publishDate,session.dateKeyFormat)#)</cfif> (#rsChangesets.pending#)
+					</a>
+				</li>
+			</cfloop>
+		  </ul>
+		</div>
+	</cfif>
+</cfif>
+<!---
 <a class="btn <cfif rc.originalfuseaction eq 'recentcomments'> active</cfif>"  href="index.cfm?muraAction=cComments.default&siteID=#session.siteid#">#application.rbFactory.getKeyValue(session.rb,"dashboard.comments")#</a>
+--->
 </div>
 </cfoutput>

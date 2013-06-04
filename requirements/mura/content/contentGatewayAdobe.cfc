@@ -853,7 +853,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	union 
 	
 	SELECT DISTINCT draft.contenthistid,module.Title AS module, draft.ModuleID, draft.SiteID, draft.ParentID, draft.Type, draft.subtype, draft.MenuTitle, draft.Filename, draft.ContentID,
-	 draft.SiteID, draft.SiteID, draft.targetparams,draft.lastUpdate,
+	 module.SiteID, draft.SiteID, active.SiteID, draft.targetparams,draft.lastUpdate,
 	 draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	 tapprovalrequests.status AS approvalStatus
 	FROM  tcontent draft INNER JOIN tcontent module ON (draft.ModuleID = module.ContentID and draft.siteid = module.siteid)
