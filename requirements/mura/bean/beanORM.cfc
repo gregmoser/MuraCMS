@@ -746,9 +746,9 @@ component extends="mura.bean.bean" versioned=false {
 		var qs=new Query();
 		
 		if(!hasProperty('siteid') && structKeyExists(arguments,'siteid')){
-			arguments.bundle.setValue("rs" * getTable(),qs.execute(sql="select * form #getTable()#").getResult());
+			arguments.bundle.setValue("rs" * getTable(),qs.execute(sql="select * from #getTable()#").getResult());
 		} else {
-			qs.setSQL("select * form #getTable()# where siteid = :siteid");
+			qs.setSQL("select * from #getTable()# where siteid = :siteid");
 			qs.addParam(cfsqltype="cf_sql_varchar",value=arguments.siteid);
 			arguments.bundle.setValue("rs" * getTable(),qs.getResult());
 		}

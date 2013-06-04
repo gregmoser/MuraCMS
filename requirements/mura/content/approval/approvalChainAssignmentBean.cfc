@@ -1,4 +1,4 @@
-component extends="mura.bean.beanORM" table="tapprovalassignments" {
+component extends="mura.bean.beanORM" table="tapprovalassignments" bundlealbe=true {
 
 	property name="assignmentID" fieldtype="id";
     property name="approvalChain" fieldtype="many-to-one" cfc="approvalChain" fkcolumn="chainID";
