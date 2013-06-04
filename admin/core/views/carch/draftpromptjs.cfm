@@ -21,7 +21,7 @@ function initDraftPrompt(){
 						modal:true,
 						width:"600px"
 					});
-
+					
 					$(".draft-prompt-option").click(function(e){
 						e.preventDefault();
 						var href = a.attr('href').replace(node.attr('data-contenthistid'),$(this).attr('data-contenthistid'));

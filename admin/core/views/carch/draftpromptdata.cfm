@@ -62,10 +62,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</tr>
 					</thead>
 					<tbody>
-						<td><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#">#HTMLEditFormat(publishedVersion.getMenuTitle())#</a></td>
+						<td><a href="##" tabindex="-1" class="draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#">#HTMLEditFormat(publishedVersion.getMenuTitle())#</a></td>
 						<td>#LSDateFormat(publishedVersion.getlastupdate(),session.dateKeyFormat)# #LSTimeFormat(publishedVersion.getLastUpdate(),"medium")#</td>
 						<td>#HTMLEditFormat(publishedVersion.getLastUpdateBy())#</td>
-						<td><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#"><i class="icon-pencil"></i></a></td>
+						<td><a href="##" tabindex="-1" class="draft-prompt-option" data-contenthistid="#draftprompdata.publishedHistoryID#"><i class="icon-pencil"></i></a></td>
 					</tbody>
 				</table>
 			</cfif>
@@ -81,10 +81,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</thead>
 					<tbody>
 						<tr>
-							<td><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.historyid#">#HTMLEditFormat(draftVersion.getMenuTitle())#</a></td>
+							<td><a href="##" tabindex="-1" class="draft-prompt-option" data-contenthistid="#draftprompdata.historyid#">#HTMLEditFormat(draftVersion.getMenuTitle())#</a></td>
 							<td>#LSDateFormat(draftVersion.getlastupdate(),session.dateKeyFormat)# #LSTimeFormat(draftVersion.getLastUpdate(),"medium")#</td>
 							<td>#HTMLEditFormat(draftVersion.getLastUpdateBy())#</td>
-							<td><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.historyid#"><i class="icon-pencil"></i></a></td>
+							<td><a href="##" tabindex="-1" class="draft-prompt-option" data-contenthistid="#draftprompdata.historyid#"><i class="icon-pencil"></i></a></td>
 						</tr>
 					</tbody>
 				</table>
@@ -100,10 +100,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<tbody>
 						<cfloop query="draftprompdata.pendingchangesets">
 						<tr>
-							<td><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangesets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangesets.changesetName)#</a></td>
+							<td><a href="##" tabindex="-1" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangesets.contenthistid#">#HTMLEditFormat(draftprompdata.pendingchangesets.changesetName)#</a></td>
 							<td>#LSDateFormat(draftprompdata.pendingchangesets.lastupdate,session.dateKeyFormat)# #LSTimeFormat(draftprompdata.pendingchangesets.lastupdate,"medium")#</td>
 							<td>#HTMLEditFormat(draftprompdata.pendingchangesets.lastupdateby)#</td>
-							<td><a href="##" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangesets.contenthistid#"><i class="icon-pencil"></i></a></td>
+							<td><a href="##" tabindex="-1" class="draft-prompt-option" data-contenthistid="#draftprompdata.pendingchangesets.contenthistid#"><i class="icon-pencil"></i></a></td>
 						</tr>
 						</cfloop>
 					</tbody>
@@ -120,10 +120,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<tbody>
 						<cfloop query="draftprompdata.yourapprovals">
 							<tr>
-								<td><a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" class="draft-prompt-approval">#HTMLEditFormat(draftprompdata.yourapprovals.menutitle)#</a></td>
+								<td><a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" tabindex="-1" class="draft-prompt-approval">#HTMLEditFormat(draftprompdata.yourapprovals.menutitle)#</a></td>
 								<td>#LSDateFormat(draftprompdata.yourapprovals.lastupdate,session.dateKeyFormat)# #LSTimeFormat(draftprompdata.yourapprovals.lastupdate,"medium")#</td>
 								<td>#HTMLEditFormat(draftprompdata.yourapprovals.lastupdateby)#</td>
-								<td><a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" class="draft-prompt-approval"><i class="icon-pencil"></i></a></td>
+								<td><a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" tabindex="-1" class="draft-prompt-approval"><i class="icon-pencil"></i></a></td>
 							</tr>
 						</cfloop>
 					</tbody>
