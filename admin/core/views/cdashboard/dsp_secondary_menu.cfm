@@ -72,17 +72,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfquery>
 <a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mydrafts&siteID=#session.siteid#&sortby=lastupdate&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mydrafts")# (#rsDrafts.recordcount#)</a>
 
-<cfset rsDrafts=$.getBean('contentManager').getApprovalsQuery(session.siteid)>
-<cfquery name="rsDrafts" dbtype="query">
-	select distinct contentid from rsDrafts
-</cfquery>
-<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=myapprovals&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.myapprovals")# (#rsDrafts.recordcount#)</a>
-
 <cfset rsDrafts=$.getBean('contentManager').getSubmissionsQuery(session.siteid)>
 <cfquery name="rsDrafts" dbtype="query">
 	select distinct contentid from rsDrafts
 </cfquery>
 <a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mysubmissions&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mysubmissions")# (#rsDrafts.recordcount#)</a>
+
+<cfset rsDrafts=$.getBean('contentManager').getApprovalsQuery(session.siteid)>
+<cfquery name="rsDrafts" dbtype="query">
+	select distinct contentid from rsDrafts
+</cfquery>
+<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=myapprovals&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.myapprovals")# (#rsDrafts.recordcount#)</a>
 
 <cfif $.siteConfig('hasChangesets')
 	and application.permUtility.getModulePerm('00000000000000000000000000000000014',rc.siteid) 
