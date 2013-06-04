@@ -494,8 +494,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<ul id="navReports" class="nav nav-list">
 			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#</a></li>
 			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#</a></li>
-			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#</a></li>
 			<li><a href="" data-report="mysubmissions"<cfif $.event("report") eq "mysubmissions"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mysubmissions")#</a></li>
+			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#</a></li>
 			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#</a></li>
 			<li><a href="" data-report="expires"<cfif $.event("report") eq "expires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.expires")#</a></li>
 			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#</a></li>
