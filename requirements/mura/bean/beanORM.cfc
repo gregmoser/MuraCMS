@@ -292,7 +292,7 @@ component extends="mura.bean.bean" versioned=false {
 				       	 		application.objectMappings[variables.entityName].synthedFunctions['add#prop.name#']={exp='addObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='addEntity'}};
 				       	 		application.objectMappings[variables.entityName].synthedFunctions['remove#prop.name#']={exp='removeObject(arguments.MissingMethodArguments[1])',args={prop=prop.name,functionType='removeEntity'}};
 
-				       	 		if(listFindNoCase('content,user,feed,category,address,site,comment',prop.name)){
+				       	 		if(listFindNoCase('content,user,feed,category,address,site,comment',prop.cfc)){
 				       	 			param name="application.objectMappings.#prop.cfc#" default={};
 				       	 			param name="application.objectMappings.#prop.cfc#.synthedFunctions" default={};
 
@@ -320,7 +320,7 @@ component extends="mura.bean.bean" versioned=false {
 			       	 			}
    	 			
    	 							
-			       	 			if(listFindNoCase('content,user,feed,category,address,site,comment',prop.name)){
+			       	 			if(listFindNoCase('content,user,feed,category,address,site,comment',prop.cfc)){
 			       	 				
 			       	 				param name="application.objectMappings.#prop.cfc#" default={};
 					       	 		param name="application.objectMappings.#prop.cfc#.synthedFunctions" default={};

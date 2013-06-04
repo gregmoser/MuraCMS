@@ -398,16 +398,31 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 				var props=getProperties();
 				var rules=[];
+				var rule={};
+
 				for(var prop in props){
 
 					rules=[];
 
+					if(structKeyExists(props[prop], "message")){
+						rule={message=props[prop].message};
+					} else {
+						rule={};
+					}
+
 					if(structKeyExists(props[prop], "datatype") && props[prop].datatype != 'any'){
-						arrayAppend(rules, {datatype=props[prop].datatype});
+						structAppend(rule,{datatype=props[prop].datatype});
+						arrayAppend(rules, rule);
 					}
 
 					if(structKeyExists(props[prop], "regex")){
-						arrayAppend(rules, {regex=props[prop].regex});
+						structAppend(rule,{regex=props[prop].regex});
+						arrayAppend(rules, rule);
+					}
+
+					if(structKeyExists(props[prop], "required")){
+						structAppend(rule,{required=props[prop].required});
+						arrayAppend(rules,rule);
 					}
 					
 					if(arrayLen(rules)){
