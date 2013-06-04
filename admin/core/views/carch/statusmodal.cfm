@@ -94,6 +94,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.archived")#
 	</cfif></br>
 
+<cfif $.siteConfig('hasChangesets')>
+	<cfset changeset=$.getBean('changeset').loadBy(changesetID=content.getChangesetID())>
+	<strong>Change Set:</strong> <cfif changeset.getIsNew()>Not Assigned<cfelse>#HTMLEditFormat(changeset.getName())#</cfif><br/>
+</cfif>
 <cfif requiresApproval>
 	<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending'>
 		<strong>Waiting For Group:</strong> #HTMLEditFormat(group.getGroupName())#</br>

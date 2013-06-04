@@ -60,6 +60,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<li><a class="<cfif rc.originalfuseaction eq 'topreferers'> active</cfif>"  href="index.cfm?muraAction=cDashboard.topReferers&siteID=#session.siteid#">#application.rbFactory.getKeyValue(session.rb,"dashboard.topreferrers")#</a></li>
 		<li><a class="<cfif rc.originalfuseaction eq 'topsearches'> active</cfif>"  href="index.cfm?muraAction=cDashboard.topSearches&siteID=#session.siteid#">#application.rbFactory.getKeyValue(session.rb,"dashboard.topsearches")#</a></li>
 		<li><a class="<cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cDashboard.topRated&siteID=#session.siteid#">#application.rbFactory.getKeyValue(session.rb,"dashboard.toprated")#</a></li>
+		<a class="<cfif rc.originalfuseaction eq 'recentcomments'> active</cfif>"  href="index.cfm?muraAction=cComments.default&siteID=#session.siteid#">#application.rbFactory.getKeyValue(session.rb,"dashboard.comments")#</a>
 	  </ul>
 	</div>
 <cfelse>
@@ -119,8 +120,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</div>
 	</cfif>
 </cfif>
-<!---
-<a class="btn <cfif rc.originalfuseaction eq 'recentcomments'> active</cfif>"  href="index.cfm?muraAction=cComments.default&siteID=#session.siteid#">#application.rbFactory.getKeyValue(session.rb,"dashboard.comments")#</a>
---->
+
 </div>
 </cfoutput>
