@@ -111,6 +111,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfif>
 
 			<cfif draftprompdata.yourapprovals.recordcount>
+				<cfset content=$.getBean('content').loadBy(contentid=rc.contentid)>
 				<table>	
 					<thead>
 						<tr>
