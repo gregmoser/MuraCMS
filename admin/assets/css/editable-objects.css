@@ -77,6 +77,8 @@
   -moz-border-radius: 9px;
   border-radius: 9px;
   border: 1px solid #ffffff;
+  background-color: #666666;
+  color: #ffffff;
 }
 .label-important,
 .badge-important {
