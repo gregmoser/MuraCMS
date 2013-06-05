@@ -54,11 +54,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<p class="alert alert-info">#application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.dialog')#</p>
 			
 			<cfset publishedVersion=$.getBean('content').loadBy(contenthistid=draftprompdata.publishedHistoryID)>
-			<cfif publishedVersion.getApproved()>		
+			<cfif publishedVersion.getApproved() or not draftprompdata.hasdraft>		
 				<table>
 					<thead>
 						<tr>
-							<th colspan="4">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#</th>
+							<th colspan="4">
+								<cfif publishedVersion.getApproved()>
+									#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.published'))#
+								<cfelse>
+									#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#
+								</cfif>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
