@@ -115,7 +115,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<table>	
 					<thead>
 						<tr>
-							<th colspan="4">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.awaitingapprovals'))#</th>
+							<th colspan="4">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.awaitingapproval'))#</th>
 						</tr>
 					</thead>
 					<tbody>
