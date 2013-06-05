@@ -624,7 +624,7 @@ component extends="mura.bean.bean" versioned=false {
 		var props=getProperties();
 		var pluginManager=getBean('pluginManager');
 		var event=new mura.event({siteID=variables.instance.siteid,bean=this});
-
+		var subitem="";
 		if(isdefined('preDelete')){
 			evaluate('preDelete()');
 		}
@@ -640,7 +640,10 @@ component extends="mura.bean.bean" versioned=false {
 				}
 				var subItems=evaluate('getBean(variables.entityName).loadBy(argumentCollection=loadArgs).get#prop#Iterator()');
 				while(subItems.hasNext()){
-					subItems.next().delete();
+					subitem=subitems.next();
+					if(!subitem.getIsNew()){
+						subitem.delete();
+					}
 				}
 			}
 		}
