@@ -47,7 +47,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfoutput>
 <cfset rc.originalfuseaction=listLast(request.action,".")>
 <div id="nav-module-specific" class="btn-group">
+<!---
 <a class="btn<cfif rc.originalfuseaction eq 'main'> active</cfif>" href="index.cfm?muraAction=cDashboard.main&siteID=#session.siteid#">#application.rbFactory.getKeyValue(session.rb,"dashboard.overview")#</a>
+--->
 <cfif application.configBean.getSessionHistory()>
 	<div class="btn-group">
 	  <a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
@@ -71,19 +73,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfquery name="rsDrafts" dbtype="query">
 	select distinct contentid from rsDrafts
 </cfquery>
-<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mydrafts&siteID=#session.siteid#&sortby=lastupdate&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mydrafts")# <span class="badge badge-important">#rsDrafts.recordcount#</span></a>
+<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mydrafts&siteID=#session.siteid#&sortby=lastupdate&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mydrafts")#<cfif rsDrafts.recordcount> <span class="badge badge-important">#rsDrafts.recordcount#</span></cfif></a>
 
 <cfset rsDrafts=$.getBean('contentManager').getSubmissionsQuery(session.siteid)>
 <cfquery name="rsDrafts" dbtype="query">
 	select distinct contentid from rsDrafts
 </cfquery>
-<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mysubmissions&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mysubmissions")# <span class="badge badge-important">#rsDrafts.recordcount#</span></a>
+<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mysubmissions&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mysubmissions")#<cfif rsDrafts.recordcount> <span class="badge badge-important">#rsDrafts.recordcount#</span></cfif></a>
 
 <cfset rsDrafts=$.getBean('contentManager').getApprovalsQuery(session.siteid)>
 <cfquery name="rsDrafts" dbtype="query">
 	select distinct contentid from rsDrafts
 </cfquery>
-<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=myapprovals&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.myapprovals")# <span class="badge badge-important">#rsDrafts.recordcount#</span></a>
+<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=myapprovals&siteID=#session.siteid#&sortby=deadline&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.myapprovals")#<cfif rsDrafts.recordcount> <span class="badge badge-important">#rsDrafts.recordcount#</span></cfif></a>
 
 <cfif $.siteConfig('hasChangesets')
 	and application.permUtility.getModulePerm('00000000000000000000000000000000014',rc.siteid) 
@@ -104,7 +106,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif rsChangesets.recordcount>	
 		<div class="btn-group">
 		  <a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
-		    #application.rbFactory.getKeyValue(session.rb,"dashboard.pendingchangesets")# <span class="badge badge-important">#totalpending.totalpending#</span>
+		    #application.rbFactory.getKeyValue(session.rb,"dashboard.pendingchangesets")
+		    #<cfif totalpending.totalpending> <span class="badge badge-important">#totalpending.totalpending#</span></cfif>
 		    <span class="caret"></span>
 		  </a>
 		  <ul class="dropdown-menu">
@@ -112,7 +115,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<li>
 					<a href="./?muraAction=cChangesets.assignments&changesetID=#rsChangesets.changesetID#&siteid=#session.siteid#">
 						#HTMLEditFormat(rsChangesets.name)#
-						<cfif isDate(rsChangesets.publishDate)> (#LSDateFormat(rsChangesets.publishDate,session.dateKeyFormat)#)</cfif> <span class="badge badge-important">#rsChangesets.pending#</span>
+						<cfif isDate(rsChangesets.publishDate)> (#LSDateFormat(rsChangesets.publishDate,session.dateKeyFormat)#)</cfif><cfif rsChangesets.pending> <span class="badge badge-important">#rsChangesets.pending#</span></cfif>
 					</a>
 				</li>
 			</cfloop>
