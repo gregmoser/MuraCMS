@@ -633,7 +633,11 @@ component extends="mura.bean.bean" versioned=false {
 
 		for(var prop in props){
 			if(structKeyExists(props[prop],'cfc') and props[prop].fieldtype eq 'one-to-many' and  props[prop].cascade eq 'delete'){
-				var loadArgs[props[prop].fkcolumn]=getValue(translatePropKey(props[prop].fkcolumn));
+				if(props[prop].fkcolumn eq 'primaryKey'){
+					var loadArgs[getPrimaryKey()]=getValue(translatePropKey(props[prop].fkcolumn));
+				} else {
+					var loadArgs[props[prop].fkcolumn]=getValue(translatePropKey(props[prop].fkcolumn));
+				}
 				var subItems=evaluate('getBean(variables.entityName).loadBy(argumentCollection=loadArgs).get#prop#Iterator()');
 				while(subItems.hasNext()){
 					subItems.next().delete();
