@@ -70,6 +70,54 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+.badge {
+  padding-left: 7px;
+  padding-right: 7px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+  border: 1px solid #ffffff;
+}
+.label-important,
+.badge-important {
+  background-color: #ff3a00;
+}
+.label-important[href],
+.badge-important[href] {
+  background-color: #cc2e00;
+}
+.label-warning,
+.badge-warning {
+  background-color: #ff3a00;
+}
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #cc2e00;
+}
+.label-success,
+.badge-success {
+  background-color: #587231;
+}
+.label-success[href],
+.badge-success[href] {
+  background-color: #3c4f22;
+}
+.label-info,
+.badge-info {
+  background-color: #4e7696;
+}
+.label-info[href],
+.badge-info[href] {
+  background-color: #3d5c74;
+}
+.label-inverse,
+.badge-inverse {
+  background-color: #666666;
+}
+.label-inverse[href],
+.badge-inverse[href] {
+  background-color: #4d4d4d;
+}
 .mura-modal,
 .modal-backdrop {
   background-color: #222;
