@@ -1029,11 +1029,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	<cfif isdate(arguments.stopDate)>and active.lastUpdate <=  <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.stopDate),month(arguments.stopDate),day(arguments.stopDate),23,59,0)#"></cfif>
 	<cfif isdate(arguments.startDate)>and active.lastUpdate >= <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.startDate),month(arguments.startDate),day(arguments.startDate),0,0,0)#"></cfif>
-	GROUP BY module.Title, active.ModuleID, active.ParentID, active.Type, active.subType,
+	GROUP BY draft.contentHistID, module.Title, draft.ModuleID, active.ParentID, active.Type, active.subType,
 	active.MenuTitle, active.Filename, active.ContentID, draft.IsNav, module.SiteID, 
-	draft.SiteID, active.targetparams, draft.lastUpdate,
+	draft.SiteID, draft.targetparams, draft.lastUpdate,
 	draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
-	tapprovalrequests.status
+	tapprovalrequests.status, draft.displayStart, tchangesets.publishDate
 	</cfquery>
 
 	<cfquery name="rs" dbtype="query" maxrows="#arguments.limit#">
@@ -1083,11 +1083,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfif isdate(arguments.stopDate)>and active.lastUpdate <=  <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.stopDate),month(arguments.stopDate),day(arguments.stopDate),23,59,0)#"></cfif>
 	<cfif isdate(arguments.startDate)>and active.lastUpdate >= <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.startDate),month(arguments.startDate),day(arguments.startDate),0,0,0)#"></cfif>
-	GROUP BY module.Title, active.ModuleID, active.ParentID, active.Type, active.subType,
+	GROUP BY draft.contentHistID,module.Title, draft.ModuleID, active.ParentID, active.Type, active.subType,
 	active.MenuTitle, active.Filename, active.ContentID, draft.IsNav, module.SiteID, 
-	draft.SiteID, active.targetparams, draft.lastUpdate,
+	draft.SiteID, draft.targetparams, draft.lastUpdate,
 	draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
-	tapprovalrequests.status
+	tapprovalrequests.status, draft.displayStart, tchangesets.publishDate
 	</cfquery>
 
 	<cfquery name="rs" dbtype="query" maxrows="#arguments.limit#">
