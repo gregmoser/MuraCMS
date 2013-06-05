@@ -1030,7 +1030,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif isdate(arguments.stopDate)>and active.lastUpdate <=  <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.stopDate),month(arguments.stopDate),day(arguments.stopDate),23,59,0)#"></cfif>
 	<cfif isdate(arguments.startDate)>and active.lastUpdate >= <cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.startDate),month(arguments.startDate),day(arguments.startDate),0,0,0)#"></cfif>
 	GROUP BY draft.contentHistID, module.Title, draft.ModuleID, draft.ParentID, draft.Type, draft.subType,
-	active.MenuTitle, draft.Filename, draft.ContentID, draft.IsNav, module.SiteID, 
+	draft.MenuTitle, draft.Filename, draft.ContentID, draft.IsNav, module.SiteID, 
 	draft.SiteID, draft.targetparams, draft.lastUpdate,
 	draft.lastUpdateBy,tfiles.fileExt, draft.changesetID, draft.majorVersion, draft.minorVersion, tcontentstats.lockID, draft.expires,
 	tapprovalrequests.status, draft.displayStart, tchangesets.publishDate
