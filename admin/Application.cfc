@@ -107,7 +107,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		}
 		
 		if(not hasMappings){
-			include "config/buildPluginCFApplication.cfm";
+			include "../config/buildPluginCFApplication.cfm";
 		}
 		
 	}
