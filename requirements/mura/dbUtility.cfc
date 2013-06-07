@@ -1085,7 +1085,7 @@
 		type="index">
 	
 	<cfquery name="rsCheck" dbtype="query">
-		select * from rsCheck where lower(rsCheck.INDEX_NAME) like 'primary'
+		select * from rsCheck where lower(rsCheck.INDEX_NAME) like 'primary%'
 		or lower(rsCheck.INDEX_NAME) like 'pk_%'
 	</cfquery>
 
