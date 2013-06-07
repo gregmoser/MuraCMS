@@ -324,6 +324,7 @@ to your own modified versions of Mura CMS.
                 </cfloop>
               </cfcase>
               <cfcase value="mysql,h2" delimiters=",">
+
                 <cfset aSql = ListToArray(sql, ';')>
                 <!--- loop over items --->
                 <cfloop index="x" from="1" to="#arrayLen(aSql) - 1#">

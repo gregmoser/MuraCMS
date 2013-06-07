@@ -306,7 +306,10 @@
 					<cfif arguments.autoincrement>
 						,PRIMARY KEY(#arguments.column#)
 					</cfif>
-					) ENGINE=InnoDB DEFAULT CHARSET=utf8
+					) 
+					<cfif version().database_productname neq 'h2'>
+						ENGINE=InnoDB DEFAULT CHARSET=utf8
+					</cfif>
 				</cfif>
 			</cfquery>
 		</cfcase>
@@ -1019,7 +1022,6 @@
 	<cfargument name="table" default="#variables.table#">
 	<cfset var indexArray=indexes(arguments.table)>
 	<cfset var i="">
-	
 	<cfif arrayLen(indexArray)>
 		<cfloop from="1" to="#arrayLen(indexArray)#" index="i">
 			<cfif indexArray[i].column eq arguments.column>
@@ -1062,7 +1064,7 @@
 		type="index">
 	
 	<cfquery name="rsCheck" dbtype="query">
-		select * from rsCheck where lower(rsCheck.INDEX_NAME) like 'primary'
+		select * from rsCheck where lower(rsCheck.INDEX_NAME) like 'primary%'
 		or lower(rsCheck.INDEX_NAME) like 'pk_%'
 		or lower(rsCheck.INDEX_NAME) like '%_pkey'
 	</cfquery>
