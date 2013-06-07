@@ -448,7 +448,14 @@
 			</cfcase>
 			<cfcase value="mysql">
 				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TABLE #arguments.table# MODIFY COLUMN #arguments.column# <cfif arguments.autoincrement>INT(10) NOT NULL AUTO_INCREMENT<cfelse>#transformDataType(arguments.datatype,arguments.length)# <cfif not arguments.nullable> not null </cfif> default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
+					ALTER TABLE #arguments.table# 
+					<cfif version().database_productname eq 'H2'>
+						ALTER
+					<cfelse>
+						MODIFY
+					</cfif>
+					 
+					COLUMN #arguments.column# <cfif arguments.autoincrement>INT(10) NOT NULL AUTO_INCREMENT<cfelse>#transformDataType(arguments.datatype,arguments.length)# <cfif not arguments.nullable> not null </cfif> default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
 				</cfquery>
 			</cfcase>
 			<cfcase value="postgresql">
