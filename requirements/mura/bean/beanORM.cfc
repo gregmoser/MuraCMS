@@ -765,7 +765,7 @@ component extends="mura.bean.bean" versioned=false {
 		var item='';
 		var prop='';
 
-		if(rs.recordcount){
+		if(isQuery(rs) && rs.recordcount){
 			var it=getIterator().setQuery(rs);
 
 			while (it.hasNext()){

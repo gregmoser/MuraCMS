@@ -134,7 +134,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		<!--- BEGIN BUNDLEABLE CUSTOM OBJECTS --->
 		<cfif structKeyExists(arguments, "bundle")>
-			<cfset var bundleablebeans=arguments.getValue("bundleablebeans")>	
+			<cfset var bundleablebeans=application.objectMappings.bundleablebeans>	
 			<cfif len(bundleablebeans)>
 				<cfset var bb="">
 
