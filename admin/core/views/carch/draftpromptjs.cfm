@@ -35,7 +35,7 @@ function initDraftPrompt(){
 						return false;
 					});
 				} else {
-					window.location = a.attr('href');
+					actionModal(a.attr('href'));
 				}
 			}
 		});
