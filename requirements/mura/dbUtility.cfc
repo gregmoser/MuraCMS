@@ -308,7 +308,7 @@
 					</cfif>
 					) 
 					<cfif version().database_productname neq 'h2'>
-						ENGINE=InnoDB DEFAULT CHARSET=utf8
+						ENGINE=#variables.configBean.getMySQLEngine()# DEFAULT CHARSET=utf8
 					</cfif>
 				</cfif>
 			</cfquery>

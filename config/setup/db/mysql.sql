@@ -29,7 +29,7 @@ CREATE TABLE `tadcampaigns` (
   `isActive` int(10) default NULL,
   `notes` longtext,
   PRIMARY KEY  (`campaignID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tadcampaigns`
@@ -61,7 +61,7 @@ CREATE TABLE `tadcreatives` (
   `width` int(10) default NULL,
   `textBody` longtext,
   PRIMARY KEY  (`creativeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tadcreatives`
@@ -78,7 +78,7 @@ CREATE TABLE `tadcreatives` (
 CREATE TABLE `tadipwhitelist` (
   `IP` varchar(50) character set utf8 NOT NULL default '',
   `siteID` varchar(50) character set utf8 NOT NULL default ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tadipwhitelist`
@@ -98,7 +98,7 @@ CREATE TABLE `tadplacementdetails` (
   `PlacementType` char(35) character set utf8 NOT NULL default '',
   `PlacementValue` int(10) NOT NULL default '0',
    PRIMARY KEY  (`detailID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tadplacementdetails`
@@ -130,7 +130,7 @@ CREATE TABLE `tadplacements` (
   `isActive` int(10) default NULL,
   `notes` longtext,
   PRIMARY KEY  (`placementID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tadplacements`
@@ -152,7 +152,7 @@ CREATE TABLE `tadstats` (
   `Type` varchar(50) character set utf8 default NULL,
   `counter` int(10) default NULL,
    PRIMARY KEY  (`statID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tadstats`
@@ -179,7 +179,7 @@ CREATE TABLE `tadzones` (
   `height` int(10) default NULL,
   `width` int(10) default NULL,
    PRIMARY KEY  (`adZoneID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tadzones`
@@ -197,7 +197,7 @@ CREATE TABLE `tcaptcha` (
   `LetterID` int(10) NOT NULL default '0',
   `Letter` char(1) default NULL,
   `ImageFile` varchar(50) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcaptcha`
@@ -304,7 +304,7 @@ CREATE TABLE `tcontent` (
    KEY `IX_TContent_3` (`ParentID`),
    KEY `IX_TContent_4` (`RemoteID`),
    KEY `IX_TContent_5` (`ModuleID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontent`
@@ -340,7 +340,7 @@ CREATE TABLE `tcontentstats` (
   `downVotes` int(10) unsigned NOT NULL default '0',
   `comments` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`contentID`,`siteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 
 
@@ -354,7 +354,7 @@ CREATE TABLE `tcontentassignments` (
   `siteID` varchar(25) character set utf8 NOT NULL default '',
   `userID` char(35) NOT NULL default '',
   PRIMARY KEY  (`contentID`,`contentHistID`,`siteID`,`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentassignments`
@@ -386,7 +386,7 @@ CREATE TABLE `tcontentcategories` (
   `path` longtext,
   PRIMARY KEY  (`categoryID`),
   KEY `IX_TContentCategories` (`siteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentcategories`
@@ -410,7 +410,7 @@ CREATE TABLE `tcontentcategoryassign` (
   `featureStart` datetime default NULL,
   `featureStop` datetime default NULL,
   PRIMARY KEY  (`contentHistID`,`categoryID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentcategoryassign`
@@ -438,7 +438,7 @@ CREATE TABLE `tcontentcomments` (
   `isApproved` tinyint(3) default '0',
   PRIMARY KEY  (`commentid`),
   KEY `IX_TContentComments` (`contentid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentcomments`
@@ -457,7 +457,7 @@ CREATE TABLE `tcontentdisplaytitleapprovals` (
   `isApproved` tinyint(3) default NULL,
   `email` varchar(150) character set utf8 default NULL,
   `siteid` varchar(25) character set utf8 default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentdisplaytitleapprovals`
@@ -480,7 +480,7 @@ CREATE TABLE `tcontenteventreminders` (
   `RemindMinute` int(10) default NULL,
   `RemindInterval` int(10) default NULL,
   `isSent` int(10) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontenteventreminders`
@@ -504,7 +504,7 @@ CREATE TABLE `tcontentfeedadvancedparams` (
   `criteria` varchar(200) character set utf8 default NULL,
   `dataType` varchar(50) character set utf8 default NULL,
   PRIMARY KEY  (`paramID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentfeedadvancedparams`
@@ -522,7 +522,7 @@ CREATE TABLE `tcontentfeeditems` (
   `feedID` char(35) NOT NULL default '',
   `itemID` char(35) NOT NULL default '',
   `type` varchar(50) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentfeeditems`
@@ -565,7 +565,7 @@ CREATE TABLE `tcontentfeeds` (
   `displayComments` tinyint(3) default NULL,
   PRIMARY KEY  (`feedID`),
   KEY `IX_TContentFeeds` (`siteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentfeeds`
@@ -590,7 +590,7 @@ CREATE TABLE `tcontentobjects` (
   `ColumnID` int(10) default NULL,
   PRIMARY KEY  (`ContentHistID`,`ObjectID`,`Object`,`ColumnID` ),
   KEY `IX_TContentObjects` (`SiteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentobjects`
@@ -612,7 +612,7 @@ CREATE TABLE `tcontentratings` (
   `entered` timestamp NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`contentID`,`userID`,`siteID`),
   KEY `IDX_ENTERED` (`entered`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentratings`
@@ -632,7 +632,7 @@ CREATE TABLE `tcontentrelated` (
   `contentID` char(35) NOT NULL default '',
   `siteID` varchar(25) NOT NULL default '',
   PRIMARY KEY  (`contentHistID`,`relatedID`,`contentID`,`siteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tcontentrelated`
@@ -651,7 +651,7 @@ CREATE TABLE `temailreturnstats` (
   `email` varchar(100) character set utf8 default NULL,
   `url` mediumtext,
   `created` datetime default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `temailreturnstats`
@@ -684,7 +684,7 @@ CREATE TABLE `temails` (
   `isDeleted` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`EmailID`),
   KEY `IX_TEmails` (`siteid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `temails`
@@ -706,7 +706,7 @@ CREATE TABLE `temailstats` (
   `bounce` int(10) NOT NULL default '0',
   `sent` int(10) NOT NULL default '0',
   `Created` datetime default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `temailstats`
@@ -735,7 +735,7 @@ CREATE TABLE `tfiles` (
   `fileExt` varchar(50) character set utf8 default NULL,
   `created` datetime default NULL,
   PRIMARY KEY  (`fileID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tfiles`
@@ -758,7 +758,7 @@ CREATE TABLE `tformresponsepackets` (
   `Entered` datetime default NULL,
   PRIMARY KEY  (`ResponseID`),
   KEY `IX_TFormResponsePackets` (`FormID`,`SiteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tformresponsepackets`
@@ -778,7 +778,7 @@ CREATE TABLE `tformresponsequestions` (
   `formField` varchar(50) character set utf8 default NULL,
   `formValue` longtext,
   `pollValue` varchar(255) character set utf8 default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tformresponsequestions`
@@ -795,7 +795,7 @@ CREATE TABLE `tformresponsequestions` (
 CREATE TABLE `tglobals` (
   `appreload` datetime default NULL,
   `loadlist` mediumtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tglobals`
@@ -817,7 +817,7 @@ CREATE TABLE `tmailinglist` (
   `LastUpdate` datetime default NULL,
   `isPurge` int(10) default NULL,
   `isPublic` int(10) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tmailinglist`
@@ -843,7 +843,7 @@ CREATE TABLE `tmailinglistmembers` (
   `lname` varchar(50) character set utf8 default NULL,
   `company` varchar(50) character set utf8 default NULL,
   `isVerified` tinyint(1) NOT NULL default '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tmailinglistmembers`
@@ -862,7 +862,7 @@ CREATE TABLE `tpermissions` (
   `GroupID` char(35) character set utf8 default NULL,
   `SiteID` varchar(25) character set utf8 default NULL,
   `Type` varchar(50) character set utf8 default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tpermissions`
@@ -881,7 +881,7 @@ CREATE TABLE `tredirects` (
   `URL` mediumtext,
   `created` datetime default NULL,
   PRIMARY KEY  (`redirectID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tredirects`
@@ -919,7 +919,7 @@ CREATE TABLE `tsessiontracking` (
   KEY `IX_TSessionTracking_1` (`contentID`),
   KEY `IX_TSessionTracking_2` (`urlToken`),
   KEY `IX_TSessionTracking_3` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tsessiontracking`
@@ -998,7 +998,7 @@ CREATE TABLE `tsettings` (
   `mailserverPOPPort` varchar(5) default NULL,
   `mailserverTLS` varchar(5) default NULL, 
   `mailserverSSL` varchar(5) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tsettings`
@@ -1019,7 +1019,7 @@ CREATE TABLE `tsystemobjects` (
   `SiteID` varchar(25) character set utf8 default NULL,
   `Name` varchar(50) character set utf8 default NULL,
   `OrderNo` int(10) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tsystemobjects`
@@ -1074,7 +1074,7 @@ CREATE TABLE `tuseraddresses` (
   INDEX `Index_2`(`longitude`),
   INDEX `Index_3`(`latitude`),
   INDEX `Index_4`(`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tuseraddresses`
@@ -1127,7 +1127,7 @@ CREATE TABLE `tusers` (
   `remoteID` varchar(35) default NULL,
   `tags` longtext,
    PRIMARY KEY  (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tusers`
@@ -1158,7 +1158,7 @@ CREATE TABLE `tusersfavorites` (
   `rowNumber` int(10) default NULL,
   `maxRSSItems` int(10) default NULL,
   PRIMARY KEY  (`favoriteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tusersfavorites`
@@ -1176,7 +1176,7 @@ CREATE TABLE `tusersinterests` (
   `userID` char(35) character set utf8  NOT NULL default '',
   `categoryID` char(35) character set utf8 NOT NULL default '',
   PRIMARY KEY (`userID`,`categoryID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tusersinterests`
@@ -1194,7 +1194,7 @@ CREATE TABLE `tusersmemb` (
   `UserID` char(35) character set utf8 NOT NULL default '',
   `GroupID` char(35) character set utf8 NOT NULL default '',
   PRIMARY KEY  (`UserID`,`GroupID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 --
 -- Dumping data for table `tusersmemb`
@@ -1210,7 +1210,7 @@ CREATE TABLE  `tcontentpublicsubmissionapprovals` (
   `email` varchar(150) NOT NULL,
   `siteID` varchar(25) NOT NULL,
   PRIMARY KEY  USING BTREE (`contentID`,`siteID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 
 CREATE TABLE `tcontenttags` (
@@ -1225,7 +1225,7 @@ CREATE TABLE `tcontenttags` (
   INDEX `Index_4`(`contentID`),
   INDEX `Index_5`(`tag`)
 )
-ENGINE=InnoDB DEFAULT CHARSET=utf8;
+<cfoutput>#storageEngine#</cfoutput>;
 
 
 CREATE TABLE `tuserstags` (
@@ -1238,7 +1238,7 @@ CREATE TABLE `tuserstags` (
   INDEX `Index_3`(`siteID`),
   INDEX `Index_4`(`tag`)
 )
-ENGINE=InnoDB DEFAULT CHARSET=utf8;
+<cfoutput>#storageEngine#</cfoutput>;
 
 
 CREATE TABLE `tclassextenddatauseractivity`  (
@@ -1250,7 +1250,7 @@ CREATE TABLE `tclassextenddatauseractivity`  (
 	INDEX `Index_2`(`baseID`),
 	INDEX `Index_3`(`attributeID`),
 	PRIMARY KEY (`dataID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 
 CREATE TABLE `tclassextenddata`  (
@@ -1262,7 +1262,7 @@ CREATE TABLE `tclassextenddata`  (
 	INDEX `Index_2`(`baseID`),
 	INDEX `Index_3`(`attributeID`),
 	PRIMARY KEY (`dataID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 
 CREATE TABLE `tclassextend` (
@@ -1279,7 +1279,7 @@ CREATE TABLE `tclassextend` (
 	`dateCreated` datetime NULL ,
 	`lastUpdateBy` varchar (100)  NULL ,
 	PRIMARY KEY (`subTypeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 
 CREATE TABLE `tclassextendattributes` (
@@ -1301,7 +1301,7 @@ CREATE TABLE `tclassextendattributes` (
 	`optionLabelList` longtext,
 	INDEX `Index_2`(`extendSetID`),
 	PRIMARY KEY (`attributeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 
 CREATE TABLE `tclassextendsets` (
@@ -1314,7 +1314,7 @@ CREATE TABLE `tclassextendsets` (
 	`isActive` tinyint(3) NULL,
 	INDEX `Index_2`(`subTypeID`),
 	PRIMARY KEY (`extendSetID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) <cfoutput>#storageEngine#</cfoutput>;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

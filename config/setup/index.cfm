@@ -323,8 +323,22 @@ to your own modified versions of Mura CMS.
                   </cfif>
                 </cfloop>
               </cfcase>
-              <cfcase value="mysql,h2" delimiters=",">
+              <cfcase value="mysql">
 
+                <cfdbinfo 
+                name="rsCheck"
+                datasource="#FORM.production_datasource#" 
+                username="#FORM.production_dbusername#" 
+                password="#FORM.production_dbpassword#"
+                type="version">
+
+                <cfif check.database_productName eq 'H2'>
+                  <cfset storageEngine="">
+                <cfelse>
+                  <cfparam name="form.production_mysqlengine" default="InnoDB">
+                  <cfset storageEngine="ENGINE=#form.production_mysqlengine# DEFAULT CHARSET=utf8">
+                </cfif>
+              
                 <cfset aSql = ListToArray(sql, ';')>
                 <!--- loop over items --->
                 <cfloop index="x" from="1" to="#arrayLen(aSql) - 1#">
