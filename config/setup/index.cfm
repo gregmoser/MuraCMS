@@ -270,9 +270,25 @@ to your own modified versions of Mura CMS.
             </cfif>
             --->
          
-          <cfsavecontent variable="sql">
-            <cfinclude template="db/#FORM.production_dbtype#.sql">
-          </cfsavecontent>
+          <cfdbinfo 
+                name="rsCheck"
+                datasource="#FORM.production_datasource#" 
+                username="#FORM.production_dbusername#" 
+                password="#FORM.production_dbpassword#"
+                type="version">
+
+          <cfif rsCheck.database_productname eq 'H2'>
+            <cfsavecontent variable="sql">
+              <cfinclude template="db/h2.sql">
+            </cfsavecontent>
+          <cfelse>
+            <cfparam name="form.production_mysqlengine" default="InnoDB">
+            <cfset storageEngine="ENGINE=#form.production_mysqlengine# DEFAULT CHARSET=utf8">
+            <cfsavecontent variable="sql">
+              <cfinclude template="db/#FORM.production_dbtype#.sql">
+            </cfsavecontent>
+          </cfif>
+          
           <!---
           <cfsavecontent variable="sql">
             <cfinclude template="db/#FORM.production_dbtype#.sql">
@@ -324,20 +340,6 @@ to your own modified versions of Mura CMS.
                 </cfloop>
               </cfcase>
               <cfcase value="mysql">
-
-                <cfdbinfo 
-                name="rsCheck"
-                datasource="#FORM.production_datasource#" 
-                username="#FORM.production_dbusername#" 
-                password="#FORM.production_dbpassword#"
-                type="version">
-
-                <cfif check.database_productName eq 'H2'>
-                  <cfset storageEngine="">
-                <cfelse>
-                  <cfparam name="form.production_mysqlengine" default="InnoDB">
-                  <cfset storageEngine="ENGINE=#form.production_mysqlengine# DEFAULT CHARSET=utf8">
-                </cfif>
               
                 <cfset aSql = ListToArray(sql, ';')>
                 <!--- loop over items --->
@@ -682,7 +684,6 @@ to your own modified versions of Mura CMS.
               <option value="mssql" <cfif FORM.production_dbtype IS "mssql">selected</cfif>>MSSQL</option>
               <option value="oracle" <cfif FORM.production_dbtype IS "oracle">selected</cfif>>Oracle</option>
 			        <option value="postgresql" <cfif FORM.production_dbtype IS "postgresql">selected</cfif>>PostgreSQL</option>
-               <option value="h2" <cfif FORM.production_dbtype IS "h2">selected</cfif>>H2 (Testing Only)</option>
             </select>
           </div>
         </div>
