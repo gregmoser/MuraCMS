@@ -127,7 +127,7 @@
 			where objectID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#rs.objectID#">
 		</cfquery>
 
-		<cfset getBean('contentDAO').deleteVersionedObjects(contentID=rs.contentid,siteID=rs.siteid)>
+		<cfset getBean('contentDAO').deleteVersionedObjects(contentID=rs.objectid,siteID=rs.siteid)>
 
 	</cfloop>
 
