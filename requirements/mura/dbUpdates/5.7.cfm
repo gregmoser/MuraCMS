@@ -98,7 +98,7 @@
 	.addColumn(column="height",dataType="varchar",length="10")
 	.addColumn(column="width",dataType="varchar",length="10")
 	.addPrimaryKey('sizeID')
-	.addIndex('sizeID')
+	//.addIndex('sizeID')
 	.addIndex('siteID');
 
 	dbUtility.setTable("ttrash")
@@ -118,8 +118,8 @@
 	.addColumn(column="autoimport",dataType="tinyint",default=0)
 	.addColumn(column="isLocked",dataType="tinyint",default=0);
 
-	//dbUtility.setTable("tcontent")
-	//.addColumn(column="sourceID",dataType="char",length="35");
+	dbUtility.setTable("tcontent")
+	.addColumn(column="sourceID",dataType="char",length="35");
 
 	dbUtility.setTable("tclusterpeers")
 	.addColumn(column="instanceID",dataType="char",length="35",nullable=false, default='')

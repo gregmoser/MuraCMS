@@ -323,7 +323,7 @@ to your own modified versions of Mura CMS.
                   </cfif>
                 </cfloop>
               </cfcase>
-              <cfcase value="mysql" delimiters=",">
+              <cfcase value="mysql,h2" delimiters=",">
                 <cfset aSql = ListToArray(sql, ';')>
                 <!--- loop over items --->
                 <cfloop index="x" from="1" to="#arrayLen(aSql) - 1#">
@@ -335,7 +335,7 @@ to your own modified versions of Mura CMS.
                   </cfif>
                 </cfloop>
               </cfcase>
-				<cfcase value="postgresql" delimiters=",">
+				<cfcase value="postgresql">
 				  <cfset aSql = ListToArray(sql, ';')>
 				  <!--- loop over items --->
 				  <cfloop index="x" from="1" to="#arrayLen(aSql) - 1#">
@@ -666,7 +666,8 @@ to your own modified versions of Mura CMS.
               <option value="mysql" <cfif FORM.production_dbtype IS "mysql">selected</cfif>>MySQL</option>
               <option value="mssql" <cfif FORM.production_dbtype IS "mssql">selected</cfif>>MSSQL</option>
               <option value="oracle" <cfif FORM.production_dbtype IS "oracle">selected</cfif>>Oracle</option>
-			  <option value="postgresql" <cfif FORM.production_dbtype IS "postgresql">selected</cfif>>PostgreSQL</option>
+			        <option value="postgresql" <cfif FORM.production_dbtype IS "postgresql">selected</cfif>>PostgreSQL</option>
+               <option value="h2" <cfif FORM.production_dbtype IS "h2">selected</cfif>>H2</option>
             </select>
           </div>
         </div>
