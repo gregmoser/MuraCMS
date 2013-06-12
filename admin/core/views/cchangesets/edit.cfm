@@ -92,6 +92,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <div class="control-group">
   <label class="control-label">
+    <a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.changesetclosedate"))#">#application.rbFactory.getKeyValue(session.rb,'changesets.closedate')# <i class="icon-question-sign"></i></a>
+    </label>
+  <div class="controls">
+    
+    <input type="text" name="closeDate" value="#LSDateFormat(rc.changeset.getCloseDate(),session.dateKeyFormat)#"  maxlength="12" class="textAlt datepicker" />
+
+    <select name="closehour" class="span1"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.changeset.getCloseDate())  and h eq 12 or (LSisDate(rc.changeset.getCloseDate()) and (hour(rc.changeset.getCloseDate()) eq h or (hour(rc.changeset.getCloseDate()) - 12) eq h or hour(rc.changeset.getCloseDate()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
+    <select name="closeMinute" class="span1"><cfloop from="0" to="59" index="m"><option value="#m#" <cfif LSisDate(rc.changeset.getCloseDate()) and minute(rc.changeset.getCloseDate()) eq m>selected</cfif>>#iif(len(m) eq 1,de('0#m#'),de('#m#'))#</option></cfloop></select>
+    <select name="closeDayPart" class="span1"><option value="AM">AM</option><option value="PM" <cfif LSisDate(rc.changeset.getCloseDate()) and hour(rc.changeset.getCloseDate()) gte 12>selected</cfif>>PM</option></select>
+  </div>
+</div>
+
+<div class="control-group">
+  <label class="control-label">
     <a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.changesetpublishdate"))#">#application.rbFactory.getKeyValue(session.rb,'changesets.publishdate')# <i class="icon-question-sign"></i></a>
     </label>
   <div class="controls">

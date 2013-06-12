@@ -16,4 +16,7 @@
 
 	dbUtility.setTable('temails')
 	.addColumn(column='template',dataType='varchar');
+
+	dbUtility.setTable("tchangesets")
+	.addColumn(column="closeDate",dataType="datetime");
 </cfscript>

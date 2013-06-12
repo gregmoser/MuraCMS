@@ -12,6 +12,7 @@
 <cfproperty name="remotePubDate" type="date" default="" />
 <cfproperty name="lastUpdate" type="date" default="" />
 <cfproperty name="lastUpdateBy" type="string" default="" />
+<cfproperty name="closeDate" type="date" default="" />
 <cfproperty name="isNew" type="numeric" default="1" required="true" />
 
 <cffunction name="init" output="false">
@@ -30,6 +31,7 @@
 	<cfset variables.instance.remotePubDate = "">
 	<cfset variables.instance.lastUpdate="#now()#"/>
 	<cfset variables.instance.lastUpdateBy=""/>
+	<cfset variables.instance.closeDate=""/>
 	<cfset variables.instance.isNew=1 />
 	<cfset variables.instance.errors=structNew()>
 	
@@ -100,6 +102,31 @@
 			
 				</cfif>
 			</cfif>
+
+			<cfif isDate(variables.instance.closedate)>
+				
+				<cfif isdefined("arguments.data.closehour")
+				and isdefined("arguments.data.closeMinute")
+				and isdefined("arguments.data.closeDayPart")>
+				
+					<cfif arguments.data.closedaypart eq "PM">
+						<cfset closehour = arguments.data.closehour + 12>
+						
+						<cfif closehour eq 24>
+							<cfset closehour = 12>
+						</cfif>
+					<cfelse>
+						<cfset closehour = arguments.data.closehour>
+						
+						<cfif closehour eq 12>
+							<cfset closehour = 0>
+						</cfif>
+					</cfif>
+					
+					<cfset setCloseDate(createDateTime(year(variables.instance.closeDate), month(variables.instance.closeDate), day(variables.instance.closeDate), closehour, arguments.data.closeMinute, "0"))>
+			
+				</cfif>
+			</cfif>
 			
 		</cfif>
 		
@@ -138,6 +165,12 @@
 </cffunction>
 
 <cffunction name="setLastUpdate" access="public" output="false">
+	<cfargument name="lastUpdate" type="String" />
+	<cfset variables.instance.lastUpdate = parseDateArg(arguments.lastUpdate) />
+	<cfreturn this>
+</cffunction>
+
+<cffunction name="setCloseDate" access="public" output="false">
 	<cfargument name="lastUpdate" type="String" />
 	<cfset variables.instance.lastUpdate = parseDateArg(arguments.lastUpdate) />
 	<cfreturn this>

@@ -73,7 +73,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<dt>#HTMLEditFormat(variables.f)#</dt>
 					<dd>
 						<cfif findNoCase('attachment',variables.f) and isValid("UUID",fvalue)>
-							<a  href="##" onclick="return preview('http://#application.settingsManager.getSite(session.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()#/tasks/render/file/?fileID=#variables.fvalue#');">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.viewattachment')#</a>
+							<a  href="http://#application.settingsManager.getSite(session.siteid).getDomain()##application.configBean.getServerPort()##application.configBean.getContext()#/tasks/render/file/?fileID=#variables.fvalue#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.viewattachment')#</a>
 						<cfelse>
 							#$.setParagraphs(htmleditformat(variables.fvalue))#
 						</cfif>
