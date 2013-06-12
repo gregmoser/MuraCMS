@@ -565,6 +565,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="getURLStem" access="public" output="false" returntype="string">
 	<cfargument name="siteID">
 	<cfargument name="filename">
+	<cfargument name="siteidinurls" default="#application.configBean.getSiteIDInURLS()#">
+	<cfargument name="indexfileinurls" default="#application.configBean.getIndexFileInURLS()#">
 
 	<cfif len(arguments.filename)>
 		<cfif left(arguments.filename,1) neq "/">
@@ -575,37 +577,25 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 	</cfif>
 
-	<cfif not application.configBean.getSiteIDInURLS()>
+	<cfif not arguments.siteidinurls>
 		<cfif arguments.filename neq ''>
-			<cfif application.configBean.getStub() eq ''>
-				<cfif application.configBean.getIndexFileInURLS() and not request.muraExportHTML>
-					<cfreturn "/index.cfm" &  arguments.filename />
-				<cfelse>
-					<cfreturn arguments.filename />
-				</cfif>
+			<cfif arguments.indexfileinurls and not request.muraExportHTML>
+				<cfreturn "/index.cfm" &  arguments.filename />
 			<cfelse>
-				<cfreturn application.configBean.getStub() & arguments.filename />
-			</cfif>
+				<cfreturn arguments.filename />
+			</cfif>	
 		<cfelse>
 			<cfreturn "/" />
 		</cfif>
 	<cfelse>
 		<cfif arguments.filename neq ''>
-			<cfif not len(application.configBean.getStub())>
-				<cfif application.configBean.getIndexFileInURLS()>
-					<cfreturn "/" & arguments.siteID & "/index.cfm" & arguments.filename />
-				<cfelse>
-					<cfreturn "/" & arguments.siteID & arguments.filename />
-				</cfif>
+			<cfif arguments.indexfileinurls>
+				<cfreturn "/" & arguments.siteID & "/index.cfm" & arguments.filename />
 			<cfelse>
-				<cfreturn application.configBean.getStub() & "/" & arguments.siteID  & arguments.filename />
+				<cfreturn "/" & arguments.siteID & arguments.filename />
 			</cfif>
 		<cfelse>
-			<cfif not len(application.configBean.getStub())>
-				<cfreturn "/" & arguments.siteID & "/" />
-			<cfelse>
-				<cfreturn application.configBean.getStub() & "/" & arguments.siteID & "/"  />
-			</cfif>
+			<cfreturn "/" & arguments.siteID & "/" />
 		</cfif>
 	</cfif>
 </cffunction>
