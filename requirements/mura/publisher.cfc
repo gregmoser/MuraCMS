@@ -783,7 +783,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfquery datasource="#arguments.toDSN#">
 					insert into tchangesets (changesetID, siteID, name, description, created, publishDate, 
 					published, lastupdate, lastUpdateBy, lastUpdateByID,
-					remoteID, remotePubDate, remoteSourceURL)
+					remoteID, remotePubDate, remoteSourceURL,closedate)
 					values (
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(rstchangesets.changesetID)#">,
 					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.toSiteID#">,
@@ -797,7 +797,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstchangesets.LastUpdateByID neq '',de('no'),de('yes'))#" value="#rstchangesets.LastUpdateByID#">,
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstchangesets.remoteID neq '',de('no'),de('yes'))#" value="#rstchangesets.remoteID#">,
 					<cfqueryparam cfsqltype="cf_sql_TIMESTAMP" null="#iif(isDate(rstchangesets.remotePubDate),de('no'),de('yes'))#" value="#rstchangesets.remotePubDate#">,
-					<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstchangesets.remoteSourceURL neq '',de('no'),de('yes'))#" value="#rstchangesets.remoteSourceURL#">
+					<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstchangesets.remoteSourceURL neq '',de('no'),de('yes'))#" value="#rstchangesets.remoteSourceURL#">,
+					<cfif structKeyExists(rstchangesets, "closedate")>
+						<cfqueryparam cfsqltype="cf_sql_TIMESTAMP" null="#iif(isDate(rstchangesets.closedate),de('no'),de('yes'))#" value="#rstchangesets.closedate#">,
+					<cfelse>
+						null
+					</cfif>
 					)
 				</cfquery>
 			</cfloop>
