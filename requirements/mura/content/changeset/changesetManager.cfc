@@ -113,7 +113,7 @@
 												minute(arguments.bean.getCloseDate()),0)#">
 					<cfelse>
 						null
-					</cfif>,
+					</cfif>
 		where changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getChangesetID()#">
 	</cfquery>
 

@@ -171,8 +171,8 @@
 </cffunction>
 
 <cffunction name="setCloseDate" access="public" output="false">
-	<cfargument name="lastUpdate" type="String" />
-	<cfset variables.instance.lastUpdate = parseDateArg(arguments.lastUpdate) />
+	<cfargument name="closeDate" type="String" />
+	<cfset variables.instance.closeDate = parseDateArg(arguments.closeDate) />
 	<cfreturn this>
 </cffunction>
 
