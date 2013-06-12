@@ -312,6 +312,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							</cftry>
 							--->
 						<cfelse>
+							<cfif arguments.event.getValue('urltitle') eq '404'>
+								<cfheader statuscode="404" statustext="Content Not Found" /> 
+							</cfif>
 							<cfset translator=arguments.event.getHandler('standardTranslation')>	
 						</cfif>
 					</cfcase>
@@ -348,7 +351,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif len(arguments.event.getValue('previewID'))>
 			<cfset arguments.event.getContentBean().setBody("The requested version of this content could not be found.")>
 		</cfif>
-		<cfheader statuscode="404" statustext="Content Not Found" /> 
 	</cfif>
 	
 </cffunction>
