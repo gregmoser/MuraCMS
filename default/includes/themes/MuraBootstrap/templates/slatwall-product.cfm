@@ -69,8 +69,14 @@ Notes:
 		<div class="row">
 			<div class="span4">
 				<div class="well">
-					<!--- This displays the primary image which is pulled from the default sku --->
-					<a href="#$.slatwall.product().getImagePath()#" target="_blank">#$.slatwall.product().getImage(size="m")#</a>
+					<!--- Display primary product image if it exists or the product image placeholder  --->
+					<cfif $.slatwall.product().getImageExistsFlag()>
+						<!--- If the image exists, display image with link to full version --->
+						<a href="#$.slatwall.product().getImagePath()#" target="_blank">#$.slatwall.product().getImage(size="m")#</a>
+					<cfelse>
+						<!--- If the image doesn't exists, display image with link to full version --->
+						#$.slatwall.product().getImage(size="m")#
+					</cfif>
 				</div>
 			</div>
 			<div class="span8">
@@ -89,7 +95,7 @@ Notes:
 							
 							<!--- Brand --->
 							<cfif !isNull($.slatwall.product().getBrand())>
-								<dt>Product Type</dt>
+								<dt>Brand</dt>
 								<dd>#$.slatwall.product().getBrand().getBrandName()#</dd>
 							</cfif>
 							
@@ -153,7 +159,7 @@ Notes:
 				<!--- If this item was just tried to be added, but failed then show the failure message ---> 
 				<cfelseif $.slatwall.hasFailureAction( "public:cart.addOrderItem" )>
 					<div class="alert alert-error">
-						<sw:errorDisplay object="#$.slatwall.cart().getProcessObject('addOrderItem')#" />
+						<sw:ErrorDisplay object="#$.slatwall.cart().getProcessObject('addOrderItem')#" />
 					</div>
 				</cfif>
 				
@@ -305,7 +311,7 @@ Notes:
 							<cfset addProductReviewObj = $.slatwall.product().getProcessObject('addProductReview') />
 							
 							<!--- Error Display: This will show all of the errors of the addProductReview if it was submitted and has some --->
-							<sw:errorDisplay object="#addProductReviewObj.getNewProductReview()#" />
+							<sw:ErrorDisplay object="#addProductReviewObj.getNewProductReview()#" />
 							
 							<!--- Add Product Review Form --->
 							<form action="?s=1" method="post" class="form-horizontal">
@@ -325,8 +331,8 @@ Notes:
 			    					<div class="controls">
 			    						
 										<!--- This select box allows you to add ratings along with your review, but it is not required.  If you would just like to do ratings that is fine too --->
-										<sw:formField type="select" name="newProductReview.rating" valueObject="#addProductReviewObj.getNewProductReview()#" valueOptions="#addProductReviewObj.getNewProductReview().getRatingOptions()#" valueObjectProperty="rating" />
-										<sw:errorDisplay object="#addProductReviewObj.getNewProductReview()#" errorName="rating" />
+										<sw:FormField type="select" name="newProductReview.rating" valueObject="#addProductReviewObj.getNewProductReview()#" valueOptions="#addProductReviewObj.getNewProductReview().getRatingOptions()#" valueObjectProperty="rating" />
+										<sw:ErrorDisplay object="#addProductReviewObj.getNewProductReview()#" errorName="rating" />
 										
 			    					</div>
 			  					</div>
@@ -342,8 +348,8 @@ Notes:
 			    						</cfif>
 										
 			    						<!--- This form field allows you to let users add titles to reviews, but it is not required --->
-										<sw:formField type="text" name="newProductReview.reviewerName" valueObject="#addProductReviewObj.getNewProductReview()#" valueObjectProperty="reviewerName" />
-										<sw:errorDisplay object="#addProductReviewObj.getNewProductReview()#" errorName="reviewerName" />
+										<sw:FormField type="text" name="newProductReview.reviewerName" valueObject="#addProductReviewObj.getNewProductReview()#" valueObjectProperty="reviewerName" />
+										<sw:ErrorDisplay object="#addProductReviewObj.getNewProductReview()#" errorName="reviewerName" />
 										
 			    					</div>
 			  					</div>
@@ -354,8 +360,8 @@ Notes:
 			    					<div class="controls">
 			    						
 			    						<!--- This form field allows you to let users add titles to reviews, but it is not required --->
-										<sw:formField type="text" name="newProductReview.reviewTitle" valueObject="#addProductReviewObj.getNewProductReview()#" valueObjectProperty="reviewTitle" />
-										<sw:errorDisplay object="#addProductReviewObj.getNewProductReview()#" errorName="reviewTitle" />
+										<sw:FormField type="text" name="newProductReview.reviewTitle" valueObject="#addProductReviewObj.getNewProductReview()#" valueObjectProperty="reviewTitle" />
+										<sw:ErrorDisplay object="#addProductReviewObj.getNewProductReview()#" errorName="reviewTitle" />
 										
 			    					</div>
 			  					</div>
@@ -366,8 +372,8 @@ Notes:
 			    					<div class="controls">
 			    						
 			    						<!--- This input is the primary review section, but it is also not required by default --->
-										<sw:formField type="textarea" name="newProductReview.review" valueObject="#addProductReviewObj.getNewProductReview()#" valueObjectProperty="review" />
-										<sw:errorDisplay object="#addProductReviewObj.getNewProductReview()#" errorName="review" />
+										<sw:FormField type="textarea" name="newProductReview.review" valueObject="#addProductReviewObj.getNewProductReview()#" valueObjectProperty="review" />
+										<sw:ErrorDisplay object="#addProductReviewObj.getNewProductReview()#" errorName="review" />
 										
 										
 			    					</div>
@@ -492,15 +498,29 @@ Notes:
 					http://docs.getslatwall.com/reference/product-images-and-cropping/							
 																												
 				--->
-				<cfloop array="#local.galleryDetails#" index="local.image">
-					
-					<!---[ DEVELOPER NOTES ]																		
-																													
-						Now that we are inside of the loop of images being returned, you have access to the			
-						following detials insilde of the local.image struct that came back in the array				
-																													
-					--->
-				</cfloop>
+				
+				<!--- If the product has more than the default image assigned, let's display all images --->
+				<cfif arraylen(local.galleryDetails) GT "1">
+					<ul class="thumbnails">
+						<cfloop array="#local.galleryDetails#" index="local.image">
+							<!---[ DEVELOPER NOTES ]																		
+								Now that we are inside of the loop of images being returned, you have access to the			
+								following detials insilde of the local.image struct that came back in the array				
+							--->
+							<li class="span3">
+								<a href="#local.image.resizedimagepaths[2]#" target="_blank" class="thumbnail" title="zoom">
+									<img src="#local.image.resizedimagepaths[1]#" alt="#local.image.name#">
+									<i class="icon-zoom-in"></i>
+									<span class="pull-right">
+										#local.image.name#
+									</span>
+								</a>
+							</li>
+						</cfloop>
+					</ul>
+				<cfelse>
+					<p>There are no additional images.</p>
+				</cfif>
 				
 			</div>
 		</div>
