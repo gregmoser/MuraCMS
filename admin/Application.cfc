@@ -205,7 +205,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				}
 				
 			}
-		} catch(e any){application.appInitialized=false;}
+		} catch(e any){}
 
 		super.onRequestStart(argumentCollection=arguments);
 	}
