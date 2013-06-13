@@ -147,65 +147,65 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	function onRequestStart(){
 		try{
-		if(isDefined('application.scriptProtectionFilter') and application.configBean.getScriptProtect()){
+			if(application.appInitialized and isDefined('application.scriptProtectionFilter') and application.configBean.getScriptProtect()){
 
-			variables.remoteIPHeader=application.configBean.getValue("remoteIPHeader");
-			
-			if(len(variables.remoteIPHeader)){
-				try{
-					if(StructKeyExists(GetHttpRequestData().headers, variables.remoteIPHeader)){
-				    	request.remoteAddr = GetHttpRequestData().headers[remoteIPHeader];
-				   	} else {
-						request.remoteAddr = CGI.REMOTE_ADDR;
-				   	}
-				   }
-					catch(any e){
-						request.remoteAddr = CGI.REMOTE_ADDR;
-					}
-			} else {
-				request.remoteAddr = CGI.REMOTE_ADDR;
-			}
+				variables.remoteIPHeader=application.configBean.getValue("remoteIPHeader");
+				
+				if(len(variables.remoteIPHeader)){
+					try{
+						if(StructKeyExists(GetHttpRequestData().headers, variables.remoteIPHeader)){
+					    	request.remoteAddr = GetHttpRequestData().headers[remoteIPHeader];
+					   	} else {
+							request.remoteAddr = CGI.REMOTE_ADDR;
+					   	}
+					   }
+						catch(any e){
+							request.remoteAddr = CGI.REMOTE_ADDR;
+						}
+				} else {
+					request.remoteAddr = CGI.REMOTE_ADDR;
+				}
 
-			if(application.configBean.getScriptProtect()){
-				if(isDefined("url")){
-					application.scriptProtectionFilter.scan(
-												object=url,
-												objectname="url",
-												ipAddress=request.remoteAddr,
-												useTagFilter=true,
-												useWordFilter=true);
-				}
-				if(isDefined("form")){
-					application.scriptProtectionFilter.scan(
-												object=form,
-												objectname="form",
-												ipAddress=request.remoteAddr);
-				}
-				try{	
-					if(isDefined("cgi")){
+				if(application.configBean.getScriptProtect()){
+					if(isDefined("url")){
 						application.scriptProtectionFilter.scan(
-													object=cgi,
-													objectname="cgi",
+													object=url,
+													objectname="url",
 													ipAddress=request.remoteAddr,
 													useTagFilter=true,
-													useWordFilter=true,
-													fixValues=false);
-					}			
-					if(isDefined("cookie")){
-						application.scriptProtectionFilter.scan(
-													object=cookie,
-													objectname="cookie",
-													ipAddress=request.remoteAddr,
-													useTagFilter=true,
-													useWordFilter=true,
-													fixValues=false);
+													useWordFilter=true);
 					}
-				} catch(e any){}
-					
+					if(isDefined("form")){
+						application.scriptProtectionFilter.scan(
+													object=form,
+													objectname="form",
+													ipAddress=request.remoteAddr);
+					}
+					try{	
+						if(isDefined("cgi")){
+							application.scriptProtectionFilter.scan(
+														object=cgi,
+														objectname="cgi",
+														ipAddress=request.remoteAddr,
+														useTagFilter=true,
+														useWordFilter=true,
+														fixValues=false);
+						}			
+						if(isDefined("cookie")){
+							application.scriptProtectionFilter.scan(
+														object=cookie,
+														objectname="cookie",
+														ipAddress=request.remoteAddr,
+														useTagFilter=true,
+														useWordFilter=true,
+														fixValues=false);
+						}
+					} catch(e any){}
+						
+				}
+				
 			}
-			
-		}
-	} catch(e any){}
+		} catch(e any){}
 
 		super.onRequestStart(argumentCollection=arguments);
 	}
