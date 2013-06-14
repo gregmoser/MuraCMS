@@ -156,7 +156,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			request.muraAppreloaded=false;
 		} 
 
+		if(!isStruct(application.configBean.getAllValues())){
+			application.appInitialized=false;
+			request.muraAppreloaded=false;
+		}
+
 		try{
+
 			if(application.appInitialized and isDefined('application.scriptProtectionFilter') and application.configBean.getScriptProtect()){
 
 				variables.remoteIPHeader=application.configBean.getValue("remoteIPHeader");
