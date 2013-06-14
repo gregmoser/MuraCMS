@@ -52,14 +52,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <!--- Double check that the application has started properly.
 If it has not set application.appInitialized=false. --->
 <cftry>
-	<cfif application.appInitialized>
-		<cfif not (structKeyExists(application.settingsManager,'validate') and application.settingsManager.validate() and structKeyExists(application.configBean,'validate') and application.configBean.validate())>
-			<cfset application.appInitialized=false>
-		</cfif>
-		<cfset application.clusterManager.runCommands()>
-		<cfif not application.appInitialized>
-			<cfset request.muraAppreloaded=false>
-		</cfif>
+	<cfif not (structKeyExists(application.settingsManager,'validate') and application.settingsManager.validate() and isStruct(application.configBean.getAllValues()))>
+		<cfset application.appInitialized=false>
+	</cfif>
+	<cfset application.clusterManager.runCommands()>
+	<cfif not application.appInitialized>
+		<cfset request.muraAppreloaded=false>
 	</cfif>
 	<cfcatch>
 		<cfset application.appInitialized=false>

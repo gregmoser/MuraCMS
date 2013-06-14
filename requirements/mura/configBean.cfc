@@ -1594,8 +1594,4 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn arguments>
 </cffunction>
 
-<cffunction name="validate" output="false">
-	<cfreturn isStruct(variables.instance) and structCount(variables.instance)>
-</cffunction>
-
 </cfcomponent>
