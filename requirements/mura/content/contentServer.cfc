@@ -385,7 +385,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfheader statuscode="404" statustext="Content Not Found" />
 	<!--- Must reset the linkservID to prevent recursive 404s --->
 	<cfset request.linkServID=""> 
-	<cfheader statuscode="404" statustext="Content Not Found" /> 
 	<cfset renderFilename("404",true,false)> 
 </cffunction>
 
