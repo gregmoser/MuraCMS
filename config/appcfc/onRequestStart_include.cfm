@@ -63,7 +63,12 @@ If it has not set application.appInitialized=false. --->
 		<cfset application.appInitialized=false>
 		<cfset request.muraAppreloaded=false>
 	</cfcatch>
-</cftry>	
+</cftry>
+
+<cfif isDefined('application.configBean.getAllValues') and not isStruct(application.configBean.getAllValues())>
+	<cfset application.appInitialized=false>
+	<cfset request.muraAppreloaded=false>
+</cfif>	
 
 <cfif isDefined("onApplicationStart") >
 	<cfif (
