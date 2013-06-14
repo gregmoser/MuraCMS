@@ -205,7 +205,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				}
 				
 			}
-		} catch(e any){}
+		} catch(e any){
+			if(
+				not(isDefined('application.configBean') 
+					and isStruct(application.configBean.getAllValues())
+					and structCount(application.configBean.getAllValues()) gt 10
+				)
+			){
+				application.appInitialized=false;
+			}
+		}
 
 		super.onRequestStart(argumentCollection=arguments);
 	}
