@@ -148,7 +148,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	function onRequestStart(){
 
 		try{
-			if(not application.settingsManager.validate() or not application.configBean.validate()){
+			if(not (structKeyExists(application.settingsManager,'validate') and application.settingsManager.validate() and structKeyExists(application.configBean,'validate') and application.configBean.validate())){
 				application.appInitialized=false;
 			}
 		} catch(e any){
