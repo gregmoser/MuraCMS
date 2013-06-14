@@ -151,10 +151,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			if(not application.settingsManager.validate()){
 				application.appInitialized=false;
 			}
-			application.clusterManager.runCommands();
-			if(not application.appInitialized){
-				request.muraAppreloaded=false;
-			}
 		} catch(e any){
 			application.appInitialized=false;
 			request.muraAppreloaded=false;
