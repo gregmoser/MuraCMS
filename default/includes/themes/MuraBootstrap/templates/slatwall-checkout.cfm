@@ -524,8 +524,8 @@ Notes:
 						<h4>Step 3 - Payment Details</h4>
 						
 						<br />
-						<!--- Display existing order payments --->
-						<cfif arrayLen($.slatwall.cart().getOrderPayments())>
+						<!--- Display existing order payments, we are using the smart list here so that any non-persisted order payments don't show up --->
+						<cfif $.slatwall.cart().getOrderPaymentsSmartList().getRecordsCount()>
 							<h5>Payments Applied</h5>
 							<table class="table">
 								<tr>
@@ -533,8 +533,7 @@ Notes:
 									<th>Amount</th>
 									<th>&nbsp;</th>
 								</tr>
-								<cfloop array="#$.slatwall.cart().getOrderPayments()#" index="orderPayment">
-									<cfdump var="#orderPayment.getErrors()#" />
+								<cfloop array="#$.slatwall.cart().getOrderPaymentsSmartList().getRecords()#" index="orderPayment">
 									<tr>
 										<td>#orderPayment.getSimpleRepresentation()#</td>
 										<td>#orderPayment.getAmount()#</td>
@@ -652,7 +651,7 @@ Notes:
 								    					<div class="controls">
 								    						
 															<sw:formField type="text" name="newOrderPayment.creditCardNumber" valueObject="#addOrderPaymentObj.getNewOrderPayment()#" valueObjectProperty="creditCardNumber" class="span4" />
-															<sw:errorDisplay object="#addOrderPaymentObj.getNewOrderPayment()#" errorName="newOrderPayment" />
+															<sw:errorDisplay object="#addOrderPaymentObj.getNewOrderPayment()#" errorName="creditCardNumber" />
 															
 								    					</div>
 								  					</div>
