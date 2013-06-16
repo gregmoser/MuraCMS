@@ -311,12 +311,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-list"></i></a>
-						<cfif request.muraChangesetPreview and changesetMembers.hasNext()>
+						<cfif request.muraChangesetPreview>
 							<ul class="dropdown-menu">
-							<cfloop condition="changesetMembers.hasNext()">
+							<cfif changesetMembers.hasNext()>
+								<cfloop condition="changesetMembers.hasNext()">
 								<cfset changesetMember=changesetMembers.next()>
 								<li><a href="#changesetMember.getURL()#">#HTMLEditFormat(changesetMember.getMenuTitle())#</a></li>
-							</cfloop>
+								</cfloop>
+							<cfelse>
+								<li><a onclick="return false;">#application.rbFactory.getKeyValue(session.rb,'changesets.noassignedcontent')#</a></li>
+							</cfif>
+							
 							</ul>
 						</cfif>
 					</li>
