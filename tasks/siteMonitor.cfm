@@ -110,7 +110,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfquery name="rsChanges" dbtype="query">
 			select distinct siteid from rsChanges
 		</cfquery>
-		<cfloop query="v">
+		<cfloop query="rsChanges">
 			<cfset application.settingsManager.getSite(rsChanges.siteid).purgeCache() />
 		</cfloop>
 	</cfif>
