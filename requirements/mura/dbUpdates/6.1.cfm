@@ -19,4 +19,10 @@
 
 	dbUtility.setTable("tchangesets")
 	.addColumn(column="closeDate",dataType="datetime");
+
+	dbUtility.setTable("tcontent")
+	.addIndex('filename')
+	.addIndex('title')
+	.addIndex('subtype')
+	.addIndex('isnav');
 </cfscript>

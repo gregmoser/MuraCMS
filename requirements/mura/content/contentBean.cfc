@@ -48,7 +48,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 <cfproperty name="contentHistID" type="string" default="" required="true"/>
 <cfproperty name="contentID" type="string" default="" required="true"/>
-<cfproperty name="sourceID" type="string" default=""/>
 <cfproperty name="active" type="numeric" default="0" required="true" />
 <cfproperty name="approved" type="numeric" default="0" required="true" />
 <cfproperty name="orderno" type="numeric" default="0" required="true" />
