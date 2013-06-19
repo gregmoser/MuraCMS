@@ -22,7 +22,7 @@
 <cfoutput>
 	<cfif session.localeHasDayParts>
 		<cfsilent>
-			<cfif atttributes.defaulthour gte 12>
+			<cfif attributes.defaulthour gte 12>
 				<cfset attributes.defaulthour=attributes.defaulthour-12>
 				<cfset attributes.daypart="PM">
 			<cfelse>
