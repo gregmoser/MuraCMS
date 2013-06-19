@@ -844,11 +844,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset arguments.mySession.dateKeyFormat=utils.getJSDateKeyFormat()>
 </cfif>
 
+<cfset arguments.mySession.localeHasDayParts=findNoCase('AM',LSTimeFormat(createTime(0,0,0),  'medium'))>
+
 </cffunction>
 
 <cffunction name="resetSessionLocale" output="false">
 <cfargument name="mySession" required="true" default="#session#">
 	<cfset arguments.mySession.locale=application.settingsManager.getSite(arguments.mySession.siteID).getJavaLocale() />
+	<cfset arguments.mySession.localeHasDayParts=true>
 	<cfset arguments.mySession.dateKey=""/>
 	<cfset arguments.mySession.dateKeyFormat=""/>
 	<cfset setAdminLocale(arguments.mySession)>

@@ -95,12 +95,31 @@ version 2 without this exception.  You may, if you choose, apply this exception 
     <a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.changesetclosedate"))#">#application.rbFactory.getKeyValue(session.rb,'changesets.closedate')# <i class="icon-question-sign"></i></a>
     </label>
   <div class="controls">
-    
-    <input type="text" name="closeDate" value="#LSDateFormat(rc.changeset.getCloseDate(),session.dateKeyFormat)#"  maxlength="12" class="textAlt datepicker" />
+     <cfif rc.changeset.getPublished()>
+        <cfif lsIsDate(rc.changeset.getCloseDate())>
+          #LSDateFormat(rc.changeset.getCloseDate(),session.dateKeyFormat)# #LSTimeFormat(rc.changeset.getCloseDate(),"medium")#
+        <cfelse>
+           #LSDateFormat(rc.changeset.getLastUpdate(),session.dateKeyFormat)# #LSTimeFormat(rc.changeset.getLastUpdate(),"medium")#
+        </cfif>
+    <cfelse>
+      <input type="text" name="closeDate" value="#LSDateFormat(rc.changeset.getCloseDate(),session.dateKeyFormat)#"  maxlength="12" class="textAlt datepicker" />
 
-    <select name="closehour" class="span1"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.changeset.getCloseDate())  and h eq 12 or (LSisDate(rc.changeset.getCloseDate()) and (hour(rc.changeset.getCloseDate()) eq h or (hour(rc.changeset.getCloseDate()) - 12) eq h or hour(rc.changeset.getCloseDate()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
-    <select name="closeMinute" class="span1"><cfloop from="0" to="59" index="m"><option value="#m#" <cfif LSisDate(rc.changeset.getCloseDate()) and minute(rc.changeset.getCloseDate()) eq m>selected</cfif>>#iif(len(m) eq 1,de('0#m#'),de('#m#'))#</option></cfloop></select>
-    <select name="closeDayPart" class="span1"><option value="AM">AM</option><option value="PM" <cfif LSisDate(rc.changeset.getCloseDate()) and hour(rc.changeset.getCloseDate()) gte 12>selected</cfif>>PM</option></select>
+       <cf_timeselector name="close" time="#rc.changeset.getCloseDate()#" defaulthour="23" defaultminute="59">
+
+      <!---
+      <cfif session.localeHasDayParts>
+        <select name="closehour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.changeset.getCloseDate())  and h eq 12 or (LSisDate(rc.changeset.getCloseDate()) and (hour(rc.changeset.getCloseDate()) eq h or (hour(rc.changeset.getCloseDate()) - 12) eq h or hour(rc.changeset.getCloseDate()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
+      <cfelse>
+        <select name="closeHour" class="time"><cfloop from="0" to="23" index="h"><option value="#h#" <cfif LSisDate(rc.changeset.getCloseDate())  and hour(rc.changeset.getCloseDate()) eq h >selected</cfif>>#h#</option></cfloop></select>
+      </cfif>
+
+      <select name="closeMinute" class="time"><cfloop from="0" to="59" index="m"><option value="#m#" <cfif LSisDate(rc.changeset.getCloseDate()) and minute(rc.changeset.getCloseDate()) eq m>selected</cfif>>#iif(len(m) eq 1,de('0#m#'),de('#m#'))#</option></cfloop></select>
+
+      <cfif session.localeHasDayParts>
+        <select name="closeDayPart" class="time"><option value="AM">AM</option><option value="PM" <cfif LSisDate(rc.changeset.getCloseDate()) and hour(rc.changeset.getCloseDate()) gte 12>selected</cfif>>PM</option></select>
+      </cfif>
+      --->
+  </cfif>
   </div>
 </div>
 
@@ -114,10 +133,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
   <cfelse>
     <input type="text" name="publishDate" value="#LSDateFormat(rc.changeset.getpublishdate(),session.dateKeyFormat)#"  maxlength="12" class="textAlt datepicker" />
 
-    <select name="publishhour" class="span1"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.changeset.getpublishDate())  and h eq 12 or (LSisDate(rc.changeset.getpublishDate()) and (hour(rc.changeset.getpublishDate()) eq h or (hour(rc.changeset.getpublishDate()) - 12) eq h or hour(rc.changeset.getpublishDate()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
-    <select name="publishMinute" class="span1"><cfloop from="0" to="59" index="m"><option value="#m#" <cfif LSisDate(rc.changeset.getpublishDate()) and minute(rc.changeset.getpublishDate()) eq m>selected</cfif>>#iif(len(m) eq 1,de('0#m#'),de('#m#'))#</option></cfloop></select>
-    <select name="publishDayPart" class="span1"><option value="AM">AM</option><option value="PM" <cfif LSisDate(rc.changeset.getpublishDate()) and hour(rc.changeset.getpublishDate()) gte 12>selected</cfif>>PM</option></select>
+    <cf_timeselector name="publish" time="#rc.changeset.getpublishdate()#">
+  
+    <!---
+    <cfif session.localeHasDayParts>
+      <select name="publishhour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.changeset.getpublishDate())  and h eq 12 or (LSisDate(rc.changeset.getpublishDate()) and (hour(rc.changeset.getpublishDate()) eq h or (hour(rc.changeset.getpublishDate()) - 12) eq h or hour(rc.changeset.getpublishDate()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
+    <cfelse>
+       <select name="publishhour" class="time"><cfloop from="0" to="23" index="h"><option value="#h#" <cfif LSisDate(rc.changeset.getpublishDate())  and hour(rc.changeset.getpublishDate()) eq h >selected</cfif>>#h#</option></cfloop></select>
+    </cfif>
+
+   <select name="publishMinute" class="time"><cfloop from="0" to="59" index="m"><option value="#m#" <cfif LSisDate(rc.changeset.getpublishDate()) and minute(rc.changeset.getpublishDate()) eq m>selected</cfif>>#iif(len(m) eq 1,de('0#m#'),de('#m#'))#</option></cfloop></select>
+
+   <cfif session.localeHasDayParts>
+     <select name="publishDayPart" class="time"><option value="AM">AM</option><option value="PM" <cfif LSisDate(rc.changeset.getpublishDate()) and hour(rc.changeset.getpublishDate()) gte 12>selected</cfif>>PM</option></select>
+    </cfif>  
+  --->
   </cfif>
+
   </div>
 </div>
 
