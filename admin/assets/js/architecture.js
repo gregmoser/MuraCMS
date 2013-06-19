@@ -1260,11 +1260,11 @@ buttons: {
 				'displayStop': $("#mura-quickEdit-displayStop").val(),
 				'stopHour': $("#mura-quickEdit-stopHour").val(),
 				'stopMinute': $("#mura-quickEdit-stopMinute").val(),
-				'stopDayPart': $("#mura-quickEdit-stopDayPart").val(),
+				'stopDayPart': ($("#mura-quickEdit-stopDayPart").length) ? $("#mura-quickEdit-stopDayPart").val(): '',
 				'displayStart': $("#mura-quickEdit-displayStart").val(),
 				'startHour': $("#mura-quickEdit-startHour").val(),
 				'startMinute': $("#mura-quickEdit-startMinute").val(),
-				'startDayPart': $("#mura-quickEdit-startDayPart").val()
+				'startDayPart': ($("#mura-quickEdit-startpDayPart").length) ? $("#mura-quickEdit-startDayPart").val(): ''
 			}
 
 		}
