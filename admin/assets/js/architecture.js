@@ -1345,14 +1345,24 @@ buttons: {
 
 			dd.attr("id", "selected");
 
-			$.post("./index.cfm", categoryAssignment, function(data) {
+			$.ajax({
+			  type: "POST",
+			  url: "./index.cfm",
+			  data: categoryAssignment,
+			  success: function(data) {
 				if(data.indexOf('mura-primary-login-token') != -1) {
 					location.href = './';
 				}
 				$("#mura-quickEditor").html(data);
 				setDatePickers(".mura-quickEdit-datepicker", dtLocale, dtCh);
 				setToolTips(".mura-quickEdit-datepicker");
+				},
+			 error: function( jqXHR, textStatus,errorThrown) {
+				alert(errorThrown);
+				},
+			  dataType: 'text'
 			});
+
 		}, function(event) {
 			event.preventDefault();
 			siteManager.closeQuickEdit();
@@ -1369,18 +1379,22 @@ buttons: {
 			featureStart: $('#mura-quickEdit-featureStart').val(),
 			startHour: $('#mura-quickEdit-startHour').val(),
 			startMinute: $('#mura-quickEdit-startMinute').val(),
-			startDayPart: $('#mura-quickEdit-startDayPart').val(),
+			startDayPart: ($('#mura-quickEdit-startDayPart').length) ? $('#mura-quickEdit-startDayPart').val() : '',
 			featureStop: $('#mura-quickEdit-featureStop').val(),
 			stopHour: $('#mura-quickEdit-stopHour').val(),
 			stopMinute: $('#mura-quickEdit-stopMinute').val(),
-			stopDayPart: $('#mura-quickEdit-stopDayPart').val(),
+			stopDayPart: ($('#mura-quickEdit-stopDayPart').length) ? $('#mura-quickEdit-stopDayPart').val() : '',
 			siteid: siteid
 		};
 
 		//alert(JSON.stringify(categoryAssignment));
 		$("#mura-quickEditor").html('<img class="loader" src="assets/images/ajax-loader-big.gif" />');
 
-		$.post("./index.cfm", categoryAssignment, function(data) {
+		$.ajax({
+		  type: "POST",
+		  url: "./index.cfm",
+		  data: categoryAssignment,
+		  success: function(data) {
 			if(data.indexOf('mura-primary-login-token') != -1) {
 				location.href = './';
 			}
@@ -1388,7 +1402,13 @@ buttons: {
 			siteManager.closeCategoryAssignment();
 			setToolTips(".mura-quickEdit-datepicker");
 			siteManager.initCategoryAssignments();
+			},
+		 error: function( jqXHR, textStatus,errorThrown) {
+			alert(errorThrown);
+			},
+		  dataType: 'text'
 		});
+
 
 	},
 

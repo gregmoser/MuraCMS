@@ -18,7 +18,9 @@
 	<cfset attributes.defaulthour=hour(attributes.time)>
 	<cfset attributes.defaultminute=minute(attributes.time)>
 </cfif>
+
 </cfsilent>
+
 <cfoutput>
 	<cfif session.localeHasDayParts>
 		<cfsilent>
