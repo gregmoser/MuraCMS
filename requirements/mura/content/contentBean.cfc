@@ -280,21 +280,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			AND isDate(variables.instance.displayStart)>
 			
 			<cfif isdefined("arguments.content.starthour")
-			and isdefined("arguments.content.startMinute")
-			and isdefined("arguments.content.startDayPart")>
+			and isdefined("arguments.content.startMinute")>
 			
+				<cfparam name="arguments.content.startDayPart" default="">
+
 				<cfif arguments.content.startdaypart eq "PM">
 					<cfset starthour = arguments.content.starthour + 12>
 					
 					<cfif starthour eq 24>
 						<cfset starthour = 12>
 					</cfif>
-				<cfelse>
+				<cfelseif arguments.content.startdaypart eq "AM">
 					<cfset starthour = arguments.content.starthour>
 					
 					<cfif starthour eq 12>
 						<cfset starthour = 0>
 					</cfif>
+				<cfelse>
+					<cfset starthour = arguments.content.starthour>
 				</cfif>
 				
 				<cfset setDisplayStart(createDateTime(year(variables.instance.displayStart), month(variables.instance.displayStart), day(variables.instance.displayStart),starthour, arguments.content.startMinute, "0"))>
@@ -310,20 +313,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			AND isDate(variables.instance.displayStop)>
 			
 			<cfif isdefined("arguments.content.Stophour")
-			and isdefined("arguments.content.StopMinute")
-			and isdefined("arguments.content.StopDayPart")>
+			and isdefined("arguments.content.StopMinute")>
+
+			<cfparam name="arguments.content.stopDayPart" default="">
+
 			<cfif arguments.content.stopdaypart eq "PM">
 				<cfset stophour = arguments.content.stophour + 12>
 				
 				<cfif stophour eq 24>
 					<cfset stophour = 12>
 				</cfif>
-			<cfelse>
+			<cfelseif arguments.content.stopdaypart eq "AM">
 				<cfset stophour = arguments.content.stophour>
 				
 				<cfif stophour eq 12>
 					<cfset stophour = 0>
 				</cfif>
+			<cfelse>
+				<cfset stophour = arguments.content.stophour>
 			</cfif>
 			
 			<cfset setDisplayStop(createDateTime(year(variables.instance.displayStop), month(variables.instance.displayStop), day(variables.instance.displayStop),stophour, arguments.content.StopMinute, "0"))>
@@ -334,21 +341,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif variables.instance.isFeature eq 2 
 			AND isDate(variables.instance.featureStart)
 			and isdefined("arguments.content.featurestarthour")
-			and isdefined("arguments.content.featurestartMinute")
-			and isdefined("arguments.content.featureStartDayPart")>
+			and isdefined("arguments.content.featurestartMinute")>
 			
+			<cfparam name="arguments.content.featureStartDayPart" default="">
+
 			<cfif arguments.content.featureStartdaypart eq "PM">
 				<cfset featurestarthour = arguments.content.featurestarthour + 12>
 				
 				<cfif featurestarthour eq 24>
 					<cfset featurestarthour = 12>
 				</cfif>
-			<cfelse>
+			<cfelseif arguments.content.featureStartdaypart eq "AM">
 				<cfset featurestarthour = arguments.content.featurestarthour>
 				
 				<cfif featurestarthour eq 12>
 					<cfset featurestarthour = 0>
 				</cfif>
+			<cfelse>
+				<cfset featurestarthour = arguments.content.featurestarthour>
 			</cfif>
 			
 			<cfset setFeatureStart(createDateTime(year(variables.instance.featureStart), month(variables.instance.featureStart), day(variables.instance.featureStart),Featurestarthour, arguments.content.featurestartMinute, "0"))>
@@ -357,21 +367,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif variables.instance.isFeature eq 2 
 			AND isDate(variables.instance.featureStop)
 			and isdefined("arguments.content.featurestophour")
-			and isdefined("arguments.content.featurestopMinute")
-			and isdefined("arguments.content.featureStopDayPart")>
+			and isdefined("arguments.content.featurestopMinute")>
 			
+			<cfparam name="arguments.content.featureStopDayPart" default="">
+
 			<cfif arguments.content.featureStopdaypart eq "PM">
 				<cfset featurestophour = arguments.content.featurestophour + 12>
 				
 				<cfif featurestophour eq 24>
 					<cfset featurestophour = 12>
 				</cfif>
-			<cfelse>
+			<cfelseif arguments.content.featureStopdaypart eq "AM">
 				<cfset featurestophour = arguments.content.featurestophour>
 				
 				<cfif featurestophour eq 12>
 					<cfset featurestophour = 0>
 				</cfif>
+			<cfelse>
+				<cfset featurestophour = arguments.content.featurestophour>
 			</cfif>
 			
 			<cfset setFeatureStop(createDateTime(year(variables.instance.featureStop), month(variables.instance.featureStop), day(variables.instance.featureStop),Featurestophour, arguments.content.featurestopMinute, "0"))>
@@ -380,21 +393,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif isDate(variables.instance.releaseDate)>
 			
 			<cfif isdefined("arguments.content.releasehour")
-			and isdefined("arguments.content.releaseMinute")
-			and isdefined("arguments.content.releaseDayPart")>
+			and isdefined("arguments.content.releaseMinute")>
 			
+				<cfparam name="arguments.content.releaseDayPart" default="">
+
 				<cfif arguments.content.releasedaypart eq "PM">
 					<cfset releasehour = arguments.content.releasehour + 12>
 					
 					<cfif releasehour eq 24>
 						<cfset releasehour = 12>
 					</cfif>
-				<cfelse>
+				<cfelseif arguments.content.releasedaypart eq "AM">
 					<cfset releasehour = arguments.content.releasehour>
 					
 					<cfif releasehour eq 12>
 						<cfset releasehour = 0>
 					</cfif>
+				<cfelse>
+					<cfset releasehour = arguments.content.releasehour>
 				</cfif>
 				
 				<cfset setReleaseDate(createDateTime(year(variables.instance.releaseDate), month(variables.instance.releaseDate), day(variables.instance.releaseDate), releasehour, arguments.content.releaseMinute, "0"))>
@@ -405,8 +421,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif isDate(variables.instance.expires)>
 			
 			<cfif isdefined("arguments.content.expireshour")
-			and isdefined("arguments.content.expiresMinute")
-			and isdefined("arguments.content.expiresDayPart")>
+			and isdefined("arguments.content.expiresMinute")>
+
+				<cfparam name="arguments.content.expiresDayPart" default="">
 			
 				<cfif arguments.content.expiresdaypart eq "PM">
 					<cfset expireshour = arguments.content.expireshour + 12>
@@ -414,12 +431,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfif expireshour eq 24>
 						<cfset expireshour = 12>
 					</cfif>
-				<cfelse>
+				<cfelseif arguments.content.expiresdaypart eq "AM">
 					<cfset expireshour = arguments.content.expireshour>
 					
 					<cfif expireshour eq 12>
 						<cfset expireshour = 0>
 					</cfif>
+				<cfelse>
+					<cfset expireshour = arguments.content.expireshour>
 				</cfif>
 				
 				<cfset setExpires(createDateTime(year(variables.instance.expires), month(variables.instance.expires), day(variables.instance.expires), expireshour, arguments.content.expiresMinute, "0"))>

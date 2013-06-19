@@ -726,10 +726,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset schedule.featureStart=arguments.data['featureStart#catTrim#'] />
 				<cfset schedule.starthour=arguments.data['starthour#catTrim#'] />
 				<cfset schedule.startMinute=arguments.data['startMinute#catTrim#'] />
+
+				<cfparam name="arguments.data.startDayPart#catTrim#" default="" />
 				<cfset schedule.startDayPart=arguments.data['startDayPart#catTrim#'] />
+				
 				<cfset schedule.featureStop=arguments.data['featureStop#catTrim#'] />
 				<cfset schedule.stopHour=arguments.data['stopHour#catTrim#'] />
 				<cfset schedule.stopMinute=arguments.data['stopMinute#catTrim#'] />
+				
+				<cfparam name="arguments.data.stopDayPart#catTrim#" default="" />
 				<cfset schedule.stopDayPart=arguments.data['stopDayPart#catTrim#'] />
 			<cfelse>
 				<cfset schedule.featureStart="" />
