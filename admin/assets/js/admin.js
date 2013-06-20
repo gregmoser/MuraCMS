@@ -141,9 +141,12 @@ function parseDateTimeSelector(id){
 
 		if($('#mura-' + id + 'DayPart').length){
 			if($('#mura-' + id + 'DayPart').val().toLowerCase() == 'pm'){
-				strHour=parseInt(strHour) + 11;
-			} else {
-				strHour=parseInt(strHour) - 1;
+				strHour=parseInt(strHour) + 12;
+				if(strHour==24){
+					strHour=12;
+				}
+			} else if (parseInt(strHour) ==12) {
+				strHour=0;
 			}
 		}
 

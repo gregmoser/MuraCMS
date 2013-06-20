@@ -20,15 +20,17 @@
 </cfif>
 
 </cfsilent>
-
 <cfoutput>
 	<cfif session.localeHasDayParts>
 		<cfsilent>
-			<cfset attributes.defaulthour=attributes.defaulthour+1>
+			
 			<cfif attributes.defaulthour gt 12>
-				<cfset attributes.defaulthour=attributes.defaulthour-12>
+				<cfset attributes.defaulthour=attributes.defaulthour-11>
 				<cfset attributes.daypart="PM">
 			<cfelse>
+				<cfif attributes.defaulthour eq 0>
+					<cfset attributes.defaulthour=12>
+				</cfif>
 				<cfset attributes.daypart="AM">
 			</cfif>	
 		</cfsilent>

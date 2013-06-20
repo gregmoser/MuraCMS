@@ -17,7 +17,7 @@
 <cfparam name="attributes.required" default="false">
 <cfparam name="attributes.message" default="">
 <cfparam name="attributes.break" default="false">
-<cfparam name="attributes.dateclass" default="false">
+<cfparam name="attributes.dateclass" default="">
 
 <cfset attributes.hourname="">
 <cfset attributes.minutename="">
