@@ -73,7 +73,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	            <span class="icon-globe"></span>
 	          </a>--->
 	              
-              <cfif application.configBean.getDashboard()>
+              <cfif session.showdashboard>
                   <cfset baseURL="#application.configBean.getContext()#/admin/index.cfm?muraAction=cDashboard.main">
               <cfelse>
                    <cfset baseURL="#application.configBean.getContext()#/admin/index.cfm?muraAction=cArch.list&amp;moduleID=00000000000000000000000000000000000&amp;topID=00000000000000000000000000000000001">
@@ -203,7 +203,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	 				
 	 				</li>
 	 				
-	 				<cfif application.configBean.getDashboard()>
+	 				<cfif session.showdashboard>
 	 				<li<cfif  rc.originalcircuit eq 'cDashboard'> class="active"</cfif>>
 	 					<a href="#application.configBean.getContext()#/admin/index.cfm?muraAction=cDashboard.main&siteid=#session.siteid#&span=#session.dashboardSpan#"> <i class="icon-dashboard"></i><span>#application.rbFactory.getKeyValue(session.rb,"layout.dashboard")#</span></a>
 	 				</li>

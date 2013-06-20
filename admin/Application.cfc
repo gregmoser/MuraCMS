@@ -272,7 +272,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		param name="request.context.compactDisplay" default="false";
 		param name="session.siteid" default="";
 		param name="session.keywords" default="";
-		param name="session.alerts" default="#structNew()#";
+		param name="session.showdashboard" default=application.configBean.getDashboard();
+		param name="session.alerts" default=structNew();
 		param name="cookie.rb" default="";
 	
 		if(len(request.context.rb)){

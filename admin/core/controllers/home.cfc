@@ -89,7 +89,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 
 	<cfif len(arguments.rc.siteid)>
-		<cfif application.configBean.getDashboard()>
+		<cfif session.showdashboard>
 			<cfset variables.fw.redirect(action="cDashboard.main",append="siteid",path="index.cfm")>
 		<cfelse>
 			<cfset arguments.rc.moduleid="00000000000000000000000000000000000">
