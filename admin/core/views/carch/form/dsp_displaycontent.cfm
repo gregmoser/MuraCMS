@@ -17,10 +17,12 @@
 			<div id="editDates" <cfif  not bydate>style="display: none;"</cfif>>
 					<label class="control-label">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.startdatetime')#</label>
 					<div class="controls">
-						<input type="text" name="displayStart" value="#LSDateFormat(rc.contentBean.getdisplaystart(),session.dateKeyFormat)#" class="textAlt datepicker">
-
-						<cf_timeselector name="start" time="#rc.contentBean.getDisplayStart()#">
+						<cf_datetimeselector name="displayStart" datetime="#rc.contentBean.getDisplayStart()#">
 						<!---
+						<input type="text" name="displayStart" value="#LSDateFormat(rc.contentBean.getdisplaystart(),session.dateKeyFormat)#" class="textAlt datepicker">
+					
+						<cf_timeselector name="start" time="#rc.contentBean.getDisplayStart()#">
+						
 						<cfif session.localeHasDayParts>
 							<select name="starthour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.contentBean.getdisplaystart())  and h eq 12 or (LSisDate(rc.contentBean.getdisplaystart()) and (hour(rc.contentBean.getdisplaystart()) eq h or (hour(rc.contentBean.getdisplaystart()) - 12) eq h or hour(rc.contentBean.getdisplaystart()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
 						<cfelse>
@@ -38,9 +40,12 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.stopdatetime')#
 					</label>
 					<div class="controls">
-						<input type="text" name="displayStop" value="#LSDateFormat(rc.contentBean.getdisplaystop(),session.dateKeyFormat)#" class="textAlt datepicker">
-						<cf_timeselector name="stop" time="#rc.contentBean.getDisplayStop()#" defaulthour="23" defaultminute="59">
+						<cf_datetimeselector name="displayStop" datetime="#rc.contentBean.getDisplayStop()#" defaulthour="23" defaultminute="59">
+
 						<!---
+						<input type="text" name="displayStop" value="#LSDateFormat(rc.contentBean.getdisplaystop(),session.dateKeyFormat)#" class="textAlt datepicker">
+						
+						
 						<cfif session.localeHasDayParts>
 							<select name="stophour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.contentBean.getdisplaystop())  and h eq 11 or (LSisDate(rc.contentBean.getdisplaystop()) and (hour(rc.contentBean.getdisplaystop()) eq h or (hour(rc.contentBean.getdisplaystop()) - 12) eq h or hour(rc.contentBean.getdisplaystop()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
 						<cfelse>

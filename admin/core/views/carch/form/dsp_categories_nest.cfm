@@ -110,12 +110,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 										<input type="hidden" id="categoryAssign#catTrim#" name="categoryAssign#catTrim#" value="2"/>
 											<input type="hidden" id="featureStart#catTrim#" name="featureStart#catTrim#" value="#LSDateFormat(rsIsMember.featurestart,session.dateKeyFormat)#">
 										<cfif isDate(rsIsMember.featurestart)>
-											<cfif hour(rsIsMember.featurestart) lt 12>
-												<input type="hidden" id="startHour#catTrim#" name="startHour#catTrim#" value="#hour(rsIsMember.featurestart)#">
-												<input type="hidden" id="startDayPart#catTrim#" name="startDayPart#catTrim#" value="AM">	
+											<cfif session.localeHasDayParts>
+												<cfif hour(rsIsMember.featurestart) lt 12>
+													<input type="hidden" id="startHour#catTrim#" name="startHour#catTrim#" value="#hour(rsIsMember.featurestart)#">
+													<input type="hidden" id="startDayPart#catTrim#" name="startDayPart#catTrim#" value="AM">	
+												<cfelse>
+													<input type="hidden" id="startHour#catTrim#" name="startHour#catTrim#" value="#evaluate('hour(rsIsMember.featurestart)-12')#">
+													<input type="hidden" id="startDayPart#catTrim#" name="startDayPart#catTrim#" value="PM">	
+												</cfif>
 											<cfelse>
-												<input type="hidden" id="startHour#catTrim#" name="startHour#catTrim#" value="#evaluate('hour(rsIsMember.featurestart)-12')#">
-												<input type="hidden" id="startDayPart#catTrim#" name="startDayPart#catTrim#" value="PM">	
+												<input type="hidden" id="startHour#catTrim#" name="startHour#catTrim#" value="#hour(rsIsMember.featurestart)#">
+												<input type="hidden" id="startDayPart#catTrim#" name="startDayPart#catTrim#" value="">	
 											</cfif>
 											<input type="hidden" id="startMinute#catTrim#" name="startMinute#catTrim#" value="#minute(rsIsMember.featurestart)#">	
 										<cfelse>
@@ -126,12 +131,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 										<!--- feature stop --->
 										<input type="hidden" id="featureStop#catTrim#" name="featureStop#catTrim#" value="#LSDateFormat(rsIsMember.featureStop,session.dateKeyFormat)#">
 										<cfif isDate(rsIsMember.featureStop)>
-											<cfif hour(rsIsMember.featureStop) lt 12>
-												<input type="hidden" id="stopHour#catTrim#" name="stopHour#catTrim#" value="#hour(rsIsMember.featureStop)#">
-												<input type="hidden" id="stopDayPart#catTrim#" name="stopDayPart#catTrim#" value="AM">	
+											<cfif session.localeHasDayParts>
+												<cfif hour(rsIsMember.featureStop) lt 12>
+													<input type="hidden" id="stopHour#catTrim#" name="stopHour#catTrim#" value="#hour(rsIsMember.featureStop)#">
+													<input type="hidden" id="stopDayPart#catTrim#" name="stopDayPart#catTrim#" value="AM">	
+												<cfelse>
+													<input type="hidden" id="stopHour#catTrim#" name="stopHour#catTrim#" value="#evaluate('hour(rsIsMember.featureStop)-12')#">	
+													<input type="hidden" id="stopDayPart#catTrim#" name="stopDayPart#catTrim#" value="PM">
+												</cfif>
 											<cfelse>
-												<input type="hidden" id="stopHour#catTrim#" name="stopHour#catTrim#" value="#evaluate('hour(rsIsMember.featureStop)-12')#">	
-												<input type="hidden" id="stopDayPart#catTrim#" name="stopDayPart#catTrim#" value="PM">
+												<input type="hidden" id="stopHour#catTrim#" name="stopHour#catTrim#" value="#hour(rsIsMember.featureStop)#">
+													<input type="hidden" id="stopDayPart#catTrim#" name="stopDayPart#catTrim#" value="">	
 											</cfif>
 											<input type="hidden" id="stopMinute#catTrim#" name="stopMinute#catTrim#" value="#minute(rsIsMember.featureStop)#">	
 										<cfelse>

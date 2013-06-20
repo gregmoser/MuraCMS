@@ -402,7 +402,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfset sched.featurestop = createDateTime(year(sched.featurestop), month(sched.featurestop), day(sched.featurestop),sched.stophour, sched.stopMinute, "0")>
 	</cfif>
-	
+
 	<cfset saveAssignment(arguments.contentHistID, arguments.contentID, arguments.categoryID, arguments.siteID,
 				arguments.orderno, feature, sched.featureStart, sched.featureStop)>
 

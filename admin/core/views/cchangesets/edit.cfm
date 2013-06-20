@@ -102,11 +102,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
            #LSDateFormat(rc.changeset.getLastUpdate(),session.dateKeyFormat)# #LSTimeFormat(rc.changeset.getLastUpdate(),"medium")#
         </cfif>
     <cfelse>
+       <cf_datetimeselector name="closeDate" datetime="#rc.changeset.getCloseDate()#" defaulthour="23" defaultminute="59">
+       <!---
       <input type="text" name="closeDate" value="#LSDateFormat(rc.changeset.getCloseDate(),session.dateKeyFormat)#"  maxlength="12" class="textAlt datepicker" />
 
        <cf_timeselector name="close" time="#rc.changeset.getCloseDate()#" defaulthour="23" defaultminute="59">
 
-      <!---
+     
       <cfif session.localeHasDayParts>
         <select name="closehour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.changeset.getCloseDate())  and h eq 12 or (LSisDate(rc.changeset.getCloseDate()) and (hour(rc.changeset.getCloseDate()) eq h or (hour(rc.changeset.getCloseDate()) - 12) eq h or hour(rc.changeset.getCloseDate()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
       <cfelse>
@@ -131,11 +133,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
     <cfif rc.changeset.getPublished()>
     #LSDateFormat(rc.changeset.getLastUpdate(),session.dateKeyFormat)# #LSTimeFormat(rc.changeset.getLastUpdate(),"medium")#
   <cfelse>
+   
+    <cf_datetimeselector name="publishDate" datetime="#rc.changeset.getpublishdate()#">
+    <!---
     <input type="text" name="publishDate" value="#LSDateFormat(rc.changeset.getpublishdate(),session.dateKeyFormat)#"  maxlength="12" class="textAlt datepicker" />
 
     <cf_timeselector name="publish" time="#rc.changeset.getpublishdate()#">
   
-    <!---
     <cfif session.localeHasDayParts>
       <select name="publishhour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.changeset.getpublishDate())  and h eq 12 or (LSisDate(rc.changeset.getpublishDate()) and (hour(rc.changeset.getpublishDate()) eq h or (hour(rc.changeset.getpublishDate()) - 12) eq h or hour(rc.changeset.getpublishDate()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
     <cfelse>

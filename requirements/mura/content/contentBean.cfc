@@ -446,6 +446,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfif>
 		</cfif>
 		
+
 		<cfif isDefined("session.mura") and session.mura.isLoggedIn>
 			<cfset variables.instance.LastUpdateBy = left(session.mura.fname & " " & session.mura.lname,50) />
 			<cfset variables.instance.LastUpdateByID = session.mura.userID />

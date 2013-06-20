@@ -143,14 +143,17 @@
 		<cfset local.args.display=arguments.rc.display>
 		
 		<cfset local.args.displayStop=arguments.rc.displayStop>
+		<!---
 		<cfset local.args.stopHour=arguments.rc.stopHour>
 		<cfset local.args.stopMinute=arguments.rc.stopMinute>
 		<cfset local.args.stopDayPart=arguments.rc.stopDayPart>
-		
+		--->
 		<cfset local.args.displayStart=arguments.rc.displayStart>
+		<!---
 		<cfset local.args.startHour=arguments.rc.startHour>
 		<cfset local.args.startMinute=arguments.rc.startMinute>
 		<cfset local.args.startDayPart=arguments.rc.startDayPart>
+		--->
 	
 	<cfelseif arguments.rc.attribute eq "template">
 		<cfset local.args.template=arguments.rc.template>

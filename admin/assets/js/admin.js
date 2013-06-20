@@ -126,7 +126,49 @@ function DaysArray(n) {
 	return this
 }
 
-function isDate(dtStr, fldName) {
+function parseDateTimeSelector(id){
+	//alert($('.datepicker.mura-datepicker' + id).val())
+	if(isDate($('.datepicker.mura-datepicker' + id).val())){
+		var dtStr=$('.datepicker.mura-datepicker' + id).val();
+		var daysInMonth = DaysArray(12);
+		var dtArray = dtStr.split(dtCh);
+		var strMonth = dtArray[dtFormat[0]];
+		var strDay = dtArray[dtFormat[1]];
+		var strYear = dtArray[dtFormat[2]];
+	
+		var strMinute = ($('#mura-' + id + 'Minute').length) ? $('#mura-' + id + 'Minute').val() : 0;
+		var strHour=($('#mura-' + id + 'Hour').length) ? $('#mura-' + id + 'Hour').val() : 0;
+
+		if($('#mura-' + id + 'DayPart').length){
+			if($('#mura-' + id + 'DayPart').val().toLowerCase() == 'pm'){
+				strHour=strHour + 11;
+			} else {
+				strHour=strHour - 1;
+			}
+		}
+
+		//alert('#mura-' + id + 'Minute');
+
+		if(strHour.length==1){
+			strHour='0' + strHour;
+		}
+
+		if(strMinute.length==1){
+			strMinute='0' + strMinute;
+		}
+
+		var newVal="{ts '" + strYear + "-" + strMonth + "-" + strDay + " " + strHour + ":" + strMinute + ":00'}";
+		
+		$('#mura-' + id).val(newVal);
+		//alert($('#mura-' + id).val());
+	} else {
+		$('#mura-' + id).val('');
+	}
+
+
+}
+
+function isDate(dtStr) {
 	var daysInMonth = DaysArray(12);
 	var dtArray = dtStr.split(dtCh);
 

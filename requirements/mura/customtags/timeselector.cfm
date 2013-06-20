@@ -32,15 +32,15 @@
 			</cfif>
 			<cfset attributes.defaulthour=attributes.defaulthour+1>
 		</cfsilent>
-		<select id="#attributes.hourid#" class="#attributes.hourclass#" name="#attributes.hourname#"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif h eq attributes.defaulthour>selected</cfif>>#h#</option></cfloop></select>
+		<select id="#attributes.hourid#" class="#attributes.hourclass# mura-datepicker#attributes.name#" name="#attributes.hourname#"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif h eq attributes.defaulthour>selected</cfif>>#h#</option></cfloop></select>
 	<cfelse>
-		  <select  id="#attributes.hourid#" class="#attributes.hourclass#" name="#attributes.hourname#"><cfloop from="0" to="23" index="h"><option value="#h#" <cfif h eq attributes.defaulthour>selected</cfif>>#h#</option></cfloop></select>
+		  <select  id="#attributes.hourid#" class="#attributes.hourclass# mura-datepicker#attributes.name#" name="#attributes.hourname#"><cfloop from="0" to="23" index="h"><option value="#h#" <cfif h eq attributes.defaulthour>selected</cfif>>#h#</option></cfloop></select>
 	</cfif>
 
-	<select id="#attributes.minuteid#" class="#attributes.minuteclass#" name="#attributes.minutename#"><cfloop from="0" to="59" index="m"><option value="#m#" <cfif m eq attributes.defaultminute>selected</cfif>>#iif(len(m) eq 1,de('0#m#'),de('#m#'))#</option></cfloop></select>
+	<select id="#attributes.minuteid#" class="#attributes.minuteclass# mura-datepicker#attributes.name#" name="#attributes.minutename#"><cfloop from="0" to="59" index="m"><option value="#m#" <cfif m eq attributes.defaultminute>selected</cfif>>#iif(len(m) eq 1,de('0#m#'),de('#m#'))#</option></cfloop></select>
 	
 	<cfif session.localeHasDayParts>
-		<select id="#attributes.daypartid#" class="#attributes.daypartclass#" name="#attributes.daypartname#"><option value="AM">AM</option><option value="PM" <cfif attributes.daypart eq "PM">selected</cfif>>PM</option></select>
+		<select id="#attributes.daypartid#" class="#attributes.daypartclass# mura-datepicker#attributes.name#" name="#attributes.daypartname#"><option value="AM">AM</option><option value="PM" <cfif attributes.daypart eq "PM">selected</cfif>>PM</option></select>
 	</cfif>
 
 </cfoutput>

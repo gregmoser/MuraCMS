@@ -81,9 +81,12 @@
 	      		 <i class="icon-question-sign"></i></a>
 	      	</label>
 	      	<div class="controls">
+	      		<cf_datetimeselector name="releaseDate" datetime="#rc.contentBean.getReleaseDate()#">
+
+				<!---
 				<input type="text" class="datepicker span3" name="releaseDate" value="#LSDateFormat(rc.contentBean.getreleasedate(),session.dateKeyFormat)#"  maxlength="12" >
 				<cf_timeselector name="release" time="#rc.contentBean.getReleaseDate()#">
-				<!---
+				
 				<cfif session.localeHasDayParts>
 					<select name="releasehour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.contentBean.getReleaseDate())  and h eq 12 or (LSisDate(rc.contentBean.getReleaseDate()) and (hour(rc.contentBean.getReleaseDate()) eq h or (hour(rc.contentBean.getReleaseDate()) - 12) eq h or hour(rc.contentBean.getReleaseDate()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
 				<cfelse>
@@ -142,9 +145,11 @@
 	      		#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.expires')#
 	      	</label>
 	     	<div class="controls" id="expires-date-selector">
+	     			<cf_datetimeselector name="expires" datetime="#rc.contentBean.getExpires()#" defaulthour="23" defaultminute="59">
+					<!---
 					<input type="text" name="expires" value="#LSDateFormat(rc.contentBean.getExpires(),session.dateKeyFormat)#" class="span3 datepicker">
 					<cf_timeselector name="expires" time="#rc.contentBean.getExpires()#" defaulthour="23" defaultminute="59">
-					<!---
+					
 					<cfif session.localeHasDayParts>
 						<select name="expireshour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.contentBean.getExpires())  and h eq 12 or (LSisDate(rc.contentBean.getExpires()) and (hour(rc.contentBean.getExpires()) eq h or (hour(rc.contentBean.getExpires()) - 12) eq h or hour(rc.contentBean.getExpires()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
 					<cfelse>
@@ -186,9 +191,12 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.startdatetime')#
 					</label>
 					<div class="controls">
+						
+						<cf_datetimeselector name="featureStart" datetime="#rc.contentBean.getFeatureStart()#">
+						<!---
 						<input type="text" name="featureStart" value="#LSDateFormat(rc.contentBean.getFeatureStart(),session.dateKeyFormat)#" class="span3 datepicker">
 						<cf_timeselector name="featureStart" time="#rc.contentBean.getFeatureStart()#">
-						<!---
+						
 						<cfif session.localeHasDayParts>
 							<select name="featureStartHour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.contentBean.getFeatureStart())  and h eq 12 or (LSisDate(rc.contentBean.getFeatureStart()) and (hour(rc.contentBean.getFeatureStart()) eq h or (hour(rc.contentBean.getFeatureStart()) - 12) eq h or hour(rc.contentBean.getFeatureStart()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
 						<cfelse>
@@ -206,9 +214,11 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.stopdatetime')#
 					</label>
 					<div class="controls">
+						<cf_datetimeselector name="featureStop" datetime="#rc.contentBean.getFeatureStop()#" defaulthour="23" defaultminute="59">
+						<!---
 						<input type="text" name="featureStop" value="#LSDateFormat(rc.contentBean.getFeatureStop(),session.dateKeyFormat)#" class="span3 datepicker">
 						<cf_timeselector name="featureStop" time="#rc.contentBean.getFeatureStop()#" defaulthour="23" defaultminute="59">
-						<!---
+						
 						<cfif session.localeHasDayParts>
 							<select name="featureStophour" class="time"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif not LSisDate(rc.contentBean.getFeatureStop())  and h eq 11 or (LSisDate(rc.contentBean.getFeatureStop()) and (hour(rc.contentBean.getFeatureStop()) eq h or (hour(rc.contentBean.getFeatureStop()) - 12) eq h or hour(rc.contentBean.getFeatureStop()) eq 0 and h eq 12))>selected</cfif>>#h#</option></cfloop></select>
 						<cfelse>

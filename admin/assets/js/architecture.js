@@ -61,8 +61,8 @@ var siteManager = {
 
 		if(typeof(document.contentForm.display) != 'undefined'){
 			if(document.contentForm.display.value == '2') {
-				var tempStart = document.contentForm.displayStart.value;
-				var tempStop = document.contentForm.displayStop.value;
+				var tempStart = $(".datepicker.mura-datepickerdisplayStart").val();
+				var tempStop = $(".datepicker.mura-datepickerdisplayStop").val();
 				//alert(tempStart);
 				if(isDate(tempStart, 'DISPLAY START DATE') == false) {
 
@@ -74,8 +74,10 @@ var siteManager = {
 					return false;
 				}
 			} else {
-				document.contentForm.displayStart.value = "";
-				document.contentForm.displayStop.value = "";
+				$(".datepicker.mura-datepickerdisplayStart").val("");
+				$(".datepicker.mura-datepickerdisplayStop").val("");
+				$("#mura-displayStart").val("");
+				$("#mura-displayStop").val("");
 			}
 		}
 
@@ -1255,6 +1257,7 @@ buttons: {
 				'childTemplate': $("#mura-quickEdit-childtemplate").val()
 			}
 		} else if(attribute == 'display') {
+			/*
 			var attributeParams = {
 				'display': $("#mura-quickEdit-display").val(),
 				'displayStop': $("#mura-quickEdit-displayStop").val(),
@@ -1266,6 +1269,13 @@ buttons: {
 				'startMinute': $("#mura-quickEdit-startMinute").val(),
 				'startDayPart': ($("#mura-quickEdit-startpDayPart").length) ? $("#mura-quickEdit-startDayPart").val(): ''
 			}
+			*/
+
+			var attributeParams = {
+				'display': $("#mura-quickEdit-display").val(),
+				'displayStop': $("#mura-quickEdit-displayStop").val(),
+				'displayStart': $("#mura-quickEdit-displayStart").val(),
+			}
 
 		}
 
@@ -1273,6 +1283,30 @@ buttons: {
 
 		$("#mura-quickEditor").html('<img class="loader" src="assets/images/ajax-loader-big.gif" />');
 
+		$.ajax({
+			  type: "POST",
+			  url: "./index.cfm",
+			  data: pars,
+			  success:function(data) {
+					if(data.indexOf('mura-primary-login-token') != -1) {
+						location.href = './';
+					}
+					var parentNode = node.parents("li:first");
+					
+					if(parentNode.parents('li:first').length) {
+						siteManager.refreshSiteSection(parentNode, 1)
+					} else {
+						var topNode = $("#top-node").parents("li:first");
+						siteManager.loadSiteManager(topNode.attr("data-siteid"), topNode.attr("data-contentid"), topNode.attr("data-moduleid"), topNode.attr("data-sortby"), topNode.attr("data-sortdirection"), topNode.attr("data-type"), 1);
+					}
+				},
+			 error: function( jqXHR, textStatus,errorThrown) {
+				alert(jqXHR.responseText);
+				},
+			  dataType: 'text'
+			});
+
+		/*
 		$.post('index.cfm', pars, function(data) {
 			if(data.indexOf('mura-primary-login-token') != -1) {
 				location.href = './';
@@ -1286,6 +1320,7 @@ buttons: {
 				siteManager.loadSiteManager(topNode.attr("data-siteid"), topNode.attr("data-contentid"), topNode.attr("data-moduleid"), topNode.attr("data-sortby"), topNode.attr("data-sortdirection"), topNode.attr("data-type"), 1);
 			}
 		});
+		*/
 
 	},
 

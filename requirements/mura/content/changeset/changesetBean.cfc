@@ -78,6 +78,7 @@
 				<cfset setValue(prop,arguments.data[prop]) />
 			</cfloop>
 			
+			<!---
 			<cfif isDate(variables.instance.publishDate)>
 				
 				<cfif isdefined("arguments.data.publishhour")
@@ -133,6 +134,7 @@
 			
 				</cfif>
 			</cfif>
+			--->
 			
 		</cfif>
 		
