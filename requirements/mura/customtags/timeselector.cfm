@@ -24,13 +24,13 @@
 <cfoutput>
 	<cfif session.localeHasDayParts>
 		<cfsilent>
-			<cfif attributes.defaulthour gte 12>
+			<cfset attributes.defaulthour=attributes.defaulthour+1>
+			<cfif attributes.defaulthour gt 12>
 				<cfset attributes.defaulthour=attributes.defaulthour-12>
 				<cfset attributes.daypart="PM">
 			<cfelse>
 				<cfset attributes.daypart="AM">
-			</cfif>
-			<cfset attributes.defaulthour=attributes.defaulthour+1>
+			</cfif>	
 		</cfsilent>
 		<select id="#attributes.hourid#" class="#attributes.hourclass# mura-datepicker#attributes.name#" name="#attributes.hourname#"><cfloop from="1" to="12" index="h"><option value="#h#" <cfif h eq attributes.defaulthour>selected</cfif>>#h#</option></cfloop></select>
 	<cfelse>

@@ -97,7 +97,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<ol id="mura-quickEdit-displayDates"<cfif content.getdisplay() NEQ 2> style="display: none;"</cfif>>
 			<li><label>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.startdatetime')#</label>
-			<cf_datetimeselector name="quickEdit-displayStart" 
+			<cf_datetimeselector name="quickEdit-displayStart"
+				dateclass="mura-quickEdit-datepicker" 
 			 	datetime="#content.getdisplaystart()#" 
 			 	break="true">
 			<!---<input type="text" id="mura-quickEdit-displayStart" value="#LSDateFormat(content.getdisplaystart(),session.dateKeyFormat)#" class="textAlt datepicker mura-quickEdit-datepicker"><br />
@@ -120,6 +121,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<li><label>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.stopdatetime')#</label>
 			<cf_datetimeselector name="quickEdit-displayStop" 
 			 	datetime="#content.getdisplaystop()#" 
+			 	dateclass="mura-quickEdit-datepicker"
 			 	defaulthour="23" 
 			 	defaultminute="59"
 			 	break="true">
