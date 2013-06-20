@@ -21,6 +21,7 @@
 
 <cfset attributes.hourname="">
 <cfset attributes.minutename="">
+<cfset attributes.daypartname="">
 </cfsilent>
 
 <cfoutput>
