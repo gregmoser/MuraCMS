@@ -2278,7 +2278,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="getShowToolbar" output="false">
-<cfreturn ((listFind(session.mura.memberships,'S2IsPrivate;#application.settingsManager.getSite(variables.event.getValue('siteID')).getPrivateUserPoolID()#') or listFind(session.mura.memberships,'S2')) or (listFindNoCase("editor,author",variables.event.getValue('r').perm) and this.showMemberToolBar)) and getShowAdminToolBar() and not request.muraExportHTML />
+<cfreturn (request.muraChangesetPreview and (this.showMemberToolBar or this.showAdminToolBar) or ((listFind(session.mura.memberships,'S2IsPrivate;#application.settingsManager.getSite(variables.event.getValue('siteID')).getPrivateUserPoolID()#') or listFind(session.mura.memberships,'S2')) or (listFindNoCase("editor,author",variables.event.getValue('r').perm) and this.showMemberToolBar)) and getShowAdminToolBar()) and not request.muraExportHTML />
 </cffunction>
 
 <cffunction name="hasFETools" output="false">
