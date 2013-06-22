@@ -46,10 +46,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 --->
 <cfcomponent extends="mura.cfobject" output="false">
 
-<cfproperty name="errors" type="struct" persistent="false" />
+<cfproperty name="errors" type="struct" persistent="false" comparable="false" />
 <cfproperty name="isNew" type="numeric" persistent="false" default="0"/>
-<cfproperty name="fromMuraCache" type="boolean" default="false" persistent="false"/>
-<cfproperty name="instanceID" type="string" persistent="false"/>
+<cfproperty name="fromMuraCache" type="boolean" default="false" persistent="false" comparable="false"/>
+<cfproperty name="instanceID" type="string" persistent="false" comparable="false"/>
 
 <cfset variables.properties={}>
 <cfset variables.validations={}>
@@ -301,7 +301,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			var md=getMetaData(this);
 
 			param name="application.objectMappings.#variables.entityName#" default={};
-			application.objects[variables.entityName].properties={};
+			application.objectMappings[variables.entityName].properties={};
 			
 			//writeDump(var=md,abort=true);
 
@@ -316,11 +316,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			           i <= arrayLen(md.properties); 
 			           i++) 
 			      { 
-			        pName = md.properties[i].name; 
+			        pName = md.properties[i].name;
 
 			        if(!structkeyExists(application.objectMappings[variables.entityName].properties,pName)){
 			       	 	application.objectMappings[variables.entityName].properties[pName]=md.properties[i];
 			       	 	prop=application.objectMappings[variables.entityName].properties[pName];
+
+			       	 	if(!structKeyExists(prop,'comparable')){
+				       	 	prop.comparable=true;
+				       	 } 
 
 			       	 	if(!structKeyExists(prop,"dataType")){
 			       	 		if(structKeyExists(prop,"ormtype")){
@@ -375,12 +379,22 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		var props=getProperties();
 
 		for(var prop in props){
-			if(props[prop].column eq arguments.property){
+			if(prop eq arguments.property or structKeyExists(props[prop],'column') and  props[prop].column eq arguments.property){
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	function isComparable(property){
+		var props=getProperties();
+
+		if(structKeyExists(props, property) && structKeyExists(props[property],'comparable')){
+			return props[property].comparable;
+		} else {
+			return true;
+		}
 	}
 
 	function getValidations(){
@@ -450,6 +464,29 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		return application.objectMappings[variables.entityName].synthedFunctions;
 	}
+
+
+	function compare(bean){
+		var instance=getAllValues();
+		var returnStruct={};
+		var diffMatchPatch=getBean('diffMatchPatch');
+		var diffObj={};
+
+		for(var i in instance){
+			if(isComparable(i) 
+				&& isSimpleValue(instance[i]) 
+				&& isSimpleValue(arguments.bean.getValue(i))
+				&& instance[i] != arguments.bean.getValue(i)
+			){
+			
+				diffObj=diffMatchPatch.diffStrings(javaCast('string',getValue(i)),javaCast('string',arguments.bean.getValue(i)));
+				returnStruct[i]=diffObj;
+			}
+		}
+
+		return returnStruct;
+	}
+
 </cfscript>
 
 </cfcomponent>

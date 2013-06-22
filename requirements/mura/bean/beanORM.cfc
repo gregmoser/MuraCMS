@@ -256,6 +256,10 @@ component extends="mura.bean.bean" versioned=false {
 			       	 		setPropAsIDColumn(prop);
 			       	 	}
 
+			       	 	if(!structKeyExists(prop,'comparable')){
+			       	 		prop.comparable=true;
+			       	 	}
+
 			       	 	if(!structKeyExists(prop,"dataType")){
 			       	 		if(structKeyExists(prop,"ormtype")){
 			       	 			prop.dataType=prop.ormtype;
