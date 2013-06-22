@@ -466,21 +466,29 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 
 
-	function compare(bean){
-		var instance=getAllValues();
+	function compare(bean, propertyList=''){
+		
 		var returnStruct={};
 		var diffMatchPatch=getBean('diffMatchPatch');
 		var diffObj={};
+		var i='';
+		var propertyArray=listToArray(arguments.propertyList);
+		var property='';
 
-		for(var i in instance){
-			if(isComparable(i) 
-				&& isSimpleValue(instance[i]) 
-				&& isSimpleValue(arguments.bean.getValue(i))
-				&& instance[i] != arguments.bean.getValue(i)
+		if(!arrayLen(propertyArray)){
+			propertyArray=StructKeyArray(getAllValues());
+		}
+
+		for(i=1; i lte arrayLen(propertyArray); i++){
+			property=propertyArray[i];
+			if(isComparable(property) 
+				&& isSimpleValue(getValue(property)) 
+				&& isSimpleValue(arguments.bean.getValue(property))
+				&& getValue(property) != arguments.bean.getValue(property)
 			){
 			
-				diffObj=diffMatchPatch.diffStrings(javaCast('string',getValue(i)),javaCast('string',arguments.bean.getValue(i)));
-				returnStruct[i]=diffObj;
+				diffObj=diffMatchPatch.diffStrings(javaCast('string',getValue(property)),javaCast('string',arguments.bean.getValue(property)));
+				returnStruct[property]=diffObj;
 			}
 		}
 
