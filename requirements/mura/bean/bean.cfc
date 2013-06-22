@@ -479,6 +479,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			propertyArray=StructKeyArray(getAllValues());
 		}
 
+		if(!isObject(arguments.bean) && isStruct(arguments.bean)){
+			arguments.bean=new mura.bean.bean().set(arguments.bean);
+		}
+
 		for(i=1; i lte arrayLen(propertyArray); i++){
 			property=propertyArray[i];
 			if(isComparable(property) 
