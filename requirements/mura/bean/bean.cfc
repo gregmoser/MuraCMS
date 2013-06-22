@@ -479,7 +479,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				&& instance[i] != arguments.bean.getValue(i)
 			){
 			
-				diffObj=diffMatchPatch.diffStrings(javaCast('string',arguments.bean.getValue(i)),javaCast('string',getValue(i)));
+				diffObj=diffMatchPatch.diffStrings(javaCast('string',getValue(i)),javaCast('string',arguments.bean.getValue(i)));
 				returnStruct[i]=diffObj;
 			}
 		}
