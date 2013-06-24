@@ -5,17 +5,11 @@ component {
 		return this;
 	}
 
-	function diffStrings(String text1, String text2, type ="diff_main", cleanupEfficiency=false, cleanupSemantic=true) {
+	function compute(String text1, String text2, type ="diff_main") {
 		var diffOb = evaluate('variables.diff_match_patch.#type#(arguments.text1,arguments.text2)');
-			
-		if(arguments.cleanupEfficiency){
-			variables.diff_match_patch.diff_cleanupEfficiency(diffOb);
-		}
-
-		if(arguments.cleanupSemantic){
-			variables.diff_match_patch.diff_cleanupSemantic(diffOb);
-		}
-
+		
+		variables.diff_match_patch.diff_cleanupSemantic(diffOb);
+		
 		var returnStruct = {
 			diff = diffOb,
 			html = variables.diff_match_patch.diff_prettyHtml(diffOb),

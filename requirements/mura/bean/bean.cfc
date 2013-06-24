@@ -491,7 +491,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				&& getValue(property) != arguments.bean.getValue(property)
 			){
 			
-				diffObj=diffMatchPatch.diffStrings(javaCast('string',getValue(property)),javaCast('string',arguments.bean.getValue(property)));
+				diffObj=diffMatchPatch.compute(javaCast('string',getValue(property)),javaCast('string',arguments.bean.getValue(property)));
 				returnStruct[property]=diffObj;
 			}
 		}
