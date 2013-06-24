@@ -931,7 +931,7 @@ function confirmDialog(message, yesAction, noAction) {
 				if(typeof(_yesAction) == 'function') {
 					_yesAction();
 				} else {
-					location.href = _yesAction;
+					actionModal(_yesAction);
 				}
 
 			},
@@ -940,7 +940,7 @@ function confirmDialog(message, yesAction, noAction) {
 					if(typeof(_noAction) == 'function') {
 						_noAction();
 					} else {
-						location.href = _noAction;
+						actionModal(_noAction);
 					}
 				} else {
 					$(this).dialog('close');
