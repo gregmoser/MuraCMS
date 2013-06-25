@@ -146,10 +146,14 @@ component extends="mura.bean.bean" versioned=false {
 
 	function getColumns(){
 		if(hasTable()){
-			if(!getDbUtility().tableExists()){
-				checkSchema();
+			if(!structKeyExists(application.objectMappings[variables.entityName],'columns')){
+				if(!getDbUtility().tableExists()){
+					checkSchema();
+				}
+				application.objectMappings[variables.entityName].columns=getDbUtility().columns();
 			}
-			return getDbUtility().columns();
+
+			return application.objectMappings[variables.entityName].columns;
 		} else {
 			return {};
 		}
@@ -161,6 +165,7 @@ component extends="mura.bean.bean" versioned=false {
 
 	function checkSchema(){
 		var props=getProperties();
+		getEntityName();
 
 		if(hasTable()){
 			for(var prop in props){
@@ -178,6 +183,9 @@ component extends="mura.bean.bean" versioned=false {
 			}
 		}
 		
+		param name="application.objectMappings.#variables.entityName#" default={};
+		application.objectMappings[variables.entityName].columns=getColumns();
+
 		return this;
 	}
 

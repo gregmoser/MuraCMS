@@ -449,4 +449,20 @@
 	<cfabort>
 </cffunction>
 
+<cffunction name="getAuditTrail" output="true">
+	<cfargument name="rc">
+	<cfset var trail=[]>
+
+	<cfset rc.item=rc.$.getBean('content').loadBy(contenthistid=rc.contenthistid,siteid=rc.siteid)>
+	
+	<cfloop condition="not rc.item.getIsNew()">
+		<cfset arrayAppend(trail, rc.item.getContentHistID())>
+		<cfset rc.item=rc.item.getSource()>
+	</cfloop>
+	<cfcontent type="application/json">
+	<cfoutput>#createObject("component","mura.json").encode(trail)#</cfoutput>
+	<cfabort>
+		
+</cffunction>
+
 </cfcomponent>

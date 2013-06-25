@@ -109,7 +109,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset versionStatus=application.rbFactory.getKeyValue(session.rb,'sitemanager.content.archived')>
 </cfif>
 </cfsilent> 
-<tr>
+<tr data-contenthistid="#rc.item.getContentHistID()#" data-siteid="#rc.item.getSiteID()#">
 <td class="title var-width">
 	<a title="Edit" href="index.cfm?muraAction=cArch.edit&contenthistid=#rc.item.getContenthistID()#&contentid=#rc.item.getContentID()#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&return=hist&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#">#HTMLEditFormat(left(rc.item.getmenutitle(),90))#</a>
 </td>
@@ -192,10 +192,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfif not rc.item.getactive() and (rc.perm neq 'none' and application.configBean.getPurgeDrafts() or (listFind(session.mura.memberships,'Admin;#application.settingsManager.getSite(rc.siteid).getPrivateUserPoolID()#;0') or listFind(session.mura.memberships,'S2')))><li class="delete"><a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.delete')#" href="index.cfm?muraAction=cArch.update&contenthistid=#rc.item.getContentHistID()#&action=delete&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deleteversionconfirm'))#',this.href)"><i class="icon-remove-sign"></i></a></li><cfelse><li class="delete disabled"><span><i class="icon-remove-sign"></i></span></li></cfif></ul></td></tr></cfoutput>
 </cfloop> 
 </tbody></table>
-
-<cfif rc.compactDisplay eq "true">
 <script type="text/javascript">
+
+
 jQuery(document).ready(function(){
+	<cfif rc.compactDisplay eq "true">
 	if (top.location != self.location) {
 		if(jQuery("#ProxyIFrame").length){
 			jQuery("#ProxyIFrame").load(
@@ -207,6 +208,48 @@ jQuery(document).ready(function(){
 			frontEndProxy.post({cmd:'setWidth',width:'standard'});
 		}
 	}
+	</cfif>
+
+ 	var currentAudit='';
+
+	$('.audit-trail').on('mouseover',function(){
+
+		var contenthistid=$(this).parents('tr').attr('data-contenthistid');
+		currentAudit=contenthistid;
+
+		$.ajax({
+		  url: 'index.cfm',
+		  data: {
+		  		muraAction: 'carch.getaudittrail',
+		  		contenthistid:$(this).parents('tr').attr('data-contenthistid'),
+		  		siteid:$(this).parents('tr').attr('data-siteid')
+		  		}
+		  ,
+		  success: function(data){
+		  		$('tr.info').removeClass('info');
+		  		if(currentAudit==contenthistid){
+		  			for(var i=0;i < data.length;i++){
+		  				$("tr[data-contenthistid='" + data[i] + "']").addClass('info');
+		  			}
+		  		}
+		  	},
+		  error: function(data){
+		  		$('tr.info').removeClass('info');
+		  		//alert(data.responseText);
+		  	}
+		  	,
+		  dataType: "json"
+		});
+		
+	})
+
+	$('.audit-trail').on('mouseout',function(){
+		$('tr.info').removeClass('info');
+		currentAudit='';
+	});
+
 });
+
+
+
 </script>
-</cfif> 
