@@ -600,7 +600,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "int">
 				</cfcase>
 				<cfcase value="tinyint">
@@ -659,7 +659,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "int(10)">
 				</cfcase>
 				<cfcase value="tinyint">
@@ -690,7 +690,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "integer">
 				</cfcase>
 				<cfcase value="tinyint">
@@ -721,7 +721,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "int">
 				</cfcase>
 				<cfcase value="tinyint">
@@ -752,7 +752,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "number(10,0)">
 				</cfcase>
 				<cfcase value="tinyint">
