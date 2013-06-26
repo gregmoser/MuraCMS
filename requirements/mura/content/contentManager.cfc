@@ -1121,7 +1121,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfset getBean('contentUtility').setUniqueURLTitle(newBean) />
 					</cfif>
 
+					<cfset variables.pluginManager.announceEvent("onBeforeFilenameCreate",pluginEvent)>
+
 					<cfset getBean('contentUtility').setUniqueFilename(newBean) />
+
+					<cfset variables.pluginManager.announceEvent("onAfterFilenameCreate",pluginEvent)>
 												
 					<cfif not newBean.getIsNew() and newBean.getoldfilename() neq newBean.getfilename() and len(newBean.getoldfilename())>
 						<cfset getBean('contentUtility').movelink(newBean.getSiteID(),newBean.getFilename(),currentBean.getFilename()) />	
