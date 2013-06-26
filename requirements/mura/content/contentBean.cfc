@@ -116,7 +116,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="doCache" type="numeric" default="1" required="true" />
 <cfproperty name="created" type="date" default=""/>
 <cfproperty name="mobileExclude" type="numeric" default="0" required="true" />
-<cfproperty name="changesetID" type="string" default=""/>
+<cfproperty name="changesetID" type="string" default="" comparable="false"/>
 <cfproperty name="imageSize" type="string" default="small" required="true" />
 <cfproperty name="imageHeight" type="string" default="AUTO" required="true" />
 <cfproperty name="imageWidth" type="string" default="AUTO" required="true" />
