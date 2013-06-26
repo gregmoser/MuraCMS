@@ -51,7 +51,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="preserveID" type="string" default="" comparable="false"/>
 <cfproperty name="active" type="numeric" default="0" required="true" comparable="false"/>
 <cfproperty name="approved" type="numeric" default="0" required="true" comparable="false"/>
-<cfproperty name="orderno" type="numeric" default="0" required="true" />
+<cfproperty name="orderno" type="numeric" default="0" required="true" comparable="false"/>
 <cfproperty name="metaDesc" type="string" default=""/>
 <cfproperty name="metaKeyWords" type="string" default=""/>
 <cfproperty name="displayStart" type="date" default=""/>
@@ -91,7 +91,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="releaseDate" type="date" default=""/>
 <cfproperty name="isLocked" type="numeric" default="0" required="true" />
 <cfproperty name="nextN" type="numeric" default="10" required="true" />
-<cfproperty name="sortBy" type="string" default="orderno" required="true" />
+<cfproperty name="sortBy" type="string" default="orderno" required="true"/>
 <cfproperty name="sortDirection" type="string" default="asc" required="true" />
 <cfproperty name="featureStart" type="date" default=""/>
 <cfproperty name="featureStop" type="date" default=""/>
