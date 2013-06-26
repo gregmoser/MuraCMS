@@ -117,6 +117,28 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	  </cfif>
 </cffunction>	  	
 
+
+<cffunction name="updateRelatedContentSet" output="false">
+	<cfargument name="rc">
+	<cfset arguments.rc.rcsBean = getBean('relatedContentSet').loadBy(relatedContentSetID=arguments.rc.relatedContentSetID)>
+	
+	<cfif not arguments.rc.hasAvailableSubTypes>
+		<cfset arguments.rc.availableSubTypes="">
+	</cfif>
+	
+	<cfset arguments.rc.rcsBean.set(arguments.rc) />
+	
+	<cfif listFindNoCase("Update,Add", arguments.rc.action)>
+		<cfset arguments.rc.rcsBean.save() />
+	</cfif>
+	
+	<cfif arguments.rc.action eq 'Delete'>
+		<cfset arguments.rc.rcsBean.delete() />
+	</cfif>
+	
+	<cfset variables.fw.redirect(action="cExtend.listSets",append="subTypeId,siteid")>
+</cffunction>	
+
 <cffunction name="updateAttribute" output="false">
 	<cfargument name="rc">
 	  <cfset arguments.rc.attributeBean=application.classExtensionManager.getSubTypeBean().getExtendSetBean().getattributeBean() />
@@ -146,6 +168,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="saveExtendSetSort" output="false">
 	<cfargument name="rc">
 	<cfset application.classExtensionManager.saveExtendSetSort(arguments.rc.extendSetID) />
+	<cfabort>
+</cffunction>
+
+<cffunction name="saveRelatedSetSort" output="false">
+	<cfargument name="rc">
+	<cfset application.classExtensionManager.saveRelatedSetSort(arguments.rc.relatedContentSetID) />
 	<cfabort>
 </cffunction>
 </cfcomponent>

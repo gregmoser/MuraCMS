@@ -74,6 +74,35 @@ var extendManager = {
 		$("#" + id).enableSelection();
 
 	},
+	
+	showRelatedSaveSort: function(id) {
+		$('#showRelatedSort').hide();
+		$('#saveRelatedSort').show();
+
+		$(".handleRelated").each(
+
+		function(index) {
+			$(this).show();
+		});
+
+		this.setSortable(id);
+
+	},
+
+	showRelatedSort: function(id) {
+		$('#showRelatedSort').show();
+		$('#saveRelatedSort').hide();
+
+		$(".handleRelated").each(
+
+		function(index) {
+			$(this).hide();
+		});
+
+		$("#" + id).sortable('destroy');
+		$("#" + id).enableSelection();
+
+	},
 
 	saveAttributeSort: function(id) {
 		var attArray = new Array();
@@ -107,6 +136,23 @@ var extendManager = {
 		//location.href=url + "?" + pars;
 		$.get(url + "?" + pars);
 		this.showSort(id);
+	},
+	
+	saveRelatedSetSort: function(id) {
+		var setArray = new Array();
+
+		$("#" + id + ' > li').each(
+
+		function(index) {
+			setArray.push($(this).attr("relatedContentSetID"));
+		});
+
+		var url = "index.cfm";
+		var pars = 'muraAction=cExtend.saveRelatedSetSort&relatedContentSetID=' + setArray.toString() + '&cacheID=' + Math.random();
+
+		//location.href=url + "?" + pars;
+		$.get(url + "?" + pars);
+		this.showRelatedSort(id);
 	},
 
 	setSortable: function(id) {

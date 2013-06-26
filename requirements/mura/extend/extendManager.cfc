@@ -849,6 +849,21 @@ and tclassextendattributes.type='File'
 
 </cffunction>
 
+<cffunction name="saveRelatedSetSort" returntype="void">
+<cfargument name="relatedContentSetID">
+<cfset var rs = ""/>
+<cfset var s=0/>
+<cfloop from="1" to="#listlen(arguments.relatedContentSetID)#" index="s">
+	<cfquery>
+		update tclassextendrelatedcontentsets
+		set orderno=#s#
+		where 
+		relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar"  value="#listGetAt(arguments.relatedContentSetID,s)#">
+	</cfquery>
+</cfloop>
+
+</cffunction>
+
 <cffunction name="getAttribute" returnType="string" output="false">
 <cfargument name="baseID" required="true" default=""/>
 <cfargument name="key" required="true" default=""/>
