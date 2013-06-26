@@ -75,14 +75,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <table class="table table-striped table-condensed table-bordered mura-table-grid">
 <thead>
-  <tr><th class="var-width">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.title')#</th>
+<tr>
+<th colspan="2"><a class="btn" id="viewDiff">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.codediff')#</a></th> 
+<th class="var-width">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.title')#</th>
 <cfif rc.contentBean.getType() eq "file" and stats.getMajorVersion()><th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.version.file')#</th></cfif>
 <th class="notes">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.notes')#</th>
 <cfif hasChangesets><th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.changeset')#</th></cfif> 
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.status')#</th>
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.display')#</th>
 <cfif rc.contentBean.getType() neq "file"><th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.objects')#</th></cfif> 
-<th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.feature')#</th> 
+<!---<th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.feature')#</th> --->
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.nav')#</th> 
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.update')#</th> 
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.time')#</th>
@@ -110,6 +112,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfif>
 </cfsilent> 
 <tr data-contenthistid="#rc.item.getContentHistID()#" data-siteid="#rc.item.getSiteID()#">
+<td>
+	<input type="radio" name="compare1" value="#rc.item.getContentHistID()#"<cfif rc.items.currentIndex() eq 1> checked</cfif>/>
+</td>
+<td>
+	<input type="radio" name="compare2" value="#rc.item.getContentHistID()#"<cfif rc.items.currentIndex() eq 1> checked</cfif>/>
+</td>
 <td class="title var-width">
 	<a title="Edit" href="index.cfm?muraAction=cArch.edit&contenthistid=#rc.item.getContenthistID()#&contentid=#rc.item.getContentID()#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&return=hist&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#">#HTMLEditFormat(left(rc.item.getmenutitle(),90))#</a>
 </td>
@@ -153,6 +161,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfif>
 			<span>#application.rbFactory.getKeyValue(session.rb,'sitemanager.#lcase(rc.item.getinheritobjects())#')#</span></td>
 </cfif>
+<!---
 <td class="feature<cfif rc.item.getisfeature() eq 2>> scheduled</cfif>"> 
 	<cfif rc.item.getisfeature() eq 1>
 			<i class="icon-ok" title="#application.rbFactory.getKeyValue(session.rb,"sitemanager.yes")#"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.yes")#
@@ -163,6 +172,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<span>#application.rbFactory.getKeyValue(session.rb,"sitemanager.no")#</span>
 		</cfif>
 </td>
+--->
 <td class="nav-display">
 <cfif rc.item.getisnav()>
 <i class="icon-ok" title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.#yesnoformat(rc.item.getisnav())#')#"></i>
@@ -247,6 +257,13 @@ jQuery(document).ready(function(){
 		$('tr.info').removeClass('info');
 		currentAudit='';
 	});
+
+	$('#viewDiff').click(function(e){
+		e.preventDefault();
+		siteManager.openContentDiff($('input[name="compare1"]:checked').val(),$('input[name="compare2"]:checked').val(),siteid);
+	});
+
+
 
 });
 

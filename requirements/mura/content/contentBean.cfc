@@ -46,8 +46,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 --->
 <cfcomponent extends="mura.bean.beanExtendable" output="false">
 	
-<cfproperty name="contentHistID" type="string" default="" required="true"/>
-<cfproperty name="contentID" type="string" default="" required="true"/>
+<cfproperty name="contentHistID" type="string" default="" required="true" comparable="false"/>
+<cfproperty name="contentID" type="string" default="" required="true" comparable="false"/>
 <cfproperty name="preserveID" type="string" default="" comparable="false"/>
 <cfproperty name="active" type="numeric" default="0" required="true" />
 <cfproperty name="approved" type="numeric" default="0" required="true" />
@@ -69,7 +69,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="type" type="string" default="Page" required="true" />
 <cfproperty name="newfile" type="string" default=""/>
 <cfproperty name="lastUpdateBy" type="string" default=""/>
-<cfproperty name="lastUpdateByID" type="string" default=""/>
+<cfproperty name="lastUpdateByID" type="string" default="" comparable="false"/>
 <cfproperty name="summary" type="string" default=""/>
 <cfproperty name="siteID" type="string" default=""/>
 <cfproperty name="moduleID" type="string" default="00000000000000000000000000000000000" required="true" />
@@ -125,10 +125,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="expires" type="date" default=""/>
 <cfproperty name="assocFilename" type="string" default=""/>
 <cfproperty name="displayInterval" type="string" default="Daily" />
-<cfproperty name="requestID" type="string" default=""/>
+<cfproperty name="requestID" type="string" default="" comparable="false"/>
 <cfproperty name="approvalStatus" type="string" default=""/>
-<cfproperty name="approvalGroupID" type="string" default=""/>
-<cfproperty name="approvalChainOverride" type="boolean" default="false" required="true" />
+<cfproperty name="approvalGroupID" type="string" default="" comparable="false"/>
+<cfproperty name="approvalChainOverride" type="boolean" default="false" required="true" comparable="false"/>
 
 <cffunction name="init" access="public" returntype="any" output="false">
 	

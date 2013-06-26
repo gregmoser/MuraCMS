@@ -75,7 +75,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <table class="table table-striped table-condensed table-bordered mura-table-grid">
 <thead>
-  <tr><th class="var-width">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.title')#</th>
+<tr>
+<th colspan="2"><a class="btn" id="viewDiff">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.codediff')#</a></th> 
+ <th class="var-width">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.title')#</th>
 <cfif rc.contentBean.getType() eq "file" and stats.getMajorVersion()><th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.version.file')#</th></cfif>
 <th class="notes">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.notes')#</th>
 <cfif hasChangesets><th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.changeset')#</th></cfif> 
@@ -91,6 +93,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </tr> 
 </thead>
 <tbody>
+<cfset started=false>
 <cfloop condition="not rc.item.getIsNew()">
 <cfoutput>
 <cfsilent>
@@ -108,6 +111,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfif>
 </cfsilent> 
 <tr>
+<td>
+	<input type="radio" name="compare1" value="#rc.item.getContentHistID()#"<cfif not started> checked</cfif>/>
+</td>
+<td>
+	<input type="radio" name="compare2" value="#rc.item.getContentHistID()#"<cfif not started> checked</cfif>/>
+</td>
 <td class="title var-width">
 	<a title="Edit" href="index.cfm?muraAction=cArch.edit&contenthistid=#rc.item.getContenthistID()#&contentid=#rc.item.getContentID()#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&return=hist&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#">#HTMLEditFormat(left(rc.item.getmenutitle(),90))#</a>
 </td>
@@ -189,12 +198,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfif not rc.item.getactive() and (rc.perm neq 'none' and application.configBean.getPurgeDrafts() or (listFind(session.mura.memberships,'Admin;#application.settingsManager.getSite(rc.siteid).getPrivateUserPoolID()#;0') or listFind(session.mura.memberships,'S2')))><li class="delete"><a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.delete')#" href="index.cfm?muraAction=cArch.update&contenthistid=#rc.item.getContentHistID()#&action=delete&contentid=#URLEncodedFormat(rc.contentid)#&type=#URLEncodedFormat(rc.type)#&parentid=#URLEncodedFormat(rc.parentid)#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteid)#&startrow=#URLEncodedFormat(rc.startrow)#&moduleid=#URLEncodedFormat(rc.moduleid)#&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#" onclick="return confirmDialog('#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.deleteversionconfirm'))#',this.href)"><i class="icon-remove-sign"></i></a></li><cfelse><li class="delete disabled"><span><i class="icon-remove-sign"></i></span></li></cfif></ul></td></tr></cfoutput>
 <cfset rc.item=rc.item.getSource()>
+<cfset started=true>
 </cfloop> 
 </tbody></table>
 
-<cfif rc.compactDisplay eq "true">
+
 <script type="text/javascript">
 jQuery(document).ready(function(){
+	<cfif rc.compactDisplay eq "true">
 	if (top.location != self.location) {
 		if(jQuery("#ProxyIFrame").length){
 			jQuery("#ProxyIFrame").load(
@@ -206,6 +217,12 @@ jQuery(document).ready(function(){
 			frontEndProxy.post({cmd:'setWidth',width:'standard'});
 		}
 	}
+	</cfif>
+
+	$('#viewDiff').click(function(e){
+		e.preventDefault();
+		siteManager.openContentDiff($('input[name="compare1"]:checked').val(),$('input[name="compare2"]:checked').val(),siteid);
+	}); 
 });
 </script>
-</cfif> 
+

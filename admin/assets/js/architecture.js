@@ -2045,6 +2045,42 @@ buttons: {
 		}
 
 		return "";
+	},
+
+	openContentDiff: function(contenthistid1, contenthistid2, siteid) {
+
+		$("#contentDiffContainer").remove();
+		$("body").append('<div id="contentDiffContainer" title="Loading..." style="display:none"><div class="ui-dialog-content ui-widget-content"><div class="load-inline"></div></div></div>');
+
+		$("#contentDiffContainer").dialog({
+			resizable: false,
+			modal: true,
+			width: 552,
+			position: getDialogPosition(),
+
+			open: function() {
+				$("#ui-dialog-title-contentDiffContainer").html('Code Diff');
+				$("#contentDiffContainer").html('<div class="ui-dialog-content ui-widget-content"><div class="load-inline"></div></div>');
+				var url = './index.cfm';
+				var pars = 'muraAction=cArch.loaddiff&compactDisplay=true&siteid=' + siteid + '&contenthistid1=' + contenthistid1 + '&contenthistid2=' + contenthistid2 + '&cacheid=' + Math.random();
+				$.ajax(url + "?" + pars)
+					.done(function(data) {
+						$('#contentDiffContainer').html(data);
+						$("#contentDiffContainer").dialog("option", "position", "center");
+					})
+					.fail(function(data){
+						$('#contentDiffContainer').html(data.responseText);
+						$("#contentDiffContainer").dialog("option", "position", "center");
+					});
+
+			},
+			close: function() {
+				$(this).dialog("destroy");
+				$("#contentDiffContainer").remove();
+			}
+		});
+
+		return false;
 	}
 };
 
