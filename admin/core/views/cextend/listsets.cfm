@@ -66,6 +66,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <h2><i class="#application.settingsManager.getSite(rc.siteID).getContentRenderer().iconClassByContentType(type=subType.getType(),subtype=subType.getSubType())#"></i> #application.classExtensionManager.getTypeAsString(subType.getType())#/#subType.getSubType()#</h2>
 
 </cfoutput>
+
+<h3>Extended Atrtibute Sets</h3>
 <cfif arrayLen(extendSets)>
 <ul class="nav nav-pills">
 <li><a href="javascript:;" style="display:none;" id="saveSort" onclick="extendManager.saveExtendSetSort('attr-set');return false;"><i class="icon-check"></i> Save Order</a></li>
@@ -97,7 +99,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfif arrayLen(relatedContentsets)>
 <hr />
-
+<h3>Related Content Sets</h3>
 <ul class="nav nav-pills">
 <li><a href="javascript:;" style="display:none;" id="saveRelatedSort" onclick="extendManager.saveRelatedSetSort('related-set');return false;"><i class="icon-check"></i> Save Order</a></li>
 <li><a href="javascript:;"  id="showRelatedSort" onclick="extendManager.showRelatedSaveSort('related-set');return false;"><i class="icon-move"></i> Reorder</a></li>
@@ -123,6 +125,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </ul>
  
 <cfelse>
-<p class="alert">There are currently no available attribute sets.</p>
+<p class="alert">There are currently no available related sets.</p>
 </cfif>
 
