@@ -63,7 +63,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="HTMLTitle" type="string" default=""/>
 <cfproperty name="filename" type="string" default=""/>
 <cfproperty name="oldfilename" type="string" default=""/>
-<cfproperty name="lastUpdate" type="date" default=""/>
+<cfproperty name="lastUpdate" type="date" default="" comparable="false"/>
 <cfproperty name="display" type="numeric" default=""/>
 <cfproperty name="parentID" type="string" default=""/>
 <cfproperty name="type" type="string" default="Page" required="true" />

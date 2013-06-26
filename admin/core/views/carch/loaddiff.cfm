@@ -2,7 +2,7 @@
 request.layout=false;
 bean1=$.getBean('content').loadBy(contenthistid=rc.contenthistid1);
 bean2=$.getBean('content').loadBy(contenthistid=rc.contenthistid2);	
-diff=bean2.compare(bean1);
+diff=bean1.compare(bean2);
 
 if(!structIsEmpty(diff)){
 	for(i in diff){
