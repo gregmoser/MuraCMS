@@ -2055,7 +2055,7 @@ buttons: {
 		$("#contentDiffContainer").dialog({
 			resizable: false,
 			modal: true,
-			width: 552,
+			width: 750,
 			position: getDialogPosition(),
 
 			open: function() {
@@ -2067,10 +2067,13 @@ buttons: {
 					.done(function(data) {
 						$('#contentDiffContainer').html(data);
 						$("#contentDiffContainer").dialog("option", "position", "center");
+						$(".ui-widget-overlay").css('height',$(document).height());
+
 					})
 					.fail(function(data){
 						$('#contentDiffContainer').html(data.responseText);
 						$("#contentDiffContainer").dialog("option", "position", "center");
+						//$(".ui-widget-overlay").css('height',window.height);
 					});
 
 			},
