@@ -45,7 +45,7 @@ For clarity, if you create a modified version of Mura CMS, you are not obligated
 modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 */
-component extend="mura.bean.beanORM" versioned=true bundleable=true{
+component extends="mura.bean.beanORM" versioned=true bundleable=true{
 	property name="contentid" datatype="char" length="35" required=true;
 	property name="contenthistid" datatype="char" length="35" required=true;
 	property name="siteid" datatype="varchar" length="35" required=true;
@@ -59,6 +59,10 @@ component extend="mura.bean.beanORM" versioned=true bundleable=true{
 
 		arrayAppend(variables.addObjects,arguments.obj);
 		return this;
+	}
+
+	function persistToVersion(version1,version2){
+		return true;
 	}
 
 }

@@ -1381,8 +1381,8 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 
 
 <cffunction name="persistVersionedObjects" output="false">
-	<cfargument name="contenthistid">
-	<cfargument name="preserveid">
+	<cfargument name="version1">
+	<cfargument name="version2">
 
 	<cfset var it="">
 	<cfset var i="">
@@ -1391,14 +1391,16 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfif len(application.objectMappings.versionedBeans)>
 		<cfloop list="#application.objectMappings.versionedBeans#" index="i">
 			
-			<cfset it=getBean(i).loadBy(contenthistid=arguments.preserveid,returnformat='iterator')>
+			<cfset it=getBean(i).loadBy(contenthistid=arguments.version1.getContentHistID(),returnformat='iterator')>
 			
 			<cfloop condition="it.hasNext()">
 				<cfset bean=it.next()>
 				<cfif not bean.getIsNew()>
-					<cfset bean.setContentHistID(arguments.preserveID)>
-					<cfset bean.setValue(bean.getPrimaryKey(),createUUID())>
-					<cfset bean.save()>
+					<cfif bean.persistToVersion(arguments.version1,arguments.version2)>
+						<cfset bean.setContentHistID(arguments.version2.getContentHistID())>
+						<cfset bean.setValue(bean.getPrimaryKey(),createUUID())>
+						<cfset bean.save()>
+					</cfif>
 				</cfif>
 			</cfloop>
 			

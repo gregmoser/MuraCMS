@@ -7,6 +7,8 @@
 	getBean('changesetRollBack').checkSchema();
 	getBean('contentSourceMap').checkSchema();
 	getBean('relatedContentSet').checkSchema();
+	getBean('fileMetaData').checkSchema();
+
 
 	dbUtility.setTable("tclassextend")
 	.addColumn(column="iconclass",dataType="varchar",length="50");
