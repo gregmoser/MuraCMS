@@ -855,7 +855,7 @@ and tclassextendattributes.type='File'
 <cfset var s=0/>
 <cfloop from="1" to="#listlen(arguments.relatedContentSetID)#" index="s">
 	<cfquery>
-		update tclassextendrelatedcontentsets
+		update tclassextendrcsets
 		set orderno=#s#
 		where 
 		relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar"  value="#listGetAt(arguments.relatedContentSetID,s)#">
