@@ -236,4 +236,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn variables.contentManager.getImageURL(argumentCollection=arguments)>
 </cffunction>
 
+<cffunction name="getFileMetaData" output="false">
+	<cfargument name="property" default="fileid">
+	<cfreturn getBean('fileMetaData').loadBy(contentid=getValue('contentid'),contentHistID=getValue('contentHistID'),siteID=getValue('siteid'),fileid=getValue(arguments.property))>	
+</cffunction>
+
 </cfcomponent>
