@@ -363,7 +363,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset var s=0/>
 
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
-		select * from tclassextendrelatedcontentsets where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> and subTypeID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubTypeID()#"> order by orderNo
+		select * from tclassextendrcsets where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> and subTypeID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubTypeID()#"> order by orderNo
 	</cfquery>
 	
 	<cfif rsSets.recordcount>
