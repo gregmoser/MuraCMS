@@ -726,7 +726,7 @@ component extends="mura.bean.bean" versioned=false {
 						writeOutput("and ");
 					}
 
-					writeOutput(" #arg#= :#arg# ");
+					writeOutput(" #getTable()#.#arg#= :#arg# ");
 				}	
 			}
 
