@@ -1130,13 +1130,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		tfiles.fileSize,tfiles.FileExt,tfiles.ContentType,tfiles.ContentSubType, tcontent.siteID, tcontent.featureStart,tcontent.featureStop,tcontent.template,tcontent.childTemplate,
 		tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,
 		tcontentstats.rating,tcontentstats.totalVotes, tcontentstats.comments,
-		tfiles.filename as AssocFilename,tcontent.displayInterval, tcontent.fileid
+		tfiles.filename as AssocFilename,tcontent.displayInterval, tcontent.fileid, tcontentfilemetadata.altText as fileAltText
 	
 		FROM tcontent LEFT JOIN tcontent tcontent2 #tableModifier# ON tcontent.contentid=tcontent2.parentid
 		LEFT JOIN tfiles #tableModifier# On tcontent.FileID=tfiles.FileID and tcontent.siteID=tfiles.siteID
 		LEFT JOIN tcontentstats #tableModifier# on (tcontent.contentID=tcontentstats.contentID 
 								and tcontent.siteID=tcontentstats.siteID
 								)
+		Left Join tcontentfilemetadata on (tcontent.fileid=tcontentfilemetadata.fileid
+													and tcontent.contenthistid=tcontentfilemetadata.contenthistid)
 
 <cfif isExtendedSort>
 	left Join (select 
@@ -1416,7 +1418,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tcontent.Title, tcontent.menuTitle, tcontent.lastUpdate, tcontent.lastUpdateBy, tcontent.lastUpdateByID, tcontent.Display, tcontent.DisplayStart, 
 	tcontent.DisplayStop,  tcontent.isnav, tcontent.restricted, count(tcontent2.parentid) AS hasKids,tcontent.isfeature,tcontent.inheritObjects,tcontent.target,tcontent.targetParams,
 	tcontent.islocked,tcontent.releaseDate,tfiles.fileSize,tfiles.fileExt, 2 AS Priority, tcontent.nextn, tfiles.fileid,
-	tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,tfiles.filename as assocFilename
+	tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,tfiles.filename as assocFilename, tcontentfilemetadata.altText as fileAltText
 	FROM tcontent 
 	LEFT JOIN tcontent tcontent2 ON (tcontent.contentid=tcontent2.parentid)
 	LEFT JOIN tcontentstats on (tcontent.contentID=tcontentstats.contentID 
@@ -1431,6 +1433,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif len(arguments.tag)>
 		Inner Join tcontenttags on (tcontent.contentHistID=tcontenttags.contentHistID)
 	</cfif> 
+
+	Left Join tcontentfilemetadata on (tcontent.fileid=tcontentfilemetadata.fileid
+													and tcontent.contenthistid=tcontentfilemetadata.contenthistid)
 	
 	WHERE
 	
@@ -1486,7 +1491,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		tcontent.Title, tcontent.menuTitle, tcontent.lastUpdate, tcontent.lastUpdateBy, tcontent.lastUpdateByID, tcontent.Display, tcontent.DisplayStart, 
 		tcontent.DisplayStop,  tcontent.isnav, tcontent.restricted,tcontent.isfeature,tcontent.inheritObjects,
 		tcontent.target,tcontent.targetParams,tcontent.islocked,tcontent.releaseDate,tfiles.fileSize,tfiles.fileExt, tcontent.nextn, tfiles.fileid,
-		tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,tfiles.filename
+		tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,tfiles.filename,tcontentfilemetadata.altText
 		
 		
 		<cfif kw neq ''>	
@@ -1496,7 +1501,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		tcontent.Title, tcontent.menuTitle, tcontent.lastUpdate, tcontent.lastUpdateBy, tcontent.lastUpdateByID, tcontent.Display, tcontent.DisplayStart, 
 		tcontent.DisplayStop,  tcontent.isnav, tcontent.restricted, count(tcontent2.parentid) AS hasKids,tcontent.isfeature,tcontent.inheritObjects,tcontent.target,tcontent.targetParams,
 		tcontent.islocked,tcontent.releaseDate,tfiles.fileSize,tfiles.fileExt, 1 AS Priority, tcontent.nextn, tfiles.fileid,
-		tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,tfiles.filename as assocFilename
+		tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,tfiles.filename as assocFilename, tcontentfilemetadata.altText as fileAltText
 		FROM tcontent 
 		LEFT JOIN tcontent tcontent2 ON (tcontent.contentid=tcontent2.parentid)
 		LEFT JOIN tcontentstats on (tcontent.contentID=tcontentstats.contentID 
@@ -1508,6 +1513,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 		</cfif>
 		
+		Left Join tcontentfilemetadata on (tcontent.fileid=tcontentfilemetadata.fileid
+													and tcontent.contenthistid=tcontentfilemetadata.contenthistid)
 		
 		WHERE		
 		
@@ -1536,7 +1543,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		tcontent.Title, tcontent.menuTitle, tcontent.lastUpdate, tcontent.lastUpdateBy, tcontent.lastUpdateByID, tcontent.Display, tcontent.DisplayStart, 
 		tcontent.DisplayStop,  tcontent.isnav, tcontent.restricted,tcontent.isfeature,tcontent.inheritObjects,
 		tcontent.target,tcontent.targetParams,tcontent.islocked,tcontent.releaseDate,tfiles.fileSize,tfiles.fileExt,tcontent.nextn, tfiles.fileid,
-		tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,tfiles.filename 
+		tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,tfiles.filename, tcontentfilemetadata.altText
 	</cfif>
 	</cfquery> 
 	
@@ -1570,14 +1577,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tcontentstats.rating,tcontentstats.totalVotes,tcontentstats.downVotes,tcontentstats.upVotes, 0 as kids, 
 	tparent.type parentType,tcontent.nextn,tcontent.path,tcontent.orderno,tcontent.lastupdate, tcontent.created,
 	tcontent.created sortdate, 0 sortpriority,tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, 
-	tcontent.expires,tfiles.filename as assocFilename
+	tcontent.expires,tfiles.filename as assocFilename, tcontentfilemetadata.altText as fileAltText
 	from tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 	Left Join tcontent tparent on (tcontent.parentid=tparent.contentid
 						    			and tcontent.siteid=tparent.siteid
 						    			and tparent.active=1) 
 	Left Join tcontentstats on (tcontent.contentid=tcontentstats.contentid
 					    and tcontent.siteid=tcontentstats.siteid) 
-	
+	Left Join tcontentfilemetadata on (tcontent.fileid=tcontentfilemetadata.fileid
+													and tcontent.contenthistid=tcontentfilemetadata.contenthistid)
 	
 	
 	<cfif len(arguments.tag)>
@@ -1677,14 +1685,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tcontentstats.rating,tcontentstats.totalVotes,tcontentstats.downVotes,tcontentstats.upVotes, 0 as kids, 
 	tparent.type parentType,tcontent.nextn,tcontent.path,tcontent.orderno,tcontent.lastupdate, tcontent.created,
 	tcontent.releaseDate sortdate, 0 sortpriority,tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, 
-	tcontent.expires,tfiles.filename as assocFilename
+	tcontent.expires,tfiles.filename as assocFilename, tcontentfilemetadata.altText as fileAltText
 	from tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 	Left Join tcontent tparent on (tcontent.parentid=tparent.contentid
 						    			and tcontent.siteid=tparent.siteid
 						    			and tparent.active=1) 
 	Left Join tcontentstats on (tcontent.contentid=tcontentstats.contentid
 					    and tcontent.siteid=tcontentstats.siteid) 
-	
+	Left Join tcontentfilemetadata on (tcontent.fileid=tcontentfilemetadata.fileid
+													and tcontent.contenthistid=tcontentfilemetadata.contenthistid)
 	
 	
 	<cfif len(arguments.tag)>
