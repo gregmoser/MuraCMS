@@ -367,6 +367,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="validateDomain" default="true">
 	<cfargument name="parseURL" default="true">
 	<cfset var fileoutput="">
+
+	<cfset url.path=arguments.filename>
+
+ 	<cfif find(".",listLast(arguments.filename,"/"))>
+ 		<cfset arguments.filename=listDeleteAt(arguments.filename,listLen(arguments.filename,"/"),"/")>
+ 	</cfif>
  
 	<cfset request.siteid = bindToDomain()>
 	<cfset request.servletEvent = createObject("component","mura.servletEvent").init() />
