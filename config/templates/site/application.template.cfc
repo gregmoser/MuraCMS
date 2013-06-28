@@ -65,7 +65,8 @@ Mura CMS.
 				NOTE: If you need to allow direct access to a file located under your site/theme (e.g., a remote web service, etc.),
 				just add the file name to the list of files below.
 		--->
-		<cfif not listFindNoCase("styles.js.cfm,templates.js.cfm,editor.css.cfm,default.js.cfm,config.js.cfm",listLast(cgi.SCRIPT_NAME,"/"))>
+		<cfif not (listFindNoCase("styles.js.cfm,templates.js.cfm,editor.css.cfm,default.js.cfm,config.js.cfm,validate.cfm",listLast(cgi.SCRIPT_NAME,"/"))
+		 or listFindNoCase(cgi.SCRIPT_NAME,"remote","/"))>
 		<cfoutput>Access Restricted.</cfoutput>
 		<cfabort>
 		</cfif>
