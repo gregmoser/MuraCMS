@@ -284,7 +284,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		 <script>
 				function saveDraftPrompt(){
 					confirmDialog(
-						'Would you like to save draft and continue editing?',
+						'#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.keepeditingconfirm"))#',
 						function(){
 							if(siteManager.ckContent(draftremovalnotice)){
 								document.contentForm.approved.value=0;
