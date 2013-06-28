@@ -849,6 +849,21 @@ and tclassextendattributes.type='File'
 
 </cffunction>
 
+<cffunction name="saveRelatedSetSort" returntype="void">
+<cfargument name="relatedContentSetID">
+<cfset var rs = ""/>
+<cfset var s=0/>
+<cfloop from="1" to="#listlen(arguments.relatedContentSetID)#" index="s">
+	<cfquery>
+		update tclassextendrcsets
+		set orderno=#s#
+		where 
+		relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar"  value="#listGetAt(arguments.relatedContentSetID,s)#">
+	</cfquery>
+</cfloop>
+
+</cffunction>
+
 <cffunction name="getAttribute" returnType="string" output="false">
 <cfargument name="baseID" required="true" default=""/>
 <cfargument name="key" required="true" default=""/>
@@ -920,7 +935,12 @@ and tclassextendattributes.type='File'
 		inner join tclassextendsets on (tclassextendsets.extendSetID=tclassextendattributes.extendSetID)
 		inner join tclassextend on (tclassextendsets.subTypeID=tclassextend.subTypeID)
 		where tclassextend.siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteid#">
-		and tclassextend.baseTable= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.baseTable#">
+		and (
+			tclassextend.baseTable= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.baseTable#">
+			<cfif arguments.baseTable eq 'tcontent'>
+			or tclassextend.type = 'Base'	
+			</cfif>
+		)
 		<cfif arguments.activeOnly>
 			and tclassextend.isActive=1
 		</cfif>

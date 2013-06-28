@@ -349,7 +349,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
         <div style="display:none" id="scheduler">
 	        <label>#application.rbFactory.getKeyValue(session.rb,'email.deliverydate')#</label>
 	          <div class="controls">
-	          <input type="text" class="datepicker input-medium" id="deliveryDate" name="deliveryDate" value="#LSDateFormat(rc.emailBean.getDeliveryDate(),session.dateKeyFormat)#">
+	          <cf_datetimeselector name="deliveryDate" 
+            datetime="#rc.emailBean.getDeliveryDate()#" >
+            <!---
+            <input type="text" class="datepicker input-medium" id="deliveryDate" name="deliveryDate" value="#LSDateFormat(rc.emailBean.getDeliveryDate(),session.dateKeyFormat)#">
 	          <cfsilent>
 	          <cfset timehour = "">
 	          <cfset timeminute = "">
@@ -391,6 +394,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	            <option value="AM" <cfif timepart eq 'AM'>selected</cfif>>AM</option>
 	            <option value="PM" <cfif timepart eq 'PM'>selected</cfif>>PM</option>
 	          </select>
+            --->
 	          <div>
 		          <button type="button" class="btn" onClick="emailManager.validateScheduler('#formAction#', '#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'email.pleaseenterdate'))#', 'deliveryDate');"><i class="icon-check"></i> #application.rbFactory.getKeyValue(session.rb,'email.save')#</button>
 		          <button type="button" class="btn" onClick="emailManager.closeScheduler()"><i class="icon-ban-circle"></i> #application.rbFactory.getKeyValue(session.rb,'email.cancel')#</button>

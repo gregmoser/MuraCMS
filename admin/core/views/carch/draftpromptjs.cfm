@@ -25,7 +25,7 @@ function initDraftPrompt(){
 					$(".draft-prompt-option").click(function(e){
 						e.preventDefault();
 						var href = a.attr('href').replace(node.attr('data-contenthistid'),$(this).attr('data-contenthistid'));
-						window.location = href;
+						actionModal(href);
 					});
 
 					$(".draft-prompt-approval").click(function(e){
@@ -35,7 +35,7 @@ function initDraftPrompt(){
 						return false;
 					});
 				} else {
-					window.location = a.attr('href');
+					actionModal(a.attr('href'));
 				}
 			}
 		});

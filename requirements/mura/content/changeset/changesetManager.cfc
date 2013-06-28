@@ -38,7 +38,7 @@
 	</cfif>
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
-	select changesetID, siteID, name, description, created, publishDate, published, lastupdate, lastUpdateBy, lastUpdateByID, remoteID, remotePubDate, remoteSourceURL
+	select changesetID, siteID, name, description, created, publishDate, published, lastupdate, lastUpdateBy, lastUpdateByID, remoteID, remotePubDate, remoteSourceURL, closeDate
 	from tchangesets where
 	<cfif len(arguments.siteID)>
 		siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#">
@@ -104,7 +104,16 @@
 					<cfelse>
 						null
 					</cfif>,
-		remoteSourceURL=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getRemoteSourceURL()#">
+		remoteSourceURL=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getRemoteSourceURL()#">,
+		closeDate=<cfif isdate(arguments.bean.getCloseDate())> 
+						<cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.bean.getCloseDate()),
+												month(arguments.bean.getCloseDate()),
+												day(arguments.bean.getCloseDate()),
+												hour(arguments.bean.getCloseDate()),
+												minute(arguments.bean.getCloseDate()),0)#">
+					<cfelse>
+						null
+					</cfif>
 		where changesetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getChangesetID()#">
 	</cfquery>
 
@@ -112,7 +121,7 @@
 		<cfquery>
 		insert into tchangesets (changesetID, siteID, name, description, created, publishDate, 
 		published, lastupdate, lastUpdateBy, lastUpdateByID,
-		remoteID, remotePubDate, remoteSourceURL)
+		remoteID, remotePubDate, remoteSourceURL,closeDate)
 		values (
 		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getChangesetID()#">,
 		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getSiteID()#">,
@@ -142,7 +151,16 @@
 					<cfelse>
 						null
 					</cfif>,
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getRemoteSourceURL()#">
+		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getRemoteSourceURL()#">,
+		<cfif isdate(arguments.bean.getCloseDate())> 
+						<cfqueryparam cfsqltype="cf_sql_timestamp" value="#createDateTime(year(arguments.bean.getCloseDate()),
+												month(arguments.bean.getCloseDate()),
+												day(arguments.bean.getCloseDate()),
+												hour(arguments.bean.getCloseDate()),
+												minute(arguments.bean.getCloseDate()),0)#">
+					<cfelse>
+						null
+					</cfif>
 		)
 	</cfquery>
 	
@@ -173,6 +191,7 @@
 <cfargument name="publishDateOnly" default="true">
 <cfargument name="keywords">
 <cfargument name="sortBy">
+<cfargument name="openOnly">
 
 	<cfset var rsChangeSets="">
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsChangeSets')#">
@@ -188,6 +207,14 @@
 		<cfif structKeyExists(arguments,"publishDateOnly") and isBoolean(arguments.publishDateOnly) and not arguments.publishDateOnly>
 		or publishDate is null
 		</cfif>
+		)
+	</cfif>
+
+	<cfif structKeyExists(arguments,"openOnly") and isBoolean(arguments.openOnly) and arguments.openOnly>
+		and 
+		(closeDate > <cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">
+		
+		or closeDate is null
 		)
 	</cfif>
 	<cfif structKeyExists(arguments,"keywords") and len(arguments.keywords)>
@@ -217,7 +244,7 @@
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPendingChangeSets')#">
 	select tchangesets.changesetID, tcontent.contentID, tcontent.contenthistid, 
 	tcontent.siteID, tcontent.menutitle, tchangesets.name changesetName, tapprovalrequests.status approvalStatus,tapprovalrequests.requestID,
-	tcontent.lastupdate, tcontent.lastupdateby, tapprovalrequests.groupid approvalGroupID, tchangesets.publishDate
+	tcontent.lastupdate, tcontent.lastupdateby, tapprovalrequests.groupid approvalGroupID, tchangesets.publishDate, tchangesets.closeDate
 	from tcontent
 	inner join tchangesets on tcontent.changesetID=tchangesets.changesetID
 	left join tapprovalrequests on (tcontent.contenthistid=tapprovalrequests.contenthistid)

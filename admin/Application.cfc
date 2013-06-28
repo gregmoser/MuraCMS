@@ -107,7 +107,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		}
 		
 		if(not hasMappings){
-			include "config/buildPluginCFApplication.cfm";
+			include "../config/buildPluginCFApplication.cfm";
 		}
 		
 	}
@@ -146,66 +146,77 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	}
 
 	function onRequestStart(){
+	
 		try{
-		if(isDefined('application.scriptProtectionFilter') and application.configBean.getScriptProtect()){
-
-			variables.remoteIPHeader=application.configBean.getValue("remoteIPHeader");
-			
-			if(len(variables.remoteIPHeader)){
-				try{
-					if(StructKeyExists(GetHttpRequestData().headers, variables.remoteIPHeader)){
-				    	request.remoteAddr = GetHttpRequestData().headers[remoteIPHeader];
-				   	} else {
-						request.remoteAddr = CGI.REMOTE_ADDR;
-				   	}
-				   }
-					catch(any e){
-						request.remoteAddr = CGI.REMOTE_ADDR;
-					}
-			} else {
-				request.remoteAddr = CGI.REMOTE_ADDR;
+			if(not (structKeyExists(application.settingsManager,'validate') and application.settingsManager.validate() and isStruct(application.configBean.getAllValues()))){
+				application.appInitialized=false;
 			}
+		} catch(e any){
+			application.appInitialized=false;
+			request.muraAppreloaded=false;
+		} 
 
-			if(application.configBean.getScriptProtect()){
-				if(isDefined("url")){
-					application.scriptProtectionFilter.scan(
-												object=url,
-												objectname="url",
-												ipAddress=request.remoteAddr,
-												useTagFilter=true,
-												useWordFilter=true);
+		try{
+
+			if(application.appInitialized and isDefined('application.scriptProtectionFilter') and application.configBean.getScriptProtect()){
+
+				variables.remoteIPHeader=application.configBean.getValue("remoteIPHeader");
+				
+				if(len(variables.remoteIPHeader)){
+					try{
+						if(StructKeyExists(GetHttpRequestData().headers, variables.remoteIPHeader)){
+					    	request.remoteAddr = GetHttpRequestData().headers[remoteIPHeader];
+					   	} else {
+							request.remoteAddr = CGI.REMOTE_ADDR;
+					   	}
+					   }
+						catch(any e){
+							request.remoteAddr = CGI.REMOTE_ADDR;
+						}
+				} else {
+					request.remoteAddr = CGI.REMOTE_ADDR;
 				}
-				if(isDefined("form")){
-					application.scriptProtectionFilter.scan(
-												object=form,
-												objectname="form",
-												ipAddress=request.remoteAddr);
-				}
-				try{	
-					if(isDefined("cgi")){
+
+				if(application.configBean.getScriptProtect()){
+					if(isDefined("url")){
 						application.scriptProtectionFilter.scan(
-													object=cgi,
-													objectname="cgi",
+													object=url,
+													objectname="url",
 													ipAddress=request.remoteAddr,
 													useTagFilter=true,
-													useWordFilter=true,
-													fixValues=false);
-					}			
-					if(isDefined("cookie")){
-						application.scriptProtectionFilter.scan(
-													object=cookie,
-													objectname="cookie",
-													ipAddress=request.remoteAddr,
-													useTagFilter=true,
-													useWordFilter=true,
-													fixValues=false);
+													useWordFilter=true);
 					}
-				} catch(e any){}
-					
+					if(isDefined("form")){
+						application.scriptProtectionFilter.scan(
+													object=form,
+													objectname="form",
+													ipAddress=request.remoteAddr);
+					}
+					try{	
+						if(isDefined("cgi")){
+							application.scriptProtectionFilter.scan(
+														object=cgi,
+														objectname="cgi",
+														ipAddress=request.remoteAddr,
+														useTagFilter=true,
+														useWordFilter=true,
+														fixValues=false);
+						}			
+						if(isDefined("cookie")){
+							application.scriptProtectionFilter.scan(
+														object=cookie,
+														objectname="cookie",
+														ipAddress=request.remoteAddr,
+														useTagFilter=true,
+														useWordFilter=true,
+														fixValues=false);
+						}
+					} catch(e any){}
+						
+				}
+				
 			}
-			
-		}
-	} catch(e any){}
+		} catch(e any){}
 
 		super.onRequestStart(argumentCollection=arguments);
 	}
@@ -261,7 +272,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		param name="request.context.compactDisplay" default="false";
 		param name="session.siteid" default="";
 		param name="session.keywords" default="";
-		param name="session.alerts" default="#structNew()#";
+		param name="session.showdashboard" default=application.configBean.getDashboard();
+		param name="session.alerts" default=structNew();
 		param name="cookie.rb" default="";
 	
 		if(len(request.context.rb)){

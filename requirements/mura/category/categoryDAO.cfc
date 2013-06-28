@@ -375,7 +375,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif sched.starthour eq 24>
 				<cfset sched.starthour = 12>
 			</cfif>
-		<cfelse>
+		<cfelseif sched.startdaypart eq "AM">
 			<cfif sched.starthour eq 12>
 				<cfset sched.starthour = 0>
 			</cfif>
@@ -394,7 +394,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif sched.stophour eq 24>
 				<cfset sched.stophour = 12>
 			</cfif>
-		<cfelse>
+		<cfelseif sched.stopdaypart eq "AM">
 			<cfif sched.stophour eq 12>
 				<cfset sched.stophour = 0>
 			</cfif>
@@ -402,7 +402,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfset sched.featurestop = createDateTime(year(sched.featurestop), month(sched.featurestop), day(sched.featurestop),sched.stophour, sched.stopMinute, "0")>
 	</cfif>
-	
+
 	<cfset saveAssignment(arguments.contentHistID, arguments.contentID, arguments.categoryID, arguments.siteID,
 				arguments.orderno, feature, sched.featureStart, sched.featureStop)>
 

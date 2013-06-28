@@ -6,6 +6,9 @@
 	getBean('approvalChainAssignment').checkSchema();
 	getBean('changesetRollBack').checkSchema();
 	getBean('contentSourceMap').checkSchema();
+	getBean('relatedContentSet').checkSchema();
+	getBean('fileMetaData').checkSchema();
+
 
 	dbUtility.setTable("tclassextend")
 	.addColumn(column="iconclass",dataType="varchar",length="50");
@@ -16,4 +19,13 @@
 
 	dbUtility.setTable('temails')
 	.addColumn(column='template',dataType='varchar');
+
+	dbUtility.setTable("tchangesets")
+	.addColumn(column="closeDate",dataType="datetime");
+
+	dbUtility.setTable("tcontent")
+	.addIndex('filename')
+	.addIndex('title')
+	.addIndex('subtype')
+	.addIndex('isnav');
 </cfscript>

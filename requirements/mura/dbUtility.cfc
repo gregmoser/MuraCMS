@@ -306,7 +306,10 @@
 					<cfif arguments.autoincrement>
 						,PRIMARY KEY(#arguments.column#)
 					</cfif>
-					) ENGINE=InnoDB DEFAULT CHARSET=utf8
+					) 
+					<cfif version().database_productname neq 'h2'>
+						ENGINE=#variables.configBean.getMySQLEngine()# DEFAULT CHARSET=utf8
+					</cfif>
 				</cfif>
 			</cfquery>
 		</cfcase>
@@ -445,7 +448,14 @@
 			</cfcase>
 			<cfcase value="mysql">
 				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TABLE #arguments.table# MODIFY COLUMN #arguments.column# <cfif arguments.autoincrement>INT(10) NOT NULL AUTO_INCREMENT<cfelse>#transformDataType(arguments.datatype,arguments.length)# <cfif not arguments.nullable> not null </cfif> default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
+					ALTER TABLE #arguments.table# 
+					<cfif version().database_productname eq 'H2'>
+						ALTER
+					<cfelse>
+						MODIFY
+					</cfif>
+					 
+					COLUMN #arguments.column# <cfif arguments.autoincrement>INT(10) NOT NULL AUTO_INCREMENT<cfelse>#transformDataType(arguments.datatype,arguments.length)# <cfif not arguments.nullable> not null </cfif> default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
 				</cfquery>
 			</cfcase>
 			<cfcase value="postgresql">
@@ -590,7 +600,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "int">
 				</cfcase>
 				<cfcase value="tinyint">
@@ -649,7 +659,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "int(10)">
 				</cfcase>
 				<cfcase value="tinyint">
@@ -680,7 +690,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "integer">
 				</cfcase>
 				<cfcase value="tinyint">
@@ -711,7 +721,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "int">
 				</cfcase>
 				<cfcase value="tinyint">
@@ -742,7 +752,7 @@
 				<cfcase value="char">
 					<cfreturn "char(#arguments.length#)">
 				</cfcase>
-				<cfcase value="int">
+				<cfcase value="int,integer">
 					<cfreturn "number(10,0)">
 				</cfcase>
 				<cfcase value="tinyint">
@@ -1019,7 +1029,6 @@
 	<cfargument name="table" default="#variables.table#">
 	<cfset var indexArray=indexes(arguments.table)>
 	<cfset var i="">
-	
 	<cfif arrayLen(indexArray)>
 		<cfloop from="1" to="#arrayLen(indexArray)#" index="i">
 			<cfif indexArray[i].column eq arguments.column>
@@ -1062,7 +1071,7 @@
 		type="index">
 	
 	<cfquery name="rsCheck" dbtype="query">
-		select * from rsCheck where lower(rsCheck.INDEX_NAME) like 'primary'
+		select * from rsCheck where lower(rsCheck.INDEX_NAME) like 'primary%'
 		or lower(rsCheck.INDEX_NAME) like 'pk_%'
 		or lower(rsCheck.INDEX_NAME) like '%_pkey'
 	</cfquery>
@@ -1083,7 +1092,7 @@
 		type="index">
 	
 	<cfquery name="rsCheck" dbtype="query">
-		select * from rsCheck where lower(rsCheck.INDEX_NAME) like 'primary'
+		select * from rsCheck where lower(rsCheck.INDEX_NAME) like 'primary%'
 		or lower(rsCheck.INDEX_NAME) like 'pk_%'
 	</cfquery>
 

@@ -127,10 +127,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<tbody>
 						<cfloop query="draftprompdata.yourapprovals">
 							<tr>
-								<td><a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" tabindex="-1" class="draft-prompt-approval">#HTMLEditFormat(draftprompdata.yourapprovals.menutitle)#</a></td>
-								<td>#LSDateFormat(draftprompdata.yourapprovals.lastupdate,session.dateKeyFormat)# #LSTimeFormat(draftprompdata.yourapprovals.lastupdate,"medium")#</td>
-								<td>#HTMLEditFormat(draftprompdata.yourapprovals.lastupdateby)#</td>
-								<td><a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" tabindex="-1" class="draft-prompt-approval"><i class="icon-pencil"></i></a></td>
+								<cfif listFindNoCase("author,editor",draftprompdata.verdict)>
+									<td><a href="##" data-contenthistid="#draftprompdata.yourapprovals.contenthistid#"  tabindex="-1" class="draft-prompt-option">#HTMLEditFormat(draftprompdata.yourapprovals.menutitle)#</a></td>
+									<td>#LSDateFormat(draftprompdata.yourapprovals.lastupdate,session.dateKeyFormat)# #LSTimeFormat(draftprompdata.yourapprovals.lastupdate,"medium")#</td>
+									<td>#HTMLEditFormat(draftprompdata.yourapprovals.lastupdateby)#</td>
+									<td><a href="##" data-contenthistid="#draftprompdata.yourapprovals.contenthistid#" tabindex="-1" class="draft-prompt-option"><i class="icon-pencil"></i></a></td>
+								<cfelse>
+									<td><a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" tabindex="-1" class="draft-prompt-approval">#HTMLEditFormat(draftprompdata.yourapprovals.menutitle)#</a></td>
+									<td>#LSDateFormat(draftprompdata.yourapprovals.lastupdate,session.dateKeyFormat)# #LSTimeFormat(draftprompdata.yourapprovals.lastupdate,"medium")#</td>
+									<td>#HTMLEditFormat(draftprompdata.yourapprovals.lastupdateby)#</td>
+									<td><a href="#content.getURL(querystring="previewid=#draftprompdata.yourapprovals.contenthistid#")#" tabindex="-1" class="draft-prompt-approval"><i class="icon-pencil"></i></a></td>
+
+								</cfif>
 							</tr>
 						</cfloop>
 					</tbody>

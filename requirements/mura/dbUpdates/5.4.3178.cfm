@@ -89,7 +89,10 @@
 					  key `IX_tchangesets_siteID` (`siteID`),
 					  key `IX_tchangesets_publishDate` (`publishDate`),
 					  key `IX_tchangesets_remoteID` (`remoteID`)
-					) ENGINE=#variables.instance.MYSQLEngine# DEFAULT CHARSET=utf8
+					) 
+					<cfif dbUtility.version().database_productname neq 'H2'>
+						ENGINE=#variables.instance.MYSQLEngine# DEFAULT CHARSET=utf8
+					</cfif>
 				</cfquery>
 			</cfif>
 
@@ -103,54 +106,6 @@
 				</cfquery>
 			</cfif>
 		</cftransaction>	
-	</cfcase>
-	<cfcase value="postgresql">
-			<cfif not dbUtility.setTable('tchangesets').tableExists()>
-		<cftransaction>
-				<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-					CREATE TABLE tchangesets (
-					  changesetID char(35),
-					  siteID varchar(25),
-					  name varchar(100),
-					  description text,
-					  created timestamp,
-					  publishDate timestamp,
-					  published smallint,
-					  lastUpdate timestamp,
-					  lastUpdateBy varchar(50),
-					  lastUpdateByID char(35),
-					  remoteID varchar(255),
-					  remotePubDate timestamp,
-					  remoteSourceURL varchar(255),
-					  CONSTRAINT PK_tchangesets_changesetID PRIMARY KEY (changesetID)
-					)
-				</cfquery>
-
-				<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-					CREATE INDEX IX_tchangesets_siteid ON tchangesets(siteid)
-				</cfquery>
-
-				<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-					CREATE INDEX IX_tchangesets_publishDate ON tchangesets(publishDate)
-				</cfquery>
-
-				<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-					CREATE INDEX IX_tchangesets_remoteid ON tchangesets(remoteid)
-				</cfquery>
-		</cftransaction>
-			</cfif>
-
-			<cfif not dbUtility.setTable('tcontent').columnExists('changesetID')>
-		<cftransaction>
-				<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-					ALTER TABLE tcontent ADD changesetID char(35) default NULL
-				</cfquery>
-				
-				<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-					CREATE INDEX IX_tcontent_changesetID ON tcontent(changesetID)
-				</cfquery>
-		</cftransaction>
-			</cfif>
 	</cfcase>
 	<cfcase value="nuodb">
 		<cftransaction>
@@ -184,7 +139,7 @@
 					CREATE INDEX IX_tchangesets_remoteID on tchangesets (remoteID)
 				</cfquery>
 				 
-
+	  
 			</cfif>
 
 			<cfif not dbUtility.setTable('tcontent').columnExists('changesetID')>
@@ -196,7 +151,7 @@
 					CREATE INDEX IX_tcontent_changesetID ON tcontent (changesetID)
 				</cfquery>
 			</cfif>
-		</cftransaction>
+		</cftransaction>	
 	</cfcase>
 	<cfcase value="oracle">
 		<cfset variables.RUNDBUPDATE=false/>
@@ -417,11 +372,6 @@ ALTER TABLE tsettings ADD hasChangesets tinyint
 		</cfcatch>
 	</cftry>
 </cfcase>
-<cfcase value="postgresql">
-<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-ALTER TABLE tsettings ADD hasChangesets smallint
-</cfquery>
-</cfcase>
 <cfcase value="nuodb">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tsettings ADD COLUMN hasChangesets smallint 
@@ -462,14 +412,6 @@ select urltitle from tcontentcategories  where 0=1
 	</cfquery>
 </cfcase>
 <cfcase value="mysql">
-	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-	ALTER TABLE tcontentcategories ADD urltitle varchar(255) default NULL
-	</cfquery>
-	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-	ALTER TABLE tcontentcategories ADD filename varchar(255) default NULL
-	</cfquery>
-</cfcase>
-<cfcase value="postgresql">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontentcategories ADD urltitle varchar(255) default NULL
 	</cfquery>

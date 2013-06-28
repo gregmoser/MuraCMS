@@ -178,7 +178,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 			variables.serviceFactory.addBean('javaLoader',
 						new mura.javaloader.JavaLoader(
-							loadPaths=[expandPath('/mura/lib/mura.jar'),expandPath('/mura/lib/jBCrypt-0.3')]
+							loadPaths=[
+										expandPath('/mura/lib/mura.jar'),
+										expandPath('/mura/lib/jBCrypt-0.3'),
+										expandPath('/mura/lib/diff_match_patch.jar')
+									]
 						)
 					);
 			variables.serviceFactory.addBean("fileWriter",
@@ -225,6 +229,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			variables.serviceFactory.addAlias("approvalChainAssignment","approvalChainAssignmentBean");
 			variables.serviceFactory.addAlias("changesetRollBack","changesetRollBackBean");
 			variables.serviceFactory.addAlias("contentSourceMap","contentSourceMapBean");
+			variables.serviceFactory.addAlias("relatedContentSet","extendRelatedContentSetBean");
+			variables.serviceFactory.addAlias("fileMetaData","contentFileMetaDataBean");
 
 			application.serviceFactory=variables.serviceFactory;
 		</cfscript>

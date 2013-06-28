@@ -100,6 +100,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		feed.setSortBy($.event("sortBy"));
 	} else {
 		feed.setSortBy("lastupdate");
+		feed.setSortBy("desc");
 	}
 	
 	if(len($.event("sortDirection"))){

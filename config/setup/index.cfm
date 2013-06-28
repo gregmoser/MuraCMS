@@ -41,6 +41,16 @@ the GNU General Public License version 2 ?without this exception. ?You may, if y
 to your own modified versions of Mura CMS.
 --->
 
+<!--- Prevent installation if under a directory called 'mura' --->
+<cfscript>
+  muraInstallPath = GetDirectoryFromPath(GetCurrentTemplatePath());
+  fileDelim = FindNoCase('Windows', Server.OS.Name) ? '\' : '/';
+</cfscript> 
+<cfif ListFindNoCase(muraInstallPath, 'mura', fileDelim)>
+  <h1>Mura cannot be installed under a directory called &quot;<strong>mura</strong>&quot; &hellip; please move or rename and try to install again.</h1>
+  <cfabort />
+</cfif>
+
 <!--- if renderSetup is not found or is false then do not render --->
 <cfif NOT isDefined( "renderSetup" ) OR NOT renderSetup>
   <cfabort />
@@ -270,9 +280,25 @@ to your own modified versions of Mura CMS.
             </cfif>
             --->
          
-          <cfsavecontent variable="sql">
-            <cfinclude template="db/#FORM.production_dbtype#.sql">
-          </cfsavecontent>
+          <cfdbinfo 
+                name="rsCheck"
+                datasource="#FORM.production_datasource#" 
+                username="#FORM.production_dbusername#" 
+                password="#FORM.production_dbpassword#"
+                type="version">
+
+          <cfif rsCheck.database_productname eq 'H2'>
+            <cfsavecontent variable="sql">
+              <cfinclude template="db/h2.sql">
+            </cfsavecontent>
+          <cfelse>
+            <cfparam name="form.production_mysqlengine" default="InnoDB">
+            <cfset storageEngine="ENGINE=#form.production_mysqlengine# DEFAULT CHARSET=utf8">
+            <cfsavecontent variable="sql">
+              <cfinclude template="db/#FORM.production_dbtype#.sql">
+            </cfsavecontent>
+          </cfif>
+          
           <!---
           <cfsavecontent variable="sql">
             <cfinclude template="db/#FORM.production_dbtype#.sql">
@@ -323,7 +349,8 @@ to your own modified versions of Mura CMS.
                   </cfif>
                 </cfloop>
               </cfcase>
-              <cfcase value="mysql" delimiters=",">
+              <cfcase value="mysql">
+              
                 <cfset aSql = ListToArray(sql, ';')>
                 <!--- loop over items --->
                 <cfloop index="x" from="1" to="#arrayLen(aSql) - 1#">
@@ -335,7 +362,7 @@ to your own modified versions of Mura CMS.
                   </cfif>
                 </cfloop>
               </cfcase>
-				<cfcase value="postgresql" delimiters=",">
+				<cfcase value="postgresql">
 				  <cfset aSql = ListToArray(sql, ';')>
 				  <!--- loop over items --->
 				  <cfloop index="x" from="1" to="#arrayLen(aSql) - 1#">
@@ -666,7 +693,7 @@ to your own modified versions of Mura CMS.
               <option value="mysql" <cfif FORM.production_dbtype IS "mysql">selected</cfif>>MySQL</option>
               <option value="mssql" <cfif FORM.production_dbtype IS "mssql">selected</cfif>>MSSQL</option>
               <option value="oracle" <cfif FORM.production_dbtype IS "oracle">selected</cfif>>Oracle</option>
-			  <option value="postgresql" <cfif FORM.production_dbtype IS "postgresql">selected</cfif>>PostgreSQL</option>
+			        <option value="postgresql" <cfif FORM.production_dbtype IS "postgresql">selected</cfif>>PostgreSQL</option>
             </select>
           </div>
         </div>

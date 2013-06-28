@@ -61,11 +61,6 @@ select * from tcontentcomments  where 0=1
 	ALTER TABLE tcontentcomments ADD COLUMN userID char(35) default NULL
 	</cfquery>
 </cfcase>
-<cfcase value="postgresql">
-	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-	ALTER TABLE tcontentcomments ADD COLUMN userID char(35) default NULL
-	</cfquery>
-</cfcase>
 <cfcase value="nuodb">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tcontentcomments ADD COLUMN userID char(35) default NULL
@@ -151,34 +146,6 @@ select * from tcontentcomments  where 0=1
 			</cfquery>
 		</cfcatch>
 	</cftry>	
-	</cfif>
-</cfcase>
-<cfcase value="postgresql">
-	<cfset variables.RUNDBUPDATE=false/>
-	<cftry>
-	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-	select userID as CheckIfTableExists from tuserremotesessions where 0=1
-	</cfquery>
-	<cfcatch>
-	<cfset variables.RUNDBUPDATE=true/>
-	</cfcatch>
-	</cftry>
-
-	<cfif variables.RUNDBUPDATE>
-		<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-		CREATE TABLE IF NOT EXISTS tuserremotesessions (
-			  userID char(35) not null,
-			  authToken char(32) default NULL,
-			  data varchar(4000) default NULL,
-			  created timestamp NOT NULL ,
-			  lastAccessed timestamp NOT NULL ,
-			  CONSTRAINT PK_tuserremotesessions_userID PRIMARY KEY (userID)
-		)
-		</cfquery>
-
-		<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-		CREATE INDEX tuserremotesessions_authToken ON tuserremotesessions(authToken)
-		</cfquery>
 	</cfif>
 </cfcase>
 <cfcase value="nuodb">
@@ -280,14 +247,6 @@ ALTER TABLE tsettings ADD cacheFreeMemoryThreshold int
 		</cfcatch>
 	</cftry>
 </cfcase>
-<cfcase value="postgresql">
-	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-	ALTER TABLE tsettings ADD COLUMN cacheCapacity integer
-	</cfquery>
-	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-	ALTER TABLE tsettings ADD COLUMN cacheFreeMemoryThreshold integer
-	</cfquery>
-</cfcase>
 <cfcase value="nuodb">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	ALTER TABLE tsettings ADD COLUMN cacheCapacity int
@@ -373,18 +332,6 @@ cacheCapacity=0
 	</cftry>	
 	</cfif>
 </cfcase>
-<cfcase value="postgresql">
-	<cftransaction>
-	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-	CREATE TABLE IF NOT EXISTS tuserstrikes (
-		  username varchar(100) NOT NULL,
-		  strikes integer default NULL,
-		  lastAttempt timestamp default NULL,
-		  CONSTRAINT PK_tuserstrikes_username PRIMARY KEY (username)
-	)
-	</cfquery>
-	</cftransaction>
-</cfcase>
 <cfcase value="nuodb">
 	<cfset variables.RUNDBUPDATE=false/>
 	<cftry>
@@ -462,11 +409,6 @@ ALTER TABLE tplugins ADD loadPriority int
 			</cfquery>
 		</cfcatch>
 	</cftry>
-</cfcase>
-<cfcase value="postgresql">
-	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
-	ALTER TABLE tplugins ADD COLUMN loadPriority integer
-	</cfquery>
 </cfcase>
 <cfcase value="nuodb">
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">

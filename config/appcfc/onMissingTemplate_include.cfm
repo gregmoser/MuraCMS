@@ -62,8 +62,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfif isDefined("application.contentServer")>
 		<cfset onRequestStart()>
-		<cfset application.contentServer.renderFilename(listDeleteAt(cgi.script_name, listLen(cgi.script_name,"/"), "/"))>
-		<cfset onRequestEnd()>
+		<cfset local.fileArray=listToArray(cgi.script_name,"/")>
+		<cfset local.filename="">
+
+		<cfloop from="1" to="#arrayLen(local.fileArray)#" index="local.i">
+			<cfif find(".",local.fileArray[local.i]) and local.i lt arrayLen(local.fileArray)>
+				<cfset local.filename="">
+			<cfelseif not find(".",local.fileArray[local.i])>
+				<cfset local.filename=listAppend(local.filename,local.fileArray[local.i] , "/")>
+			</cfif>
+		</cfloop>
+
+		<cfset application.contentServer.renderFilename(local.filename)>
 		<cfreturn true>
 	</cfif>
 </cfif>

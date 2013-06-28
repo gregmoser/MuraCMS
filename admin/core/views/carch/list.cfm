@@ -355,7 +355,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	if(structkeyExists(rc,'refreshFlatview')){
 		session.flatViewArgs["#session.siteid#"].report=rc.report;
-		session.flatViewArgs["#session.siteid#"].sortby=rc.sortby;
+		if(structKeyExists(rc,'reportSortBy')){
+			session.flatViewArgs["#session.siteid#"].sortby=rc.reportSortBy;
+		}
+		if(structKeyExists(rc,'reportSortDirection')){
+			session.flatViewArgs["#session.siteid#"].direction=rc.reportSortDirection;
+		}
 	}
 	
 	if(not structKeyExists(session.flatViewArgs["#session.siteid#"],"moduleid")){

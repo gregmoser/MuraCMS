@@ -46,7 +46,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 --->
 <cfset request.layout=false>
 <cfset currentChangeset=application.changesetManager.read(rc.changesetID)>
-<cfset changesets=application.changesetManager.getIterator(siteID=rc.siteID,published=0,publishdate=now(),publishDateOnly=false)>
+<cfset changesets=application.changesetManager.getIterator(siteID=rc.siteID,published=0,publishdate=now(),publishDateOnly=false,openOnly=true)>
 <cfoutput>
 <table class="table table-striped table-condensed table-bordered mura-table-grid">
 <tr>

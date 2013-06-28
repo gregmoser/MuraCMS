@@ -80,10 +80,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="getExtendSetBean" returnType="any">
-<cfset var extendSetBean=createObject("component","mura.extend.extendSet").init(variables.configBean,getContentRenderer()) />
-<cfset extendSetBean.setSubTypeID(getSubTypeID()) />
-<cfset extendSetBean.setSiteID(getSiteID()) />
-<cfreturn extendSetBean />
+	<cfset var extendSetBean=createObject("component","mura.extend.extendSet").init(variables.configBean,getContentRenderer()) />
+	<cfset extendSetBean.setSubTypeID(getSubTypeID()) />
+	<cfset extendSetBean.setSiteID(getSiteID()) />
+	<cfreturn extendSetBean />
+</cffunction>
+
+<cffunction name="getRelatedContentSetBean" returnType="any">
+	<cfset var rcsBean = getBean('relatedContentSet') />
+	<cfset rcsBean.setSubTypeID(getSubTypeID()) />
+	<cfset rcsBean.setSiteID(getSiteID()) />
+	<cfreturn rcsBean />
 </cffunction>
 
 <cffunction name="load">
@@ -334,6 +341,37 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfloop from="1" to="#rsSets.recordcount#" index="s">
 			
 			<cfset extendSetBean=getExtendSetBean() />
+			<cfset extendSetBean.set(tempArray[s]) />
+			<cfset arrayAppend(extendArray,extendSetBean)/>
+		</cfloop>
+		
+	</cfif>
+	
+	<cfreturn extendArray />
+</cffunction>
+
+<cffunction name="getRelatedContentSets" access="public" returntype="array">
+<cfargument name="Inherit" required="true" default="false"/>
+<cfargument name="doFilter" required="true" default="false"/>
+<cfargument name="filter" required="true" default=""/>
+<cfargument name="container" required="true" default=""/>
+<cfargument name="activeOnly" required="true" default="false"/>
+<cfset var tempArray=""/>
+<cfset var extendArray=arrayNew(1) />
+<cfset var rsSets=""/>
+<cfset var extendSetBean=""/>
+<cfset var s=0/>
+
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
+		select * from tclassextendrcsets where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> and subTypeID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubTypeID()#"> order by orderNo
+	</cfquery>
+	
+	<cfif rsSets.recordcount>
+		<cfset tempArray=createObject("component","mura.queryTool").init(rsSets).toArray() />
+		
+		<cfloop from="1" to="#rsSets.recordcount#" index="s">
+			
+			<cfset extendSetBean=getRelatedContentSetBean() />
 			<cfset extendSetBean.set(tempArray[s]) />
 			<cfset arrayAppend(extendArray,extendSetBean)/>
 		</cfloop>
