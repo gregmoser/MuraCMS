@@ -280,7 +280,31 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfoutput>
 	<div class="form-actions">
 	
-		 <button type="button" class="btn" onclick="document.contentForm.approved.value=0;if(siteManager.ckContent(draftremovalnotice)){submitForm(document.contentForm,'add');}"><i class="icon-check"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savedraft"))#</button>
+		 <button type="button" class="btn" onclick="return saveDraftPrompt();"><i class="icon-check"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savedraft"))#</button>
+		 <script>
+				function saveDraftPrompt(){
+					confirmDialog(
+						'Would you like to save draft and continue editing?',
+						function(){
+							if(siteManager.ckContent(draftremovalnotice)){
+								document.contentForm.approved.value=0;
+								document.contentForm.preview.value=0;
+								document.contentForm.murakeepediting.value=true;
+								submitForm(document.contentForm,'add');
+							}
+						},
+						function(){	
+							if(siteManager.ckContent(draftremovalnotice)){
+								document.contentForm.approved.value=0;
+								document.contentForm.preview.value=0;
+								document.contentForm.murakeepediting.value=false;
+								submitForm(document.contentForm,'add');
+							}
+						}
+
+					);
+				}
+			</script>
 		<cfif listFindNoCase("Page,Folder,Calendar,Gallery",rc.type)>
 		<button type="button" class="btn" onclick="document.contentForm.approved.value=0;document.contentForm.preview.value=1;if(siteManager.ckContent(draftremovalnotice)){submitForm(document.contentForm,'add');}"><i class="icon-eye-open"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savedraftandpreview"))#</button>
 		</cfif>
@@ -618,6 +642,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<input type="hidden" name="returnURL" id="txtReturnURL" value="#rc.returnURL#">
 	<input type="hidden" name="homeID" value="#HTMLEditFormat(rc.homeID)#">
 	<input type="hidden" name="cancelpendingapproval" value="false">
+	<input type="hidden" name="murakeepediting" value="false">
 	<cfif not  listFind(session.mura.memberships,'S2')>
 		<input type="hidden" name="isLocked" value="#rc.contentBean.getIsLocked()#">
 	</cfif>

@@ -57,6 +57,7 @@
 		<cfparam name="arguments.rc.ommitPublishingTab" default="false"/>
 		<cfparam name="arguments.rc.ommitRelatedContentTab" default="false"/>
 		<cfparam name="arguments.rc.ommitAdvancedTab" default="false"/>
+		<cfparam name="arguments.rc.murakeepediting" default="false"/>
 
 		<cfif not arguments.rc.ommitPublishingTab>
 			<cfparam name="arguments.rc.isNav" default="0"/>
@@ -274,30 +275,30 @@
 			  </cfif>
 		  </cfif>
 		 
-		<cfif arguments.rc.closeCompactDisplay neq 'true' and arguments.rc.action neq 'multiFileUpload'>
+		<cfif (arguments.rc.closeCompactDisplay neq 'true'  or arguments.rc.murakeepediting) and arguments.rc.action neq 'multiFileUpload'>
 			
-				<cfif len(arguments.rc.returnURL) and (arguments.rc.action eq 'delete' or arguments.rc.action eq 'deletehistall' or arguments.rc.preview eq 0)>
+				<cfif len(arguments.rc.returnURL) and (arguments.rc.action eq 'delete' or arguments.rc.action eq 'deletehistall' or (arguments.rc.preview eq 0 and not arguments.rc.murakeepediting))>
 						<cflocation url="#rc.returnURL#" addtoken="false"/>
 				</cfif>
 				
-				<cfif arguments.rc.action eq 'delete' or arguments.rc.action eq 'deletehistall' or (arguments.rc.return eq 'hist' and arguments.rc.preview eq 0)>
+				<cfif arguments.rc.action eq 'delete' or arguments.rc.action eq 'deletehistall' or (arguments.rc.return eq 'hist' and arguments.rc.preview eq 0 and not arguments.rc.murakeepediting)>
 					<cfset variables.fw.redirect(action="cArch.hist",append="contentid,siteid,startrow,moduleid,parentid,type,compactDisplay")>
 				</cfif>
 				
-				<cfif arguments.rc.return eq 'changesets' and len(rc.contentBean.getChangesetID())>
+				<cfif arguments.rc.return eq 'changesets' and len(rc.contentBean.getChangesetID()) and not arguments.rc.murakeepediting>
 					<cfset variables.fw.redirect(action="cChangesets.assignments",append="changesetID,siteid")>
 				</cfif>
 				
 				<cfif structIsEmpty(rc.contentBean.getErrors())>
 					<cfset structDelete(session.mura,"editBean")>
-					<cfif arguments.rc.preview eq 0>
+					<cfif arguments.rc.preview eq 0 and not arguments.rc.murakeepediting>
 						<cfset variables.fw.redirect(action="cArch.list",append="topid,siteid,startrow,moduleid")>
 					<cfelse>
 						<cfset arguments.rc.parentid=rc.contentBean.getParentID()>
 						<cfset arguments.rc.type=rc.contentBean.getType()>
 						<cfset arguments.rc.contentid=rc.contentBean.getContentID()>
 						<cfset arguments.rc.contenthistid=rc.contentBean.getContentHistID()>
-						<cfset arguments.rc.preview=1>
+						<cfset arguments.rc.preview=arguments.rc.preview>
 						<cfset variables.fw.redirect(action="cArch.edit",append="contenthistid,contentid,type,parentid,topid,siteid,moduleid,preview,startrow,return,compactDisplay")>
 					</cfif>
 				</cfif>
