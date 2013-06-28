@@ -175,7 +175,7 @@ component extends="mura.bean.bean" versioned=false {
 					if(structKeyExists(props[prop],"fieldtype")){
 						if(props[prop].fieldtype eq "id"){
 							getDbUtility().addPrimaryKey(argumentCollection=props[prop]);
-						} else if ( listFindNoCase('one-to-many,many-to-one',props[prop].fieldtype) ){
+						} else if ( listFindNoCase('one-to-many,many-to-one,index',props[prop].fieldtype) ){
 							getDbUtility().addIndex(argumentCollection=props[prop]);
 						}
 					}
@@ -695,7 +695,7 @@ component extends="mura.bean.bean" versioned=false {
 		var hasArg=false;
 
 		savecontent variable="sql"{
-			writeOutput("select * from #getTable()# ");
+			writeOutput(getLoadSQL());
 			for(var arg in arguments){
 				hasArg=false;
 				prop=arg;
@@ -726,7 +726,7 @@ component extends="mura.bean.bean" versioned=false {
 						writeOutput("and ");
 					}
 
-					writeOutput(" #arg#= :#arg# ");
+					writeOutput(" #getTable()#.#arg#= :#arg# ");
 				}	
 			}
 
@@ -750,6 +750,10 @@ component extends="mura.bean.bean" versioned=false {
 		} else {
 			return this;
 		}
+	}
+
+	private function getLoadSQL(){
+		return "select * from #getTable()# ";
 	}
 
 	function clone(){

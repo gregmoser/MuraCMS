@@ -179,7 +179,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tcontentstats.rating,tcontentstats.totalVotes,tcontentstats.downVotes,tcontentstats.upVotes,
 	tcontentstats.comments, tparent.type parentType, <cfif doKids> qKids.kids<cfelse> null as kids</cfif>,
 	tcontent.path, tcontent.created, tcontent.nextn, tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,
-	tfiles.filename as AssocFilename,tcontent.displayInterval,tcontent.display
+	tfiles.filename as AssocFilename,tcontent.displayInterval,tcontent.display,tcontentfilemetadata.altText as fileAltText
 
 	from tcontent
 	
@@ -197,6 +197,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	Left Join tcontent tparent #tableModifier# on (tcontent.parentid=tparent.contentid
 					    			and tcontent.siteid=tparent.siteid
 					    			and tparent.active=1) 
+	Left Join tcontentfilemetadata on (tcontent.fileid=tcontentfilemetadata.fileid
+									and tcontent.contenthistid=tcontentfilemetadata.contenthistid)
 	
 	<cfif isExtendedSort>
 	left Join (select 

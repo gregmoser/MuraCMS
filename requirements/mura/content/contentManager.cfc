@@ -960,7 +960,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 
 				<cfif not newBean.getIsNew()>
-					<cfset variables.contentDAO.persistVersionedObjects(newBean.getContentHistID(),currentBean.getContentHistID())>
+					<cfset variables.contentDAO.persistVersionedObjects(currentBean,newBean)>
 				</cfif>
 				
 				<!--- Category Persistence --->	
