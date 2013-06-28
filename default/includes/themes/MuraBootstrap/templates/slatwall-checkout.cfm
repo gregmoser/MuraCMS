@@ -122,7 +122,7 @@ Notes:
 					<cfif listFindNoCase(orderRequirementsList, "account")>
 						
 						<!--- START: ACCOUNT --->
-						<h4>Step 1 - Account Details</h4>
+						<h5>Step 1 - Account Details</h5>
 						
 						<div class="row">
 							
@@ -357,7 +357,7 @@ Notes:
 					<cfelseif listFindNoCase(orderRequirementsList, "fulfillment")>
 						
 						<!--- START: FULFILLMENT --->
-						<h4>Step 2 - Fulfillment Details</h4>
+						<h5>Step 2 - Fulfillment Details</h5>
 						
 						<form action="?s=1" method="post">
 											
@@ -372,6 +372,9 @@ Notes:
 								
 								<!--- We need to check if this order fulfillment is one that needs to be updated, by checking if it is already processable or by checking if it has errors --->
 								<cfif not orderFulfillment.isProcessable( context="placeOrder" ) or orderFulfillment.hasErrors()>
+									
+									<!--- Increment the orderFulfillment index so that we can update multiple order fulfillments at once --->
+									<cfset orderFulfillmentIndex++ />
 									
 									<div class="row">
 										
@@ -415,8 +418,6 @@ Notes:
 										<!--- SHIPPING --->
 										<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "shipping">
 											
-											<!--- Increment the orderFulfillment index so that we can update multiple order fulfillments at once --->
-											<cfset orderFulfillmentIndex++ />
 											<input type="hidden" name="orderFulfillments[#orderFulfillmentIndex#].orderFulfillmentID" value="#orderFulfillment.getOrderFulfillmentID()#" />
 											
 											<div class="span4">
@@ -425,12 +426,26 @@ Notes:
 												<!--- If there are existing account addresses, then we can allow the user to select one of those --->
 												<cfif arrayLen(orderFulfillment.getAccountAddressOptions())>
 													
+													<!--- Get the options that the person can choose from --->
+													<cfset accountAddressOptions = orderFulfillment.getAccountAddressOptions() />
+													
+													<!--- Add a 'New' Attribute so that we can drive the new form below --->
+													<cfset arrayAppend(accountAddressOptions, {name='New', value=''}) />
+													
+													<!--- As long as there are no errors for the orderFulfillment, we can setup the default accountAddress value to be selected --->
+													<cfset accountAddressID = "" />
+													<cfif !orderFulfillment.hasErrors() && !isNull(orderFulfillment.getAccountAddress())>
+														<cfset accountAddressID = orderFulfillment.getAccountAddress().getAccountAddressID() />
+													<cfelseif !orderFulfillment.hasErrors()>
+														<cfset accountAddressID = $.slatwall.cart().getAccount().getPrimaryAddress().getAccountAddressID() />
+													</cfif>
+													
 													<!--- Account Address --->
 													<div class="control-group">
 								    					<label class="control-label" for="rating">Select Existing Address</label>
 								    					<div class="controls">
 								    						
-															<sw:FormField type="select" name="orderFulfillments[#orderFulfillmentIndex#].accountAddress.accountAddressID" valueObject="#orderFulfillment#" valueObjectProperty="accountAddress" valueOptions="#orderFulfillment.getAccountAddressOptions()#" class="span4" />
+															<sw:FormField type="select" name="orderFulfillments[#orderFulfillmentIndex#].accountAddress.accountAddressID" valueObject="#orderFulfillment#" valueObjectProperty="accountAddress" valueOptions="#accountAddressOptions#" value="#accountAddressID#" class="span4" />
 															<sw:ErrorDisplay object="#orderFulfillment#" errorName="accountAddress" />
 															
 								    					</div>
@@ -440,7 +455,27 @@ Notes:
 												</cfif>
 												
 												<!--- New Shipping Address --->
-												<sw:AddressForm id="newShippingAddress" address="#orderFulfillment.getAddress()#" fieldNamePrefix="orderFulfillments[#orderFulfillmentIndex#].shippingAddress." fieldClass="span4" />
+												<div id="new-shipping-address"<cfif arrayLen(orderFulfillment.getAccountAddressOptions())> class="hide"</cfif>>
+													<sw:AddressForm id="newShippingAddress" address="#orderFulfillment.getAddress()#" fieldNamePrefix="orderFulfillments[#orderFulfillmentIndex#].shippingAddress." fieldClass="span4" />
+												</div>
+												
+												<!--- SCRIPT IMPORTANT: This jQuery is just here for example purposes to show/hide the new address field if there are account addresses --->
+												<cfif arrayLen(orderFulfillment.getAccountAddressOptions())>
+													<script type="text/javascript">
+														(function($){
+															$(document).ready(function(){
+																$('body').on('change', 'select[name="orderFulfillments[#orderFulfillmentIndex#].accountAddress.accountAddressID"]', function(e){
+																	if( $(this).val() === '' ) {
+																		$('##new-shipping-address').show();
+																	} else {
+																		$('##new-shipping-address').hide();
+																	}
+																});
+																$('select[name="orderFulfillments[#orderFulfillmentIndex#].accountAddress.accountAddressID"]').change();
+															});
+														})( jQuery )
+													</script>
+												</cfif>
 												
 											</div>
 											
@@ -521,7 +556,7 @@ Notes:
 						<cfset eligiblePaymentMethods = $.slatwall.cart().getEligiblePaymentMethodDetails() />
 						
 						<!--- START: PAYMENT --->
-						<h4>Step 3 - Payment Details</h4>
+						<h5>Step 3 - Payment Details</h5>
 						
 						<br />
 						<!--- Display existing order payments, we are using the smart list here so that any non-persisted order payments don't show up --->
@@ -775,7 +810,7 @@ Notes:
 							
 <!--- ============= CONFIRMATION ============================================== --->
 					<cfelseif not len(orderRequirementsList)>
-						<h4>Step 4 - Confirmation</h4>
+						<h5>Step 4 - Confirmation</h5>
 						
 						ADD Account Details Here
 						<hr />
@@ -803,7 +838,7 @@ Notes:
 				<!--- START: ORDER SUMMARY --->
 				<div class="span4">
 					
-					<h4>Order Summary</h4>
+					<h5>Order Summary</h5>
 					<hr />
 					
 					<!--- Account Details --->
