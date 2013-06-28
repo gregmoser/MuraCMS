@@ -304,7 +304,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 					);
 				}
-			</script>
+ 	
+				document.addEventListener("keydown", function(e) {
+				  if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+				    e.preventDefault();
+				    document.contentForm.approved.value=0;
+					document.contentForm.preview.value=0;
+					document.contentForm.murakeepediting.value=true;
+					submitForm(document.contentForm,'add');
+				  }
+				}, false);
+
+		</script>
 		<cfif listFindNoCase("Page,Folder,Calendar,Gallery",rc.type)>
 		<button type="button" class="btn" onclick="document.contentForm.approved.value=0;document.contentForm.preview.value=1;if(siteManager.ckContent(draftremovalnotice)){submitForm(document.contentForm,'add');}"><i class="icon-eye-open"></i> #HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.savedraftandpreview"))#</button>
 		</cfif>

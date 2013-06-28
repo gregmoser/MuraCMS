@@ -47,7 +47,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfcomponent extends="mura.bean.bean" output="false">
 
-<cfproperty name="categoryID" type="string" default="" required="true" />
+<cfproperty name="categoryID" type="string" default="" />
 <cfproperty name="siteID" type="string" default="" required="true" />
 <cfproperty name="dateCreated" type="date" default="" />
 <cfproperty name="lastUpdate" type="date" default="" />
@@ -61,7 +61,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="sortBy" type="string" default="orderno" required="true"/>
 <cfproperty name="sortDirection" type="string" default="asc" required="true"/>
 <cfproperty name="restrictGroups" type="string" default=""/>
-<cfproperty name="path" type="string" default="" required="true" />
+<cfproperty name="path" type="string" default="" />
 <cfproperty name="remoteID" type="string" default="" />
 <cfproperty name="remoteSourceURL" type="string" default="" />
 <cfproperty name="remotePubDate" type="date" default="" />
