@@ -1299,7 +1299,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset var bb="">
 
 			<cfloop list="#application.objectMappings.bundleablebeans#" index="bb">
-				<cfset getBean(bb).toBundle(bundle=this,siteid=arguments.siteid)>
+				<cfset getBean(bb).toBundle(bundle=this,siteid=arguments.siteid,includeVersionHistory=arguments.includeVersionHistory)>
 			</cfloop>
 		</cfif>
 		<!--- END BUNDLEABLE CUSTOM OBJECTS --->
