@@ -48,37 +48,61 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfparam name="rc.keywords" default="">
 <cfparam name="rc.isNew" default="1">
 <cfset counter=0 />
+
 <cfoutput>
-<div class="form-inline input-append">
-	<input id="parentSearch" name="parentSearch" value="#HTMLEditFormat(rc.keywords)#" type="text" class="text" maxlength="50" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#" />
-	<button type="button" class="btn" onclick="siteManager.loadRelatedContent('#rc.siteid#',document.getElementById('parentSearch').value,0);return false;"><i class="icon-search"></i></button>
-</div>
+	<div class="control-group">
+		<label class="control-label">Search for Content</label>
+		<div id="internalContent" class="form-inline">
+			<input type="text" name="kewords" value="" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
+			<input type="button" name="btnSearch" value="Search" class="btn" onclick="siteManager.loadRelatedContent('#rc.siteid#', document.getElementById('rcSearch').value, 0); return false;" />
+		</div>
+		<a href="" class="pull-right">Basic Search</a>
+	</div>
+	<!---<div class="control-group">
+		<div id="externalLink" style="display:none;">EXTERNAL LINK FORM</div>
+	</div>--->
 </cfoutput>
 
-<cfif not rc.isNew>
-<cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords)/>
- <table class="table table-striped table-condensed table-bordered mura-table-grid">
-    <tr> 
-      <th class="var-width"><cfoutput><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'tooltip.addRelatedContent'))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.addrelatedcontent')# <i class="icon-question-sign"></i></a></cfoutput></th>
-	  <th class="actions">&nbsp;</th>
-    </tr><cfif rc.rslist.recordcount>
-     <cfoutput query="rc.rslist" startrow="1" maxrows="100">	
-		<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
-        <cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
-		<cfset counter=counter+1/>
-		<tr <cfif not(counter mod 2)>class="alt"</cfif>>  
-          <td class="var-width">#$.dspZoomNoLinks(crumbdata)#</td>
-		  <td class="actions"><ul><li class="add"><a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.add')#" href="javascript:;" onClick="siteManager.addRelatedContent('#rc.rslist.contentid#','#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.type.#rc.rslist.type#')#','#JSStringFormat($.dspZoomText(crumbdata,"&raquo;"))#'); return false;"><i class="icon-plus-sign"></i></a></li></ul>
-		  </td>
-		</tr>
-	 	</cfif>
-       </cfoutput>
-	 	<cfelse>
-		<tr class="alt"><cfoutput>  
-		  <td class="noResults" colspan="2">#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</td>
-		</tr></cfoutput>
+<div class="control-group">
+	<cfif not rc.isNew>
+		<cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords)/>
+		<cfif rc.rslist.recordcount>
+			<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
+				<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
+				<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
+					<cfset counter=counter+1/>
+					<!---<cfif not(counter mod 2)></cfif>  --->
+					
+					<div id="draggableContainment" class="list-table">
+						<div class="list-table-header">Matching Results</div>
+						<ul id="rcDraggable" class="list-table-items">
+							<li class="item">
+								#$.dspZoomNoLinks(crumbdata)#
+							</li>
+							<!---<li class="item">
+								<ul>
+									<li class="page">Home</li>
+									<li class="folder">Just a Folder</li>
+									<li class="page last"><strong>Just a page</strong></li>
+								</ul>
+							</li>--->
+						</ul>
+					</div>
+					
+				</cfif>
+			</cfoutput>
+			<script>
+				$("#rcDraggable li.item").draggable({
+					connectToSortable: '.rcSortable',
+					helper: 'clone',
+					revert: 'invalid',
+					cursor: 'move'
+				}).disableSelection();
+			</script>
+		<cfelse>
+			<cfoutput>  
+				<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</p>
+			</cfoutput>
 		</cfif>
-  </table>
-</td></tr></table>
-</cfif>
-
+	</cfif>	
+</div>
