@@ -535,6 +535,9 @@ http://#listFirst(cgi.http_host,":")##variables.configBean.getServerPort()##vari
 	<cfargument name="filename" type="any" />
 	<cfset var wordDelim=variables.configBean.getURLTitleDelim()>
 
+	<!--- Remove HTML --->
+	<cfset arguments.filename=ReReplace(arguments.filename, "<[^>]*>","","all") />
+	
 	<!--- replace some latin based unicode chars with allowable chars --->
 	<cfset arguments.filename=removeUnicode(arguments.filename) />
 	

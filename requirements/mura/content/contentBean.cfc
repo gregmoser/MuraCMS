@@ -1138,12 +1138,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>			
 
 <cffunction name="getEditUrl" access="public" returntype="string" output="false">
-	<cfargument name="compactDisplay" type="any" required="true" default="false"/>
+	<cfargument name="compactDisplay" type="boolean" required="true" default="false"/>
 	<cfset var returnStr="">
 	<cfset var topID="00000000000000000000000000000000001">
 	
 	<cfif listFindNoCase("Form,Component", variables.instance.type)>
 		<cfset topID=variables.instance.moduleID>
+	</cfif>
+
+	<cfif arguments.compactDisplay>
+		<cfset arguments.compactDisplay=true>
 	</cfif>
 	
 	<cfset returnStr= "#variables.configBean.getContext()#/admin/?muraAction=cArch.edit&contentHistId=#getContentHistId()#&contentId=#getContentId()#&Type=#variables.instance.type#&siteId=#variables.instance.siteID#&topId=#topID#&parentId=#variables.instance.parentID#&moduleId=#variables.instance.moduleID#&compactDisplay=#arguments.compactdisplay#" >
