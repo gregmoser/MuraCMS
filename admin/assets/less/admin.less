@@ -16,6 +16,7 @@
 	@import "typography.less";
 	@import "header.less";
 	@import "navigation.less";
+	@import "buttons.less";
 	@import "tables.less";
 	@import "mura-grid.less";
 	@import "login.less";
@@ -38,10 +39,6 @@
 
 body.compact {
 	padding: 18px;
-	//Old border on modals...doesn't quite work right
-	//padding: 19px;
-	//.border-radius(5px);
-	//border: 6px solid @grayDark;
 	background: #fff;
 }
 
@@ -49,29 +46,12 @@ body.compact {
 .compact .main { 
 	padding-bottom: 0;
 	min-width: 0;
-	//max-width: 360px;
 	}
 
 // Override bootstrap classes
 
 .dropdown .dropdown-menu {
 	.border-radius(6);
-}
-
-.btn-icon-only {
-	padding-right: 3px;
-	padding-left: 3px;
-}
-
-.btn i {
-	position: relative;
-	text-shadow: 0 1px 0 rgba(255,255,255,1);
-	}
-	
-.nav-pills .btn {
-	padding-top: 6px;
-	padding-bottom: 6px;
-	border: 0;
 }
 
 .well {
