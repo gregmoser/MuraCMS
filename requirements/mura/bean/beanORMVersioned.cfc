@@ -65,4 +65,21 @@ component extends="mura.bean.beanORM" versioned=true bundleable=true{
 		return true;
 	}
 
+	function toBundle(bundle,siteid,includeVersionHistory){
+		var qs=new Query();
+
+		if(arguments.includeVersionHistory){
+			qs.setSQL("select * from #getTable()# where siteid = :siteid");
+		} else {
+			qs.setSQL("select * from #getTable()# where contenthistid in (select contenthistid from tcontent where active=1 and siteid = :siteid) ");
+		}
+
+		qs.addParam(cfsqltype="cf_sql_varchar",value=arguments.siteid);
+		
+		arguments.bundle.setValue("rs" * getTable(),qs.getResult());
+	
+		return this;
+	}
+
+
 }
