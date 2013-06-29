@@ -251,7 +251,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 				</ul>
 				</cfif>
-				<!--- BEGIN CHANGESETS ---> 
 
 				<cfif not request.contentBean.getIsNew()>
 					<cfif ListFindNoCase('editor,author',request.r.perm)>
@@ -281,7 +280,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</ul>
 					</cfif>
 				
-				<cfif$.siteConfig('HasChangeSets')>
+				<!--- BEGIN CHANGESETS ---> 
+				<cfif $.siteConfig('HasChangeSets')>
 				<cfif request.muraChangesetPreview>
 					<cfset previewData=$.currentUser("ChangesetPreviewData")>
 				</cfif>
