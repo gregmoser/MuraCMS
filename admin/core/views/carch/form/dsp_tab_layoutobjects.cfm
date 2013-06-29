@@ -100,6 +100,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
  
     <div class="control-group">
       <label class="control-label"> <a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,"tooltip.inheritanceRules"))#"> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.inheritancerules')# <i class="icon-question-sign"></i> </a> </label>
+       <cfif structKeyExists(request, "inheritedObjects") and len(request.inheritedObjects)>
+        <cfset inheritBean=$.getBean('content').loadBy(contenthistid=request.inheritedObjects)>
+          <cfif inheritBean.getContentID() neq rc.contentBean.getContentID()>
+          <div class="alert">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.currentinheritance')#: 
+          <strong><a href='#inheritBean.getEditURL(compactDisplay=yesNoFormat(rc.compactdisplay))#'>#HTMLEditFormat(inheritBean.getMenuTitle())#</a></strong>
+          </div>
+          </cfif>
+      </cfif>
       <div class="controls">
         <label for="ioi" class="radio inline">
           <input type="radio" name="inheritObjects" id="ioi" value="Inherit" <cfif rc.contentBean.getinheritObjects() eq 'inherit' or rc.contentBean.getinheritObjects() eq ''>checked</cfif>>
