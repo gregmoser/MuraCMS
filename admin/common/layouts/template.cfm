@@ -206,7 +206,6 @@
 	<!--- <cfif cgi.http_user_agent contains 'msie'> --->
 	<!--[if IE]>
 		<link href="#application.configBean.getContext()#/admin/assets/css/ie/ie.min.css?coreversion=#application.coreversion#" rel="stylesheet" type="text/css" />
-		<script src="#application.configBean.getContext()#/admin/assets/js/mura-font-lte-ie7.js" type="text/javascript"></script>
 	<![endif]-->
 	
 	<!--[if IE 7]>
