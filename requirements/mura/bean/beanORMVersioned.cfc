@@ -46,9 +46,9 @@ modified version; it is your choice whether to do so, or to make such modified v
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 */
 component extends="mura.bean.beanORM" versioned=true bundleable=true{
-	property name="contentid" datatype="char" length="35" required=true;
-	property name="contenthistid" datatype="char" length="35" required=true;
-	property name="siteid" datatype="varchar" length="35" required=true;
+	property name="activeContent" fieldtype="many-to-one" cfc="content" fkfield="contentid";
+	property name="content" fieldtype="many-to-one" cfc="content" fkfield="contenthistid";
+	property name="site" fieldtype="one-to-one" cfc="site" fkcolumn="siteID";
 
 	private function addObject(obj){
 		//writeDump(var='arguments.obj.set#getPrimaryKey()#(getValue("#getPrimaryKey()#"))',abort=true);
