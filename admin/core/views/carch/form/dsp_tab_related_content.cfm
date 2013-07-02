@@ -44,14 +44,12 @@ For clarity, if you create a modified version of Mura CMS, you are not obligated
 modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
-<!---<cfdump var="#rc#">
-<cfabort>--->
 <cfset tabLabelList=listAppend(tabLabelList,application.rbFactory.getKeyValue(session.rb,"sitemanager.content.tabs.relatedcontent"))/>
 <cfset tabList=listAppend(tabList,"tabRelatedcontent")>
 
-<!---<cfset relatedContentSets = rc.contentBean.getRelatedContentSets()>--->
-<!---<cfset subtype = application.classExtensionManager.getSubTypeByName(rc.content.getType(), rc.content.getSubType(), rc.content.getSiteID())>
-<cfset relatedContentSets = subtype.getRelatedContentSets()>--->
+<cfset subtype = application.classExtensionManager.getSubTypeByName(rc.contentBean.getType(), rc.contentBean.getSubType(), rc.contentBean.getSiteID())>
+<cfset relatedContentSets = subtype.getRelatedContentSets()>
+
 <cfoutput>
 <div id="tabRelatedcontent" class="tab-pane">
 
@@ -88,34 +86,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 			</tbody>
 		</table>
-		<table id="relatedContent" class="table table-striped table-condensed table-bordered mura-table-grid"> 
-			<thead>
-				<tr>
-				<th class="var-width">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.contenttitle')#</th>
-				<th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.type')#</th>
-				<th class="actions">&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody id="RelatedContent">
-				<cfif rc.rsRelatedContent.recordCount>
-				<cfloop query="rc.rsRelatedContent">
-				<cfset itemcrumbdata=application.contentManager.getCrumbList(rc.rsRelatedContent.contentid, rc.siteid)/>
-				<tr id="c#rc.rsRelatedContent.contentID#">
-				<td class="var-width">#$.dspZoom(itemcrumbdata)#</td>
-				<td>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.type.#rc.rsRelatedContent.type#')#</td>
-				<td class="actions">
-					<input type="hidden" name="relatedcontentid" value="#rc.rsRelatedContent.contentid#" />
-						<ul class="clearfix"><li class="delete"><a title="Delete" href="##" onclick="return siteManager.removeRelatedContent('c#rc.rsRelatedContent.contentid#','#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removerelatedcontent'))#');"><i class="icon-remove-sign"></i></a></li>
-						</ul>
-				</td>
-				</tr></cfloop>
-				<cfelse>
-				<tr>
-				<td id="noFilters" colspan="4" class="noResults">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#</td>
-				</tr>
-				</cfif>
-			</tbody>
-		</table>		
 	</div>--->
 	
 	<script>
@@ -123,10 +93,32 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			$(".rcSortable").sortable({
 				connectWith: ".rcSortable",
 				revert: true,
-				cursor: 'move'
+				//cursor: 'move',
+				out: function( event, ui ) {
+					if ($(ui.sender).find('li.item').length == 1) {
+						$(ui.sender).find('li.empty').removeClass('noShow');
+					}
+				},
+				receive: function( event, ui ) {
+					$(this).find('li.empty').addClass('noShow');
+				},
+				stop: function( event, ui ) {
+					console.log($(ui.item));
+					if (ui.item.find('a.delete').length == 0) {
+						ui.item.append('<a class="delete"></a>');
+					}
+					$('a.delete').click(function(){$(this).parent().remove();});
+				},
+				/*change: function( event, ui ) {
+					if ($(this).find('li.item').length == 2) {
+						$(this).find('li.empty').addClass('noShow');
+					}
+				}*/
+				items: "li.item:not(.empty)"
 			}).disableSelection();
 			
 			siteManager.loadRelatedContent('#HTMLEditFormat(rc.siteid)#','',1)
+			$('a.delete').click(function(){$(this).parent().remove();});
 		});
 	</script>
 	
@@ -255,6 +247,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		color: ##666;
 		text-decoration: none;
 		}
+		
+		.noShow {
+		display: none !important;
+		}
 	</style>
 	
 	<div class="fieldset">
@@ -315,9 +311,37 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</div>--->
 		</div>
 		
-		<div class="control-group">
+		<cfloop from="1" to="#arrayLen(relatedContentsets)#" index="s">
+			<cfset rcsBean = relatedContentsets[s]/>
+			<cfset rcsRs = rcsBean.getRelatedContentQuery(rc.contentBean.getContentHistID())>
+			<cfoutput>
+				<div class="control-group">
+					<div id="rcGroup-#rcsBean.getRelatedContentSetID()#" class="list-table">
+						<div class="list-table-content-set">#rcsBean.getName()#</div>
+						<div class="list-table-header">Content</div>
+						<ul class="list-table-items rcSortable">
+							<cfif rcsRS.recordCount>
+								<cfloop query="rcsRs">	
+									<cfset crumbdata = application.contentManager.getCrumbList(rcsRs.contentid, rc.siteid)/>
+									<li class="item">
+										#$.dspZoomNoLinks(crumbdata)#
+									</li>
+									<a class="delete"></a>
+								</cfloop>
+							<cfelse>
+								<li class="item empty">
+									#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#
+								</li>
+							</cfif>
+						</ul>
+					</div>
+				</div>
+			</cfoutput>
+		</cfloop>
+		
+		<!---<div class="control-group">
 			<div id="rcGroup-id1234" class="list-table">
-				<div class="list-table-content-set">Related Content Bucket 1</div>
+				<div class="list-table-content-set">Static Test Bucket 1</div>
 				<div class="list-table-header">Content</div>
 				<ul class="list-table-items rcSortable">
 					<li class="item">
@@ -387,7 +411,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</li>
 				</ul>
 			</div>
-		</div>		
+		</div>
+		
+		<div class="control-group">
+			<div id="rcGroup-id1234" class="list-table">
+				<div class="list-table-content-set">Static Test Bucket 3</div>
+				<div class="list-table-header">Content</div>
+				<ul class="list-table-items rcSortable">
+					<li class="item empty">
+						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#
+					</li>
+				</ul>
+			</div>
+		</div>--->
+				
 	</div>
 </div>
 

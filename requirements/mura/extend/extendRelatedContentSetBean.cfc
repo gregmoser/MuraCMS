@@ -7,4 +7,9 @@ component extends="mura.bean.beanORM" table="tclassextendrcsets" entityname="rel
 	property name="siteID" ormtype="varchar" length="25" default="";
 	property name="subTypeID" ormtype="varchar" length="35" default="";
 	
+	function getRelatedContentQuery(contentHistID){
+        var rs = getBean('contentManager').getRelatedContent(siteID=getValue('siteID'), contentHistID=arguments.contenthistID, relatedContentSetID=getValue('relatedContentSetID'));
+
+        return rs;
+    }
 }
