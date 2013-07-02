@@ -58,29 +58,32 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<div class="fieldset">
 		<div class="control-group">
-	<div class="span4">
+	<div class="span3">
 		<label class="control-label">Base Type</label>
-		<div class="controls"><select name="typeSelector" id="typeSelector" required="true" message="The BASE CLASS field is required." onchange="extendManager.setBaseInfo(this.value);">
+		<div class="controls">
+			<select class="span12" name="typeSelector" id="typeSelector" required="true" message="The BASE CLASS field is required." onchange="extendManager.setBaseInfo(this.value);">
 			<option value="">Select</option>
-			<cfloop list="#typeList#" index="t"><option value="#t#" <cfif listFirst(t,'^') eq subType.getType()>selected</cfif>>#application.classExtensionManager.getTypeAsString(listFirst(t,'^'))#</option></cfloop>
+				<cfloop list="#typeList#" index="t">
+					<option value="#t#" <cfif listFirst(t,'^') eq subType.getType()>selected</cfif>>#application.classExtensionManager.getTypeAsString(listFirst(t,'^'))#</option>
+				</cfloop>
 			</select>
 			</div>
 		</div>
-		<div class="span4 subTypeContainer"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
+		<div class="span3 subTypeContainer"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
 			<label class="control-label">Sub Type</label>
 			<div class="controls">
 				<input class="span12" name="subType" id="subType" type="text" value="#HTMLEditFormat(subType.getSubType())#" required="true" maxlength="25"/>
 			</div>
 		</div>
 	
-		<div class="span4 SubTypeIconSelect"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
+		<div class="span1 SubTypeIconSelect"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
 			<label class="control-label">Icon</label>
               <div class="btn-group">
                 <button class="btn" type="button"><i id="iconcurrent" class="#subtype.getIconClass()# icon-large"></i></button>
                 <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 				    <ul class="dropdown-menu">
 				      <cfloop list="#subtype.getIconClasses()#" index="i">
-				      	  <li class="icon-selector"><i class="#i#"></i></li>
+				      	  <li class="icon-selector"><i class="#i# <!--- icon-default --->"></i></li>
 				      </cfloop>      
 				    </ul>
               </div>
@@ -93,8 +96,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
               		});
               	});
               </script>
-
-	</div>
+		</div>
+		
+		<div class="span1 SubTypeIconSelect"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
+			<label class="control-label">Default</label>
+			<div class="controls">
+				<i class="icon-folder-close-alt icon-2x"></i><!--- Folder  --->
+				<!---<i class="icon-file-alt"></i><!--- Page  --->
+				<i class="icon-file-text-alt"></i><!--- File  --->
+				<i class="icon-calendar"></i><!---  Calendar --->
+				<i class="icon-th"></i><!--- Gallery  --->
+				<i class="icon-link"></i><!--- Link  ---> --->
+				
+			</div>
+		</div>
 	
 	</div>
 	
