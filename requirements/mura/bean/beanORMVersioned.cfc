@@ -47,7 +47,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 */
 component extends="mura.bean.beanORM" versioned=true bundleable=true{
 	property name="activeContent" fieldtype="many-to-one" cfc="content" fkcolumn="contentid";
-	property name="content" fieldtype="many-to-one" cfc="content" fkcolumn="contenthistid";
+	property name="content" fieldtype="many-to-one" cfc="content" fkcolumn="contenthistid" comparable=false;
 	property name="site" fieldtype="one-to-one" cfc="site" fkcolumn="siteID";
 
 	private function addObject(obj){
