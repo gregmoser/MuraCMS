@@ -1814,6 +1814,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="today" type="date" required="yes" default="#now()#" />
 	<cfargument name="sortBy" type="string" default="created" >
 	<cfargument name="sortDirection" type="string" default="desc" >
+	<cfargument name="relatedContentSetID" type="string" default="">
 	<cfset var rs ="" />
 
 	<cfif not listFindNoCase('menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype,comments,rating',arguments.sortby)>
@@ -1830,14 +1831,22 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tcontent.fileid, tcontent.credits, tcontent.remoteSource, tcontent.remoteSourceURL, tcontent.remoteURL,
 	tfiles.fileSize,tfiles.fileExt,tcontent.path, tcontent.siteid, tcontent.contenthistid
 	FROM  tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
-
+	
+	<cfif len(arguments.relatedContentSetID)>
+		inner join tcontentrelated tcr on tcontent.contentHistId = tcr.contentHistID and tcr.relatedContentSetID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
+		and tcr.contentHistID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
+	</cfif>
+	
 	WHERE
 	tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
-	and tcontent.active=1 and
+	and tcontent.active=1 
 	
-	tcontent.contentID in (
-	select relatedID from tcontentrelated where contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
-	)
+	<cfif not len(arguments.relatedContentSetID)>
+		and
+		tcontent.contentID in (
+		select relatedID from tcontentrelated where contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
+		)
+	</cfif>
 	
 	<cfif arguments.liveOnly>
 	  AND (

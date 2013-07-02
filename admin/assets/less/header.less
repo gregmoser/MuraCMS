@@ -354,7 +354,14 @@ header, #cPlugins {
 		 	}
 		
 		.dropdown-menu {
-		 	width: 164px;
+		 	min-width: 164px;
+		 	max-width: 388px;
+		 	max-height: 200px;
+		 	overflow-y: auto; 
+		 	
+		 	> li {
+		 	.text-overflow;
+		 		}
 		 	}
 		 	
 		.dropdown-menu  i {

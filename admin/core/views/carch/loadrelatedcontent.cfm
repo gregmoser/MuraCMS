@@ -76,7 +76,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<div id="draggableContainment" class="list-table">
 						<div class="list-table-header">Matching Results</div>
 						<ul id="rcDraggable" class="list-table-items">
-							<li class="item">
+							<li class="item new">
 								#$.dspZoomNoLinks(crumbdata)#
 							</li>
 							<!---<li class="item">
@@ -92,12 +92,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 			</cfoutput>
 			<script>
-				$("#rcDraggable li.item").draggable({
-					connectToSortable: '.rcSortable',
-					helper: 'clone',
-					revert: 'invalid',
-					cursor: 'move'
-				}).disableSelection();
+				$(document).ready(function(){
+					$("#rcDraggable li.item").draggable({
+						connectToSortable: '.rcSortable',
+						helper: 'clone',
+						revert: 'invalid',
+						//cursor: 'move'
+					}).disableSelection();
+				});
 			</script>
 		<cfelse>
 			<cfoutput>  
