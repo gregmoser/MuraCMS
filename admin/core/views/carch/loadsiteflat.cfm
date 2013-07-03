@@ -472,8 +472,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<li class="created">#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.createdlong"),args)#</li>
 					</cfif>
 					<cfif isNumeric(item.getMajorVersion()) and item.getMajorVersion()><li class="version">#application.rbFactory.getKeyValue(session.rb,"sitemanager.version")#: <strong>#item.getMajorVersion()#.#item.getMinorVersion()#</strong></li></cfif>
-					<cfif isDate(item.getExpires())><li class="expiration">#application.rbFactory.getKeyValue(session.rb,"sitemanager.expiration")#: <strong>#LSDateFormat(item.getExpires(),session.dateKeyFormat)#</strong></li></cfif>
-					<cfif isDate(item.getDueDate())><li class="duedate">#application.rbFactory.getKeyValue(session.rb,"sitemanager.duedate")#: <strong>#LSDateFormat(item.getDueDate(),session.dateKeyFormat)#</strong></li></cfif>
+					<cfif isDate(item.getDueDate())><li class="duedate">#application.rbFactory.getKeyValue(session.rb,"sitemanager.duedate")#: <strong>#LSDateFormat(item.getDueDate(),session.dateKeyFormat)#</strong></li></<cfelseif isDate(item.getExpires())><li class="expiration">#application.rbFactory.getKeyValue(session.rb,"sitemanager.expiration")#: <strong>#LSDateFormat(item.getExpires(),session.dateKeyFormat)#</strong></li></cfif>
 					<cfif isNumeric(item.getFileSize()) and item.getFileSize()><li class="size">#application.rbFactory.getKeyValue(session.rb,"sitemanager.size")#: <strong>#$.renderFileSize(item.getFileSize())#</strong></li></cfif>
 					<cfset categories=item.getCategoriesIterator()>
 					<cfif categories.hasNext()>
