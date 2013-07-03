@@ -76,8 +76,8 @@
   -webkit-border-radius: 9px;
   -moz-border-radius: 9px;
   border-radius: 9px;
-  border: 1px solid #ffffff;
-  background-color: #666666;
+  border: 0 solid #ffffff;
+  background-color: #b3b3b3;
   color: #ffffff;
 }
 .label-important,
@@ -90,11 +90,11 @@
 }
 .label-warning,
 .badge-warning {
-  background-color: #ff3a00;
+  background-color: #ffc40d;
 }
 .label-warning[href],
 .badge-warning[href] {
-  background-color: #cc2e00;
+  background-color: #d9a400;
 }
 .label-success,
 .badge-success {
