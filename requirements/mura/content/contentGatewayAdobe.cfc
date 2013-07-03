@@ -1178,7 +1178,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif isExtendedSort>
 			,qExtendedSort.extendedSort	
 		</cfif>
-		,tcontent.fileid
+		,tcontent.fileid, tcontentfilemetadata.altText
 		
 		order by
 		<cfswitch expression="#arguments.sortBy#">
