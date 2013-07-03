@@ -71,7 +71,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<a class="btn <cfif rc.originalfuseaction eq 'toprated'> active</cfif>"  href="index.cfm?muraAction=cDashboard.topRated&siteID=#session.siteid#">#application.rbFactory.getKeyValue(session.rb,"dashboard.toprated")#</a>
 </cfif>
 
-<cfset draftCount=$.getBean('contentManager').getMyDraftsCount(session.siteid)>
+<cfset draftCount=$.getBean('contentManager').getMyDraftsCount(siteid=session.siteid,startdate=dateAdd('m',-3,now()))>
 <a class="btn"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mydrafts&siteID=#session.siteid#&reportSortby=lastupdate&reportSortDirection=desc&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mydrafts")#<cfif draftCount> <span class="badge badge-important">#draftCount#</span></cfif></a>
 
 <cfset draftCount=$.getBean('contentManager').getMySubmissionsCount(session.siteid)>

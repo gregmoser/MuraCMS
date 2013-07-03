@@ -945,7 +945,16 @@ buttons: {
 	sectionLoading: false,
 
 	loadSiteFlatByFilter: function() {
-		flatViewArgs.type = $("#contentTypeFilter").val();
+		var typeString=$("#contentTypeFilter").val();
+
+		if(typeString != ''){
+			var typeArray=typeString.split('^');
+			flatViewArgs.type = typeArray[0];
+			flatViewArgs.subtype = typeArray[1];
+		} else {
+			flatViewArgs.type = '';
+			flatViewArgs.subtype = '';
+		}
 		var categoryid = [];
 		var tag = [];
 

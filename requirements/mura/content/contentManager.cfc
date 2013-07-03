@@ -2493,9 +2493,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cffunction name="getMyDraftsCount" output="false">
 		<cfargument name="siteid">
-		<cfset var rsDrafts=getDraftList(arguments.siteid)>
+		<cfargument name="startdate">
+		<cfset var rsDrafts=getDraftList(argumentCollection=arguments)>
 		<cfquery name="rsDrafts" dbtype="query">
-			select distinct contentid from rsDrafts
+			select contentid from rsDrafts
+			group by contentid
 		</cfquery>
 		<cfreturn rsDrafts.recordcount>
 	</cffunction>

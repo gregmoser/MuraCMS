@@ -253,7 +253,7 @@
 		<cfelse>
 			 <cfset arguments.rc.contentBean=getBean('content').loadBy(contentID=arguments.rc.contentID, siteid=arguments.rc.siteid).set(arguments.rc).save() />
 		</cfif>
-		<cfif not arguments.rc.ajaxrequest and len(request.newImageIDList)>
+		<cfif not arguments.rc.ajaxrequest and len(request.newImageIDList) and not arguments.rc.murakeepediting>
 			<cfset rc.fileid=request.newImageIDList>
 			<cfset rc.contenthistid=arguments.rc.contentBean.getContentHistID()>
 			<cfset variables.fw.redirect(action="cArch.imagedetails",append="contenthistid,siteid,fileid,compactDisplay")>
