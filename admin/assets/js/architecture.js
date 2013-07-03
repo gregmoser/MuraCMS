@@ -528,7 +528,63 @@ buttons: {
 		return false;
 	},
 
-
+	
+	bindDelete: function () {
+		$('a.delete').click(function(){
+			$(this).parent().remove();
+			siteManager.updateBuckets();
+		});
+	},
+		
+	bindMouse: function () {
+		$(".rcSortable li.item:not(.empty), #rcDraggable li.item").mouseup(function(event){
+			// left mouse button only
+			if (event.which == 1) {
+				siteManager.enableBuckets();
+			}
+		}).mousedown(function(event){
+			// left mouse button only
+			if (event.which == 1) {
+				siteManager.disableBuckets($(this));
+			}
+		});
+	},
+	
+	updateBuckets: function () {
+		$(".rcSortable").each(function(index){
+			if ($(this).find('li.item').length == 1) {
+				$(this).find('li.empty').removeClass('noShow');
+			} else {
+				$(this).find('li.empty').addClass('noShow');	
+			}
+		});
+	},
+	
+	enableBuckets: function () {
+		$(".rcSortable").each(function(index){
+			$(this).sortable("enable");
+			$(this).parent().removeClass('disabled');
+		});
+	},
+	
+	disableBuckets: function (el) {
+		$(".rcSortable").each(function(index){
+			// ignore parent container
+			if (!($(this).attr('id') == el.parent().attr('id'))) {
+				// disable if not in allowed list
+				if ($(this).attr('data-accept').length > 0 && $(this).attr('data-accept').indexOf(el.attr('data-content-type')) == -1) {
+					$(this).sortable("disable");
+					$(this).parent().addClass('disabled');
+				}
+				// disable if already in list
+				if ($(this).find('[data-contentid="' + el.attr('data-contentid') + '"]').length > 0) {
+					$(this).sortable("disable");
+					$(this).parent().addClass('disabled');
+				}
+			}
+		});
+	},
+	
 	loadRelatedContent: function(siteid, keywords, isNew) {
 		var url = 'index.cfm';
 		var pars = 'muraAction=cArch.loadRelatedContent&compactDisplay=true&siteid=' + siteid + '&keywords=' + keywords + '&isNew=' + isNew + '&cacheid=' + Math.random();
@@ -539,67 +595,23 @@ buttons: {
 		d.html('<div class="load-inline"></div>');
 		$.get(url + "?" + pars, function(data) {
 			$('#selectRelatedContent').html(data);
+			$("#rcDraggable li.item").draggable({
+				connectToSortable: '.rcSortable',
+				helper: 'clone',
+				revert: 'invalid',
+				start: function(event, ui) {
+					// bind mouse events to clone
+					siteManager.bindMouse();
+				},
+				zIndex: 100
+			}).disableSelection();
+			
+			siteManager.bindMouse();
 		});
 	},
-
-
-	addRelatedContent: function(contentID, contentType, title) {
-		var tbody = document.getElementById('relatedContent').getElementsByTagName("TBODY")[0];
-		var row = document.createElement("TR");
-		row.id = "c" + contentID;
-		var name = document.createElement("TD");
-		name.appendChild(document.createTextNode(title));
-		name.className = "var-width";
-		var type = document.createElement("TD");
-		type.appendChild(document.createTextNode(contentType));
-		var admin = document.createElement("TD");
-		admin.className = "actions";
-		var deleteLink = document.createElement("A");
-		deleteLink.setAttribute("href", "#");
-		deleteLink.setAttribute("title", "Delete");
-		deleteLink.onclick = function() {
-			$("#c" + contentID).remove();
-			stripe('stripe');
-			return false;
-		}
-
-		var deleteIcon = document.createElement("I");	
-		deleteIcon.setAttribute("class", "icon-remove-sign");
-
-		deleteLink.appendChild(deleteIcon);
-
-		var deleteUL = document.createElement("UL");
-		deleteUL.className = "one";
-
-		var deleteLI = document.createElement("LI");
-		deleteLI.className = "delete";
-		deleteLI.appendChild(deleteLink);
-		deleteUL.appendChild(deleteLI);
-
-		var content = document.createElement("INPUT");
-		content.setAttribute("type", "hidden");
-		content.setAttribute("name", "relatedContentID");
-		content.setAttribute("value", contentID);
-		admin.appendChild(content);
-		admin.appendChild(deleteUL);
-		row.appendChild(name);
-		row.appendChild(type);
-		row.appendChild(admin);
-		tbody.appendChild(row);
-		if($('#noFilters').length) $('#noFilters').hide();
-
-		stripe('stripe');
+	
+	setDirtyRelatedContent: function () {
 		this.dirtyRelatedContent = true;
-
-	},
-
-	removeRelatedContent: function(contentID, confirmText) {
-		if(confirm(confirmText)) {
-			$("#" + contentID).remove();
-			stripe('stripe');
-			this.dirtyRelatedContent = true;
-		}
-		return false;
 	},
 
 	form_is_modified: function(oForm) {

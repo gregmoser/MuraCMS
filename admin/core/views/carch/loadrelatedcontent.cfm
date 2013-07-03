@@ -47,7 +47,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset request.layout=false>
 <cfparam name="rc.keywords" default="">
 <cfparam name="rc.isNew" default="1">
-<cfset counter=0 />
 
 <cfoutput>
 	<div class="control-group">
@@ -56,7 +55,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<input type="text" name="kewords" value="" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
 			<input type="button" name="btnSearch" value="Search" class="btn" onclick="siteManager.loadRelatedContent('#rc.siteid#', document.getElementById('rcSearch').value, 0); return false;" />
 		</div>
-		<a href="" class="pull-right">Basic Search</a>
+		<a href="" class="pull-right">Advanced Search</a>
 	</div>
 	<!---<div class="control-group">
 		<div id="externalLink" style="display:none;">EXTERNAL LINK FORM</div>
@@ -70,39 +69,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
 				<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
 				<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
-					<cfset counter=counter+1/>
-					<!---<cfif not(counter mod 2)></cfif>  --->
-					
 					<div id="draggableContainment" class="list-table">
 						<div class="list-table-header">Matching Results</div>
 						<ul id="rcDraggable" class="list-table-items">
-							<li class="item" data-contentid="cid-#rc.rslist.contentID#" data-content-type="#rc.rslist.type#/#rc.rslist.subtype#">
+							<li class="item" data-contentid="#rc.rslist.contentID#" data-content-type="#rc.rslist.type#/#rc.rslist.subtype#">
 								#$.dspZoomNoLinks(crumbdata)#
 							</li>
-							<!---<li class="item">
-								<ul>
-									<li class="page">Home</li>
-									<li class="folder">Just a Folder</li>
-									<li class="page last"><strong>Just a page</strong></li>
-								</ul>
-							</li>--->
 						</ul>
 					</div>
-					
 				</cfif>
 			</cfoutput>
-			<script>
-				$(document).ready(function(){
-					$("#rcDraggable li.item").draggable({
-						connectToSortable: '.rcSortable',
-						helper: 'clone',
-						revert: 'invalid',
-						stack: 'li.item'
-					}).disableSelection();
-					
-					bindMouse();
-				});
-			</script>
 		<cfelse>
 			<cfoutput>  
 				<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</p>
