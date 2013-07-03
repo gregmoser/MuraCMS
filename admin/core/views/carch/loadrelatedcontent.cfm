@@ -76,7 +76,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<div id="draggableContainment" class="list-table">
 						<div class="list-table-header">Matching Results</div>
 						<ul id="rcDraggable" class="list-table-items">
-							<li class="item new">
+							<li class="item" data-contentid="cid-#rc.rslist.contentID#" data-content-type="#rc.rslist.type#/#rc.rslist.subtype#">
 								#$.dspZoomNoLinks(crumbdata)#
 							</li>
 							<!---<li class="item">
@@ -97,8 +97,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						connectToSortable: '.rcSortable',
 						helper: 'clone',
 						revert: 'invalid',
-						//cursor: 'move'
+						stack: 'li.item'
 					}).disableSelection();
+					
+					bindMouse();
 				});
 			</script>
 		<cfelse>
