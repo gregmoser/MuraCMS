@@ -543,6 +543,7 @@ function initFlatViewArgs(){
 			categoryid:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].categoryid)#',
 			lockid:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].lockid)#',
 			type:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].type)#',
+			type:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].type)#',
 			subType:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].subtype)#',
 			report:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].report)#',
 			keywords:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].keywords)#',

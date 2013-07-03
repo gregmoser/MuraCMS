@@ -69,6 +69,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	session.flatViewArgs["#rc.siteID#"].page=$.event("page");
 	session.flatViewArgs["#rc.siteID#"].type=$.event("type");
 	session.flatViewArgs["#rc.siteID#"].subtype=$.event("subtype");
+	session.flatViewArgs["#rc.siteID#"].subtype=$.event("subtype");
 	session.flatViewArgs["#rc.siteID#"].report=$.event("report");
 	session.flatViewArgs["#rc.siteID#"].keywords=$.event("keywords");
 	session.flatViewArgs["#rc.siteID#"].filtered=yesNoFormat($.event("filtered"));
@@ -502,13 +503,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<!---<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports")#</h2>--->
 	<div class="well">
 		<ul id="navReports" class="nav nav-list">
-			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#<!---<span class="badge badge-important">13</span>---></a></li>
-			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#<!---<span class="badge">13</span>---></a></li>
-			<li><a href="" data-report="mysubmissions"<cfif $.event("report") eq "mysubmissions"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mysubmissions")#<!---<span class="badge">13</span>---></a></li>
-			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#<!---<span class="badge badge-warning">13</span>---></a></li>
-			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#<!---<span class="badge badge-info">13</span>---></a></li>
+			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#<!---<span class="badge">#$.getBean('contentGateway').getPageCount(siteid=session.siteid).counter#</span>---></a></li>
+			<cfset draftCount=$.getBean('contentManager').getMyDraftsCount(siteid=session.siteid, startdate=dateAdd('m',-3,now()))>
+			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#<cfif draftCount><span class="badge badge-important">#draftCount#</span></cfif></a></li>
+			<cfset draftCount=$.getBean('contentManager').getMySubmissionsCount(session.siteid)>
+			<li><a href="" data-report="mysubmissions"<cfif $.event("report") eq "mysubmissions"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mysubmissions")#<cfif draftCount><span class="badge badge-important">#draftCount#</span></cfif></a></li>
+			<cfset draftCount=$.getBean('contentManager').getMyApprovalsCount(session.siteid)>
+			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#<cfif draftCount><span class="badge badge-important">#draftCount#</span></cfif></a></li>
+			<cfset draftCount=$.getBean('contentManager').getMyExpiresCount(session.siteid)>
+			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#<cfif draftCount><span class="badge badge-important">#draftCount#</span></cfif></a></li>
 			<li><a href="" data-report="expires"<cfif $.event("report") eq "expires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.expires")#<!---<span class="badge badge-success">13</span>---></a></li>
-			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#<!---<span class="badge badge-inverse">13</span>---></a></li>
+			<cfset draftCount=$.getBean('contentManager').getMyLockedFilesCount(session.siteid)>
+			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#<cfif draftCount><span class="badge badge-important">#draftCount#</span></cfif></a></li>
 		</ul>
 	</div>
 	
@@ -522,10 +528,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
     <cfif $.event("report") neq "lockedfiles">
 	<div class="module well">
 		<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.type")#</h3>
+		<cfset rsTypes=application.configBean.getClassExtensionManager().getSubTypes(session.siteid)>
 		<select name="contentTypeFilter" id="contentTypeFilter">
 			<option value="">#application.rbFactory.getKeyValue(session.rb,"sitemanager.all")#</option>
 			<cfloop list="#$.getBean('contentManager').TreeLevelList#" index="i">
-			<option value="#i#"<cfif listfind($.event('type'),i)> selected</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#i#")#</option>
+				<option value="#i#^Default"<cfif $.event('type') eq i and $.event('subtype') eq 'Default'> selected</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#i#")# / Default</option>
+				<cfquery name="rsSubTypes" dbtype="query">
+					select * from rsTypes where type='#i#' and subtype!='Default'
+				</cfquery>
+				<cfloop query="rsSubTypes">
+					<option value="#i#^#rsSubTypes.subtype#"<cfif $.event('type') eq i and $.event('subtype') eq rsSubTypes.subtype> selected</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#i#")# / #rsSubTypes.subtype#</option>
+				</cfloop>
 			</cfloop>
 		</select>
 	</div>

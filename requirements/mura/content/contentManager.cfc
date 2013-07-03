@@ -2473,4 +2473,47 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfreturn "Basic,SEO,Mobile,List Display Options,Layout & Objects,Categorization,Tags,Related Content,Extended Attributes,Advanced,Publishing,Usage Report">
 	</cffunction>
 
+	<cffunction name="getMyApprovalsCount" output="false">
+		<cfargument name="siteid">
+		<cfset var rsDrafts=getApprovalsQuery(arguments.siteid)>
+		<cfquery name="rsDrafts" dbtype="query">
+			select distinct contentid from rsDrafts
+		</cfquery>
+		<cfreturn rsDrafts.recordcount>
+	</cffunction>
+
+	<cffunction name="getMySubmissionsCount" output="false">
+		<cfargument name="siteid">
+		<cfset var rsDrafts=getSubmissionsQuery(arguments.siteid)>
+		<cfquery name="rsDrafts" dbtype="query">
+			select distinct contentid from rsDrafts
+		</cfquery>
+		<cfreturn rsDrafts.recordcount>
+	</cffunction>
+
+	<cffunction name="getMyDraftsCount" output="false">
+		<cfargument name="siteid">
+		<cfargument name="startdate">
+		<cfset var rsDrafts=getDraftList(argumentCollection=arguments)>
+		<cfquery name="rsDrafts" dbtype="query">
+			select contentid from rsDrafts
+			group by contentid
+		</cfquery>
+		<cfreturn rsDrafts.recordcount>
+	</cffunction>
+
+	<cffunction name="getMyExpiresCount" output="false">
+		<cfargument name="siteid" type="string" required="true">
+		<cfset var rsDrafts=getExpiringContent(arguments.siteid,session.mura.userid)>
+		<cfquery name="rsDrafts" dbtype="query">
+			select distinct contentid from rsDrafts
+		</cfquery>
+		<cfreturn rsDrafts.recordcount>
+	</cffunction>
+
+	<cffunction name="getMyLockedFilesCount" output="false">
+		<cfargument name="siteid" type="string" required="true">
+		<cfreturn variables.contentGateway.getLockedFilesCount(arguments.siteid,session.mura.userid)>
+	</cffunction>
+
 </cfcomponent>

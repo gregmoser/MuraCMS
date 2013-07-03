@@ -2166,6 +2166,22 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn rsExpiringContent />
 </cffunction>
 
+<cffunction name="getLockedFilesCount" access="public" output="false">
+	<cfargument name="siteid" type="string" required="true">
+	<cfargument name="userid" type="string" required="true">
+	<cfset var rs = "">
+	
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs',maxrows=1000)#">
+	SELECT count(*) as theCount
+	FROM tcontentstats 
+	WHERE
+	tcontentstats.lockid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.userID#"/> 
+	and siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
+	</cfquery> 
+
+	<cfreturn rs.theCount />
+</cffunction>
+
 <cffunction name="getReleaseCountByMonth" output="false">
 <cfargument name="siteid">
 <cfargument name="parentID">
