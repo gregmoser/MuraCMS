@@ -1034,7 +1034,7 @@ function openPreviewDialog(previewURL) {
 		previewURL = previewURL + '&muraadminpreview';
 	}
 
-	var $dialog = $('<div></div>').html('<iframe style="border: 0; " src="' + previewURL + '" width="1100" height="600"></iframe>').dialog({
+	var $dialog = $('<div></div>').html('<iframe style="border: 0; " src="' + previewURL + '" width="1075" height="600"></iframe>').dialog({
 		width: 1100,
 		height: 600,
 		modal: true,

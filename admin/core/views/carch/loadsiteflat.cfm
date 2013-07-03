@@ -271,8 +271,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfsilent>
 <cfoutput>
 <div id="main" class="span9">
+<h2>View Title Goes Here</h2>
 	<div class="navSort">
-		<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.sortby")#:</h2>
+		<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.sortby")#:&nbsp;</h3>
 		<ul class="navTask nav nav-pills">
 			<!---<li><a href="" data-sortby="releasedate">Release Date</a></li>--->	
 			<li><a href="" data-sortby="lastupdate"<cfif $.event("sortBy") eq "lastUpdate"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.lastupdated")#</a></li>
@@ -395,10 +396,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</ul>
 			</div> 
 			
-
+			<p><i class="icon-calendar"></i> Due: 2/13/13</p>
+			<a data-toggle="tooltip" data-html="true" title="Crumblist">Crumblist as Tooltip</a>
+			<!--- Tooltip with Crumblist no worky!!!
+			<p data-toggle="tooltip" data-html="true" title="#$.dspZoom(crumbData=crumbdata,ajax=true)#">Crumblist as Tooltip</p> --->
 			<h2>
 				<cfif not listFindNoCase('none,read',verdict) or listFindNoCase('myapprovals,mysubmissions',$.event('report'))>
-					<a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.edit')#" class="draftprompt" href="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">#HTMLEditFormat(item.getMenuTitle())#
+					<a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.edit')#" class="draftprompt"  href="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">#HTMLEditFormat(item.getMenuTitle())#
 						<!---
 						<cfif $.event('report') eq 'mydrafts'>
 							(
@@ -413,13 +417,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</cfif>	
 						--->
 						<cfif listFindNoCase('myapprovals,mysubmissions',$.event('report'))>
-							(
-							<cfif item.getApprovalStatus() eq 'Pending'>
-								#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#
-							<cfelse>
-								#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.draft')#
-							</cfif>
-							)
+							(<cfif item.getApprovalStatus() eq 'Pending'>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.pending')#<cfelse>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.draft')#</cfif>)
 						</cfif>
 
 					</a>
@@ -447,8 +445,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfset lockedBy=$.getBean("user").loadBy(item.getLockID())>
 					<p class="locked-offline">#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.filelockedby"),"#HTMLEditFormat(lockedBy.getFName())# #HTMLEditFormat(lockedBy.getLName())#")#</p>
 				</cfif>
-				
-				#$.dspZoom(crumbData=crumbdata,ajax=true)#
 				
 				<ul class="nodeMeta">
 					<cfsilent><cfset args=arrayNew(1)>
@@ -493,13 +489,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<!---<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports")#</h2>--->
 	<div class="well">
 		<ul id="navReports" class="nav nav-list">
-			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#</a></li>
-			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#</a></li>
-			<li><a href="" data-report="mysubmissions"<cfif $.event("report") eq "mysubmissions"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mysubmissions")#</a></li>
-			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#</a></li>
-			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#</a></li>
-			<li><a href="" data-report="expires"<cfif $.event("report") eq "expires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.expires")#</a></li>
-			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#</a></li>
+			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#<span class="badge badge-important">13</span></a></li>
+			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#<span class="badge">13</span></a></li>
+			<li><a href="" data-report="mysubmissions"<cfif $.event("report") eq "mysubmissions"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mysubmissions")#<span class="badge">13</span></a></li>
+			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#<span class="badge badge-warning">13</span></a></li>
+			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#<span class="badge badge-info">13</span></a></li>
+			<li><a href="" data-report="expires"<cfif $.event("report") eq "expires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.expires")#<span class="badge badge-success">13</span></a></li>
+			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#<span class="badge badge-inverse">13</span></a></li>
 		</ul>
 	</div>
 	

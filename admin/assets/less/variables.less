@@ -222,8 +222,8 @@
   padding-left: 7px;
   padding-right: 7px;
   .border-radius(9px);
-  border: 1px solid @white;
-  background-color: @grayDark;
+  border: 0 solid @white;
+  background-color: darken(@gray,10%);
   color: @white;
 }
 
@@ -233,8 +233,8 @@
   &-important         { background-color: @orange; }
   &-important[href]   { background-color: darken(@orange, 10%); }
   // Warnings (orange)
-  &-warning           { background-color: @orange; }
-  &-warning[href]     { background-color: darken(@orange, 10%); }
+  &-warning           { background-color: @yellow; }
+  &-warning[href]     { background-color: darken(@yellow, 10%); }
   // Success (green)
   &-success           { background-color: @successText; }
   &-success[href]     { background-color: darken(@successText, 10%); }
