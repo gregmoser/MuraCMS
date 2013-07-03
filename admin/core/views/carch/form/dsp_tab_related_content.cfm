@@ -115,7 +115,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<style>
 		.rcSortable {
-			min-height: 38px;
+			min-height: 27px;
 		}
 		.disabled {
 			opacity: 0.1;	
@@ -160,7 +160,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		padding: 4px 5px;
 		border-collapse: collapse;
 		overflow: hidden;
-		width: 685px;
+		width: 686px;
+		}
+		
+		/* zero out bottom margin on empty list item */
+		.mura .list-table .list-table-items li.item.empty p {
+			margin: 0;
+			padding: 5px;
 		}
 	
 		.mura .list-table .list-table-items li.item:nth-child(even) {
@@ -184,40 +190,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 		.mura .list-table .list-table-items li.item ul li strong {
 		color: ##333232;
-		}
-	
-		/* set colors & position globally to :before */
-		.mura .list-table .list-table-items li.item ul li:before {
-		color: ##949494;
-		top: 2px;
-		position: relative;
-		font-family: "FontAwesome";
-		font-weight: normal;
-		font-style: normal;
-		display: inline-block;
-		text-decoration: inherit;
-		font-size: 18px;
-		margin-right: 5px;
-		}
-	
-		/* sub item of 'page' */
-		.mura .list-table .list-table-items li.item ul li.page:before {
-		content: "\f016";
-		}
-	
-		.mura .list-table .list-table-items li.item ul li.folder:before {
-		content: "\f07b";
-		}
-	
-		/* raquo on all but last item */
-		.mura .list-table .list-table-items li.item ul li:after {
-		content: "\00bb";
-		position: relative;
-		margin: 0 5px;
-		}
-	
-		.mura .list-table .list-table-items li.item ul li.last:after {
-		content: none;
 		}
 		
 		.mura div[id^="rcGroup-"] .list-table-items li.item .delete:before {
@@ -247,7 +219,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		}
 		
 		.noShow {
-		display: none !important;
+			display: none !important;
 		}
 	</style>
 	
@@ -263,51 +235,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</label>
 			</div>
 		</div>
-		<div id="selectRelatedContent">
-			<!---<div class="control-group">
-				<label class="control-label">Search for Content</label>
-				<div id="internalContent" class="form-inline">
-					<input type="text" name="k" value=""/>
-					<input type="button" name="btnSearch" value="Search" class="btn" />
-				</div>
-				<a href="" class="pull-right">Basic Search</a>
-			</div>
-			<div class="control-group">
-				<div id="externalLink" style="display:none;">EXTERNAL LINK FORM</div>
-			</div>
-			
-			<div class="control-group">
-				<div id="draggableContainment" class="list-table">
-					<div class="list-table-header">Select New Content Parent</div>
-					<ul id="rcDraggable" class="list-table-items">
-						<li class="item">
-							<ul>
-								<li class="page last"><strong>Home</strong></li>
-							</ul>
-						</li>
-						<li class="item">
-							<ul>
-								<li class="page">Home</li>
-								<li class="folder">Just a Folder</li>
-								<li class="page last"><strong>Just a page</strong></li>
-							</ul>
-						</li>
-						<li class="item">
-							<ul>
-								<li class="page">Home</li>
-								<li class="page last"><strong>My Page</strong></li>
-							</ul>
-						</li>
-						<li class="item">
-							<ul>
-								<li class="page">Home</li>
-								<li class="page last"><strong>Yet Another Page</strong></li>
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</div>--->
-		</div>
+		<div id="selectRelatedContent"><!--- target for ajax ---></div>
 		
 		<cfloop from="1" to="#arrayLen(relatedContentsets)#" index="s">
 			<cfset rcsBean = relatedContentsets[s]/>
@@ -336,95 +264,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</div>
 				</div>
 			</cfoutput>
-		</cfloop>
-		
-		<!---<div class="control-group">
-			<div id="rcGroup-id1234" class="list-table">
-				<div class="list-table-content-set">Static Test Bucket 1</div>
-				<div class="list-table-header">Content</div>
-				<ul class="list-table-items rcSortable">
-					<li class="item">
-						<ul>
-							<li class="page last"><strong>Home</strong></li>
-						</ul>
-						<a class="delete"></a>
-					</li>
-					<li class="item">
-						<ul>
-							<li class="page">Home</li>
-							<li class="folder">Just a Folder</li>
-							<li class="page last"><strong>Just a page</strong></li>
-						</ul>
-						<a class="delete"></a>
-					</li>
-					<li class="item">
-						<ul>
-							<li class="page">Home</li>
-							<li class="page last"><strong>My Page</strong></li>
-						</ul>
-						<a class="delete"></a>
-					</li>
-					<li class="item">
-						<ul>
-							<li class="page">Home</li>
-							<li class="page last"><strong>Yet Another Page</strong></li>
-						</ul>
-						<a class="delete"></a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	
-		<div class="control-group">
-			<div id="rcGroup-id5678" class="list-table">
-				<div class="list-table-content-set">Related Content Bucket 2</div>
-				<div class="list-table-header">Content</div>
-				<ul class="list-table-items rcSortable">
-					<li class="item">
-						<ul>
-							<li class="page last"><strong>Home</strong></li>
-						</ul>
-						<a class="delete"></a>
-					</li>
-					<li class="item">
-						<ul>
-							<li class="page">Home</li>
-							<li class="folder">Just a Folder</li>
-							<li class="page last"><strong>Just a page</strong></li>
-						</ul>
-						<a class="delete"></a>
-					</li>
-					<li class="item">
-						<ul>
-							<li class="page">Home</li>
-							<li class="page last"><strong>My Page</strong></li>
-						</ul>
-						<a class="delete"></a>
-					</li>
-					<li class="item">
-						<ul>
-							<li class="page">Home</li>
-							<li class="page last"><strong>Yet Another Page</strong></li>
-						</ul>
-						<a class="delete"></a>
-					</li>
-				</ul>
-			</div>
-		</div>
-		
-		<div class="control-group">
-			<div id="rcGroup-id1234" class="list-table">
-				<div class="list-table-content-set">Static Test Bucket 3</div>
-				<div class="list-table-header">Content</div>
-				<ul class="list-table-items rcSortable">
-					<li class="item empty">
-						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#
-					</li>
-				</ul>
-			</div>
-		</div>--->
-				
+		</cfloop>		
 	</div>
 </div>
-
 </cfoutput>

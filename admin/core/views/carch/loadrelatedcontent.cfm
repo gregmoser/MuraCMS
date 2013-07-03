@@ -66,19 +66,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif not rc.isNew>
 		<cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords)/>
 		<cfif rc.rslist.recordcount>
-			<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
-				<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
-				<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
-					<div id="draggableContainment" class="list-table">
-						<div class="list-table-header">Matching Results</div>
+			<div id="draggableContainment" class="list-table">
+				<div class="list-table-header">Matching Results</div>
+				<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
+					<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
+					<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
 						<ul id="rcDraggable" class="list-table-items">
 							<li class="item" data-contentid="#rc.rslist.contentID#" data-content-type="#rc.rslist.type#/#rc.rslist.subtype#">
 								#$.dspZoomNoLinks(crumbdata)#
 							</li>
 						</ul>
-					</div>
-				</cfif>
-			</cfoutput>
+					</cfif>
+				</cfoutput>
+			</div>
 		<cfelse>
 			<cfoutput>  
 				<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</p>
