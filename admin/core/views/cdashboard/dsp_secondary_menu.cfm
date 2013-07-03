@@ -81,13 +81,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfquery name="rsDrafts" dbtype="query">
 	select distinct contentid from rsDrafts
 </cfquery>
-<a class="btn"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mysubmissions&siteID=#session.siteid#&reportSortby=deadline&reportSortDirection=desc&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mysubmissions")#<cfif rsDrafts.recordcount> <span class="badge badge-important">#rsDrafts.recordcount#</span></cfif></a>
+<a class="btn"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=mysubmissions&siteID=#session.siteid#&reportSortby=duedate&reportSortDirection=desc&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.mysubmissions")#<cfif rsDrafts.recordcount> <span class="badge badge-important">#rsDrafts.recordcount#</span></cfif></a>
 
 <cfset rsDrafts=$.getBean('contentManager').getApprovalsQuery(session.siteid)>
 <cfquery name="rsDrafts" dbtype="query">
 	select distinct contentid from rsDrafts
 </cfquery>
-<a class="btn"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=myapprovals&siteID=#session.siteid#&reportSortby=deadline&reportSortDirection=desc&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.myapprovals")#<cfif rsDrafts.recordcount> <span class="badge badge-important">#rsDrafts.recordcount#</span></cfif></a>
+<a class="btn"  href="index.cfm?muraAction=cArch.list&moduleid=00000000000000000000000000000000000&activeTab=1&report=myapprovals&siteID=#session.siteid#&reportSortby=duedate&reportSortDirection=desc&refreshFlatview=true">#application.rbFactory.getKeyValue(session.rb,"dashboard.myapprovals")#<cfif rsDrafts.recordcount> <span class="badge badge-important">#rsDrafts.recordcount#</span></cfif></a>
 
 <cfif $.siteConfig('hasChangesets')
 	and application.permUtility.getModulePerm('00000000000000000000000000000000014',rc.siteid) 

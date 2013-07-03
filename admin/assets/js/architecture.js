@@ -986,6 +986,7 @@ buttons: {
 			d.html(data);
 			stripe('stripe');
 			setCheckboxTrees();
+			setToolTips(".mura-table-grid");
 
 			$("#svTagCloud a").click(
 

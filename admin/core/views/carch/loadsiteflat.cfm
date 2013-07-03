@@ -55,7 +55,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	if(!listFindNoCase('myexpires,expires',$.event('report')) && $.event('sortby') == 'expiration'){
 		$.event('sortby','lastupdate');
-	} else if(!listFindNoCase('mysubmissions,myapprovals',$.event('report')) && $.event('sortby') == 'deadline'){
+	} else if(!listFindNoCase('mysubmissions,myapprovals',$.event('report')) && $.event('sortby') == 'duedate'){
 		$.event('sortby','lastupdate');
 	}
 	
@@ -96,7 +96,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		feed.setCategoryID($.event("categoryID"));	
 	}
 	
-	if(!(listFindNoCase('myapprovals,mysubmissions',$.event("report")) && $.event("sortby") == 'deadline')){
+	if(!(listFindNoCase('myapprovals,mysubmissions',$.event("report")) && $.event("sortby") == 'duedate')){
 		feed.setSortBy($.event("sortBy"));
 	} else {
 		feed.setSortBy("lastupdate");
@@ -180,7 +180,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset rs=iterator.getQuery()>
 
 		<cfset queryAddColumn(rs, "approvalStatus", 'varchar', [])>
-		<cfset queryAddColumn(rs, "deadline", 'timestamp', [])>
+		<cfset queryAddColumn(rs, "duedate", 'timestamp', [])>
 
 			<cfloop query="rs">
 				<cfquery name="rstemp" dbtype="query">
@@ -192,9 +192,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset querySetCell(rs, "approvalStatus", 'Pending', rs.currentrow)>
 
 				<cfif isDate(rstemp.maxpublishDate)>
-					<cfset querySetCell(rs, "deadline", rstemp.maxpublishDate, rs.currentrow)>
+					<cfset querySetCell(rs, "duedate", rstemp.maxpublishDate, rs.currentrow)>
 				<cfelseif isDate(rstemp.maxdisplayStart)>
-					<cfset querySetCell(rs, "deadline", rstemp.maxdisplayStart, rs.currentrow)>
+					<cfset querySetCell(rs, "duedate", rstemp.maxdisplayStart, rs.currentrow)>
 				</cfif>
 				
 			</cfloop>
@@ -202,9 +202,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfquery name="rs" dbtype="query">
 					select * from rs order by lastupdate #feed.getSortDirection()#
 				</cfquery>
-			<cfelseif $.event('sortby') eq 'deadline'>
+			<cfelseif $.event('sortby') eq 'duedate'>
 				<cfquery name="rs" dbtype="query">
-					select * from rs order by deadline #feed.getSortDirection()#, lastupdate #feed.getSortDirection()#
+					select * from rs order by duedate #feed.getSortDirection()#, lastupdate #feed.getSortDirection()#
 				</cfquery>
 			</cfif>
 			
@@ -271,7 +271,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfsilent>
 <cfoutput>
 <div id="main" class="span9">
-<h2>View Title Goes Here</h2>
+<cfif not len($.event("report"))>
+<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#</h2>	
+<cfelse>
+<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.#$.event('report')#")#</h2>	
+</cfif>
+
 	<div class="navSort">
 		<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.sortby")#:&nbsp;</h3>
 		<ul class="navTask nav nav-pills">
@@ -281,7 +286,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<!---<li><a href="" data-sortby="releasedate"<cfif $.event("sortBy") eq "releasedate"> class="active"</cfif>>Release Date</a></li>--->
 			<li><a href="" data-sortby="menutitle"<cfif $.event("sortBy") eq "menutitle"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.title")#</a></li>
 			<cfif listfindNoCase('mysubmissions,myapprovals',$.event('report'))>
-				<li><a href="" data-sortby="deadline"<cfif $.event("sortBy") eq "deadline"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.deadline")#</a></li>
+				<li><a href="" data-sortby="duedate"<cfif $.event("sortBy") eq "duedate"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.duedate")#</a></li>
 			</cfif>
 			<cfif listfindNoCase('myexpires,expires',$.event('report'))>
 				<li><a href="" data-sortby="expiration"<cfif $.event("sortBy") eq "expiration"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.expiration")#</a></li>
@@ -396,10 +401,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</ul>
 			</div> 
 			
-			<p><i class="icon-calendar"></i> Due: 2/13/13</p>
-			<a data-toggle="tooltip" data-html="true" title="Crumblist">Crumblist as Tooltip</a>
-			<!--- Tooltip with Crumblist no worky!!!
-			<p data-toggle="tooltip" data-html="true" title="#$.dspZoom(crumbData=crumbdata,ajax=true)#">Crumblist as Tooltip</p> --->
+			<!---
+			<cfif listFindNoCase('mysubmissions,myapprovals',$.event('report')) and isDate(item.getDueDate())>
+				<p><i class="icon-calendar"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.due')#: #LSDateFormat(item.getDueDate(),session.dateKeyFormat)#</p>
+			</cfif>
+			--->
+			<!---
+			<a href="##" data-toggle="tooltip" rel="tooltip" data-html="true" title="#HTMLEditFOrmat($.dspZoomText(crumbData=crumbdata,ajax=true))#">
+				Crumblist as Tooltip</a> 
+			--->
+			
 			<h2>
 				<cfif not listFindNoCase('none,read',verdict) or listFindNoCase('myapprovals,mysubmissions',$.event('report'))>
 					<a title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.edit')#" class="draftprompt"  href="index.cfm?muraAction=cArch.edit&contenthistid=#item.getContentHistID()#&contentid=#item.getContentID()#&type=#item.gettype()#&parentid=#item.getParentID()#&topid=#URLEncodedFormat(topID)#&siteid=#URLEncodedFormat(item.getSiteid())#&moduleid=#item.getmoduleid()#&startrow=#$.event('startrow')#">#HTMLEditFormat(item.getMenuTitle())#
@@ -446,6 +457,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<p class="locked-offline">#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.filelockedby"),"#HTMLEditFormat(lockedBy.getFName())# #HTMLEditFormat(lockedBy.getLName())#")#</p>
 				</cfif>
 				
+				#$.dspZoom(crumbData=crumbdata,ajax=true)#
+
 				<ul class="nodeMeta">
 					<cfsilent><cfset args=arrayNew(1)>
 					<cfset args[1]=LSDateformat(item.getLastUpdate(),session.dateKeyFormat)>
@@ -460,6 +473,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 					<cfif isNumeric(item.getMajorVersion()) and item.getMajorVersion()><li class="version">#application.rbFactory.getKeyValue(session.rb,"sitemanager.version")#: <strong>#item.getMajorVersion()#.#item.getMinorVersion()#</strong></li></cfif>
 					<cfif isDate(item.getExpires())><li class="expiration">#application.rbFactory.getKeyValue(session.rb,"sitemanager.expiration")#: <strong>#LSDateFormat(item.getExpires(),session.dateKeyFormat)#</strong></li></cfif>
+					<cfif isDate(item.getDueDate())><li class="duedate">#application.rbFactory.getKeyValue(session.rb,"sitemanager.duedate")#: <strong>#LSDateFormat(item.getDueDate(),session.dateKeyFormat)#</strong></li></cfif>
 					<cfif isNumeric(item.getFileSize()) and item.getFileSize()><li class="size">#application.rbFactory.getKeyValue(session.rb,"sitemanager.size")#: <strong>#$.renderFileSize(item.getFileSize())#</strong></li></cfif>
 					<cfset categories=item.getCategoriesIterator()>
 					<cfif categories.hasNext()>
@@ -489,13 +503,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<!---<h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports")#</h2>--->
 	<div class="well">
 		<ul id="navReports" class="nav nav-list">
-			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#<span class="badge badge-important">13</span></a></li>
-			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#<span class="badge">13</span></a></li>
-			<li><a href="" data-report="mysubmissions"<cfif $.event("report") eq "mysubmissions"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mysubmissions")#<span class="badge">13</span></a></li>
-			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#<span class="badge badge-warning">13</span></a></li>
-			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#<span class="badge badge-info">13</span></a></li>
-			<li><a href="" data-report="expires"<cfif $.event("report") eq "expires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.expires")#<span class="badge badge-success">13</span></a></li>
-			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#<span class="badge badge-inverse">13</span></a></li>
+			<li><a href="" data-report=""<cfif not len($.event("report"))> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.all")#<!---<span class="badge badge-important">13</span>---></a></li>
+			<li><a href="" data-report="mydrafts"<cfif $.event("report") eq "mydrafts"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mydrafts")#<!---<span class="badge">13</span></a>---></li>
+			<li><a href="" data-report="mysubmissions"<cfif $.event("report") eq "mysubmissions"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mysubmissions")#<!---<span class="badge">13</span>---></a></li>
+			<li><a href="" data-report="myapprovals"<cfif $.event("report") eq "myapprovals"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myapprovals")#<!---<span class="badge badge-warning">13</span>---></a></li>
+			<li><a href="" data-report="myexpires"<cfif $.event("report") eq "myexpires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.myexpires")#<!---<span class="badge badge-info">13</span>---></a></li>
+			<li><a href="" data-report="expires"<cfif $.event("report") eq "expires"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.expires")#<!---<span class="badge badge-success">13</span>---></a></li>
+			<li><a href="" data-report="mylockedfiles"<cfif $.event("report") eq "mylockedfiles"> class="active"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.reports.mylockedfiles")#<!---<span class="badge badge-inverse">13</span>---></a></li>
 		</ul>
 	</div>
 	
