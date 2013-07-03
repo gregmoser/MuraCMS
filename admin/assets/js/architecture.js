@@ -561,7 +561,6 @@ buttons: {
 	},
 	
 	enableBuckets: function () {
-		//console.log('enable buckets');
 		$(".rcSortable").each(function(index){
 			$(this).sortable("enable");
 			$(this).parent().removeClass('disabled');
@@ -572,16 +571,13 @@ buttons: {
 		$(".rcSortable").each(function(index){
 			// ignore parent container
 			if (!($(this).attr('id') == el.parent().attr('id'))) {
-				//console.log('ignore parent container');
 				// disable if not in allowed list
 				if ($(this).attr('data-accept').length > 0 && $(this).attr('data-accept').indexOf(el.attr('data-content-type')) == -1) {
-					//console.log('disable if not in allowed list');
 					$(this).sortable("disable");
 					$(this).parent().addClass('disabled');
 				}
 				// disable if already in list
 				if ($(this).find('[data-contentid="' + el.attr('data-contentid') + '"]').length > 0) {
-					//console.log('disable if already in list');
 					$(this).sortable("disable");
 					$(this).parent().addClass('disabled');
 				}
@@ -1002,6 +998,7 @@ buttons: {
 			d.html(data);
 			stripe('stripe');
 			setCheckboxTrees();
+			setToolTips(".mura-table-grid");
 
 			$("#svTagCloud a").click(
 

@@ -63,7 +63,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
   </cfif>
 </cfif>
 
-<cfif isDate(rc.changeset.getCloseDate())>
+<cfif not rc.changeset.getPublished() and isDate(rc.changeset.getCloseDate())>
    <div class="alert">#application.rbFactory.getResourceBundle(session.rb).messageFormat(application.rbFactory.getKeyValue(session.rb,"changesets.hasclosedate"),LSDateFormat(rc.changeset.getCloseDate(),session.dateKeyFormat))#
     </div> 
 </cfif>
