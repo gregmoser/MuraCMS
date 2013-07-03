@@ -89,40 +89,84 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</div>--->
 	
 	<script>
+		function bindDelete() {
+			$('a.delete').click(function(){
+				$(this).parent().remove();
+				updateBuckets();
+			});
+		}
+		
+		function bindMouse() {
+				$(".rcSortable li.item, ##rcDraggable li.item").mouseup(function(){
+					enableBuckets();
+				}).mousedown(function(){
+					disableBuckets($(this));
+				});
+			}
+		
+		function updateBuckets() {
+			$(".rcSortable").each(function(index){
+				if ($(this).find('li.item').length == 1) {
+					$(this).find('li.empty').removeClass('noShow');
+				} else {
+					$(this).find('li.empty').addClass('noShow');	
+				}
+			});
+		}
+		
+		function disableBuckets(el) {
+			$(".rcSortable").each(function(index){
+				// ignore parent container
+				if (!($(this).attr('id') == el.parent().attr('id'))) {
+					console.log('ignore parent container');
+					// disable if not in allowed list
+					if ($(this).attr('data-accept').length > 0 && $(this).attr('data-accept').indexOf(el.attr('data-content-type')) == -1) {
+						console.log('disable if not in allowed list');
+						$(this).sortable("disable");
+						$(this).addClass('disabled');
+					}
+					// disable if already in list
+					if ($(this).find('[data-contentid="' + el.attr('data-contentid') + '"]').length > 0) {
+						console.log('disable if already in list');
+						$(this).sortable("disable");
+						$(this).addClass('disabled');
+					}
+				}
+			});
+		}
+		
+		function enableBuckets() {
+			$(".rcSortable").each(function(index){
+				$(this).sortable("enable");
+				$(this).removeClass('disabled');
+			});
+		}
+	
 		$(document).ready(function(){
 			$(".rcSortable").sortable({
 				connectWith: ".rcSortable",
 				revert: true,
-				//cursor: 'move',
-				out: function( event, ui ) {
-					if ($(ui.sender).find('li.item').length == 1) {
-						$(ui.sender).find('li.empty').removeClass('noShow');
-					}
-				},
-				receive: function( event, ui ) {
-					$(this).find('li.empty').addClass('noShow');
-				},
-				stop: function( event, ui ) {
-					console.log($(ui.item));
+				update: function( event, ui ) {
+					updateBuckets();
 					if (ui.item.find('a.delete').length == 0) {
 						ui.item.append('<a class="delete"></a>');
 					}
-					$('a.delete').click(function(){$(this).parent().remove();});
+					bindDelete();
+					bindMouse();
 				},
-				/*change: function( event, ui ) {
-					if ($(this).find('li.item').length == 2) {
-						$(this).find('li.empty').addClass('noShow');
-					}
-				}*/
 				items: "li.item:not(.empty)"
 			}).disableSelection();
-			
+		
 			siteManager.loadRelatedContent('#HTMLEditFormat(rc.siteid)#','',1)
-			$('a.delete').click(function(){$(this).parent().remove();});
+			bindDelete();
+			bindMouse();
 		});
 	</script>
 	
 	<style>
+		.disabled {
+			border: 1px solid ##F00;	
+		}
 		.mura .list-table {
 		border: 1px solid ##e6e6e6;
 		margin: 18px 0;
@@ -314,25 +358,26 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfloop from="1" to="#arrayLen(relatedContentsets)#" index="s">
 			<cfset rcsBean = relatedContentsets[s]/>
 			<cfset rcsRs = rcsBean.getRelatedContentQuery(rc.contentBean.getContentHistID())>
+			<cfset emptyClass = "item empty">
 			<cfoutput>
 				<div class="control-group">
 					<div id="rcGroup-#rcsBean.getRelatedContentSetID()#" class="list-table">
 						<div class="list-table-content-set">#rcsBean.getName()#</div>
-						<div class="list-table-header">Content</div>
-						<ul class="list-table-items rcSortable">
+						<div class="list-table-header">Content: <cfif len(rcsBean.getAvailableSubTypes()) gt 0>#rcsBean.getAvailableSubTypes()#<cfelse>All</cfif></div>
+						<ul class="list-table-items rcSortable" data-accept="#rcsBean.getAvailableSubTypes()#" id="rcSortable-#rcsBean.getRelatedContentSetID()#"> 
 							<cfif rcsRS.recordCount>
+								<cfset emptyClass = emptyClass & " noShow">
 								<cfloop query="rcsRs">	
 									<cfset crumbdata = application.contentManager.getCrumbList(rcsRs.contentid, rc.siteid)/>
-									<li class="item">
+									<li class="item" data-contentid="cid-#rcsRs.contentID#" data-content-type="#rcsRs.type#/#rcsRs.subtype#">
 										#$.dspZoomNoLinks(crumbdata)#
+										<a class="delete"></a>
 									</li>
-									<a class="delete"></a>
 								</cfloop>
-							<cfelse>
-								<li class="item empty">
-									#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#
-								</li>
 							</cfif>
+							<li class="#emptyClass#">
+								#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#
+							</li>
 						</ul>
 					</div>
 				</div>
