@@ -142,6 +142,14 @@ to your own modified versions of Mura CMS.
               </div>
             <label class="control-label">Enforce Primary Domain</label>
             <div class="controls">
+            
+	            <!--- How to submit the selected option to the form?
+<div class="btn-group" data-toggle="buttons-radio">
+				  <button type="button" class="btn btn-primary" name="enforcePrimaryDomain" value="0"<cfif rc.siteBean.getEnforcePrimaryDomain() neq 1> CHECKED</CFIF>>On</button>
+				  <button type="button" class="btn btn-primary" data-toggle="button" name="enforcePrimaryDomain" value="1"<cfif rc.siteBean.getEnforcePrimaryDomain() eq 1> CHECKED</CFIF>>Off</button>
+				</div>
+--->
+            
                 <label class="radio inline">
                 <input type="radio" name="enforcePrimaryDomain" value="0"<cfif rc.siteBean.getEnforcePrimaryDomain() neq 1> CHECKED</CFIF>>
                 Off</label>
