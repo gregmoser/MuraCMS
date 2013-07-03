@@ -34,7 +34,16 @@
 			</cfif>
 			<cfif rc.type neq 'File'>			
 				<cfif len(rc.contentBean.getFileID())>
+				<!--- <div class="well"> --->
 					<a href="./index.cfm?muraAction=cArch.imagedetails&contenthistid=#rc.contentBean.getContentHistID()#&siteid=#rc.contentBean.getSiteID()#&fileid=#rc.contentBean.getFileID()#&compactDisplay=#urlEncodedFormat(rc.compactDisplay)#"><img id="assocImage" src="#application.configBean.getContext()#/tasks/render/small/index.cfm?fileid=#rc.contentBean.getFileID()#&cacheID=#createUUID()#" /></a>
+					
+					<div class="btn-group">
+						<a class="btn" href="./index.cfm?muraAction=cArch.imagedetails&contenthistid=#rc.contentBean.getContentHistID()#&siteid=#rc.contentBean.getSiteID()#&fileid=#rc.contentBean.getFileID()#&compactDisplay=#urlEncodedFormat(rc.compactDisplay)#"><i class="icon-crop"></i></a>
+						<a class="btn" href=""><i class="icon-info-sign"></i></a>
+						<a class="btn" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(rc.siteid)#','#htmlEditFormat(rc.contentBean.getFileID())#','#htmlEditFormat(rc.contentID)#','',1);return false;"><i class="icon-picture" data-toggle="tooltip" title="" data-original-title="Select an Existing Image"></i></a>
+				  	</div>
+				 <!--- </div> --->
+					
 					<label class="checkbox inline" for="deleteFileBox"><input type="checkbox" name="deleteFile" value="1" id="deleteFileBox"/> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removeattachedfile')#</label>
 				</cfif>
 				<cfif rc.type neq 'File'>
@@ -42,7 +51,7 @@
 					<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getfileid())#" />		
 					<a class="selectImage btn btn-small" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(rc.siteid)#','#htmlEditFormat(rc.contentBean.getFileID())#','#htmlEditFormat(rc.contentID)#','',1);return false;">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</a>
 					</span>
-					
+										
 					<span id="selectAssocImageReInit" style="display:none">
 						<input type="hidden" name="fileidReInit" value="#htmlEditFormat(rc.contentBean.getfileid())#" />
 						<a class="btn btn-small" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(rc.siteid)#','#htmlEditFormat(rc.contentBean.getFileID())#','#htmlEditFormat(rc.contentID)#','',1);return false;">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</a>
