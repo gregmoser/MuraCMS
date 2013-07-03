@@ -532,12 +532,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<select name="contentTypeFilter" id="contentTypeFilter">
 			<option value="">#application.rbFactory.getKeyValue(session.rb,"sitemanager.all")#</option>
 			<cfloop list="#$.getBean('contentManager').TreeLevelList#" index="i">
-				<option value="#i#^Default"<cfif $.event('type') eq i and $.event('subtype') eq 'Default'> selected</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#i#")#/Default</option>
+				<option value="#i#^Default"<cfif $.event('type') eq i and $.event('subtype') eq 'Default'> selected</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#i#")# / Default</option>
 				<cfquery name="rsSubTypes" dbtype="query">
 					select * from rsTypes where type='#i#' and subtype!='Default'
 				</cfquery>
 				<cfloop query="rsSubTypes">
-					<option value="#i#^#rsSubTypes.subtype#"<cfif $.event('type') eq i and $.event('subtype') eq rsSubTypes.subtype> selected</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#i#")#/#rsSubTypes.subtype#</option>
+					<option value="#i#^#rsSubTypes.subtype#"<cfif $.event('type') eq i and $.event('subtype') eq rsSubTypes.subtype> selected</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#i#")# / #rsSubTypes.subtype#</option>
 				</cfloop>
 			</cfloop>
 		</select>
