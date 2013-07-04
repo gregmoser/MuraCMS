@@ -20,7 +20,7 @@
 
 // Accent colors
 // -------------------------
-@blue:                  #69c;
+@blue:                  #6699cc;
 @blueDark:              darken(@blue, 20%);
 @blueDarker:            darken(@blueDark, 10%);
 @green:                 #46a546;
@@ -82,8 +82,9 @@
 @btnBackgroundHighlight:            darken(@grayLighter,4%);
 @btnBorder:                         darken(@btnBackgroundHighlight,1%);
 
-@btnPrimaryBackground:              @blue;
-@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground,10%);
+@btnPrimaryBackground:              lighten(@blue,10%);
+@btnPrimaryBackgroundHighlight:     @blue;
+@btnPrimaryBorder:                  lighten(@btnPrimaryBackgroundHighlight,4%);
 
 @btnInfoBackground:                 #5bc0de;
 @btnInfoBackgroundHighlight:        #2f96b4;
@@ -97,8 +98,8 @@
 @btnDangerBackground:               #ee5f5b;
 @btnDangerBackgroundHighlight:      #bd362f;
 
-@btnInverseBackground:              lighten(@blue,10%);
-@btnInverseBackgroundHighlight:     lighten(@blue,0%);
+@btnInverseBackground:              @grayDark;
+@btnInverseBackgroundHighlight:     darken(@grayDark,15%);
 
 //@btnInverseBackground:              darken(@gray,50%);
 //@btnInverseBackgroundHighlight:     darken(@btnInverseBackground,15%);

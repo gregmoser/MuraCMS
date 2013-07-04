@@ -1,3 +1,17 @@
+.btn {
+  color: @grayDark;
+  border-color: @btnBorder @btnBorder darken(@btnBorder, 10%);
+}
+
+.btn-primary {
+		.border-radius(28px);
+		.box-shadow(inset 0 0 0);
+		//.box-shadow(-1px -1px 6px rgba(0,0,0,.17));
+		border-color: @btnPrimaryBorder @btnPrimaryBorder darken(@btnPrimaryBorder, 8%) @btnPrimaryBorder !important;
+		text-shadow: 0 -1px 1px rgba(0,0,0,.35);
+		margin: 0 .15em;
+	}
+
 .btn-icon-only {
 	padding-right: 3px;
 	padding-left: 3px;

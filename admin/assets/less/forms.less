@@ -280,12 +280,7 @@ label:last-child {
 		text-align: center;
 	
 		.btn {
-			.btn-inverse;
-			border: 0;
-			.border-radius(28px);
-			/* .box-shadow(0 2px 2px rgba(255,255,255,.6)); */
-			text-shadow: 0 -1px 1px rgba(0,0,0,.35);
-			margin: 0 .15em;
+			.btn-primary;
 			
 			i {
 				color: darken(@btnInverseBackgroundHighlight,30%);
@@ -450,6 +445,11 @@ select[multiple] {
 		
 	form {
 		margin-bottom: 0;
+		
+		.btn {
+			.btn-primary;
+  			.border-radius(20px);
+  			}
 		
 		input[type=text] {
 			margin-bottom: 0;
