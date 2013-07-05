@@ -223,7 +223,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<h2>Install Plugin</h2>
 		<div class="mura-resource-select">
 			<div class="btn-group" data-toggle="buttons-radio">
-			  <button type="button" class="btn active" data-toggle="button" name="installType" value="File" id="apptypefile"><i class="icon-upload-alt"></i> Via File</button>
+			  <button type="button" class="btn active" data-toggle="button" name="installType" value="Upload" id="apptypefile"><i class="icon-upload-alt"></i> Via Upload</button>
 			  <button type="button" class="btn" name="installType" value="URL" id="apptypeurl"><i class="icon-download-alt"></i> Via URL</button>
 			</div>
 			
