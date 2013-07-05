@@ -89,7 +89,25 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</div>--->
 	
 	<script>
-		
+		function updateForm() {
+			var aBuckets = new Array();
+			$(".rcSortable").each(function(){
+				var aItems = new Array();
+				var bucket = new Object;
+				$(this).find('li.item:not(.empty)').each(function(){
+					var i = new Object;
+					i.contentid = $(this).attr('data-contentid');
+					i.externalurl = $(this).attr('data-externalurl');
+					i.externaltitle = $(this).attr('data-externaltitle');
+					aItems.push(i);
+				});
+				bucket.relatedcontentsetid = $(this).attr('data-relatedcontentsetid')
+				bucket.items = aItems;
+				aBuckets.push(bucket);
+			});
+			console.log(aBuckets);
+			$("##relatedContentSetData").val(JSON.stringify(aBuckets));
+		}
 	
 		$(document).ready(function(){
 			$(".rcSortable").sortable({
@@ -103,6 +121,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					siteManager.bindDelete();
 					siteManager.bindMouse();
 					siteManager.setDirtyRelatedContent();
+					updateForm();
 				},
 				cancel: "li.empty"
 			}).disableSelection();
@@ -110,6 +129,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			siteManager.loadRelatedContent('#HTMLEditFormat(rc.siteid)#','',1)
 			siteManager.bindDelete();
 			siteManager.bindMouse();
+			updateForm();
 		});
 	</script>
 	
@@ -246,12 +266,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<div id="rcGroup-#rcsBean.getRelatedContentSetID()#" class="list-table">
 						<div class="list-table-content-set">#rcsBean.getName()#</div>
 						<div class="list-table-header">Content Type<cfif listLen(rcsBean.getAvailableSubTypes()) gte 2>s</cfif>: <cfif len(rcsBean.getAvailableSubTypes()) gt 0>#replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#<cfelse>All</cfif></div>
-						<ul class="list-table-items rcSortable" data-accept="#rcsBean.getAvailableSubTypes()#" id="rcSortable-#rcsBean.getRelatedContentSetID()#"> 
+						<ul id="rcSortable-#rcsBean.getRelatedContentSetID()#" class="list-table-items rcSortable" data-accept="#rcsBean.getAvailableSubTypes()#" data-relatedcontentsetid="#rcsBean.getRelatedContentSetID()#"> 
 							<cfif rcsRS.recordCount>
 								<cfset emptyClass = emptyClass & " noShow">
 								<cfloop query="rcsRs">	
 									<cfset crumbdata = application.contentManager.getCrumbList(rcsRs.contentid, rc.siteid)/>
-									<li class="item" data-contentid="#rcsRs.contentID#" data-content-type="#rcsRs.type#/#rcsRs.subtype#">
+									<li class="item" data-content-type="#rcsRs.type#/#rcsRs.subtype#" data-contentid="#rcsRs.contentID#" data-externaltitle="#rcsRs.externalTitle#" data-externalurl="#rcsRs.externalURL#">
 										#$.dspZoomNoLinks(crumbdata)#
 										<a class="delete"></a>
 									</li>
@@ -264,7 +284,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</div>
 				</div>
 			</cfoutput>
-		</cfloop>		
+		</cfloop>
+		<input id="relatedContentSetData" type="hidden" name="relatedContentSetData" value="" />	
 	</div>
 </div>
 </cfoutput>

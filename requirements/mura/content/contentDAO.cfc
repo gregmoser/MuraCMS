@@ -1081,44 +1081,62 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfargument name="data" type="struct" required="yes" default="#structNew()#" />
 	<cfargument name="siteID" type="string" required="yes" default="" />
 	<cfargument name="oldContentHistID" type="string" required="yes" default="" />
+	<cfset var I = "">
+	<cfset var j = "">
+	<cfset var rcs = "">
+	<cfset var item = "">
+	<cfset var rcsData = "">
 	
-	<cfset var I='' />
+	<!---<cfdump var="#deserializeJSON(data.relatedContentSetData)#">
+	<cfabort>--->
 	 
-	 <cfif isDefined('arguments.data.relatedContentID')>
-	 <cfloop list="#arguments.data.relatedContentID#" index="I">
-		<cftry>
-		<cfquery>
-		insert into tcontentrelated (contentID,contentHistID,relatedID,siteid)
-		values (
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#I#"/>,
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
-		)
-		</cfquery>
-		<cfcatch></cfcatch>
-		</cftry>
-	</cfloop>
-	
+	<!---<cfif isDefined('arguments.data.relatedContentID')>--->
+	<cfif isDefined('arguments.data.relatedContentSetData')>
+		<cfset rcsData = deserializeJSON(arguments.data.relatedContentSetData)>
+		<!---<cfdump var="#arrayLen(rcsData)#">--->
+		<cfloop from="1" to="#arrayLen(rcsData)#" index="i">
+			<cfset rcs = rcsData[i]>
+			<!---<cfdump var="#arrayLen(rcs.items)#">--->
+			<cfloop from="1" to="#arrayLen(rcs.items)#" index="j">
+				<cfset item = rcs.items[j]>
+				<!---<cfdump var="#item#">--->
+				<cftry>
+					<cfquery>
+						insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,externalTitle,externalURL,orderNo)
+						values (
+						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
+						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
+						<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.contentid#"/>,
+						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>,
+						<cfqueryparam cfsqltype="cf_sql_varchar" value="#rcs.relatedContentSetID#"/>,
+						<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.externalTitle#"/>,
+						<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.externalURL#"/>,
+						<cfqueryparam cfsqltype="cf_sql_integer" value="#j#"/>
+						)
+					</cfquery>
+					<cfcatch></cfcatch>
+				</cftry>
+			</cfloop>
+		</cfloop>
+		<!---<cfdump var="#deserializeJSON(data.relatedContentSetData)#">
+		<cfabort>--->
 	<cfelseif arguments.oldContentHistID neq ''>
 
-	 <cfloop list="#readRelatedItems(arguments.oldContentHistID,arguments.siteID)#" index="I">
-		<cftry>
-		<cfquery>
-		insert into tcontentrelated (contentID,contentHistID,relatedID,siteid)
-		values (
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#I#"/>,
-		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
-		)
-		</cfquery>
-		<cfcatch></cfcatch>
-		</cftry>
-	</cfloop>
-	
+		<cfloop list="#readRelatedItems(arguments.oldContentHistID,arguments.siteID)#" index="I">
+			<cftry>
+				<cfquery>
+					insert into tcontentrelated (contentID,contentHistID,relatedID,siteid)
+					values (
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#I#"/>,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
+					)
+				</cfquery>
+			<cfcatch></cfcatch>
+			</cftry>
+		</cfloop>
 	</cfif>
-
 </cffunction> 
 
 <cffunction name="deleteRelatedItems" access="public" output="false" returntype="void" >

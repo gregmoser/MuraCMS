@@ -1830,10 +1830,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tcontent.target,tcontent.targetParams, tcontent.restricted, tcontent.restrictgroups, tcontent.displaystart, tcontent.displaystop, tcontent.orderno,tcontent.sortBy,tcontent.sortDirection,
 	tcontent.fileid, tcontent.credits, tcontent.remoteSource, tcontent.remoteSourceURL, tcontent.remoteURL, tcontent.subtype, 
 	tfiles.fileSize,tfiles.fileExt,tcontent.path, tcontent.siteid, tcontent.contenthistid
+	
+	<cfif len(arguments.relatedContentSetID)>
+		, tcr.relatedContentSetID, tcr.externalURL, tcr.externalTitle, tcr.orderNo
+	</cfif>
+	
 	FROM  tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 	
 	<cfif len(arguments.relatedContentSetID)>
-		inner join tcontentrelated tcr on tcontent.contentHistId = tcr.contentHistID and tcr.relatedContentSetID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
+		inner join tcontentrelated tcr on tcontent.contentID = tcr.relatedID and tcr.relatedContentSetID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
 		and tcr.contentHistID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
 	</cfif>
 	
@@ -1883,24 +1888,28 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	order by 
 	
-	<cfswitch expression="#arguments.sortBy#">
-		<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype">
-			<cfif variables.configBean.getDbType() neq "oracle" or  listFindNoCase("orderno,lastUpdate,releaseDate,created,displayStart,displayStop",arguments.sortBy)>
-				tcontent.#arguments.sortBy# #arguments.sortDirection#
-			<cfelse>
-				lower(tcontent.#arguments.sortBy#) #arguments.sortDirection#
-			</cfif>
-		</cfcase>
-		<cfcase value="rating">
-			tcontentstats.rating #arguments.sortDirection#, tcontentstats.totalVotes  #arguments.sortDirection#
-		</cfcase>
-		<cfcase value="comments">
-			tcontentstats.comments #arguments.sortDirection#
-		</cfcase>
-		<cfdefaultcase>
-			tcontent.created desc
-		</cfdefaultcase>
-	</cfswitch>
+	<cfif len(arguments.relatedContentSetID)>
+		tcr.orderNo
+	<cfelse>
+		<cfswitch expression="#arguments.sortBy#">
+			<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype">
+				<cfif variables.configBean.getDbType() neq "oracle" or  listFindNoCase("orderno,lastUpdate,releaseDate,created,displayStart,displayStop",arguments.sortBy)>
+					tcontent.#arguments.sortBy# #arguments.sortDirection#
+				<cfelse>
+					lower(tcontent.#arguments.sortBy#) #arguments.sortDirection#
+				</cfif>
+			</cfcase>
+			<cfcase value="rating">
+				tcontentstats.rating #arguments.sortDirection#, tcontentstats.totalVotes  #arguments.sortDirection#
+			</cfcase>
+			<cfcase value="comments">
+				tcontentstats.comments #arguments.sortDirection#
+			</cfcase>
+			<cfdefaultcase>
+				tcontent.created desc
+			</cfdefaultcase>
+		</cfswitch>
+	</cfif>
 	
 	</cfquery>
 	
