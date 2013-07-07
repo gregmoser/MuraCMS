@@ -1086,21 +1086,15 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfset var rcs = "">
 	<cfset var item = "">
 	<cfset var rcsData = "">
+	<cfset var rsRelatedContent = "">
 	
-	<!---<cfdump var="#deserializeJSON(data.relatedContentSetData)#">
-	<cfabort>--->
-	 
-	<!---<cfif isDefined('arguments.data.relatedContentID')>--->
 	<cfif isDefined('arguments.data.relatedContentSetData')>
 		<cfset rcsData = deserializeJSON(arguments.data.relatedContentSetData)>
-		<!---<cfdump var="#arrayLen(rcsData)#">--->
 		<cfloop from="1" to="#arrayLen(rcsData)#" index="i">
 			<cfset rcs = rcsData[i]>
-			<!---<cfdump var="#arrayLen(rcs.items)#">--->
 			<cfloop from="1" to="#arrayLen(rcs.items)#" index="j">
 				<cfset item = rcs.items[j]>
-				<!---<cfdump var="#item#">--->
-				<!---<cftry>--->
+				<cftry>
 					<cfquery>
 						insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,externalTitle,externalURL,orderNo)
 						values (
@@ -1114,23 +1108,25 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 						<cfqueryparam cfsqltype="cf_sql_integer" value="#j#"/>
 						)
 					</cfquery>
-					<!---<cfcatch></cfcatch>
-				</cftry>--->
+					<cfcatch></cfcatch>
+				</cftry>
 			</cfloop>
 		</cfloop>
-		<!---<cfdump var="#deserializeJSON(data.relatedContentSetData)#">
-		<cfabort>--->
 	<cfelseif arguments.oldContentHistID neq ''>
-
-		<cfloop list="#readRelatedItems(arguments.oldContentHistID,arguments.siteID)#" index="I">
+		<cfset rsRelatedContent = readRelatedContent(arguments.oldContentHistID, arguments.siteID)>
+		<cfloop query="rsRelatedContent">
 			<cftry>
 				<cfquery>
-					insert into tcontentrelated (contentID,contentHistID,relatedID,siteid)
+					insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,externalTitle,externalURL,orderNo)
 					values (
 					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
 					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#I#"/>,
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsRelatedContent.relatedID#"/>,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsRelatedContent.relatedContentSetID#"/>,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsRelatedContent.externalTitle#"/>,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsRelatedContent.externalURL#"/>,
+					<cfqueryparam cfsqltype="cf_sql_integer" value="#rsRelatedContent.orderNo#"/>
 					)
 				</cfquery>
 			<cfcatch></cfcatch>
@@ -1154,16 +1150,13 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfargument name="siteid" type="string" required="yes" default="" />
 	
 	 <cfset var rsRelatedItems =""/>
-	 <cfset var ItemList =""/>
 	
 	<cfquery name="rsRelatedItems">
-		select relatedID from tcontentrelated
+		select relatedID, relatedContentSetID, orderNo, externalTitle, externalURL from tcontentrelated
 		where contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contenthistID#"/> and siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 	</cfquery>
 	
-	<cfset ItemList=valueList(rsRelatedItems.relatedID) />
-	
-	<cfreturn ItemList />
+	<cfreturn rsRelatedItems />
 	
 </cffunction> 
 
