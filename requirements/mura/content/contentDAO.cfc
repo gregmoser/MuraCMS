@@ -1113,9 +1113,9 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			</cfloop>
 		</cfloop>
 	<cfelseif arguments.oldContentHistID neq ''>
-		<cfset rsRelatedContent = readRelatedContent(arguments.oldContentHistID, arguments.siteID)>
+		<cfset rsRelatedContent = readRelatedItems(arguments.oldContentHistID, arguments.siteID)>
 		<cfloop query="rsRelatedContent">
-			<cftry>
+			<!---<cftry>--->
 				<cfquery>
 					insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,externalTitle,externalURL,orderNo)
 					values (
@@ -1129,8 +1129,8 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 					<cfqueryparam cfsqltype="cf_sql_integer" value="#rsRelatedContent.orderNo#"/>
 					)
 				</cfquery>
-			<cfcatch></cfcatch>
-			</cftry>
+				<!---<cfcatch></cfcatch>
+			</cftry>--->
 		</cfloop>
 	</cfif>
 </cffunction> 
@@ -1145,7 +1145,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 
 </cffunction>
 
-<cffunction name="readRelatedItems" returntype="string" access="public" output="false">
+<cffunction name="readRelatedItems" returntype="query" access="public" output="false">
 	<cfargument name="contentHistID" type="string" required="yes" default="" />
 	<cfargument name="siteid" type="string" required="yes" default="" />
 	
