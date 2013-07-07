@@ -29,8 +29,12 @@
 	.addIndex('subtype')
 	.addIndex('isnav');
 	
+	// drop primary key before adding relatedContentID
+	if (!dbUtility.setTable("tcontentrelated").columnExists("relatedContentID")) {
+		dbUtility.setTable("tcontentrelated").dropPrimaryKey();
+	}
+	
 	dbUtility.setTable("tcontentrelated")
-	.dropPrimaryKey()
 	.addColumn(column="relatedContentSetID",dataType="varchar",length="35")
 	.addColumn(column="orderNo",dataType="int")
 	.addColumn(column="externalTitle",dataType="varchar",length="500")
