@@ -1100,7 +1100,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			<cfloop from="1" to="#arrayLen(rcs.items)#" index="j">
 				<cfset item = rcs.items[j]>
 				<!---<cfdump var="#item#">--->
-				<cftry>
+				<!---<cftry>--->
 					<cfquery>
 						insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,externalTitle,externalURL,orderNo)
 						values (
@@ -1114,8 +1114,8 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 						<cfqueryparam cfsqltype="cf_sql_integer" value="#j#"/>
 						)
 					</cfquery>
-					<cfcatch></cfcatch>
-				</cftry>
+					<!---<cfcatch></cfcatch>
+				</cftry>--->
 			</cfloop>
 		</cfloop>
 		<!---<cfdump var="#deserializeJSON(data.relatedContentSetData)#">

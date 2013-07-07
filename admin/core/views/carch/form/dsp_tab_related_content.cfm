@@ -271,7 +271,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								<cfset emptyClass = emptyClass & " noShow">
 								<cfloop query="rcsRs">	
 									<cfset crumbdata = application.contentManager.getCrumbList(rcsRs.contentid, rc.siteid)/>
-									<li class="item" data-content-type="#rcsRs.type#/#rcsRs.subtype#" data-contentid="#rcsRs.contentID#" data-externaltitle="#rcsRs.externalTitle#" data-externalurl="#rcsRs.externalURL#">
+									<li class="item" data-contentid="#rcsRs.contentID#" data-content-type="#rcsRs.type#/#rcsRs.subtype#" data-externaltitle="#rcsRs.externalTitle#" data-externalurl="#rcsRs.externalURL#">
 										#$.dspZoomNoLinks(crumbdata)#
 										<a class="delete"></a>
 									</li>
