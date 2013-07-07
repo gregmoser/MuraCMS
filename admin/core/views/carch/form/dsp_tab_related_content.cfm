@@ -49,6 +49,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfset subtype = application.classExtensionManager.getSubTypeByName(rc.contentBean.getType(), rc.contentBean.getSubType(), rc.contentBean.getSiteID())>
 <cfset relatedContentSets = subtype.getRelatedContentSets()>
+<cfset arrayAppend(relatedContentSets, $.getBean('relatedContentSet'))>
 
 <cfoutput>
 <div id="tabRelatedcontent" class="tab-pane">
@@ -257,8 +258,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</div>
 		<div id="selectRelatedContent"><!--- target for ajax ---></div>
 		
-		<cfloop from="1" to="#arrayLen(relatedContentsets)#" index="s">
-			<cfset rcsBean = relatedContentsets[s]/>
+		<cfloop from="1" to="#arrayLen(relatedContentSets)#" index="s">
+			<cfset rcsBean = relatedContentSets[s]/>
 			<cfset rcsRs = rcsBean.getRelatedContentQuery(rc.contentBean.getContentHistID())>
 			<cfset emptyClass = "item empty">
 			<cfoutput>
