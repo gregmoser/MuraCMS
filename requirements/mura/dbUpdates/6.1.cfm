@@ -34,5 +34,8 @@
 	.addColumn(column="orderNo",dataType="int")
 	.addColumn(column="externalTitle",dataType="varchar",length="500")
 	.addColumn(column="externalURL",dataType="varchar",length="2000");
+
+	dbUtility.setTable("tcontentcategories")
+	.addColumn(column="isFeatureable",dataType="int");
 	
 </cfscript>

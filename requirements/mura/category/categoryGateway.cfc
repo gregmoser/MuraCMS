@@ -66,7 +66,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsCategories')#">
 	select tcontentcategories.siteID,tcontentcategories.categoryID,tcontentcategories.name,tcontentcategories.parentID,tcontentcategories.isActive,tcontentcategories.isInterestGroup,tcontentcategories.isOpen, count(tcontentcategories2.parentid) as hasKids 
-	,tcontentcategories.restrictGroups from 
+	,tcontentcategories.restrictGroups,tcontentcategories.isfeatureable from 
 	tcontentcategories left join tcontentcategories tcontentcategories2 ON
 	(tcontentcategories.categoryID = tcontentcategories2.parentID)
 	where tcontentcategories.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />

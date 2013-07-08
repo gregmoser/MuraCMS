@@ -138,9 +138,21 @@ version 2 without this exception.  You may, if you choose, apply this exception 
   
   
   
-<div class="span6">  <label class="control-label">Active?</label>
+<div class="span3">  <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'categorymanager.isfeatureable')#</label>
   <div class="controls">
-  	<label class="radio inline" for="isActiveYes">
+  	<label class="radio inline" for="isfeatureableYes">
+      <input name="isfeatureable" id="isfeatureableYes" type="radio" value="1" <cfif rc.categoryBean.getIsfeatureable()>checked</cfif>> 
+      #application.rbFactory.getKeyValue(session.rb,'categorymanager.yes')#
+    </label>
+    <label class="radio inline" for="isfeatureableNo"> 
+      <input name="isfeatureable" id="isfeatureableNo" type="radio" value="0" <cfif not rc.categoryBean.getIsfeatureable()>checked</cfif>> 
+      #application.rbFactory.getKeyValue(session.rb,'categorymanager.no')#
+    </label> 
+  </div></div>
+
+<div class="span3">  <label class="control-label">Active?</label>
+  <div class="controls">
+    <label class="radio inline" for="isActiveYes">
       <input name="isActive" id="isActiveYes" type="radio" value="1" <cfif rc.categoryBean.getIsActive()>checked</cfif>> 
       #application.rbFactory.getKeyValue(session.rb,'categorymanager.yes')#
     </label>
@@ -149,6 +161,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
       #application.rbFactory.getKeyValue(session.rb,'categorymanager.no')#
     </label> 
   </div></div>
+
   
 </div>
 

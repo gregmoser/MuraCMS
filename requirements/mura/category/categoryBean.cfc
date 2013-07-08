@@ -68,6 +68,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="URLtitle" type="string" default="" />
 <cfproperty name="filename" type="string" default="" />
 <cfproperty name="isNew" type="numeric" default="1" required="true"/>
+<cfproperty name="isFeatureable" type="numeric" default="1" required="true"/>
+
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	
@@ -94,6 +96,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.URLTitle = "">
 	<cfset variables.instance.filename = "">
 	<cfset variables.instance.isNew=1 />
+	<cfset variables.instance.isFeatureable=1 />
 	
 	<cfset variables.kids = arrayNew(1) />
 	<cfset variables.primaryKey = 'categoryid'>
@@ -220,6 +223,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="setFilename" output="false" access="public">
     <cfargument name="filename" type="string" required="true">
     <cfset variables.instance.filename = left(trim(arguments.filename),255) />
+    <cfreturn this>
+</cffunction>
+
+<cffunction name="setIsFeatureable" output="false" access="public">
+    <cfargument name="IsFeatureable">
+    <cfif isNumeric(arguments.IsFeatureable)>
+    	<cfset variables.instance.IsFeatureable = arguments.IsFeatureable />
+    </cfif>
     <cfreturn this>
 </cffunction>
 	
