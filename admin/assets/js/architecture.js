@@ -2087,12 +2087,18 @@ buttons: {
 				var pars = 'muraAction=cArch.loaddiff&compactDisplay=true&siteid=' + siteid + '&contenthistid1=' + contenthistid1 + '&contenthistid2=' + contenthistid2 + '&cacheid=' + Math.random();
 				$.ajax(url + "?" + pars)
 					.done(function(data) {
+						if(data.indexOf('mura-primary-login-token') != -1) {
+							location.href = './';
+						}
 						$('#contentDiffContainer').html(data);
 						$("#contentDiffContainer").dialog("option", "position", "center");
 						$(".ui-widget-overlay").css('height',$(document).height());
 
 					})
 					.fail(function(data){
+						if(data.responseText.indexOf('mura-primary-login-token') != -1) {
+							location.href = './';
+						}
 						$('#contentDiffContainer').html(data.responseText);
 						$("#contentDiffContainer").dialog("option", "position", "center");
 						//$(".ui-widget-overlay").css('height',window.height);

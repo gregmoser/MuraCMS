@@ -220,34 +220,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</form>
 		</div>
 		<div id="tabPlugins" class="tab-pane fade">
-			<script type="text/javascript">
-			$(function(){
-				$('#apptypeurl,#apptypefile').click(function(){
-					var appfield = $('#appzip');
-					var urlfield = $('#appurl');
-					if ($('#apptypefile:checked').length)
-					{
-						appfield.show().prop('disabled', null);
-						urlfield.hide().prop('disabled', 'disabled');
-					} else
-					{
-						urlfield.show().prop('disabled', null);
-						appfield.hide().prop('disabled', 'disabled');
-					};
-				}).filter(':first').triggerHandler('click');
-			});
-		</script>
-		<!--- <input type="radio" name="installType" value="File" Checked="true" id="apptypefile">File <input type="radio" name="installType" value="URL" id="apptypeurl">URL --->
 		<h2>Install Plugin</h2>
 		<div class="mura-resource-select">
 			<div class="btn-group" data-toggle="buttons-radio">
-			  <button type="button" class="btn" data-toggle="button" name="installType" value="File" Checked="true" id="apptypefile"><i class="icon-upload-alt"></i> Via File</button>
+			  <button type="button" class="btn active" data-toggle="button" name="installType" value="Upload" id="apptypefile"><i class="icon-upload-alt"></i> Via Upload</button>
 			  <button type="button" class="btn" name="installType" value="URL" id="apptypeurl"><i class="icon-download-alt"></i> Via URL</button>
 			</div>
 			
 			<div class="well">
 	
-			<div id="appzip">
+			<div id="appzip" class="fileTypeOption">
 				<form novalidate="novalidate" name="frmNewPlugin" action="index.cfm?muraAction=cSettings.deployPlugin" enctype="multipart/form-data" method="post" onsubmit="return validateForm(this);">
 					<div class="control-group">
 						<label class="control-label">Select File to Upload</label>
@@ -256,7 +238,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<input type="submit" value="Upload &amp; Deploy" class="btn btn-primary" />
 				</form>
 			</div>
-			<div id="appurl">
+			<div id="appurl" class="fileTypeOption" style="display:none;">
 				<form name="frmNewPluginFROMURL" action="index.cfm?muraAction=cSettings.deployPlugin" method="post" onsubmit="return validateForm(this);">
 					<div class="control-group">
 						<label class="control-label">Enter URL</label>
@@ -270,6 +252,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</div>
 			</div>
 		</div>
+		<script>
+			$(function(){
+				$("button[name='installType']").click(
+						function(){
+							$(".fileTypeOption").toggle()
+						}
+					);
+			})
+		</script>
 			<table class="table table-striped table-condensed table-bordered mura-table-grid">
 				<tr>
 					<th class="var-width">Name</th>

@@ -29,10 +29,18 @@
 	.addIndex('subtype')
 	.addIndex('isnav');
 	
+	// drop primary key before adding relatedContentID
+	if (!dbUtility.setTable("tcontentrelated").columnExists("relatedContentID")) {
+		dbUtility.setTable("tcontentrelated").dropPrimaryKey();
+	}
+	
 	dbUtility.setTable("tcontentrelated")
 	.addColumn(column="relatedContentSetID",dataType="varchar",length="35")
 	.addColumn(column="orderNo",dataType="int")
 	.addColumn(column="externalTitle",dataType="varchar",length="500")
-	.addColumn(column="externalURL",dataType="varchar",length="2000");
-	
+	.addColumn(column="externalURL",dataType="varchar",length="2000")
+	.addColumn(column="relatedContentID",autoincrement=true);
+
+	dbUtility.setTable("tcontentcategories")
+	.addColumn(column="isfeatureable",dataType="int");
 </cfscript>

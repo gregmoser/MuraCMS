@@ -47,7 +47,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfcomponent extends="mura.cfobject" output="false">
 
-<cfset variables.fieldlist="categoryID,siteID,dateCreated,lastUpdate,lastUpdateBy,name,isInterestGroup,parentID,isActive,isOpen,notes,sortBy,sortDirection,restrictGroups,path,remoteID,remoteSourceURL,remotePubDate,urlTitle,filename">
+<cfset variables.fieldlist="categoryID,siteID,dateCreated,lastUpdate,lastUpdateBy,name,isInterestGroup,parentID,isActive,isOpen,notes,sortBy,sortDirection,restrictGroups,path,remoteID,remoteSourceURL,remotePubDate,urlTitle,filename,isFeatureable">
 
 <cffunction name="init" returntype="any" output="false" access="public">
 <cfargument name="configBean" type="any" required="yes"/>
@@ -60,7 +60,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	 
 	<cfquery>
 	insert into tcontentcategories (categoryID,siteid,parentID,dateCreated,lastupdate,lastupdateBy,
-	name,notes,isInterestGroup,isActive,isOpen,sortBy,sortDirection,restrictgroups,path,remoteID,remoteSourceURL,remotePubDate,urltitle,filename)
+	name,notes,isInterestGroup,isActive,isOpen,sortBy,sortDirection,restrictgroups,path,remoteID,remoteSourceURL,remotePubDate,urltitle,filename,isFeatureable)
 	values (
 	'#arguments.categoryBean.getCategoryID()#',
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getSiteID() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getsiteID()#">,
@@ -70,9 +70,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getLastUpdateBy() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getLastUpdateBy()#">,
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getName() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getName()#">,
 	<cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.categoryBean.getNotes() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getNotes()#">,
-	#arguments.categoryBean.getIsInterestGroup()#,
-	#arguments.categoryBean.getIsActive()#,
-	#arguments.categoryBean.getIsOpen()#,
+	<cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsInterestGroup()),de(arguments.categoryBean.getIsInterestGroup()),de(0))#">,
+	<cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsActive()),de(arguments.categoryBean.getIsActive()),de(0))#">,
+	<cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsOpen()),de(arguments.categoryBean.getIsOpen()),de(0))#">,
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getSortBy() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getSortBy()#">,
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getSortDirection() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getSortDirection()#">,
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getRestrictGroups() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getRestrictGroups()#">,
@@ -81,7 +81,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getRemoteSourceURL() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getRemoteSourceURL()#">,
 	<cfqueryparam cfsqltype="cf_sql_timestamp" null="#iif(arguments.categoryBean.getRemotePubDate() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getRemotePubDate()#">,
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getURLTitle() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getURLTitle()#">,
-	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getFilename() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getFilename()#">)
+	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getFilename() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getFilename()#">,
+	<cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsFeatureable()),de(arguments.categoryBean.getIsFeatureable()),de(0))#">
 	</cfquery>
 
 </cffunction> 
@@ -274,10 +275,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	lastUpdate = <cfif isDate(arguments.categoryBean.getLastUpdate()) ><cfqueryparam cfsqltype="cf_sql_timestamp" value="#arguments.categoryBean.getLastUpdate()#"><cfelse>null</cfif>,
 	lastupdateBy = <cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getLastUpdateBy() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getLastUpdateBy()#">,
 	name = <cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getName() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getName()#">,
-	isActive = #arguments.categoryBean.getIsActive()#,
-	isOpen = #arguments.categoryBean.getIsOpen()#,
+	isActive = <cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsActive()),de(arguments.categoryBean.getIsActive()),de(0))#">,
+	isOpen = <cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsOpen()),de(arguments.categoryBean.getIsOpen()),de(0))#">,
 	parentID = <cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getParentID() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getParentID()#">,
-	isInterestGroup = #arguments.categoryBean.getIsInterestGroup()#,
+	isInterestGroup = <cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsInterestGroup()),de(arguments.categoryBean.getIsInterestGroup()),de(0))#">,
 	notes= <cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.categoryBean.getNotes() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getNotes()#">,
 	sortBy = <cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getSortBy() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getSortBy()#">,
 	sortDirection = <cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getSortDirection() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getSortDirection()#">,
@@ -287,7 +288,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	remoteSourceURL= <cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getRemoteSourceURL() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getRemoteSourceURL()#">,
 	remotePubDate=<cfqueryparam cfsqltype="cf_sql_timestamp" null="#iif(arguments.categoryBean.getRemotePubDate() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getRemotePubDate()#">,
 	urlTitle=<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getURLTitle() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getURLTitle()#">,
-	filename=<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getFilename() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getFilename()#">
+	filename=<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getFilename() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getFilename()#">,
+	isFeatureable=<cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsFeatureable()),de(arguments.categoryBean.getIsFeatureable()),de(0))#">
 	where categoryID =<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.categoryBean.getCategoryID()#" />
 	</cfquery>
 

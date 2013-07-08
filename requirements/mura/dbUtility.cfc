@@ -310,6 +310,10 @@
 					<cfif version().database_productname neq 'h2'>
 						ENGINE=#variables.configBean.getMySQLEngine()# DEFAULT CHARSET=utf8
 					</cfif>
+				<cfelse>
+				 	 <cfif arguments.autoincrement>
+					 	, ADD PRIMARY KEY (#arguments.column#)
+					</cfif>
 				</cfif>
 			</cfquery>
 		</cfcase>

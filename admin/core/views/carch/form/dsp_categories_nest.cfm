@@ -79,9 +79,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</dt>
 					<!--- assignment --->
 					<dd class="categoryassignmentwrapper">
-						<cfif rslist.isOpen eq 1>
+						<cfif rslist.isOpen eq 1 and rslist.isFeatureable eq 1 or rslist.isFeatureable eq ''>
 							<div id="categoryLabelContainer#cattrim#" class="categoryLabelContainer">
-
 								<div class="categoryassignment<cfif rsIsMember.recordcount and rsIsMember.isFeature eq 2> scheduled</cfif>">
 									<!--- Quick Edit --->
 									<a class="dropdown-toggle<cfif not disabled> mura-quickEditItem</cfif>"<cfif rsIsMember.isFeature eq 2> rel="tooltip" title="#HTMLEditFormat(LSDateFormat(rsIsMember.featurestart,"short"))#&nbsp;-&nbsp;#LSDateFormat(rsIsMember.featurestop,"short")#"</cfif>>
@@ -152,6 +151,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 									</cfif>
 								</div><!--- /.categoryassignmentcontent --->
 							</div><!--- /.categoryLabelContainer --->
+
+						<cfelse>
+							<input type="hidden" id="categoryAssign#catTrim#" name="categoryAssign#catTrim#" value="0"/>
 						</cfif>
 					</dd><!--- /.categoryassignment --->
 				</dl><!--- /dl --->
