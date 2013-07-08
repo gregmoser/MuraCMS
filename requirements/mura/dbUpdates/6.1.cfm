@@ -40,5 +40,7 @@
 	.addColumn(column="externalTitle",dataType="varchar",length="500")
 	.addColumn(column="externalURL",dataType="varchar",length="2000")
 	.addColumn(column="relatedContentID",autoincrement=true);
-	
+
+	dbUtility.setTable("tcontentcategories")
+	.addColumn(column="isfeatureable",dataType="int");
 </cfscript>
