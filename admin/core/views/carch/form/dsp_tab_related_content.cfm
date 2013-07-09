@@ -55,40 +55,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <div id="tabRelatedcontent" class="tab-pane">
 
 	<span id="extendset-container-tabrelatedcontenttop" class="extendset-container"></span>
-
-	<!---<div class="fieldset padded">
-	<!--- #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.relatedcontent')#:  --->
-	<span id="selectRelatedContent"> <a class="btn" href="javascript:;" onclick="javascript: siteManager.loadRelatedContent('#HTMLEditFormat(rc.siteid)#','',1);return false;"><i class="icon-plus-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.addrelatedcontent')#</a></span>
-		<table id="relatedContent" class="table table-striped table-condensed table-bordered mura-table-grid"> 
-			<thead>
-				<tr>
-				<th class="var-width">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.contenttitle')#</th>
-				<th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.type')#</th>
-				<th class="actions">&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody id="RelatedContent">
-				<cfif rc.rsRelatedContent.recordCount>
-				<cfloop query="rc.rsRelatedContent">
-				<cfset itemcrumbdata=application.contentManager.getCrumbList(rc.rsRelatedContent.contentid, rc.siteid)/>
-				<tr id="c#rc.rsRelatedContent.contentID#">
-				<td class="var-width">#$.dspZoom(itemcrumbdata)#</td>
-				<td>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.type.#rc.rsRelatedContent.type#')#</td>
-				<td class="actions">
-					<input type="hidden" name="relatedcontentid" value="#rc.rsRelatedContent.contentid#" />
-						<ul class="clearfix"><li class="delete"><a title="Delete" href="##" onclick="return siteManager.removeRelatedContent('c#rc.rsRelatedContent.contentid#','#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removerelatedcontent'))#');"><i class="icon-remove-sign"></i></a></li>
-						</ul>
-				</td>
-				</tr></cfloop>
-				<cfelse>
-				<tr>
-				<td id="noFilters" colspan="4" class="noResults">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#</td>
-				</tr>
-				</cfif>
-			</tbody>
-		</table>
-	</div>--->
-	
 	<script>
 		function updateForm() {
 			var aBuckets = new Array();
@@ -98,8 +64,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				$(this).find('li.item:not(.empty)').each(function(){
 					var i = new Object;
 					i.contentid = $(this).attr('data-contentid');
-					i.externalurl = $(this).attr('data-externalurl');
-					i.externaltitle = $(this).attr('data-externaltitle');
 					aItems.push(i);
 				});
 				bucket.relatedcontentsetid = $(this).attr('data-relatedcontentsetid')
@@ -272,7 +236,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								<cfset emptyClass = emptyClass & " noShow">
 								<cfloop query="rcsRs">	
 									<cfset crumbdata = application.contentManager.getCrumbList(rcsRs.contentid, rc.siteid)/>
-									<li class="item" data-contentid="#rcsRs.contentID#" data-content-type="#rcsRs.type#/#rcsRs.subtype#" data-externaltitle="#rcsRs.externalTitle#" data-externalurl="#rcsRs.externalURL#">
+									<li class="item" data-contentid="#rcsRs.contentID#" data-content-type="#rcsRs.type#/#rcsRs.subtype#">
 										#$.dspZoomNoLinks(crumbdata)#
 										<a class="delete"></a>
 									</li>

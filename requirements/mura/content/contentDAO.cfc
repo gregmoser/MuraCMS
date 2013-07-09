@@ -1096,15 +1096,13 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfset item = rcs.items[j]>
 				<cftry>
 					<cfquery>
-						insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,externalTitle,externalURL,orderNo)
+						insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,orderNo)
 						values (
 						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
 						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
 						<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.contentid#"/>,
 						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>,
 						<cfqueryparam cfsqltype="cf_sql_varchar" value="#rcs.relatedContentSetID#"/>,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.externalTitle#"/>,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.externalURL#"/>,
 						<cfqueryparam cfsqltype="cf_sql_integer" value="#j#"/>
 						)
 					</cfquery>
@@ -1117,15 +1115,13 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfloop query="rsRelatedContent">
 			<!---<cftry>--->
 				<cfquery>
-					insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,externalTitle,externalURL,orderNo)
+					insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,orderNo)
 					values (
 					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
 					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
 					<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsRelatedContent.relatedID#"/>,
 					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>,
 					<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsRelatedContent.relatedContentSetID#"/>,
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsRelatedContent.externalTitle#"/>,
-					<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsRelatedContent.externalURL#"/>,
 					<cfqueryparam cfsqltype="cf_sql_integer" value="#rsRelatedContent.orderNo#"/>
 					)
 				</cfquery>
@@ -1152,7 +1148,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	 <cfset var rsRelatedItems =""/>
 	
 	<cfquery name="rsRelatedItems">
-		select relatedID, relatedContentSetID, orderNo, externalTitle, externalURL from tcontentrelated
+		select relatedID, relatedContentSetID, orderNo from tcontentrelated
 		where contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contenthistID#"/> and siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 	</cfquery>
 	
