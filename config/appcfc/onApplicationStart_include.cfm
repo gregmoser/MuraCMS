@@ -403,13 +403,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfsavecontent variable="variables.themeConfig">
 						<cfinclude template="#variables.siteBean.getThemeIncludePath()#/config.xml.cfm">
 					</cfsavecontent>
-
 				<cfelse>
 					<cfset variables.themeConfig=fileRead(variables.themedir & "/" & variables.themeConfig)>
 				</cfif>
 
-				<cfset variables.themeConfig=xmlParse(variables.themeConfig)>
-				<cfset application.configBean.getClassExtensionManager().loadConfigXML(variables.themeConfig,variables.rsSites.siteid)>
+				<cfif isXml(variables.themeConfig)>
+					<cfset variables.themeConfig=xmlParse(variables.themeConfig)>
+					<cfset application.configBean.getClassExtensionManager().loadConfigXML(variables.themeConfig,variables.rsSites.siteid)>
+				</cfif>
 
 			</cfif>
 
