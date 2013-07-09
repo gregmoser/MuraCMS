@@ -51,14 +51,14 @@
 						}
 					});
 
-				input.data('autocomplete')._renderItem = function(ul, item) {
+				input.data('ui-autocomplete')._renderItem = function(ul, item) {
 						return $('<li/>')
 							.data('item.autocomplete', item)
 							.append($('<a/>').text(item.toString()))
 							.appendTo(ul);
 					};
 
-				input.data('autocomplete')._resizeMenu = function(ul, item) {
+				input.data('ui-autocomplete')._resizeMenu = function(ul, item) {
 						var ul = this.menu.element;
 						ul.outerWidth(Math.max(
 							ul.width('').outerWidth(),

@@ -181,6 +181,7 @@ jQuery(document).ready(function(){
 --->
 
 <!-- The template to display files available for upload -->
+<!---
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
@@ -193,7 +194,7 @@ jQuery(document).ready(function(){
             <td>
                 <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
             </td>
-            <td class="start">{% if (!o.options.autoUpload) { %}
+            <td class="start">tet{% if (!o.options.autoUpload) { %}
                 <button class="btn">
                     <i class="icon-upload icon-white"></i>
                     <span>{%=locale.fileupload.start%}</span>
@@ -242,27 +243,109 @@ jQuery(document).ready(function(){
     </tr>
 {% } %}
 </script>
+--->
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td>
+            <span class="preview"></span>
+        </td>
+        <td>
+            <div class="name">{%=file.name%}</div>
+            <div class="editable" data-attribute="title" contenteditable="true">{%=file.name%}</div>
+            <div class="editable" data-attribute="credits" contenteditable="true"></div>
+            <div class="editable" data-attribute="summary" contenteditable="true"></div>
+            <div class="editable" data-attribute="alttext" contenteditable="true"></div>
 
+            {% if (file.error) { %}
+                <div><span class="label label-important">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <p class="size">{%=o.formatFileSize(file.size)%}</p>
+            {% if (!o.files.error) { %}
+                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+            {% } %}
+        </td>
+        <td>
+            {% if (!o.files.error && !i && !o.options.autoUpload) { %}
+                <button class="btn btn-primary start">
+                    <i class="icon-upload icon-white"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}
+            {% if (!i) { %}
+                <button class="btn btn-warning cancel">
+                    <i class="icon-ban-circle icon-white"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td>
+            <span class="preview">
+                {% if (file.thumbnail_url) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" class="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td>
+            <p class="name">
+                <a href="{%=file.url%}" title="{%=file.name%}" class="{%=file.thumbnail_url?'gallery':''%}" download="{%=file.name%}">{%=file.name%}</a>
+            </p>
+            {% if (file.error) { %}
+                <div><span class="label label-important">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td>
+        <!---
+            <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                <i class="icon-trash icon-white"></i>
+                <span>Delete</span>
+            </button>
+            <input type="checkbox" name="delete" value="1" class="toggle">
+        --->
+        </td>
+    </tr>
+{% } %}
+</script>
+<!-- The Templates plugin is included to render the upload/download listings -->
 <script src="#application.configBean.getContext()#/admin/assets/js/jquery/tmpl.min.js?coreversion=#application.coreversion#"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
 <script src="#application.configBean.getContext()#/admin/assets/js/jquery/load-image.min.js?coreversion=#application.coreversion#"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
 <script src="#application.configBean.getContext()#/admin/assets/js/jquery/canvas-to-blob.min.js?coreversion=#application.coreversion#"></script>
-<!-- Bootstrap JS and Bootstrap Image Gallery are not required, but included for the demo 
-<script src="http://blueimp.github.com/cdn/js/bootstrap.min.js"></script>
-<script src="http://blueimp.github.com/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js"></script>
--->
 
+<!-- blueimp Gallery script -->
+<script src="http://blueimp.github.io/Gallery/js/blueimp-gallery.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
 <script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.iframe-transport.js?coreversion=#application.coreversion#"></script>
 <!-- The basic File Upload plugin -->
 <script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.fileupload.js?coreversion=#application.coreversion#"></script>
-<!-- The File Upload file processing plugin -->
-<script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.fileupload-fp.js?coreversion=#application.coreversion#"></script>
+<!-- The File Upload processing plugin -->
+<script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.fileupload-process.js?coreversion=#application.coreversion#"></script>
+<!-- The File Upload image preview & resize plugin -->
+<script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.fileupload-image.js?coreversion=#application.coreversion#"></script>
+<!-- The File Upload audio preview plugin -->
+<script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.fileupload-audio.js?coreversion=#application.coreversion#"></script>
+<!-- The File Upload video preview plugin -->
+<script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.fileupload-video.js?coreversion=#application.coreversion#"></script>
+<!-- The File Upload validation plugin -->
+<script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.fileupload-validate.js?coreversion=#application.coreversion#"></script>
 <!-- The File Upload user interface plugin -->
 <script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.fileupload-ui.js?coreversion=#application.coreversion#"></script>
 <!-- The localization script -->
 <script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery.fileupload.locale.js?coreversion=#application.coreversion#"></script>
+
 <!-- The main application script -->
 <script>
 $(function () {
@@ -270,6 +353,26 @@ $(function () {
 
     // Initialize the jQuery File Upload widget:
     $('##fileupload').fileupload({url:'#application.configBean.getContext()#/admin/index.cfm'});
+
+    $('##fileupload').bind('fileuploadsubmit', function (e, data) {
+        
+        var extraParams={};
+      
+        data.formData=$('##fileupload').serializeArray();
+
+        $(data.context).find('.editable').each(
+            function(){
+
+             extraParams[$(this).attr('data-attribute')]=$(this).html();
+            }
+        ); 
+      
+        data.formData.push({name:'extraParams',value:JSON.stringify(extraParams)});
+
+        //alert(data.formData.extraParams);
+        //return false;
+       
+    });
 
 });
 </script>

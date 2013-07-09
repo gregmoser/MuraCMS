@@ -2041,6 +2041,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset fileItem.contentID=""/>
 	<cfset fileItem.approved=arguments.data.approved/>
 	
+	<!--- BEGIN LEGACY --->
 	<cfif structKeyExists(arguments.data,'qqfile')>
 		<cftry>
 		
@@ -2088,6 +2089,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 		<cfset f=f+1 />			
 	</cfloop>
+	<!--- END LEGACY --->
 
 	<!--- RAILO --->
 	<cfif isDefined('form.files') and isArray(form.files)>
@@ -2104,6 +2106,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset fileItem.title=tempFile.serverfile/>
 				<cfset fileItem.fileid=variables.fileManager.create(theFileStruct.fileObj, '', arguments.data.siteid, tempFile.ClientFile, tempFile.ContentType, tempFile.ContentSubType, tempFile.FileSize, "00000000000000000000000000000000000", tempFile.ServerFileExt, theFileStruct.fileObjSmall, theFileStruct.fileObjMedium, variables.utility.getUUID(), theFileStruct.fileObjSource) />
 				<cfset fileItem.filename=tempFile.serverfile/>
+
+				<cfif isDefined('form.extraParams') 
+					and isArray(form.extraParams) 
+					and arrayLen(form.extraParams) 
+					and isJSON(form.extraParams[1])>
+					<cfset structAppend(fileItem,deserializeJSON(form.extraParams[1]))>
+				</cfif>
+
 				<cfset fileBean=add(structCopy(fileItem)) />
 				<cfquery>
 					 update tfiles set contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getContentID()#"> 
@@ -2147,6 +2157,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset fileItem.title=tempFile.serverfile/>
 				<cfset fileItem.fileid=variables.fileManager.create(theFileStruct.fileObj, '', arguments.data.siteid, tempFile.ClientFile, tempFile.ContentType, tempFile.ContentSubType, tempFile.FileSize, "00000000000000000000000000000000000", tempFile.ServerFileExt, theFileStruct.fileObjSmall, theFileStruct.fileObjMedium, variables.utility.getUUID(), theFileStruct.fileObjSource) />
 				<cfset fileItem.filename=tempFile.serverfile/>
+
+				<cfif isDefined('form.extraParams') 
+					and isSimpleValue(form['extraParams']) 
+					and len(form['extraParams'])>
+					<cfset structAppend(fileItem,deserializeJSON(form['extraParams']))>
+				</cfif>
+				
 				<cfset fileBean=add(structCopy(fileItem)) />
 				<cfquery>
 					 update tfiles set contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getContentID()#"> 
