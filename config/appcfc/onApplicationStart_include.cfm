@@ -231,6 +231,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			variables.serviceFactory.addAlias("contentSourceMap","contentSourceMapBean");
 			variables.serviceFactory.addAlias("relatedContentSet","extendRelatedContentSetBean");
 			variables.serviceFactory.addAlias("fileMetaData","contentFileMetaDataBean");
+			variables.serviceFactory.addAlias("file","fileBean");
 
 			application.serviceFactory=variables.serviceFactory;
 		</cfscript>
