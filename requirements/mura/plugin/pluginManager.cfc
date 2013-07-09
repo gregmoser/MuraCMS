@@ -1890,11 +1890,11 @@ select * from tplugins order by #arguments.orderby#
 		<cfif rsDisplayObject.recordcount>
 		<cftry>
 		<cfif listLast(rsDisplayObject.displayobjectfile,".") neq "cfm">
-			<!---<cfif rsDisplayObject.location neq "local">
+			<!---<cfif rsDisplayObject.location neq "local">--->
 				<cfset componentPath="plugins.#rsDisplayObject.directory#.#rsDisplayObject.displayobjectfile#">
-			<cfelse>--->
+			<!---<cfelse>
 				<cfset componentPath="#variables.configBean.getWebRootMap()#.#event.getSite().getDisplayPoolID()#.includes.plugins.#rsDisplayObject.directory#.#rsDisplayObject.displayobjectfile#">
-			<!---</cfif>--->
+			</cfif>--->
 			<cfset eventHandler=getComponent(componentPath, rsDisplayObject.pluginID, event.getValue('siteID'),rsDisplayObject.docache)>
 			<cfset tracePoint=initTracePoint("#getMetaData(eventHandler).name#.#rsDisplayObject.displaymethod#")>
 			<cfsavecontent variable="theDisplay1">

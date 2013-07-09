@@ -220,7 +220,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="fileID" type="any" required="yes"/>
 		<cfset var rs=""/>
 		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
-		SELECT fileID, contentID, siteID, moduleID, filename, fileSize, contentType, contentSubType, fileExt,image, created FROM tfiles where fileid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fileID#">
+		SELECT fileID, contentID, siteID, moduleID, filename, fileSize, contentType, contentSubType, fileExt,image, created, alttext, caption, credits FROM tfiles where fileid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fileID#">
 		</cfquery>
 		
 		<cfreturn rs />
@@ -242,7 +242,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="fileID" type="any" required="yes"/>
 		<cfset var rs=""/>
 		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
-		SELECT fileID, contentID, siteID, moduleID, filename, fileSize, contentType, contentSubType, fileExt, created  FROM tfiles where fileid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fileID#">
+		SELECT fileID, contentID, siteID, moduleID, filename, fileSize, contentType, contentSubType, fileExt, created, alttext, caption, credits  FROM tfiles where fileid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fileID#">
 		</cfquery>
 		
 		<cfreturn rs />
@@ -253,7 +253,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="fileID" type="any" required="yes"/>
 		<cfset var rs=""/>
 		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
-		SELECT fileID, contentID, siteID, moduleID, filename, fileSize, contentType, contentSubType, fileExt, imageSmall, created  FROM tfiles where fileid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fileID#"> and imageSmall is not null
+		SELECT fileID, contentID, siteID, moduleID, filename, fileSize, contentType, contentSubType, fileExt, imageSmall, created, alttext, caption, credits  FROM tfiles where fileid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fileID#"> and imageSmall is not null
 		</cfquery>
 		
 		<cfreturn rs />

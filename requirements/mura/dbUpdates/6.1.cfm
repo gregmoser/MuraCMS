@@ -8,6 +8,7 @@
 	getBean('contentSourceMap').checkSchema();
 	getBean('relatedContentSet').checkSchema();
 	getBean('fileMetaData').checkSchema();
+	getBean('file').checkSchema();
 
 
 	dbUtility.setTable("tclassextend")
@@ -43,4 +44,5 @@
 
 	dbUtility.setTable("tcontentcategories")
 	.addColumn(column="isfeatureable",dataType="int");
+
 </cfscript>

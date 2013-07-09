@@ -844,8 +844,12 @@ function setTabs(target, activetab) {
 	if(window.location.hash != "") {
 		$(target + ' a[href="' + window.location.hash + '"]').tab('show');
 	} else if(typeof(activetab) != 'undefined') {
-		$(target + ' li::nth-child(' + (activetab + 1) + ') a').tab('show');
-
+		try{
+			$(target + ' li::nth-child(' + (activetab + 1) + ') a').tab('show');
+		} 
+		catch(err){
+			$(target + ' li:first a').tab('show');
+		}
 	} else {
 		$(target + ' li:first a').tab('show');
 	}

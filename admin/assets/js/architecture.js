@@ -196,6 +196,7 @@ var siteManager = {
 			resizable: false,
 			modal: true,
 			width: 552,
+			title: newContentMenuTitle,
 			position: getDialogPosition(),
 			/*
 buttons: {
@@ -205,7 +206,6 @@ buttons: {
 				},
 */
 			open: function() {
-				$("#ui-dialog-title-newContentMenuContainer").html(newContentMenuTitle);
 				$("#newContentMenuContainer").html('<div class="ui-dialog-content ui-widget-content"><div class="load-inline"></div></div>');
 				var url = 'index.cfm';
 				var pars = 'muraAction=cArch.loadnewcontentmenu&siteid=' + siteid + '&contentid=' + contentid + '&parentid=' + parentid + '&topid=' + parentid + '&ptype=' + type + '&cacheid=' + Math.random();
@@ -1202,9 +1202,67 @@ buttons: {
 	},
 
 	initQuickEdits: function() {
+
+		$(".mura-quickEditItem").click(function(event)
+		    {
+
+		    event.preventDefault();
+		    $(this).data('clicked',!$(this).data('clicked'));
+
+		    if ($(this).data('clicked'))
+		        {
+		        	if(!this.activeQuickEdit) {
+
+					var attribute = $(this).attr("data-attribute");
+					var node = $(this).parents("li:first");
+					var url = 'index.cfm';
+					var pars = 'muraAction=cArch.loadQuickEdit&siteid=' + siteid + '&contentID=' + node.attr("data-contentid") + '&attribute=' + attribute + '&cacheid=' + Math.random();
+
+					//location.href='?' + pars;
+					//images/icons/template_24x24.png
+					$("#mura-quickEditor").remove();
+					$("#selected").attr("id", "");
+					$('#selectedIcon').attr("id", "").attr("src", "assets/images/icons/template_24x24.png");
+					$(this).parent().prepend(quickEditTmpl);
+
+					var qe = $("#mura-quickEditor")
+					var dd = qe.parents("dd:first");
+
+					dd.attr("id", "selected");
+
+					$.get(url + "?" + pars, function(data) {
+						if(data.indexOf('mura-primary-login-token') != -1) {
+							location.href = './';
+						}
+						$("#mura-quickEditor").html(data);
+
+						setDatePickers(".mura-quickEdit-datepicker", dtLocale, dtCh);
+						setToolTips(".mura-quickEdit-datepicker");
+						if($("#hasDraftsMessage").length) {
+							dd.addClass("hasDraft");
+						}
+
+						if(attribute == 'template') {
+							var img = dd.find("img:first");
+							if(img.length) {
+								img.attr("id", "selectedIcon").attr("src", "assets/images/icons/template_24x24-on.png")
+							}
+						}
+
+					});
+				}
+		    }
+		    else
+		        {
+		        	siteManager.closeQuickEdit();
+		        }
+		 });
+
+	/*
 		$(".mura-quickEditItem").toggle(
 
 		function(event) {
+			
 			event.preventDefault();
 			if(!this.activeQuickEdit) {
 
@@ -1250,6 +1308,7 @@ buttons: {
 			event.preventDefault();
 			siteManager.closeQuickEdit();
 		});
+*/
 	},
 
 	saveQuickEdit: function() {
@@ -1353,76 +1412,81 @@ buttons: {
 	},
 
 	initCategoryAssignments: function() {
-		$(".mura-quickEditItem").toggle(
+		$(".mura-quickEditItem").click(
 
 		function(event) {
 			event.preventDefault();
 
-			var node = $(this).parents("li:first");
-			var cattrim = node.attr("data-cattrim");
+			$(this).data('clicked',!$(this).data('clicked'));
 
-			var categoryAssignment = {
-				muraAction: 'cArch.loadCategoryAssignment',
-				cattrim: node.attr("data-cattrim"),
-				siteID: node.attr("data-siteid"),
-				categoryID: node.attr("data-categoryid"),
-				categoryAssignment: $('#categoryAssign' + cattrim).val(),
-				featureStart: '',
-				startHour: '',
-				startMinute: '',
-				startDayPart: '',
-				featureStop: '',
-				stopHour: '',
-				stopMinute: '',
-				stopDayPart: ''
-			};
+		    if ($(this).data('clicked'))
+		        {
+				
+				var node = $(this).parents("li:first");
+				var cattrim = node.attr("data-cattrim");
 
-			if(categoryAssignment.categoryAssignment == '2') {
-				$.extend(
-				categoryAssignment, {
-					featureStart: $('#featureStart' + cattrim).val(),
-					startHour: $('#startHour' + cattrim).val(),
-					startMinute: $('#startMinute' + cattrim).val(),
-					startDayPart: $('#startDayPart' + cattrim).val(),
-					featureStop: $('#featureStop' + cattrim).val(),
-					stopHour: $('#stopHour' + cattrim).val(),
-					stopMinute: $('#stopMinute' + cattrim).val(),
-					stopDayPart: $('#stopDayPart' + cattrim).val()
-				});
-				//alert(JSON.stringify(categoryAssignment))
-			}
+				var categoryAssignment = {
+					muraAction: 'cArch.loadCategoryAssignment',
+					cattrim: node.attr("data-cattrim"),
+					siteID: node.attr("data-siteid"),
+					categoryID: node.attr("data-categoryid"),
+					categoryAssignment: $('#categoryAssign' + cattrim).val(),
+					featureStart: '',
+					startHour: '',
+					startMinute: '',
+					startDayPart: '',
+					featureStop: '',
+					stopHour: '',
+					stopMinute: '',
+					stopDayPart: ''
+				};
 
-			$("#mura-quickEditor").remove();
-			$("#selected").attr("id", "");
-			$('#selectedIcon').attr("id", "").attr("src", "assets/images/icons/template_24x24.png");
-			$(this).parent().prepend(quickEditTmpl);
-
-			var qe = $("#mura-quickEditor")
-			var dd = qe.parents("dd:first");
-
-			dd.attr("id", "selected");
-
-			$.ajax({
-			  type: "POST",
-			  url: "./index.cfm",
-			  data: categoryAssignment,
-			  success: function(data) {
-				if(data.indexOf('mura-primary-login-token') != -1) {
-					location.href = './';
+				if(categoryAssignment.categoryAssignment == '2') {
+					$.extend(
+					categoryAssignment, {
+						featureStart: $('#featureStart' + cattrim).val(),
+						startHour: $('#startHour' + cattrim).val(),
+						startMinute: $('#startMinute' + cattrim).val(),
+						startDayPart: $('#startDayPart' + cattrim).val(),
+						featureStop: $('#featureStop' + cattrim).val(),
+						stopHour: $('#stopHour' + cattrim).val(),
+						stopMinute: $('#stopMinute' + cattrim).val(),
+						stopDayPart: $('#stopDayPart' + cattrim).val()
+					});
+					//alert(JSON.stringify(categoryAssignment))
 				}
-				$("#mura-quickEditor").html(data);
-				setDatePickers(".mura-quickEdit-datepicker", dtLocale, dtCh);
-				setToolTips(".mura-quickEdit-datepicker");
-				},
-			 error: function( jqXHR, textStatus,errorThrown) {
-				alert(errorThrown);
-				},
-			  dataType: 'text'
-			});
 
-		}, function(event) {
-			event.preventDefault();
-			siteManager.closeQuickEdit();
+				$("#mura-quickEditor").remove();
+				$("#selected").attr("id", "");
+				$('#selectedIcon').attr("id", "").attr("src", "assets/images/icons/template_24x24.png");
+				$(this).parent().prepend(quickEditTmpl);
+
+				var qe = $("#mura-quickEditor")
+				var dd = qe.parents("dd:first");
+
+				dd.attr("id", "selected");
+
+				$.ajax({
+				  type: "POST",
+				  url: "./index.cfm",
+				  data: categoryAssignment,
+				  success: function(data) {
+					if(data.indexOf('mura-primary-login-token') != -1) {
+						location.href = './';
+					}
+					$("#mura-quickEditor").html(data);
+					setDatePickers(".mura-quickEdit-datepicker", dtLocale, dtCh);
+					setToolTips(".mura-quickEdit-datepicker");
+					},
+				 error: function( jqXHR, textStatus,errorThrown) {
+					alert(errorThrown);
+					},
+				  dataType: 'text'
+				});
+
+			} else {
+				siteManager.closeQuickEdit();
+			}
 		});
 	},
 
@@ -1835,6 +1899,7 @@ buttons: {
 			resizable: true,
 			modal: true,
 			// width: 400,
+			title: genericConfiguratorTitle,
 			position: getDialogPosition(),
 			buttons: {
 				Cancel: function() {
@@ -1842,7 +1907,7 @@ buttons: {
 				}
 			},
 			open: function() {
-				$("#ui-dialog-title-configuratorContainer").html(genericConfiguratorTitle);
+				//$("#ui-dialog-title-configuratorContainer").html(genericConfiguratorTitle);
 				$("#configurator").html('<div class="ui-dialog-content ui-widget-content">' + genericConfiguratorMessage + '</div>');
 			},
 			close: function() {
@@ -2078,10 +2143,11 @@ buttons: {
 			resizable: false,
 			modal: true,
 			width: 750,
+			title: 'Code Diff',
 			position: getDialogPosition(),
 
 			open: function() {
-				$("#ui-dialog-title-contentDiffContainer").html('Code Diff');
+				//$("#ui-dialog-title-contentDiffContainer").html('Code Diff');
 				$("#contentDiffContainer").html('<div class="ui-dialog-content ui-widget-content"><div class="load-inline"></div></div>');
 				var url = './index.cfm';
 				var pars = 'muraAction=cArch.loaddiff&compactDisplay=true&siteid=' + siteid + '&contenthistid1=' + contenthistid1 + '&contenthistid2=' + contenthistid2 + '&cacheid=' + Math.random();
