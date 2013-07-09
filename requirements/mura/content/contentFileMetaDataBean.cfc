@@ -7,6 +7,8 @@ component extends="mura.bean.beanORMVersioned"
 	property name="metaID" fieldType="id";
 	property name="fileID" fieldType="index" dataType="char" length="35";
 	property name="altText" dataType="varchar" length="255";
+	property name="caption" datatype="text";
+	property name="credits" datatype="varchar" length=255;
 	property name="filename" type="string" default="" persistent=false;
 	property name="filesize" type="integer" default="0" persistent=false;
 	property name="contentType" type="string" default="" persistent=false;
@@ -14,14 +16,14 @@ component extends="mura.bean.beanORMVersioned"
 	property name="fileExt" type="string" default="" persistent=false;
 	property name="created" type="datetime" persistent=false;
 	property name="directImages" type="boolean" default=true persistent=false;
-
+	
 	function loadBy(returnFormat="self"){
 		var result=super.loadBy(argumentCollection=arguments);
 
 		switch(arguments.returnFormat){
 			case 'self': 
 				if(variables.instance.isnew && len(variables.instance.fileid)){
-					set(getBean('fileManager').readMeta(variables.instance.fileid));
+					set(getBean('file').loadBy(fileID=variables.instance.fileid,returnFormat='query'));
 				}
 
 				return this;
