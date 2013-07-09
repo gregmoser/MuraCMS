@@ -60,7 +60,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <li><strong>#application.rbFactory.getKeyValue(session.rb,"dashboard.session.useragent")#:</strong> #HTMLEditFormat(application.dashboardManager.getUserAgentFromSessionQuery(rc.rslist))#</li>
 </ul>
 
-<table class="table table-striped table-condensed table-bordered mura-table-grid"> 
+<table class="mura-table-grid"> 
 <tr>
 <th>#application.rbFactory.getKeyValue(session.rb,"dashboard.session.user")#</th>
 <th class="var-width">#application.rbFactory.getKeyValue(session.rb,"dashboard.session.content")#</th>

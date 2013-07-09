@@ -109,7 +109,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfsilent>
 	
 	<cfoutput><h3>#month(theMonth)#/#year(theMonth)#</h3>
-	<table class="table table-striped table-condensed table-bordered mura-table-grid">
+	<table class="mura-table-grid">
 	<tr>
 	<th class="var-width">#application.rbFactory.getKeyValue(session.rb,'advertising.adzone')#</th>
 		<th>#application.rbFactory.getKeyValue(session.rb,'advertising.creative')#</th>
@@ -200,7 +200,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfoutput>
 	<h2>#application.rbFactory.getKeyValue(session.rb,'advertising.total')#</h2>
 
-	<table id="metadata" class="table table-striped table-condensed table-bordered mura-table-grid">
+	<table id="metadata" class="mura-table-grid">
 	<tr>
 		<th>#application.rbFactory.getKeyValue(session.rb,'advertising.totalm')#</th>
 		<th>#application.rbFactory.getKeyValue(session.rb,'advertising.cpmtotal')#</th>

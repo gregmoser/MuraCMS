@@ -57,7 +57,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfif not rc.isNew>
 <cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords)/>
- <table class="table table-striped table-condensed table-bordered mura-table-grid">
+ <table class="mura-table-grid">
  	<thead>
     <tr> 
       <th class="var-width"><cfoutput>#application.rbFactory.getKeyValue(session.rb,'collections.selectnewsection')#</cfoutput></th>

@@ -56,7 +56,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <input type="hidden" name="siteid" value="#HTMLEditFormat(rc.siteid)#">
 </form>
 
-        <table class="table table-striped table-condensed table-bordered mura-table-grid">
+        <table class="mura-table-grid">
           <tr> 
             <th class="var-width">Name</th>
             <th>#application.rbFactory.getKeyValue(session.rb,'user.email')#</th>

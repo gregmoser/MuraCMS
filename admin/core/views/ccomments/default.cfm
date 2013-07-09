@@ -97,7 +97,7 @@
 		<!--- FORM --->
 		<form name="frmUpdate" id="frmUpdate" method="post" action="#buildURL(action='cComments.bulkedit', querystring='isapproved=#rc.isapproved#&pageno=#rc.pageno#&sortby=#rc.sortby#&sortdirection=#rc.sortdirection#')#">
 			<input type="hidden" name="bulkedit" id="bulkedit" value="" />
-			<table class="table table-striped table-condensed table-bordered mura-table-grid">
+			<table class="mura-table-grid">
 				<thead>
 					<tr>
 						<th>

@@ -38,8 +38,6 @@
 	dbUtility.setTable("tcontentrelated")
 	.addColumn(column="relatedContentSetID",dataType="varchar",length="35")
 	.addColumn(column="orderNo",dataType="int")
-	.addColumn(column="externalTitle",dataType="varchar",length="500")
-	.addColumn(column="externalURL",dataType="varchar",length="2000")
 	.addColumn(column="relatedContentID",autoincrement=true);
 
 	dbUtility.setTable("tcontentcategories")

@@ -234,7 +234,7 @@ select * from rsSubTypes where subType <> 'Default'
  <cfif rc.userid neq ''>
       <cfoutput>
       <h2>#application.rbFactory.getKeyValue(session.rb,'user.groupmembers')#</h2> 
-        <table class="table table-striped table-condensed table-bordered mura-table-grid">
+        <table class="mura-table-grid">
             <tr> 
               <th class="var-width">#application.rbFactory.getKeyValue(session.rb,'user.name')#</th>
               <th>#application.rbFactory.getKeyValue(session.rb,'user.email')#</th>

@@ -194,7 +194,7 @@ select * from rsSubTypes where subType <> 'Default'
 				
 		      <cfset rsAddresses=rc.userBean.getAddresses()>
 				<cfif rsAddresses.recordcount>
-				<table class="table table-condensed table-stripedtable-bordered mura-table-grid">
+				<table class="mura-table-grid">
 				<tr><th>#application.rbFactory.getKeyValue(session.rb,'user.primary')#</th><th>#application.rbFactory.getKeyValue(session.rb,'user.address')#</th><th class="adminstration"></th></tr>
 				<cfloop query="rsAddresses">
 				<tr>

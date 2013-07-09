@@ -1830,7 +1830,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tcontent.target,tcontent.targetParams, tcontent.restricted, tcontent.restrictgroups, tcontent.displaystart, tcontent.displaystop, tcontent.orderno,tcontent.sortBy,tcontent.sortDirection,
 	tcontent.fileid, tcontent.credits, tcontent.remoteSource, tcontent.remoteSourceURL, tcontent.remoteURL, tcontent.subtype, 
 	tfiles.fileSize,tfiles.fileExt,tcontent.path, tcontent.siteid, tcontent.contenthistid,
-	tcr.relatedContentSetID, tcr.externalURL, tcr.externalTitle, tcr.orderNo
+	tcr.relatedContentSetID, tcr.orderNo
 
 	FROM  tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 	
