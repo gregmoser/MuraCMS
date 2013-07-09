@@ -350,6 +350,21 @@ jQuery(document).ready(function(){
 <script>
 $(function () {
     'use strict';
+ 
+    $.blueimp.fileupload.prototype._renderPreviews= function (data) {
+            data.context.find('.preview').each(function (index, elm) {
+                var fileext=$(data.files[index].name.split(".")).get(-1).toLowerCase();
+                //alert(fileext);
+                $(elm).append(data.files[index].preview);
+            });
+        }
+
+    $.blueimp.fileupload.prototype.getFilesFromResponse= function (data) {
+                if (data && $.isArray(data.files)) {
+                    return data.files;
+                }
+                return [];
+            }
 
     // Initialize the jQuery File Upload widget:
     $('##fileupload').fileupload({url:'#application.configBean.getContext()#/admin/index.cfm'});

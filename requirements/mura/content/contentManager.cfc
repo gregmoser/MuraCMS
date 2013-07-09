@@ -2111,7 +2111,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					and isArray(form.extraParams) 
 					and arrayLen(form.extraParams) 
 					and isJSON(form.extraParams[1])>
-					<cfset structAppend(fileItem,deserializeJSON(form.extraParams[1]))>
+					<cfset structAppend(fileItem,deserializeJSON(local.extraParams))>
+				<cfelse>
+					<cfset local.extraParams={}>
 				</cfif>
 
 				<cfset fileBean=add(structCopy(fileItem)) />
@@ -2120,8 +2122,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					 where fileid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getFileID()#">
 				</cfquery>
 				<cfset fileBean=read(contentHistID=fileBean.getContentHistID(),siteid=fileBean.getSiteID())>
-				<cfoutput>
-					{
+				<cfset local.returnStr={
 					    "name":"#JSStringFormat(fileBean.getTitle())#",
 					    "size":#fileBean.getFileSize()#,
 					    "url":"#JSStringFormat(fileBean.getImageURL(size='source'))#",
@@ -2129,9 +2130,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					    "thumbnail_url":"#JSStringFormat(fileBean.getImageURL(size='small'))#",
 					    "delete_url":"",
 					    "delete_type":"DELETE"
-					  }
-				<cfif f lt arrayLen(form.files)>,</cfif>
-				</cfoutput>
+					  }>
+				<cfset structAppend(local.returnStr,fileBean.getAllValues())>
+				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
+				<cfif f lt arrayLen(form.files)><cfoutput>,</cfoutput></cfif>
 			</cfloop>
 			<cfoutput>]</cfoutput>
 			<cfabort>
@@ -2162,16 +2164,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					and isSimpleValue(form['extraParams']) 
 					and len(form['extraParams'])>
 					<cfset structAppend(fileItem,deserializeJSON(form['extraParams']))>
+				<cfelse>
+					<cfset local.extraParams={}>
 				</cfif>
-				
+
 				<cfset fileBean=add(structCopy(fileItem)) />
 				<cfquery>
 					 update tfiles set contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getContentID()#"> 
 					 where fileid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getFileID()#">
 				</cfquery>
 				<cfset fileBean=read(contentHistID=fileBean.getContentHistID(),siteid=fileBean.getSiteID())>
-				<cfoutput>
-					{
+				<cfset local.returnStr={
 					    "name":"#JSStringFormat(fileBean.getTitle())#",
 					    "size":#fileBean.getFileSize()#,
 					    "url":"#JSStringFormat(fileBean.getImageURL(size='source'))#",
@@ -2179,9 +2182,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					    "thumbnail_url":"#JSStringFormat(fileBean.getImageURL(size='small'))#",
 					    "delete_url":"",
 					    "delete_type":"DELETE"
-					  }
-				<!---<cfif f lt listLen(form['files'])>,</cfif>--->
-				</cfoutput>
+					  }>
+				<cfset structAppend(local.returnStr,fileBean.getAllValues())>
+				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
 			<!---</cfloop>--->
 			<cfoutput>]</cfoutput>
 			<cfabort>
