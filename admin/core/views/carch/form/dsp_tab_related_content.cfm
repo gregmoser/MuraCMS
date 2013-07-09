@@ -98,8 +98,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				$(this).find('li.item:not(.empty)').each(function(){
 					var i = new Object;
 					i.contentid = $(this).attr('data-contentid');
-					i.externalurl = $(this).attr('data-externalurl');
-					i.externaltitle = $(this).attr('data-externaltitle');
 					aItems.push(i);
 				});
 				bucket.relatedcontentsetid = $(this).attr('data-relatedcontentsetid')
@@ -272,7 +270,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								<cfset emptyClass = emptyClass & " noShow">
 								<cfloop query="rcsRs">	
 									<cfset crumbdata = application.contentManager.getCrumbList(rcsRs.contentid, rc.siteid)/>
-									<li class="item" data-contentid="#rcsRs.contentID#" data-content-type="#rcsRs.type#/#rcsRs.subtype#" data-externaltitle="#rcsRs.externalTitle#" data-externalurl="#rcsRs.externalURL#">
+									<li class="item" data-contentid="#rcsRs.contentID#" data-content-type="#rcsRs.type#/#rcsRs.subtype#">
 										#$.dspZoomNoLinks(crumbdata)#
 										<a class="delete"></a>
 									</li>
