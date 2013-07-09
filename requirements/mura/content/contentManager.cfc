@@ -1175,7 +1175,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 						
 					<cfif newBean.getType() eq "File">
-						<cfset newBean.setBody(tempFile.serverfile) />
+						<cfset newBean.setBody(local.fileBean.getFilename()) />
 							
 						<cfif not isdefined("arguments.data.versionType")>
 							<cfset arguments.data.versionType="minor">

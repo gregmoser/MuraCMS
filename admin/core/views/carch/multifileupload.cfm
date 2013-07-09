@@ -360,15 +360,28 @@ $(function () {
             });
         }
 
-    $.blueimp.fileupload.prototype.getFilesFromResponse= function (data) {
+    $.blueimp.fileupload.prototype._renderDownload= function (files) {
+           // alert(files[0].thumbnail_url)
+            return this._renderTemplate(
+                this.options.downloadTemplate,
+                files
+            ).find('a[download]').each(this._enableDragToDesktop).end();
+        }
+
+    // Initialize the jQuery File Upload widget:
+    $('##fileupload').fileupload(
+        {url:'#application.configBean.getContext()#/admin/index.cfm',
+        getFilesFromResponse: function (data) {
                 if (data && $.isArray(data.files)) {
+                    for(var p in data.files[0]){
+                    alert(p)
+                }
                     return data.files;
                 }
                 return [];
             }
-
-    // Initialize the jQuery File Upload widget:
-    $('##fileupload').fileupload({url:'#application.configBean.getContext()#/admin/index.cfm'});
+        }
+    );
 
     $('##fileupload').bind('fileuploadsubmit', function (e, data) {
         
