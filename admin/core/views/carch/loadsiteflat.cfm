@@ -297,7 +297,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	#pagination#
 
-	<table class="mura-table-grid table table-striped table-bordered table-condensed">
+	<table class="mura-table-grid">
 		<tr>
 			<th></th>
 		  	<th class="item">#application.rbFactory.getKeyValue(session.rb,"sitemanager.item")#</th>
