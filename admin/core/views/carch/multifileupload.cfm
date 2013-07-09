@@ -244,6 +244,7 @@ jQuery(document).ready(function(){
 {% } %}
 </script>
 --->
+
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
@@ -252,10 +253,10 @@ jQuery(document).ready(function(){
         </td>
         <td>
             <div class="name">{%=file.name%}</div>
-            <div class="editable" data-attribute="title" contenteditable="true">{%=file.name%}</div>
-            <div class="editable" data-attribute="credits" contenteditable="true"></div>
+            <div class="editable nolinebreaks" data-attribute="title" contenteditable="true">{%=file.name%}</div>
             <div class="editable" data-attribute="summary" contenteditable="true"></div>
-            <div class="editable" data-attribute="alttext" contenteditable="true"></div>
+            <div class="editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
+            <div class="editable nolinebreaks" data-attribute="alttext" contenteditable="true"></div>
 
             {% if (file.error) { %}
                 <div><span class="label label-important">Error</span> {%=file.error%}</div>
@@ -387,6 +388,15 @@ $(function () {
         //alert(data.formData.extraParams);
         //return false;
        
+    })
+    .bind('fileuploadadd',function(e,data){
+        $(document).on('keypress', '.editable.nolinebreaks', function(e){
+            
+            if(e.which == 13){
+                e.preventDefault();
+                $(this).next('.editable').focus();
+            } 
+        });  
     });
 
 });
