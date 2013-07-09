@@ -1,8 +1,8 @@
-component extends="mura.bean.beanORM"{
+component extends="mura.bean.beanORM" table='tfiles' entityName="file" {
 
-	property nane="fileid" fieldtype="id";
-	property name="content" fieldtype="one-to-one" cfc="content";
-	property name="site" fieldtype="one-to-one";
+	property name="fileid" fieldtype="id";
+	property name="content" fieldtype="one-to-one" fkcolumn="contentid" cfc="content";
+	property name="site" fieldtype="many-to-one" fkcolumn="siteid" cfc="site";
 	property name="filename" datatype="varchar" length=200;
 	property name="contentType" datatype="varchar" length=100;
 	property name="contentSubType" datatype="varchar" length=200;
@@ -14,5 +14,56 @@ component extends="mura.bean.beanORM"{
 	property name="caption" datatype="text";
 	property name="credits" datatype="varchar" length=255;
 	property name="alttext" datatype="varchar" length=255;
+	property name="fileField" default="newfile" persistent=false;
 
+	function setSummary(summary){
+		setValue('caption',arguments.summary);
+		return this;
+	}
+
+	function setFileField(fileField){
+		variables.instance.fileField=arguments.fileField;
+		if(isdefined('form') and structKeyExists(form,variables.instance.fileField)){
+			setValue(variables.instance.fileField,form['#variables.instance.fileField#']);
+		}
+	}
+
+	function save(processFile=true){
+
+		//writeDump(var=getValue('fileField'));
+		//writeDump(var=getValue(getValue('fileField')));
+		//abort;
+
+		//(var=getProperties(),abort=true);
+
+		if(arguments.processFile && len(getValue('fileField')) && len(getValue(getValue('fileField')))){
+			setValue('fileID',createUUID());
+		
+			var fileManager=getBean('fileManager');
+
+			if(fileManager.isPostedFile(getValue('fileField'))){
+				local.tempFile=fileManager.upload(getValue('fileField'));
+			} else {
+				local.tempFile=fileManager.emulateUpload(getValue(getValue('fileField')));
+			}
+
+			structAppend(variables.instance, local.tempFile);
+			structAppend(variables.instance, fileManager.process(local.tempFile,getValue('siteid')));
+			variables.instance.fileExt=local.tempFile.serverFileExt;
+			variables.instance.filename=local.tempFile.ClientFile;
+
+			//writeDump(var=variables.instance,abort=true);
+
+			param name='variables.instance.content' default='';
+			
+			fileManager.create(argumentCollection=variables.instance);
+		
+			setAllValues(getBean('file').loadBy(fileID=getValue('fileID')).getAllValues());
+		} else {
+
+			super.save();
+		}
+		return this;
+
+	}
 }

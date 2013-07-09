@@ -93,12 +93,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="fileObjMedium" type="any" required="yes"/>
 		<cfargument name="fileID" type="any" required="yes" default="#createUUID()#"/>
 		<cfargument name="fileObjSource" type="any" default=""/>
+		<cfargument name="credits" type="string" required="yes" default=""/>
+		<cfargument name="caption" type="string" required="yes" default=""/>
+		<cfargument name="alttext" type="string" required="yes" default=""/>
 		
 		<cfset var ct=arguments.contentType & "/" & arguments.contentSubType />
 		<cfset var pluginEvent = createObject("component","mura.event").init(arguments) />
+		<cfset var fileBean=getBean('file')>
+	
+		<cfset arguments.fileExt=lcase(arguments.fileExt)>
+		<cfset fileBean.set(arguments)>
+		<cfset pluginEvent.setValue('fileBean',fileBean)>
 		<cfset variables.pluginManager.announceEvent("onBeforeFileCache",pluginEvent)>
 		
-		<cfset arguments.fileExt=lcase(arguments.fileExt)>
 		
 		<cfswitch expression="#variables.configBean.getFileStore()#">
 			<cfcase value="fileDir">		
@@ -160,33 +167,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		         </cfif>
 			</cfcase>
 		</cfswitch>
-		
-		<cfquery>
-		INSERT INTO tfiles (fileID,contentID,siteID,filename,contentType,contentSubType,fileSize,moduleID,fileExt,created<cfif variables.configBean.getFileStore() eq 'database'>,image,imageSmall,imageMedium</cfif>,deleted)
-		VALUES(
-		<cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.fileid#">,
-		<cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.contentid#">,
-		<cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.siteid#">,
-		<cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.filename#">,
-		<cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.contentType#">,
-		<cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.contentSubType#">,
-		<cfqueryparam cfsqltype="cf_sql_integer"  value="#arguments.fileSize#">,
-		<cfqueryparam cfsqltype="cf_sql_varchar"  value="#arguments.moduleID#">,
-		<cfqueryparam cfsqltype="cf_sql_varchar"  null="#iif(arguments.fileExt eq '',de('yes'),de('no'))#" value="#arguments.fileExt#">,
-		<cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">
-		<cfif variables.configBean.getFileStore() eq 'database'>,
-		<cfqueryparam cfsqltype="cf_sql_blob"  value="#arguments.fileObj#">,
-		<cfqueryparam cfsqltype="cf_sql_blob"  null="#iif(isBinary(arguments.fileObjSmall),de('no'),de('yes'))#" value="#arguments.fileObjSmall#">,
-		<cfqueryparam cfsqltype="cf_sql_blob"  null="#iif(isBinary(arguments.fileObjMedium),de('no'),de('yes'))#" value="#arguments.fileObjMedium#">
-		</cfif>,
-		0
-		)	
-		</cfquery>
-		
+
+		<cfset fileBean.save(processFile=false)>
+
 		<cfset variables.pluginManager.announceEvent("onFileCache", pluginEvent)>
 		<cfset variables.pluginManager.announceEvent("onAfterFileCache",pluginEvent)>
 
-		<cfif listFindNoCase('jpg,jpeg,png',arguments.fileExt) and isDefined('request.newImageIDList')>
+		<cfif listFindNoCase('jpg,jpeg,png',fileBean.getFileExt()) and isDefined('request.newImageIDList')>
 			<cfset request.newImageIDList=listAppend(request.newImageIDList,fileid)>
 		</cfif>
 

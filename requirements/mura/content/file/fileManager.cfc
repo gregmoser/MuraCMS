@@ -80,8 +80,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="fileObjMedium" type="any" required="yes"/>
 		<cfargument name="fileID" type="any" required="yes" default="#createUUID()#"/>
 		<cfargument name="fileObjSource" type="any" required="yes" default=""/>
+		<cfargument name="credits" type="string" required="yes" default=""/>
+		<cfargument name="caption" type="string" required="yes" default=""/>
+		<cfargument name="alttext" type="string" required="yes" default=""/>
 	
-		<cfreturn variables.fileDAO.create(arguments.fileObj,arguments.contentid,arguments.siteid,arguments.filename,arguments.contentType,arguments.contentSubType,arguments.fileSize,arguments.moduleID,arguments.fileExt,arguments.fileObjSmall,arguments.fileObjMedium,arguments.fileID,arguments.fileObjSource) />
+		<cfreturn variables.fileDAO.create(argumentCollection=arguments) />
 	
 </cffunction>
 
@@ -471,8 +474,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="isPostedFile" output="false">
-<cfargument name="theFileField">
-<cfreturn listFindNoCase("tmp,upload",listLast(arguments.theFileField,"."))>
+<cfargument name="fileField">
+<cfreturn (structKeyExists(form,arguments.fileField) and listFindNoCase("tmp,upload",listLast(form['#arguments.fileField#'],"."))) or listFindNoCase("tmp,upload",listLast(arguments.fileField,"."))>
 </cffunction>
 
 <cffunction name="purgeDeleted" output="false">
@@ -527,6 +530,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfif>
 		</cfloop>
 	</cfif>
+</cffunction>
+
+<cffunction name="upload" output="false">
+	<cfargument name="fileField">
+	<cffile action="upload" result="local.tempFile" filefield="#arguments.fileField#" nameconflict="makeunique" destination="#variables.configBean.getTempDir()#">
+	<cfreturn local.tempFile>
 </cffunction>
 
 <cffunction name="rebuildImageCache" output="false">

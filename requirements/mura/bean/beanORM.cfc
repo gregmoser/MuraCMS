@@ -93,6 +93,16 @@ component extends="mura.bean.bean" versioned=false {
 					}
 				}
 
+			} else {
+				if(listFindNoCase("date,datetime,timestamp",prop.datatype)){
+					variables.instance[prop.column]=now();
+				} else if(structKeyExists(prop,"default")){
+					if(prop.default neq 'null'){
+						variables.instance[prop.column]=prop.default;
+					} else {
+						variables.instance[prop.column]='';
+					}
+				} 
 			}
 		}
 
@@ -169,6 +179,8 @@ component extends="mura.bean.bean" versioned=false {
 
 		if(hasTable()){
 			for(var prop in props){
+				
+
 				if(props[prop].persistent){
 					getDbUtility().addColumn(argumentCollection=props[prop]);
 
