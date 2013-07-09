@@ -213,7 +213,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<div class="control-group">
 	      <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'collections.basicfromsection')#: <span id="selectFilter"><a href="javascript:;" onclick="javascript: feedManager.loadSiteFilters('#rc.siteid#','',1);return false;">[#application.rbFactory.getKeyValue(session.rb,'collections.selectnewsection')#]</a></span></label>
 		<div class="controls">
-			<table id="contentFilters" class="table table-striped table-condensed table-bordered mura-table-grid"> 
+			<table id="contentFilters" class="mura-table-grid"> 
 			<tr>
 			<th class="var-width">#application.rbFactory.getKeyValue(session.rb,'collections.section')#</th>
 			<th>#application.rbFactory.getKeyValue(session.rb,'collections.type')#</th>

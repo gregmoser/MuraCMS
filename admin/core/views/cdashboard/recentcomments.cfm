@@ -56,7 +56,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset comments.setPage(rc.page)>
 
 <h3>#application.rbFactory.getKeyValue(session.rb,"dashboard.comments.last100")#</h3>
-<table class="table table-striped table-condensed table-bordered mura-table-grid">
+<table class="mura-table-grid">
 <thead>
 <tr>
 	<th class="var-width">#application.rbFactory.getKeyValue(session.rb,"dashboard.comments")#</th>

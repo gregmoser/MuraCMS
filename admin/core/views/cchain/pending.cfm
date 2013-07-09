@@ -14,7 +14,7 @@
 		<h4>#members.getRecordIndex()#. #HTMLEditFormat(member.getGroup().getGroupName())#</h4>
 		<cfset requests=member.getPendingContentIterator()>
 	
-		<table class="table table-striped table-condensed table-bordered mura-table-grid">
+		<table class="mura-table-grid">
 		    <tr> 
 		      <th class="var-width">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.title')#</th>
 		      <cfif hasChangesets>
