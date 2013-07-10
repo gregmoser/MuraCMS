@@ -251,7 +251,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset variables.tracer.commitTracepoint(variables.tracepoint)>
 		<cfelse>
 			<cfscript>
-				/*
 				getBean('approvalChain');
 				getBean('approvalChainMembership');
 				getBean('approvalRequest');
@@ -262,7 +261,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				getBean('relatedContentSet');
 				getBean('fileMetaData');
 				getBean('file');
-				*/
 			</cfscript>
 		</cfif>
 		

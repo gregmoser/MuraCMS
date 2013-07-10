@@ -131,7 +131,7 @@ jQuery(document).ready(function(){
         </div>
         <!-- The loading indicator is shown during file processing 
         <div class="fileupload-loading"></div>
-       
+
         <br> -->
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"></tbody></table>
@@ -271,13 +271,13 @@ jQuery(document).ready(function(){
         </td>
         <td>
             {% if (!o.files.error && !i && !o.options.autoUpload) { %}
-                <button class="btn btn-primary start">
+                <button class="btn">
                     <i class="icon-upload icon-white"></i>
                     <span>Start</span>
                 </button>
             {% } %}
             {% if (!i) { %}
-                <button class="btn btn-warning cancel">
+                <button class="btn">
                     <i class="icon-ban-circle icon-white"></i>
                     <span>Cancel</span>
                 </button>
