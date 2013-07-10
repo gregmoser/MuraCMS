@@ -361,7 +361,6 @@ $(function () {
         }
 
     $.blueimp.fileupload.prototype._renderDownload= function (files) {
-           // alert(files[0].thumbnail_url)
             return this._renderTemplate(
                 this.options.downloadTemplate,
                 files
@@ -372,18 +371,13 @@ $(function () {
     $('##fileupload').fileupload(
         {url:'#application.configBean.getContext()#/admin/index.cfm',
         getFilesFromResponse: function (data) {
-                if (data && $.isArray(data.files)) {
-                    for(var p in data.files[0]){
-                    alert(p)
-                }
-                    return data.files;
+                if (data.result && $.isArray(data.result.files)) {
+                    return data.result.files;
                 }
                 return [];
             }
         }
-    );
-
-    $('##fileupload').bind('fileuploadsubmit', function (e, data) {
+    ).bind('fileuploadsubmit', function (e, data) {
         
         var extraParams={};
       
