@@ -55,59 +55,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <div id="tabRelatedcontent" class="tab-pane">
 
 	<span id="extendset-container-tabrelatedcontenttop" class="extendset-container"></span>
-
-	<!---<div class="fieldset padded">
-	<!--- #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.relatedcontent')#:  --->
-	<span id="selectRelatedContent"> <a class="btn" href="javascript:;" onclick="javascript: siteManager.loadRelatedContent('#HTMLEditFormat(rc.siteid)#','',1);return false;"><i class="icon-plus-sign"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.addrelatedcontent')#</a></span>
-		<table id="relatedContent" class="mura-table-grid"> 
-			<thead>
-				<tr>
-				<th class="var-width">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.contenttitle')#</th>
-				<th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.type')#</th>
-				<th class="actions">&nbsp;</th>
-				</tr>
-			</thead>
-			<tbody id="RelatedContent">
-				<cfif rc.rsRelatedContent.recordCount>
-				<cfloop query="rc.rsRelatedContent">
-				<cfset itemcrumbdata=application.contentManager.getCrumbList(rc.rsRelatedContent.contentid, rc.siteid)/>
-				<tr id="c#rc.rsRelatedContent.contentID#">
-				<td class="var-width">#$.dspZoom(itemcrumbdata)#</td>
-				<td>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.type.#rc.rsRelatedContent.type#')#</td>
-				<td class="actions">
-					<input type="hidden" name="relatedcontentid" value="#rc.rsRelatedContent.contentid#" />
-						<ul class="clearfix"><li class="delete"><a title="Delete" href="##" onclick="return siteManager.removeRelatedContent('c#rc.rsRelatedContent.contentid#','#jsStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removerelatedcontent'))#');"><i class="icon-remove-sign"></i></a></li>
-						</ul>
-				</td>
-				</tr></cfloop>
-				<cfelse>
-				<tr>
-				<td id="noFilters" colspan="4" class="noResults">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#</td>
-				</tr>
-				</cfif>
-			</tbody>
-		</table>
-	</div>--->
 	
 	<script>
-		function updateForm() {
-			var aBuckets = new Array();
-			$(".rcSortable").each(function(){
-				var aItems = new Array();
-				var bucket = new Object;
-				$(this).find('li.item:not(.empty)').each(function(){
-					var i = new Object;
-					i.contentid = $(this).attr('data-contentid');
-					aItems.push(i);
-				});
-				bucket.relatedcontentsetid = $(this).attr('data-relatedcontentsetid')
-				bucket.items = aItems;
-				aBuckets.push(bucket);
-			});
-			console.log(aBuckets);
-			$("##relatedContentSetData").val(JSON.stringify(aBuckets));
-		}
-	
 		$(document).ready(function(){
 			$(".rcSortable").sortable({
 				connectWith: ".rcSortable",
@@ -120,7 +69,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					siteManager.bindDelete();
 					siteManager.bindMouse();
 					siteManager.setDirtyRelatedContent();
-					updateForm();
+					siteManager.updateRCForm();
 				},
 				cancel: "li.empty"
 			}).disableSelection();
@@ -128,7 +77,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			siteManager.loadRelatedContent('#HTMLEditFormat(rc.siteid)#','',1)
 			siteManager.bindDelete();
 			siteManager.bindMouse();
-			updateForm();
+			siteManager.updateRCForm();
 		});
 	</script>
 	
@@ -243,17 +192,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</style>
 	
 	<div class="fieldset">
-		<div class="control-group">
-			<label class="control-label">Add Related Content</label>
-			<div class="controls">
-				<label class="radio inline">
-					<input type="radio" name="contentType" value="ic" /> Internal Content
-				</label>
-				<label class="radio inline">
-					<input type="radio" name="contentType" value="el" class="radio inline" /> External Link
-				</label>
-			</div>
-		</div>
 		<div id="selectRelatedContent"><!--- target for ajax ---></div>
 		
 		<cfloop from="1" to="#arrayLen(relatedContentSets)#" index="s">
