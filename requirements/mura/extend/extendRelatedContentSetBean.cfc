@@ -1,4 +1,4 @@
-component extends="mura.bean.beanORM" table="tclassextendrcsets" entityname="relatedContentSet" bundleable=true {
+component extends="mura.bean.beanORM" table="tclassextendrcsets" entityname="relatedContentSet" {
 
 	property name="relatedContentSetID" ormtype="varchar" length="35" default="00000000000000000000000000000000001";
     property name="name" ormtype="varchar" length="50" default="Default";

@@ -249,6 +249,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset variables.tracepoint=variables.tracer.initTracepoint("Checking/Applying DB updates")> 
 			<cfset application.configBean.applyDbUpdates() />
 			<cfset variables.tracer.commitTracepoint(variables.tracepoint)>
+		<cfelse>
+			<cfscript>
+				getBean('approvalChain');
+				getBean('approvalChainMembership');
+				getBean('approvalRequest');
+				getBean('approvalAction');
+				getBean('approvalChainAssignment');
+				getBean('changesetRollBack');
+				getBean('contentSourceMap');
+				getBean('relatedContentSet');
+				getBean('fileMetaData');
+				getBean('file');
+			</cfscript>
 		</cfif>
 		
 		<cfset application.appAutoUpdated=false>

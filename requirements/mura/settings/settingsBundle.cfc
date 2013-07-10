@@ -425,6 +425,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var rstclassextendattributes=""/>
 		<cfset var rstclassextenddata=""/>
 		<cfset var rstclassextenddatauseractivity="">
+		<cfset var tclassextendrcsets="">
 		<cfset var rstchangesets=""/>
 		<cfset var rstpluginmodules=""/>
 		<cfset var rstplugins=""/>
@@ -1047,6 +1048,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfquery>
 		
 			<cfset setValue("rstclassextendsets",rstclassextendsets)>
+
+			<cfquery datasource="#arguments.dsn#" name="rstclassextendsets">
+				select * from tclassextendrcsets 
+				where siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
+				<cfif rstclassextend.recordcount>
+					and subTypeID in (<cfqueryparam cfsqltype="cf_sql_varchar" value="#valueList(rstclassextend.subtypeID)#" list="true">)
+				<cfelse>
+					and 0=1
+				</cfif>
+			</cfquery>
+		
+			<cfset setValue("tclassextendrcsets",rstclassextendrcsets)>
 		
 			<cfquery datasource="#arguments.dsn#" name="rstclassextendattributes">
 				select * from tclassextendattributes where siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
