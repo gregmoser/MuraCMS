@@ -2939,7 +2939,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 					
 				</cfloop>
-
+			<!----
 			<cfif not StructKeyExists(arguments,"Bundle")>
 				<cfquery datasource="#arguments.fromDSN#" name="tclassextendrcsets">
 					select * from tclassextendrcsets 
@@ -2996,7 +2996,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 					
 				</cfloop>
-				
+			--->
 			<cfif not StructKeyExists(arguments,"Bundle")>
 				<cfquery datasource="#arguments.fromDSN#" name="rstclassextendattributes">
 					select * from tclassextendattributes where siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fromsiteid#"/>

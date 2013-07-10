@@ -163,7 +163,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					strict=true,
 					transientPattern = "(Iterator|Bean|MuraScope|Event|dbUtility)$" 
 					});
-
+			
 			variables.serviceFactory.addBean("tempDir",application.configBean.getTempDir());
 			variables.serviceFactory.addBean("useFileMode",application.configBean.getUseFileMode());
 			variables.serviceFactory.addBean("configBean",application.configBean);
@@ -251,6 +251,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset variables.tracer.commitTracepoint(variables.tracepoint)>
 		<cfelse>
 			<cfscript>
+				/*
 				getBean('approvalChain');
 				getBean('approvalChainMembership');
 				getBean('approvalRequest');
@@ -261,6 +262,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				getBean('relatedContentSet');
 				getBean('fileMetaData');
 				getBean('file');
+				*/
 			</cfscript>
 		</cfif>
 		
