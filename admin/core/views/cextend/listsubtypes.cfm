@@ -57,7 +57,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfoutput>
 <table class="mura-table-grid">
 <tr>
-	<th>Icon</th>
+	<!---<th>Icon</th>--->
 	<th>Class Extension</th>	
 	<th class="var-width">Description</th>
 	<th>Active</th>
@@ -66,7 +66,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfif rslist.recordcount>
 <cfoutput query="rslist">
 	<tr>
-		<td class="selected-icon"><i class="icon-rocket<!--- #subtype.getIconClass()# --->"></i></td>
+		<!---<td class="selected-icon"><i class="#$.renderIcon(iconArgs)#"></i></td>--->
 		<td><a title="Edit" href="index.cfm?muraAction=cExtend.listSets&subTypeID=#rslist.subTypeID#&siteid=#URLEncodedFormat(rc.siteid)#">#application.classExtensionManager.getTypeAsString(rslist.type)# / #rslist.subtype#</a></td>
 		<td class="var-width">#rslist.description#</td>
 		<td>#yesNoFormat(rslist.isactive)#</td>

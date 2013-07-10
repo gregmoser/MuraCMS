@@ -1093,14 +1093,14 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfloop from="1" to="#arrayLen(rcsData)#" index="i">
 			<cfset rcs = rcsData[i]>
 			<cfloop from="1" to="#arrayLen(rcs.items)#" index="j">
-				<cfset item = rcs.items[j]>
+				<cfset relatedID = rcs.items[j]>
 				<cftry>
 					<cfquery>
 						insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,orderNo)
 						values (
 						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
 						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#item.contentid#"/>,
+						<cfqueryparam cfsqltype="cf_sql_varchar" value="#relatedID#"/>,
 						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>,
 						<cfqueryparam cfsqltype="cf_sql_varchar" value="#rcs.relatedContentSetID#"/>,
 						<cfqueryparam cfsqltype="cf_sql_integer" value="#j#"/>
@@ -1113,7 +1113,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfelseif arguments.oldContentHistID neq ''>
 		<cfset rsRelatedContent = readRelatedItems(arguments.oldContentHistID, arguments.siteID)>
 		<cfloop query="rsRelatedContent">
-			<!---<cftry>--->
+			<cftry>
 				<cfquery>
 					insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,orderNo)
 					values (
@@ -1125,8 +1125,8 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 					<cfqueryparam cfsqltype="cf_sql_integer" value="#rsRelatedContent.orderNo#"/>
 					)
 				</cfquery>
-				<!---<cfcatch></cfcatch>
-			</cftry>--->
+				<cfcatch></cfcatch>
+			</cftry>
 		</cfloop>
 	</cfif>
 </cffunction> 

@@ -129,9 +129,10 @@ jQuery(document).ready(function(){
                 <div class="progress-extended">&nbsp;</div>
             </div>
         </div>
-        <!-- The loading indicator is shown during file processing -->
+        <!-- The loading indicator is shown during file processing 
         <div class="fileupload-loading"></div>
-        <br>
+
+        <br> -->
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"></tbody></table>
       <input type="hidden" name="muraAction" value="cArch.update"/>
@@ -270,13 +271,13 @@ jQuery(document).ready(function(){
         </td>
         <td>
             {% if (!o.files.error && !i && !o.options.autoUpload) { %}
-                <button class="btn btn-primary start">
+                <button class="btn">
                     <i class="icon-upload icon-white"></i>
                     <span>Start</span>
                 </button>
             {% } %}
             {% if (!i) { %}
-                <button class="btn btn-warning cancel">
+                <button class="btn">
                     <i class="icon-ban-circle icon-white"></i>
                     <span>Cancel</span>
                 </button>
@@ -360,17 +361,24 @@ $(function () {
             });
         }
 
-    $.blueimp.fileupload.prototype.getFilesFromResponse= function (data) {
-                if (data && $.isArray(data.files)) {
-                    return data.files;
+    $.blueimp.fileupload.prototype._renderDownload= function (files) {
+            return this._renderTemplate(
+                this.options.downloadTemplate,
+                files
+            ).find('a[download]').each(this._enableDragToDesktop).end();
+        }
+
+    // Initialize the jQuery File Upload widget:
+    $('##fileupload').fileupload(
+        {url:'#application.configBean.getContext()#/admin/index.cfm',
+        getFilesFromResponse: function (data) {
+                if (data.result && $.isArray(data.result.files)) {
+                    return data.result.files;
                 }
                 return [];
             }
-
-    // Initialize the jQuery File Upload widget:
-    $('##fileupload').fileupload({url:'#application.configBean.getContext()#/admin/index.cfm'});
-
-    $('##fileupload').bind('fileuploadsubmit', function (e, data) {
+        }
+    ).bind('fileuploadsubmit', function (e, data) {
         
         var extraParams={};
       

@@ -360,6 +360,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var rstclassextendsets=""/>
 		<cfset var rstclassextendattributes=""/>
 		<cfset var rstclassextenddata=""/>
+		<cfset var rstclassextendrcsets="">
 		<cfset var getNewID=""/>
 		<cfset var rstpluginscripts=""/>
 		<cfset var rstplugindisplayobjects=""/>
@@ -1212,7 +1213,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfloop query="rstFiles">
 				<cfquery datasource="#arguments.toDSN#">
 					insert into tfiles (contentID,contentSubType,contentType,fileExt,fileID,filename,fileSize,
-					image,imageMedium,imageSmall,moduleID,siteID,created)
+					image,imageMedium,imageSmall,moduleID,siteID,created
+					<cfif structKeyExists(rstfiles, "caption")>
+						,caption
+						,credits
+						,alttext
+					</cfif>
+					)
 					values
 					(
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.contentID neq '',de('no'),de('yes'))#" value="#keys.get(rstFiles.contentID)#">,
@@ -1228,6 +1235,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstfiles.moduleID neq '',de('no'),de('yes'))#" value="#rstfiles.moduleID#">,
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#arguments.tositeID#">,
 					<cfqueryparam cfsqltype="cf_sql_TIMESTAMP" null="#iif(isDate(rstFiles.created),de('no'),de('yes'))#" value="#rstFiles.created#">
+					<cfif structKeyExists(rstfiles, "caption")>
+						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.caption neq '',de('no'),de('yes'))#" value="#rstFiles.caption#">
+						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.credits neq '',de('no'),de('yes'))#" value="#rstFiles.credits#">
+						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.alttext neq '',de('no'),de('yes'))#" value="#rstFiles.alttext#">
+					</cfif>
 					)
 				</cfquery>
 			</cfloop>
@@ -2043,7 +2055,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		
 	</cffunction>
-	
+	<!---
 	<cffunction name="getToWorkAdvertising" returntype="void" output="false">
 		<cfargument name="fromSiteID" type="string" default="" required="true">
 		<cfargument name="toSiteID" type="string" default="" required="true">
@@ -2087,6 +2099,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var rstusersinterests=""/>
 		<cfset var rstclassextend=""/>
 		<cfset var rstclassextendsets=""/>
+		<cfset var rstclassextendrcsets="">
 		<cfset var rstclassextendattributes=""/>
 		<cfset var rstclassextenddata=""/>
 		<cfset var getNewID=""/>
@@ -2508,6 +2521,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var rstusersinterests=""/>
 		<cfset var rstclassextend=""/>
 		<cfset var rstclassextendsets=""/>
+		<cfset var rstclassextendrcsets="">
 		<cfset var rstclassextendattributes=""/>
 		<cfset var rstclassextenddata=""/>
 		<cfset var getNewID=""/>
@@ -2596,7 +2610,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfloop>
 		
 	</cffunction>
-		
+	
 	<cffunction name="getToWorkClassExtensionOLD" returntype="void">
 		<cfargument name="fromSiteID" type="string" default="" required="true">
 		<cfargument name="toSiteID" type="string" default="" required="true">
@@ -2684,7 +2698,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfloop>
 		
 	</cffunction>
-	
+	--->
 	<cffunction name="getToWorkClassExtensions" returntype="void">
 		<cfargument name="fromSiteID" type="string" default="" required="true">
 		<cfargument name="toSiteID" type="string" default="" required="true">
@@ -2704,6 +2718,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var keys=arguments.keyFactory/>
 		<cfset var rstclassextend=""/>
 		<cfset var rstclassextendsets=""/>
+		<cfset var rstclassextendrcsets="">
 		<cfset var rstclassextendattributes=""/>
 		<cfset var rstclassextenddata=""/>
 		<cfset var getAttributeID=""/>
@@ -2924,7 +2939,41 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 					
 				</cfloop>
+			
+			<cfif not StructKeyExists(arguments,"Bundle")>
+				<cfquery datasource="#arguments.fromDSN#" name="tclassextendrcsets">
+					select * from tclassextendrcsets 
+					where siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fromsiteid#"/>
+					and subTypeID in (
+								select subTypeID 
+								from tclassextend 
+								where siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fromsiteid#"/> 
+								and type in (<cfqueryparam cfsqltype="cf_sql_varchar" value="#typeList#" list="true">)
+								)
+				</cfquery>
+			<cfelse>
+				<cfset tclassextendrcsets = arguments.Bundle.getValue("tclassextendrcsets")>
+			</cfif>
+	
+				<cfquery name="tclassextendrcsets" dbtype="query">
+				select * from tclassextendrcsets where 
+				<cfif rstclassextend.recordcount>
+					subtypeID in (<cfqueryparam cfsqltype="cf_sql_varchar" value="#valueList(rstclassextend.subtypeID)#" list="true">)
+				<cfelse>
+					0=1
+				</cfif>
+				</cfquery>
 				
+				<cfset local.it=getBean('relatedContentSet').getIterator()>
+				<cfset local.it.setQuery(tclassextendrcsets)>
+				<cfloop condition="local.it.hasNext()">
+					<cfset local.item=local.next()>
+					<cfset local.item.setSiteID(arguments.toSiteID)>
+					<cfset local.item.setRelatedContentID(keys.get(local.item.getRelatedContentID()))>
+					<cfset local.item.setRelatedContentID(keys.get(local.item.getSubTypeID()))>
+					<cfset local.item.save()>
+				</cfloop>
+			
 			<cfif not StructKeyExists(arguments,"Bundle")>
 				<cfquery datasource="#arguments.fromDSN#" name="rstclassextendattributes">
 					select * from tclassextendattributes where siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.fromsiteid#"/>

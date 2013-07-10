@@ -1175,7 +1175,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 						
 					<cfif newBean.getType() eq "File">
-						<cfset newBean.setBody(tempFile.serverfile) />
+						<cfset newBean.setBody(local.fileBean.getFilename()) />
 							
 						<cfif not isdefined("arguments.data.versionType")>
 							<cfset arguments.data.versionType="minor">
@@ -2091,19 +2091,21 @@ version 2 without this exception.  You may, if you choose, apply this exception 
    			<cfelse>
    				<cfcontent type="text/plain; charset=utf-8">
 			</cfif>
-			<cfoutput>[</cfoutput>
+			<cfoutput>{"files":[</cfoutput>
 			<cfloop from="1" to="#arrayLen(form.files)#" index="f">
 				<cfif isDefined('form.extraParams') 
 					and isArray(form.extraParams) 
 					and arrayLen(form.extraParams) 
 					and isJSON(form.extraParams[1])>
-					<cfset structAppend(fileItem,deserializeJSON(local.extraParams))>
+					<cfset local.extraParams=deserializeJSON(form['extraParams'])>
 				<cfelse>
 					<cfset local.extraParams={}>
 				</cfif>
 
+				<cfset structAppend(fileItem,local.extraParams)>
+
 				<cfset local.fileBean=getBean('file')>
-				<cfset local.fileBean.setSiteID(fileItem)>
+				<cfset local.fileBean.set(fileItem)>
 				<cfset local.fileBean.setFileField('files')>
 				<cfset local.fileBean.save()>
 			
@@ -2129,11 +2131,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					    "delete_url":"",
 					    "delete_type":"DELETE"
 					  }>
-				<cfset structAppend(local.returnStr,fileBean.getAllValues())>
+				<cfset structAppend(local.returnStr,local.extraParams)>
 				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
 				<cfif f lt arrayLen(form.files)><cfoutput>,</cfoutput></cfif>
 			</cfloop>
-			<cfoutput>]</cfoutput>
+			<cfoutput>]}</cfoutput>
 			<cfabort>
 		<cfcatch>
 			<cflog log="application" text="Railo: #cfcatch.message#">
@@ -2150,16 +2152,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
    			<cfelse>
    				<cfcontent type="text/plain; charset=utf-8">
 			</cfif>
-			<cfoutput>[</cfoutput>
+			<cfoutput>{"files":[</cfoutput>
 			<!---<cfloop from="1" to="#listLen(form['files'])#" index="f">--->
 				<cfif isDefined('form.extraParams') 
 					and isSimpleValue(form['extraParams']) 
 					and len(form['extraParams'])>
-					<cfset structAppend(fileItem,deserializeJSON(form['extraParams']))>
+					<cfset local.extraParams=deserializeJSON(form['extraParams'])>
+				<cfelse>
+					<cfset local.extraParams={}>
 				</cfif>
 
+				<cfset structAppend(fileItem,local.extraParams)>
+
 				<cfset local.fileBean=getBean('file')>
-				<cfset local.fileBean.setSiteID(fileItem)>
+				<cfset local.fileBean.set(fileItem)>
 				<cfset local.fileBean.setFileField('files')>
 				<cfset local.fileBean.save()>
 			
@@ -2169,7 +2175,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif not structKeyExists(fileItem,'title')>
 					<cfset fileItem.title=local.fileBean.getFilename()>
 				</cfif>
-				
+
 				<cfset fileBean=add(structCopy(fileItem)) />
 				<cfquery>
 					 update tfiles set contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getContentID()#"> 
@@ -2185,10 +2191,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					    "delete_url":"",
 					    "delete_type":"DELETE"
 					  }>
-				<cfset structAppend(local.returnStr,fileBean.getAllValues())>
+				<cfset structAppend(local.returnStr,local.extraParams)>
 				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
 			<!---</cfloop>--->
-			<cfoutput>]</cfoutput>
+			<cfoutput>]}</cfoutput>
 			<cfabort>
 		<cfcatch>
 			<cflog log="application" text="CF: #cfcatch.message#">
