@@ -188,6 +188,7 @@
 				setCheckboxTrees();
 				setColorPickers(".colorpicker");
 				setToolTips(".container");
+				setFileSelectors();
 			});
 
 		preloadimages(['#application.configBean.getContext()#/admin/assets/images/ajax-loader.gif']);

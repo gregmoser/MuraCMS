@@ -16,7 +16,10 @@
 				and (rc.type eq 'File' and not rc.contentBean.getIsNew())>
 				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')#</p>
 			</cfif>
-			<input type="file" id="file" name="NewFile" <cfif rc.ptype eq 'Gallery' or rc.type neq 'File'>accept="image/jpeg,image/png" message="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.newimagevalidate')#"</cfif>>
+			<cf_fileselector name="newfile">
+			<!---
+			<input type="file" id="file" name="NewFile" <cfif rc.ptype eq 'Gallery' or rc.type neq 'File'>accept="image/jpeg,image/png" message="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.newimagevalidate')#"</cfif>>--->
+
 			<cfif rc.type eq "file" and not rc.contentBean.getIsNew()>
 				<p style="display:none;" id="mura-revision-type">
 					<label class="radio inline">
@@ -27,7 +30,7 @@
 					</label>
 				</p>
 				<script>
-					jQuery("##file").change(function(){
+					jQuery(".mura-file-selector-newfile").change(function(){
 						jQuery("##mura-revision-type").fadeIn();
 					});	
 				</script>
