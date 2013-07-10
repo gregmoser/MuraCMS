@@ -228,6 +228,8 @@
 }
 .editableObject .editableObjectContents {
   /*display: inline-block;*/
+  /* May be overridden when rendered */
+
   visibility: visiible !important;
   float: none;
   /* May be overridden when rendered */

@@ -62,7 +62,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </script>
 </cfif>
 <div class="mura">
-<div class="add-content-ui">
+<div id="add-content-ui">
 <ul>
 <cfif rc.ptype neq 'Gallery'>
 	<cfloop list="#typeList#" index="i">
