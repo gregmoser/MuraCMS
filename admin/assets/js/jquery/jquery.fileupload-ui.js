@@ -71,8 +71,8 @@
 
             // Callback to retrieve the list of files from the server response:
             getFilesFromResponse: function (data) {
-                if (data && $.isArray(data.files)) {
-                    return data.files;
+                if (data.result && $.isArray(data.result.files)) {
+                    return data.result.files;
                 }
                 return [];
             },

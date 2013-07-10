@@ -1175,7 +1175,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 						
 					<cfif newBean.getType() eq "File">
-						<cfset newBean.setBody(tempFile.serverfile) />
+						<cfset newBean.setBody(local.fileBean.getFilename()) />
 							
 						<cfif not isdefined("arguments.data.versionType")>
 							<cfset arguments.data.versionType="minor">
@@ -2091,7 +2091,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
    			<cfelse>
    				<cfcontent type="text/plain; charset=utf-8">
 			</cfif>
-			<cfoutput>[</cfoutput>
+			<cfoutput>{"files":[</cfoutput>
 			<cfloop from="1" to="#arrayLen(form.files)#" index="f">
 				<cfif isDefined('form.extraParams') 
 					and isArray(form.extraParams) 
@@ -2135,7 +2135,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
 				<cfif f lt arrayLen(form.files)><cfoutput>,</cfoutput></cfif>
 			</cfloop>
-			<cfoutput>]</cfoutput>
+			<cfoutput>]}</cfoutput>
 			<cfabort>
 		<cfcatch>
 			<cflog log="application" text="Railo: #cfcatch.message#">
@@ -2152,7 +2152,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
    			<cfelse>
    				<cfcontent type="text/plain; charset=utf-8">
 			</cfif>
-			<cfoutput>[</cfoutput>
+			<cfoutput>{"files":[</cfoutput>
 			<!---<cfloop from="1" to="#listLen(form['files'])#" index="f">--->
 				<cfif isDefined('form.extraParams') 
 					and isSimpleValue(form['extraParams']) 
@@ -2194,7 +2194,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset structAppend(local.returnStr,local.extraParams)>
 				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
 			<!---</cfloop>--->
-			<cfoutput>]</cfoutput>
+			<cfoutput>]}</cfoutput>
 			<cfabort>
 		<cfcatch>
 			<cflog log="application" text="CF: #cfcatch.message#">

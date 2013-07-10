@@ -384,7 +384,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				title, releasedate, menuTitle, tcontent.lastupdate,summary, tags,tcontent.filename, type,subType, tcontent.siteid,
 				tcontent.contentid, tcontent.contentHistID, target, targetParams, 
 				restricted, restrictgroups, displaystart, displaystop, orderno,sortBy,sortDirection,
-				tcontent.fileid, credits, remoteSource, remoteSourceURL, remoteURL,
+				tcontent.fileid, tcontent.credits, remoteSource, remoteSourceURL, remoteURL,
 				tfiles.fileSize,tfiles.fileExt, audience, keypoints
 				,tcontentstats.rating,tcontentstats.totalVotes,tcontentstats.downVotes,tcontentstats.upVotes
 				,tcontentstats.comments, '' as parentType, <cfif doKids> qKids.kids<cfelse>null as kids</cfif>,tcontent.path, tcontent.created, tcontent.nextn,
@@ -569,7 +569,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				order by 
 							
 				<cfswitch expression="#arguments.sortBy#">
-					<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype">
+					<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,tcontent.credits,type,subtype">
 						<cfif dbType neq "oracle" or  listFindNoCase("orderno,lastUpdate,releaseDate,created,displayStart,displayStop",arguments.sortBy)>
 						tcontent.#arguments.sortBy# #arguments.sortDirection#
 						<cfelse>
@@ -1108,7 +1108,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="sortDirection" type="string" required="true" default="asc">
 		<cfargument name="searchString" type="string" required="true" default="">
 		<cfset var rsNest = "">
-		<cfset var sortOptions="menutitle,title,lastupdate,releasedate,orderno,displayStart,created,rating,comment,credits,type,subtype">
+		<cfset var sortOptions="menutitle,title,lastupdate,releasedate,orderno,displayStart,created,rating,comment,tcontent.credits,type,subtype">
 		<cfset var isExtendedSort=(not listFindNoCase(sortOptions,arguments.sortBy))>
 		<cfset var dbType=variables.configBean.getDbType() />
 		<cfset var likeCi=variables.configBean.getDbLikeCi() />
@@ -1182,7 +1182,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		order by
 		<cfswitch expression="#arguments.sortBy#">
-			<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype">
+			<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,tcontent.credits,type,subtype">
 				<cfif dbType neq "oracle" or  listFindNoCase("orderno,lastUpdate,releaseDate,created,displayStart,displayStop",arguments.sortBy)>
 				tcontent.#arguments.sortBy# #arguments.sortDirection#
 				<cfelse>
@@ -1893,7 +1893,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		tcr.orderNo
 	<cfelse>
 		<cfswitch expression="#arguments.sortBy#">
-			<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype">
+			<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,tcontent.credits,type,subtype">
 				<cfif variables.configBean.getDbType() neq "oracle" or  listFindNoCase("orderno,lastUpdate,releaseDate,created,displayStart,displayStop",arguments.sortBy)>
 					tcontent.#arguments.sortBy# #arguments.sortDirection#
 				<cfelse>
