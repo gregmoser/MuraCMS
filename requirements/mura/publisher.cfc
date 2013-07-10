@@ -2964,37 +2964,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 				</cfquery>
 				
-				<cfloop query="tclassextendrcsets">
-					<cfquery name="rsCheck" datasource="#arguments.toDSN#">
-					select * from tclassextendrcsets
-					where tclassextendrcsets = <cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(tclassextendrcsets.relatedContentSetID)#">
-					</cfquery>
-					
-					<cfif not rsCheck.recordcount>
-						<cfquery datasource="#arguments.toDSN#">
-							insert into tclassextendsets (relatedContentSetID, subTypeID, siteID, name, orderno, availableSubTypes)
-							values
-							(
-							<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(tclassextendrcsets.relatedContentSetID)#">,
-							<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(tclassextendrcsets.subTypeID)#">,
-							<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#arguments.toSiteID#">,
-							<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(tclassextendrcsets.name neq '',de('no'),de('yes'))#" value="#tclassextendrcsets.name#">,
-							<cfqueryparam cfsqltype="cf_sql_NUMERIC" null="#iif(tclassextendrcsets.orderno neq '',de('no'),de('yes'))#" value="#tclassextendrcsets.orderno#">,
-							<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(tclassextendrcsets.availableSubTypes neq '',de('no'),de('yes'))#" value="#tclassextendrcsets.availableSubTypes#">
-							)
-						</cfquery>
-					<cfelse>
-						<cfquery datasource="#arguments.toDSN#">
-							update tclassextendsets set
-							<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(tclassextendrcsets.subTypeID)#">,
-							<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#arguments.toSiteID#">,
-							<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(tclassextendrcsets.name neq '',de('no'),de('yes'))#" value="#tclassextendrcsets.name#">,
-							<cfqueryparam cfsqltype="cf_sql_NUMERIC" null="#iif(tclassextendrcsets.orderno neq '',de('no'),de('yes'))#" value="#tclassextendrcsets.orderno#">,
-							<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(tclassextendrcsets.availableSubTypes neq '',de('no'),de('yes'))#" value="#tclassextendrcsets.availableSubTypes#">
-							where relatedContentSetID = <cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(tclassextendrcsets.relatedContentSetID)#">
-						</cfquery>	
-					</cfif>
-					
+				<cfset local.it=getBean('relatedContentSet').getIterator()>
+				<cfset local.it.setQuery(tclassextendrcsets)>
+				<cfloop condition="local.it.hasNext()">
+					<cfset local.item=local.next()>
+					<cfset local.item.setSiteID(arguments.toSiteID)>
+					<cfset local.item.setRelatedContentID(keys.get(local.item.getRelatedContentID()))>
+					<cfset local.item.setRelatedContentID(keys.get(local.item.getSubTypeID()))>
+					<cfset local.item.save()>
 				</cfloop>
 			
 			<cfif not StructKeyExists(arguments,"Bundle")>
