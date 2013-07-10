@@ -50,16 +50,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfoutput>
 	<div class="control-group">
-		<label class="control-label">Search for Content</label>
+		<label class="control-label">Add Related Content</label>
 		<div id="internalContent" class="form-inline">
-			<input type="text" name="kewords" value="" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
+			<input type="text" name="kewords" value="#rc.keywords#" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
 			<input type="button" name="btnSearch" value="Search" class="btn" onclick="siteManager.loadRelatedContent('#rc.siteid#', document.getElementById('rcSearch').value, 0); return false;" />
 		</div>
-		<a href="" class="pull-right">Advanced Search</a>
+		<a href="##" class="pull-right">Advanced Search</a>
 	</div>
-	<!---<div class="control-group">
-		<div id="externalLink" style="display:none;">EXTERNAL LINK FORM</div>
-	</div>--->
+	<div id="rcAdvancedSearch" class="control-group">
+		<label class="control-label">Available Categories</label>
+
+		<div id="mura-list-tree" class="controls">
+			<cf_dsp_categories_nest siteID="#rc.siteID#" parentID="" nestLevel="0" useID="0">
+		</div>
+	</div>
 </cfoutput>
 
 <div class="control-group">

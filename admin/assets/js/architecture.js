@@ -607,8 +607,26 @@ buttons: {
 			}).disableSelection();
 			
 			siteManager.bindMouse();
+			setCheckboxTrees();
+			$('#rcAdvancedSearch').find('ul.categories:not(.checkboxTrees)').css("margin-left", "10px");
 		});
 	},
+	
+	updateRCForm: function() {
+		var aBuckets = new Array();
+		$(".rcSortable").each(function(){
+			var aItems = new Array();
+			var bucket = new Object;
+			$(this).find('li.item:not(.empty)').each(function(){
+				aItems.push($(this).attr('data-contentid'));
+			});
+			bucket.relatedcontentsetid = $(this).attr('data-relatedcontentsetid')
+			bucket.items = aItems;
+			aBuckets.push(bucket);
+		});
+		$("#relatedContentSetData").val(JSON.stringify(aBuckets));
+	},
+		
 	
 	setDirtyRelatedContent: function () {
 		this.dirtyRelatedContent = true;
