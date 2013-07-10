@@ -129,9 +129,10 @@ jQuery(document).ready(function(){
                 <div class="progress-extended">&nbsp;</div>
             </div>
         </div>
-        <!-- The loading indicator is shown during file processing -->
+        <!-- The loading indicator is shown during file processing 
         <div class="fileupload-loading"></div>
-        <br>
+       
+        <br> -->
         <!-- The table listing the files available for upload/download -->
         <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"></tbody></table>
       <input type="hidden" name="muraAction" value="cArch.update"/>
