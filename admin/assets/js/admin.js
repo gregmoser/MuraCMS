@@ -918,16 +918,23 @@ function setCheckboxTrees() {
 	    	this.options.file=this.$element.attr('data-name');
 	    }
 
+	   
+
 	    var clickHandler=function(){
+	    	setTab($(this).val());
+	    }
+
+	    var setTab=function(tab){
 	    	//alert($opts.file)
 	    	$elm.find(".mura-file-option").hide();
-	    	$elm.find(".mura-file-" + $(this).val().toLowerCase()).show();
+	    	$elm.find(".mura-file-" + tab.toLowerCase()).show();
 			$elm.find(".mura-file-option").find("input").attr('name','');
-			$elm.find(".mura-file-" + $(this).val().toLowerCase()).find("input").attr('name',$opts.file);
+			$elm.find(".mura-file-" + tab.toLowerCase()).find("input").attr('name',$opts.file);
 	    }
 	
 	    $(this.$element).find("button.btn").click(clickHandler);
-	
+		setTab('Upload');
+
 	  }
 	
 	  $.fn.fileselector = function (options) {
