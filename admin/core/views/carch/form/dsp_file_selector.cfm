@@ -16,6 +16,7 @@
 				and (rc.type eq 'File' and not rc.contentBean.getIsNew())>
 				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')#</p>
 			</cfif>
+			
 			<cf_fileselector name="newfile">
 			<!---
 			<input type="file" id="file" name="NewFile" <cfif rc.ptype eq 'Gallery' or rc.type neq 'File'>accept="image/jpeg,image/png" message="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.newimagevalidate')#"</cfif>>--->
@@ -38,16 +39,7 @@
 			<cfif rc.type neq 'File'>			
 				<cfif len(rc.contentBean.getFileID())>
 				<!--- <div class="well"> --->
-					<a href="./index.cfm?muraAction=cArch.imagedetails&contenthistid=#rc.contentBean.getContentHistID()#&siteid=#rc.contentBean.getSiteID()#&fileid=#rc.contentBean.getFileID()#&compactDisplay=#urlEncodedFormat(rc.compactDisplay)#"><img id="assocImage" src="#application.configBean.getContext()#/tasks/render/small/index.cfm?fileid=#rc.contentBean.getFileID()#&cacheID=#createUUID()#" /></a>
-					
-					<div class="btn-group">
-						<a class="btn" href="./index.cfm?muraAction=cArch.imagedetails&contenthistid=#rc.contentBean.getContentHistID()#&siteid=#rc.contentBean.getSiteID()#&fileid=#rc.contentBean.getFileID()#&compactDisplay=#urlEncodedFormat(rc.compactDisplay)#"><i class="icon-crop"></i></a>
-						<a class="btn" href=""><i class="icon-info-sign"></i></a>
-						<a class="btn" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(rc.siteid)#','#htmlEditFormat(rc.contentBean.getFileID())#','#htmlEditFormat(rc.contentID)#','',1);return false;"><i class="icon-picture" data-toggle="tooltip" title="" data-original-title="Select an Existing Image"></i></a>
-				  	</div>
-				 <!--- </div> --->
-					
-					<label class="checkbox inline" for="deleteFileBox"><input type="checkbox" name="deleteFile" value="1" id="deleteFileBox"/> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removeattachedfile')#</label>
+					<cf_filetools bean="#rc.contentBean#" property="fileid" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#">
 				</cfif>
 				<cfif rc.type neq 'File'>
 					<span id="selectAssocImage">
