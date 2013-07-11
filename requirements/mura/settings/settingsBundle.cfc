@@ -1049,7 +1049,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 			<cfset setValue("rstclassextendsets",rstclassextendsets)>
 
-			<cfquery datasource="#arguments.dsn#" name="rstclassextendsets">
+			<cfquery datasource="#arguments.dsn#" name="rstclassextendrcsets">
 				select * from tclassextendrcsets 
 				where siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 				<cfif rstclassextend.recordcount>
