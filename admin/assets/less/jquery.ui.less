@@ -1,8 +1,10 @@
+// This file is for augmenting/overriding jquery.ui.bootstrap.less
+
 @jQueryPath: 'jquery/default'; 
 
 @import "variables.less";
 @import "jquery/default/jquery.ui.base.css";
-@import "jquery.ui.bootstrap.less";
+@import "jquery-ui-bootstrap/jquery-ui-1.10.0.custom.less";
 @import "fonts.less";
 
 // Buttons
@@ -325,42 +327,41 @@
 	height: 22px;
 	width: 22px;
 	display: inline-block;
-	}
-	
-	.ui-dialog-titlebar-close:hover {
-	background: transparent;
 	border: 0;
-	text-decoration: none;
-	}
-
-	.ui-dialog-titlebar-close span {
+	outline: 0;
 	background: transparent;
 	background-image: none;
 	text-decoration: inherit;
-	display: inline-block;
 	text-indent: 0;
-	height: 22px;
-	width: 22px;
-	}
+	text-shadow: 0 0 0;
 	
-	.ui-dialog-titlebar-close span:before {
-	font-family: FontAwesome;
-	font-weight: normal;
-	font-style: normal;
-	display: inline-block;
-	text-decoration: inherit;
-	text-align: left;
-	width: 1em;
-	font-size: 24px;
-	line-height: 1.1;
-	color: @grayDark;
-	display: inline-block;
-	content: "\f057"; 
-	}
+		&:before {
+		font-family: FontAwesome;
+		font-weight: normal;
+		font-style: normal;
+		display: inline-block;
+		text-decoration: inherit;
+		text-align: left;
+		width: 1em;
+		font-size: 24px;
+		line-height: 1.1;
+		color: @grayDark;
+		display: inline-block;
+		content: "\f057"; 
+		margin: -1px 0 0 1px;
+			}
+		
+		&:hover {
+		background: transparent;
+		border: 0;
+		text-decoration: none;
+			}
+		
+		&:hover:before {
+			color: @grayDarker;
+			}
+		}
 
-	.ui-dialog-titlebar-close:hover span:before {
-	color: @grayDarker;
-	}
 	
 	h1 {
 		color: @blue !important;
