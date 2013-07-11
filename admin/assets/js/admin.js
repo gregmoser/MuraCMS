@@ -904,30 +904,95 @@ function setCheckboxTrees() {
 	});
 }
 
+
+(function ($) {
+
+	 /* BUTTON PUBLIC CLASS DEFINITION
+	  * ============================== */
+
+	  var FileSelector = function (element, options) {
+	    var $elm= this.$element = $(element);
+	    var $opts = this.options = $.extend({}, $.fn.fileselector.defaults, options);
+
+	    if($(this.$element).attr('data-name')){
+	    	this.options.file=this.$element.attr('data-name');
+	    }
+
+	    var clickHandler=function(){
+	    	//alert($opts.file)
+	    	$elm.find(".mura-file-option").hide();
+	    	$elm.find(".mura-file-" + $(this).val().toLowerCase()).show();
+			$elm.find(".mura-file-option").find("input").attr('name','');
+			$elm.find(".mura-file-" + $(this).val().toLowerCase()).find("input").attr('name',$opts.file);
+	    }
+	
+	    $(this.$element).find("button.btn").click(clickHandler);
+	
+	  }
+	
+	  $.fn.fileselector = function (options) {
+	    return this.each(function () {
+	      var $this = $(this);
+	      var data = $this.data('fileselector');
+	      
+	      if (!data){
+	      	 $this.data('fileselector', (data = new FileSelector(this, options)) );
+	      }
+	  	});
+	  }
+
+	  $.fn.fileselector.defaults = {
+	    file: 'newfile'
+	  }
+
+	  $.fn.fileselector.Constructor = FileSelector;
+
+}(window.jQuery));
+
 function setFileSelectors() {
+
+	$('.mura-file-selector').fileselector();
+
+	/*
 	$('.mura-file-selector').each(
 		function(){
-				var name=$(this).attr('data-name');
+				this.name=$(this).attr('data-name');	
+				$("#mura-file-upload-" + this.name).show();
+				$("#mura-file-url-" + this.name).hide();
 
-				$("#mura-file-upload-" + name).show();
-				$("#mura-file-url-" + name).hide();
-				
-				$("button[name='newfile" + name + "']").unbind('click').click(
-						function(){
-							//alert($("#mura-file-upload-" + name).is(":visible"))
-							$(".fileTypeOption" + name).toggle();
-							if($("#mura-file-upload-" + name).is(":visible")){
-								$("#mura-file-upload-" + name).find("input").attr('name',name);
-								$("#mura-file-url-" + name).find("input").attr('name','');
-							} else {
-								$("#mura-file-upload-" + name).find("input").attr('name','');
-								$("#mura-file-url-" + name).find("input").attr('name',name);
-							}
+				$(this).find("button[value='Upload']")
+				.unbind('click')
+				.click(
+						function(){	
+								alert(name)
+								$("#mura-file-upload-" + self.name).show();
+								$("#mura-file-url-" + self.name).hide();
+								$("#mura-file-upload-" + self.name).find("input").attr('name',self.name);
+								$("#mura-file-url-" + self.name).find("input").attr('name','');
+							
 						}
 					);
+
+				$(this).$("button[value='URL']")
+				.unbind('click')
+				.click(
+						function(){	
+								alert(name)
+								$("#mura-file-upload-" + self.name).hide();
+								$("#mura-file-url-" + self.name).show();
+								$("#mura-file-upload-" + vname).find("input").attr('name','');
+								$("#mura-file-url-" + self.name).find("input").attr('name',self.name);
+							
+						}
+					);
+
+				//$(this).button();
 		
 		}
 	);
+	*/
+
+	//$().button('toggle')
 }
 
 function alertDialog(message) {

@@ -254,11 +254,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</div>
 		<script>
 			$(function(){
-				$("button[name='installType']").click(
-						function(){
-							$(".fileTypeOption").toggle()
-						}
-					);
+				$("#apptypefile").click(
+					function(){
+							$("#appurl").hide()
+							$("#appzip").show()
+					}
+				);
+				$("#apptypeurl").click(
+					function(){
+							$("#appurl").show()
+							$("#appzip").hide()
+					}
+				);
 			})
 		</script>
 			<table class="mura-table-grid">
