@@ -7,10 +7,6 @@ component extends="mura.bean.beanORM" table="tclassextendrcsets" entityname="rel
 	property name="siteID" ormtype="varchar" length="25" default="";
 	property name="subTypeID" ormtype="varchar" length="35" default="";
 	
-	function init(){
-		super.init(argumentCollection=arguments);
-		setValue('relatedContentSetID','00000000000000000000000000000000000');
-	}
 	function getRelatedContentQuery(contentHistID){
         var rcSetID = getValue('relatedContentSetID');
 		var rs = "";
