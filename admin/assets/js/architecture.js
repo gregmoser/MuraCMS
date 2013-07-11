@@ -781,6 +781,7 @@ buttons: {
 		setColorPickers(".tab-content .colorpicker");
 		setColorPickers(".tab-content .colorpicker");
 		setToolTips(".tab-content");
+		setFileSelectors();
 	},
 
 	checkExtendSetTargeting: function() {

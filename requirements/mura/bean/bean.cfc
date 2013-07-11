@@ -47,7 +47,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfcomponent extends="mura.cfobject" output="false">
 
 <cfproperty name="errors" type="struct" persistent="false" comparable="false" />
-<cfproperty name="isNew" type="numeric" persistent="false" default="0"/>
+<cfproperty name="isNew" type="numeric" persistent="false" default="1"/>
 <cfproperty name="fromMuraCache" type="boolean" default="false" persistent="false" comparable="false"/>
 <cfproperty name="instanceID" type="string" persistent="false" comparable="false"/>
 

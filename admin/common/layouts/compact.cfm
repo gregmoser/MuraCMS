@@ -144,6 +144,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				setCheckboxTrees();
 				setColorPickers(".colorpicker");
 				setToolTips(".container");
+				setFileSelectors();
 
 				if (top.location != self.location) {
 					frontEndProxy = new Porthole.WindowProxy("#session.frontEndProxyLoc##application.configBean.getContext()#/admin/assets/js/porthole/proxy.html");

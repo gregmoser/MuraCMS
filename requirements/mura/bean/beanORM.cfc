@@ -93,7 +93,8 @@ component extends="mura.bean.bean" versioned=false {
 					}
 				}
 
-			} else {
+			} 
+			else {
 				if(listFindNoCase("date,datetime,timestamp",prop.datatype)){
 					variables.instance[prop.column]=now();
 				} else if(structKeyExists(prop,"default")){

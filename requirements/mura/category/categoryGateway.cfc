@@ -74,7 +74,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif arguments.keywords neq ''>and tcontentcategories.name like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%" /></cfif> 
 	<cfif arguments.activeOnly>and tcontentcategories.isActive=1</cfif>
 	<cfif arguments.InterestsOnly>and tcontentcategories.isInterestGroup=1</cfif>
-	group by tcontentcategories.siteID,tcontentcategories.categoryID,tcontentcategories.name,tcontentcategories.parentID,tcontentcategories.isActive,tcontentcategories.isInterestGroup,tcontentcategories.isOpen,tcontentcategories.restrictGroups
+	group by tcontentcategories.siteID,tcontentcategories.categoryID,tcontentcategories.name,tcontentcategories.parentID,tcontentcategories.isActive,tcontentcategories.isInterestGroup,tcontentcategories.isOpen,tcontentcategories.restrictGroups, tcontentcategories.isfeatureable
 	order by tcontentcategories.name
 	</cfquery>
 	

@@ -904,6 +904,32 @@ function setCheckboxTrees() {
 	});
 }
 
+function setFileSelectors() {
+	$('.mura-file-selector').each(
+		function(){
+				var name=$(this).attr('data-name');
+
+				$("#mura-file-upload-" + name).show();
+				$("#mura-file-url-" + name).hide();
+				
+				$("button[name='newfile" + name + "']").unbind('click').click(
+						function(){
+							//alert($("#mura-file-upload-" + name).is(":visible"))
+							$(".fileTypeOption" + name).toggle();
+							if($("#mura-file-upload-" + name).is(":visible")){
+								$("#mura-file-upload-" + name).find("input").attr('name',name);
+								$("#mura-file-url-" + name).find("input").attr('name','');
+							} else {
+								$("#mura-file-upload-" + name).find("input").attr('name','');
+								$("#mura-file-url-" + name).find("input").attr('name',name);
+							}
+						}
+					);
+		
+		}
+	);
+}
+
 function alertDialog(message) {
 	$("#alertDialogMessage").html(message);
 	$("#alertDialog").dialog({

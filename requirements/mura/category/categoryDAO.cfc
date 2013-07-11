@@ -82,7 +82,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfqueryparam cfsqltype="cf_sql_timestamp" null="#iif(arguments.categoryBean.getRemotePubDate() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getRemotePubDate()#">,
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getURLTitle() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getURLTitle()#">,
 	<cfqueryparam cfsqltype="cf_sql_varchar" null="#iif(arguments.categoryBean.getFilename() neq '',de('no'),de('yes'))#" value="#arguments.categoryBean.getFilename()#">,
-	<cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsFeatureable()),de(arguments.categoryBean.getIsFeatureable()),de(0))#">
+	<cfqueryparam cfsqltype="cf_sql_integer" null="no" value="#iif(isNumeric(arguments.categoryBean.getIsFeatureable()),de(arguments.categoryBean.getIsFeatureable()),de(0))#">)
 	</cfquery>
 
 </cffunction> 
