@@ -1,6 +1,6 @@
 component extends="mura.bean.beanORM" table="tclassextendrcsets" entityname="relatedContentSet" {
 
-	property name="relatedContentSetID" ormtype="varchar" length="35" default="00000000000000000000000000000000001";
+	property name="relatedContentSetID" fieldtype="id";
     property name="name" ormtype="varchar" length="50" default="Default";
     property name="availableSubTypes" ormtype="text";
     property name="orderNo" ormtype="int";
