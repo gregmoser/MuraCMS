@@ -251,16 +251,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfset variables.tracer.commitTracepoint(variables.tracepoint)>
 		<cfelse>
 			<cfscript>
-				getBean('approvalChain');
-				getBean('approvalChainMembership');
-				getBean('approvalRequest');
-				getBean('approvalAction');
-				getBean('approvalChainAssignment');
-				getBean('changesetRollBack');
-				getBean('contentSourceMap');
-				getBean('relatedContentSet');
-				getBean('fileMetaData');
-				getBean('file');
+				variables.serviceFactory.getBean('approvalChain');
+				variables.serviceFactory.getBean('approvalChainMembership');
+				variables.serviceFactory.getBean('approvalRequest');
+				variables.serviceFactory.getBean('approvalAction');
+				variables.serviceFactory.getBean('approvalChainAssignment');
+				variables.serviceFactory.getBean('changesetRollBack');
+				variables.serviceFactory.getBean('contentSourceMap');
+				variables.serviceFactory.getBean('relatedContentSet');
+				variables.serviceFactory.getBean('fileMetaData');
+				variables.serviceFactory.getBean('file');
 			</cfscript>
 		</cfif>
 		
