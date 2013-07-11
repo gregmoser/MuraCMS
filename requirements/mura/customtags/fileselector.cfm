@@ -11,7 +11,7 @@
 	<div data-name="#attributes.name#" class="mura-file-selector mura-resource-select #attributes.class#">
 		<div class="btn-group" data-toggle="buttons-radio">
 			<button type="button" style="display:none">HORRIBLE HACK</button>
-			<button type="button" class="btn" value="Upload"><i class="icon-upload-alt"></i> Via Upload</button>
+			<button type="button" class="btn active" value="Upload"><i class="icon-upload-alt"></i> Via Upload</button>
 			<button type="button" class="btn" value="URL"><i class="icon-download-alt"></i> Via URL </button>
 		</div>
 
