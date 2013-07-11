@@ -26,7 +26,7 @@ input[type="color"],
 
 select, input[type="file"] {
 	height: 28px;
-	line-height: 28px;
+	line-height: 1;
 	margin-bottom: 0;
 	.box-shadow(0 0 0) !important;
 }
@@ -236,13 +236,21 @@ fieldset, .fieldset { // Using an actual fieldset causes ck editor to grow crazy
 		margin-bottom: 0;
 		border-top: 1px solid @formBorderColor;
 		.clearfix;
-		}
-
+	
 	> div:first-of-type {
 		border-top: 0 !important;
 		padding-top: 0 !important;
+		}		
+		
+	.well {
+			background-color: #eee;
+			
+			.control-group {
+				border-top: 0;
+				padding: 0;
+				}
+			}
 		}
-
 	}
 
 label:last-child {
@@ -253,6 +261,14 @@ label:last-child {
 	color: @grayDarker !important;
 	font-size: 13px;
 	font-weight: bold;
+	text-shadow: 0 1px 0 @white;
+	cursor: default;
+}
+
+.well .control-label {
+	color: @grayDarker !important;
+	font-size: 12px;
+	font-weight: normal;
 	text-shadow: 0 1px 0 @white;
 }
 
