@@ -1309,15 +1309,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset setValue("bundleablebeans",application.objectMappings.bundleablebeans)>
 		
 		<cfif len(application.objectMappings.bundleablebeans)>
-			<cfset var bb="">
-
 			<cfloop list="#application.objectMappings.bundleablebeans#" index="local.b">
-				<cftry>
 				<cfset getBean(local.b).toBundle(bundle=this,siteid=arguments.siteid,includeVersionHistory=arguments.includeVersionHistory)>
-				<cfcatch>
-				<cfdump var="#local.b#" abort="true">
-				</cfcatch>
-				</cftry>
 			</cfloop>
 		</cfif>
 		<!--- END BUNDLEABLE CUSTOM OBJECTS --->
