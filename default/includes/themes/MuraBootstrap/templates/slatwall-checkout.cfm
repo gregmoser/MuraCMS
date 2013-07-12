@@ -100,6 +100,9 @@ Notes:
 	</cfif>
 </cfif>
 
+<!--- We are paraming this variable so that we can use it later to see if a specific step was clicked on.  Using the url.step is just a templating thing and it has nothing to do really with the core of Slatwall.  This could be changed to anything --->
+<cfparam name="url.step" default="" />
+
 <cfoutput>
 	<div class="container">
 		
@@ -119,7 +122,7 @@ Notes:
 					
 					
 <!--- ============== ACCOUNT ========================================= --->
-					<cfif listFindNoCase(orderRequirementsList, "account")>
+					<cfif listFindNoCase(orderRequirementsList, "account") or url.step eq 'account'>
 						
 						<!--- START: ACCOUNT --->
 						<h5>Step 1 - Account Details</h5>
@@ -354,7 +357,7 @@ Notes:
 						<!--- END: ACCOUNT --->
 					
 <!--- ============= FULFILLMENT ============================================== --->
-					<cfelseif listFindNoCase(orderRequirementsList, "fulfillment")>
+					<cfelseif listFindNoCase(orderRequirementsList, "fulfillment") or url.step eq 'fulfillment'>
 						
 						<!--- START: FULFILLMENT --->
 						<h5>Step 2 - Fulfillment Details</h5>
@@ -371,7 +374,7 @@ Notes:
 							<cfloop array="#$.slatwall.cart().getOrderFulfillments()#" index="orderFulfillment">
 								
 								<!--- We need to check if this order fulfillment is one that needs to be updated, by checking if it is already processable or by checking if it has errors --->
-								<cfif not orderFulfillment.isProcessable( context="placeOrder" ) or orderFulfillment.hasErrors()>
+								<cfif not orderFulfillment.isProcessable( context="placeOrder" ) or orderFulfillment.hasErrors() or url.step eq 'fulfillment'>
 									
 									<!--- Increment the orderFulfillment index so that we can update multiple order fulfillments at once --->
 									<cfset orderFulfillmentIndex++ />
@@ -434,9 +437,9 @@ Notes:
 													
 													<!--- As long as there are no errors for the orderFulfillment, we can setup the default accountAddress value to be selected --->
 													<cfset accountAddressID = "" />
-													<cfif !orderFulfillment.hasErrors() && !isNull(orderFulfillment.getAccountAddress())>
+													<cfif orderFulfillment.getAddress().getNewFlag() and !orderFulfillment.hasErrors() and !isNull(orderFulfillment.getAccountAddress())>
 														<cfset accountAddressID = orderFulfillment.getAccountAddress().getAccountAddressID() />
-													<cfelseif !orderFulfillment.hasErrors()>
+													<cfelseif orderFulfillment.getAddress().getNewFlag() and !orderFulfillment.hasErrors()>
 														<cfset accountAddressID = $.slatwall.cart().getAccount().getPrimaryAddress().getAccountAddressID() />
 													</cfif>
 													
@@ -455,8 +458,35 @@ Notes:
 												</cfif>
 												
 												<!--- New Shipping Address --->
-												<div id="new-shipping-address"<cfif arrayLen(orderFulfillment.getAccountAddressOptions())> class="hide"</cfif>>
+												<div id="new-shipping-address#orderFulfillmentIndex#"<cfif arrayLen(orderFulfillment.getAccountAddressOptions()) and orderFulfillment.getAddress().getNewFlag()> class="hide"</cfif>>
 													<sw:AddressForm id="newShippingAddress" address="#orderFulfillment.getAddress()#" fieldNamePrefix="orderFulfillments[#orderFulfillmentIndex#].shippingAddress." fieldClass="span4" />
+													
+													<!--- As long as the account is not a guest account, and this is truely new address we are adding, then we can offer to save as an account address for use on later purchases --->
+													<cfif orderFulfillment.getAddress().getNewFlag() and not $.slatwall.getCart().getAccount().getGuestAccountFlag()>
+														
+														<!--- Save As Account Address --->
+														<div class="control-group">
+									    					<label class="control-label" for="rating">Save In Address Book</label>
+									    					<div class="controls">
+									    						
+																<sw:FormField type="yesno" name="orderFulfillments[#orderFulfillmentIndex#].saveAccountAddressFlag" valueObject="#orderFulfillment#" valueObjectProperty="saveAccountAddressFlag" />
+																
+									    					</div>
+									  					</div>
+														
+														<!--- Save Account Address Name --->
+														<div id="save-account-address-name#orderFulfillmentIndex#"<cfif not orderFulfillment.getSaveAccountAddressFlag()> class="hide"</cfif>>
+															<div class="control-group">
+										    					<label class="control-label" for="rating">Address Nickname (optional)</label>
+										    					<div class="controls">
+										    						
+																	<sw:FormField type="text" name="orderFulfillments[#orderFulfillmentIndex#].saveAccountAddressName" valueObject="#orderFulfillment#" valueObjectProperty="saveAccountAddressName" class="span4" />
+																	
+										    					</div>
+										  					</div>
+														</div>
+														
+													</cfif>
 												</div>
 												
 												<!--- SCRIPT IMPORTANT: This jQuery is just here for example purposes to show/hide the new address field if there are account addresses --->
@@ -466,9 +496,16 @@ Notes:
 															$(document).ready(function(){
 																$('body').on('change', 'select[name="orderFulfillments[#orderFulfillmentIndex#].accountAddress.accountAddressID"]', function(e){
 																	if( $(this).val() === '' ) {
-																		$('##new-shipping-address').show();
+																		$('##new-shipping-address#orderFulfillmentIndex#').show();
 																	} else {
-																		$('##new-shipping-address').hide();
+																		$('##new-shipping-address#orderFulfillmentIndex#').hide();
+																	}
+																});
+																$('body').on('change', 'input[name="orderFulfillments[#orderFulfillmentIndex#].saveAccountAddressFlag"]', function(e){
+																	if( $(this).val() ) {
+																		$('##save-account-address-name#orderFulfillmentIndex#').show();
+																	} else {
+																		$('##save-account-address-name#orderFulfillmentIndex#').hide();
 																	}
 																});
 																$('select[name="orderFulfillments[#orderFulfillmentIndex#].accountAddress.accountAddressID"]').change();
@@ -476,7 +513,7 @@ Notes:
 														})( jQuery )
 													</script>
 												</cfif>
-												
+													
 											</div>
 											
 											<!--- START: Shipping Method Selection --->
@@ -550,7 +587,7 @@ Notes:
 						<!--- END: FULFILLMENT --->
 							
 <!--- ============= PAYMENT ============================================== --->
-					<cfelseif listFindNoCase(orderRequirementsList, "payment")>
+					<cfelseif listFindNoCase(orderRequirementsList, "payment") or url.step eq 'payment'>
 					
 						<!--- get the eligable payment methods for this order --->
 						<cfset eligiblePaymentMethods = $.slatwall.cart().getEligiblePaymentMethodDetails() />
@@ -810,137 +847,163 @@ Notes:
 							
 <!--- ============= CONFIRMATION ============================================== --->
 <!--- ============= ORDER REVIEW ============================================== --->
-					<cfelseif not len(orderRequirementsList)>
+					<cfelseif not len(orderRequirementsList) or url.step eq 'review'>
+						
+						
 						<h4>Step 4 - Order Review</h4>
 
-						<!--- Account Details --->
-						<cfif not listFindNoCase(orderRequirementsList, "account") and not $.slatwall.cart().getAccount().isNew()>						
-							<div class="row-fluid">
-								<div class="span12">
-									<h5>ACCOUNT</h5>
-									
-									<p>
-										<!--- Name --->
-										<strong>#$.slatwall.cart().getAccount().getFullName()#</strong><br />
-										
-										<!--- Email Address --->
-										<cfif len($.slatwall.cart().getAccount().getEmailAddress())>#$.slatwall.cart().getAccount().getEmailAddress()#<br /></cfif>
-										
-										<!--- Phone Number --->
-										<cfif len($.slatwall.cart().getAccount().getPhoneNumber())>#$.slatwall.cart().getAccount().getPhoneNumber()#<br /></cfif>
-									</p>
-									<hr>
-								</div>
-							</div>
-						</cfif>
-
-						<!--- Fulfillment Details --->
-						<cfif not listFindNoCase(orderRequirementsList, "account") and not $.slatwall.cart().getAccount().isNew()>
-							<div class="row-fluid">
-								<div class="span12">						
-									<h5>FULFILLMENT</h5>
-									<cfloop array="#$.slatwall.cart().getOrderFulfillments()#" index="orderFulfillment">
-										<div class="row-fluid">
-											<div class="span6">										
-												<!--- Fulfillment Method --->
-												<h6>Shipping Via:</h6>
-												#orderFulfillment.getFulfillmentMethod().getFulfillmentMethodName()#<br />
-												#arrayLen(orderFulfillment.getOrderFulfillmentItems())# Item(s)
-											</div>
-											<div class="span6">
-												<h6>Shipping To:</h6>
-												<!--- EMAIL --->
-												<cfif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "email">
-													Email Address: #orderFulfillment.getEmailAddress()#<br />
-													
-												<!--- PICKUP --->
-												<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "pickup">
-													Pickup Location: #orderFulfillment.getPickupLocation().getLocationName()#
-													
-												<!--- SHIPPING --->
-												<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "shipping">
-													<cfif not isNull(orderFulfillment.getAddress().getName())>
-														#orderFulfillment.getAddress().getName()#<br />
-													</cfif>
-													<cfif not isNull(orderFulfillment.getAddress().getCompany())>
-														#orderFulfillment.getAddress().getCompany()#<br />
-													</cfif>
-													<cfif not isNull(orderFulfillment.getAddress().getStreetAddress())>
-														#orderFulfillment.getAddress().getStreetAddress()#<br />
-													</cfif>
-													<cfif not isNull(orderFulfillment.getAddress().getStreet2Address())>
-														#orderFulfillment.getAddress().getStreet2Address()#<br />
-													</cfif>
-													<cfif not isNull(orderFulfillment.getAddress().getLocality())>
-														#orderFulfillment.getAddress().getLocality()#<br />
-													</cfif>
-													<cfif not isNull(orderFulfillment.getAddress().getCity()) and not isNull(orderFulfillment.getAddress().getStateCode()) and not isNull(orderFulfillment.getAddress().getPostalCode())>
-														#orderFulfillment.getAddress().getCity()#, #orderFulfillment.getAddress().getStateCode()# #orderFulfillment.getAddress().getPostalCode()#<br />
-													<cfelse>
-														<cfif not isNull(orderFulfillment.getAddress().getCity())>
-															#orderFulfillment.getAddress().getCity()#<br />
-														</cfif>
-														<cfif not isNull(orderFulfillment.getAddress().getStateCode())>
-															#orderFulfillment.getAddress().getStateCode()#<br />
-														</cfif>
-														<cfif not isNull(orderFulfillment.getAddress().getPostalCode())>
-															#orderFulfillment.getAddress().getPostalCode()#<br />
-														</cfif>
-													</cfif>
-													<cfif not isNull(orderFulfillment.getAddress().getCountryCode())>
-														#orderFulfillment.getAddress().getCountryCode()#<br />
-													</cfif>
-												</cfif>
-											</div>
-										</div>
-									</cfloop>
-									<hr>
-								</div>
-							</div>
-						</cfif>
-
-						<!--- Payment Details --->
-						<div class="row-fluid">
-							<div class="span12">
-								<h5>PAYMENT</h5>
-								<!--- List the payment methods applied to this order --->
-								<cfloop array="#$.slatwall.cart().getOrderPayments()#" index="orderPayment">
-									<div class="row-fluid">
-										<!--- Display payment method details and payment amount --->
-										<div class="span6">
-											<h6>Method:</h6>
-											
-											<cfif orderPayment.getPaymentMethodType() EQ "creditcard">
-												Name on Card: #orderPayment.getNameOnCreditCard()#<br />
-												Card: #orderPayment.getCreditCardType()# ***#orderPayment.getCreditCardLastFour()#<br />
-												Expiration: #orderPayment.getExpirationMonth()# / #orderPayment.getExpirationYear()#<br />
-												Payment Amount: #dollarformat(orderPayment.getAmount())#
-											<cfelse>
-												#orderPayment.getSimpleRepresentation()#<br />
-												Payment Amount: #dollarformat(orderPayment.getAmount())#
-											</cfif>
-										</div>
-										<!--- Display Payment Billing Address, if there one --->
-										<cfif not isNull(orderPayment.getBillingAddress())>
-											<div class="span6">
-												<h6>Billing Address:</h6>
-												#orderPayment.getBillingAddress().getName()#<br />
-												<cfif orderPayment.getBillingAddress().getCompany() NEQ "">#orderPayment.getBillingAddress().getCompany()#<br /></cfif>
-												<cfif orderPayment.getBillingAddress().getPhone() NEQ "">#orderPayment.getBillingAddress().getPhone()#<br /></cfif>
-												#orderPayment.getBillingAddress().getStreetAddress()#<br />
-												
-												<cfif not isNull(orderPayment.getBillingAddress().getStreet2Address())>#orderPayment.getBillingAddress().getStreet2Address()#<br /></cfif>
-												#orderPayment.getBillingAddress().getCity()#, #orderPayment.getBillingAddress().getStateCode()# #orderPayment.getBillingAddress().getPostalCode()#<br />
-												#orderPayment.getBillingAddress().getCountryCode()#
-											</div>
-										</cfif>
-									</div>
-								</cfloop>
-							</div>
-						</div>
-						
 						<form action="?s=1" method="post">
 							<input type="hidden" name="slatAction" value="public:cart.placeOrder" />
+							
+							<!--- Account Details --->
+							<cfif not listFindNoCase(orderRequirementsList, "account") and not $.slatwall.cart().getAccount().isNew()>						
+								<div class="row-fluid">
+									<div class="span12">
+										<h5>Account Details <a href="?step=account">edit</a></h5>
+										
+										<p>
+											<!--- Name --->
+											<strong>#$.slatwall.cart().getAccount().getFullName()#</strong><br />
+											
+											<!--- Email Address --->
+											<cfif len($.slatwall.cart().getAccount().getEmailAddress())>#$.slatwall.cart().getAccount().getEmailAddress()#<br /></cfif>
+											
+											<!--- Phone Number --->
+											<cfif len($.slatwall.cart().getAccount().getPhoneNumber())>#$.slatwall.cart().getAccount().getPhoneNumber()#<br /></cfif>
+										</p>
+										<hr>
+									</div>
+								</div>
+							</cfif>
+	
+							<!--- Fulfillment Details --->
+							<cfif not listFindNoCase(orderRequirementsList, "account") and not $.slatwall.cart().getAccount().isNew()>
+								<div class="row-fluid">
+									<div class="span12">						
+										<h5>Fulfillment Details <a href="?step=fulfillment">edit</a></h5>
+										<cfloop array="#$.slatwall.cart().getOrderFulfillments()#" index="orderFulfillment">
+											<div class="row-fluid">
+												<div class="span6">										
+													<!--- Fulfillment Method --->
+													<h6>Shipping Via:</h6>
+													#orderFulfillment.getFulfillmentMethod().getFulfillmentMethodName()#<br />
+													#arrayLen(orderFulfillment.getOrderFulfillmentItems())# Item(s)
+												</div>
+												<div class="span6">
+													<h6>Shipping To:</h6>
+													<!--- EMAIL --->
+													<cfif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "email">
+														Email Address: #orderFulfillment.getEmailAddress()#<br />
+														
+													<!--- PICKUP --->
+													<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "pickup">
+														Pickup Location: #orderFulfillment.getPickupLocation().getLocationName()#
+														
+													<!--- SHIPPING --->
+													<cfelseif orderFulfillment.getFulfillmentMethod().getFulfillmentMethodType() eq "shipping">
+														<cfif not isNull(orderFulfillment.getAddress().getName())>
+															#orderFulfillment.getAddress().getName()#<br />
+														</cfif>
+														<cfif not isNull(orderFulfillment.getAddress().getCompany())>
+															#orderFulfillment.getAddress().getCompany()#<br />
+														</cfif>
+														<cfif not isNull(orderFulfillment.getAddress().getStreetAddress())>
+															#orderFulfillment.getAddress().getStreetAddress()#<br />
+														</cfif>
+														<cfif not isNull(orderFulfillment.getAddress().getStreet2Address())>
+															#orderFulfillment.getAddress().getStreet2Address()#<br />
+														</cfif>
+														<cfif not isNull(orderFulfillment.getAddress().getLocality())>
+															#orderFulfillment.getAddress().getLocality()#<br />
+														</cfif>
+														<cfif not isNull(orderFulfillment.getAddress().getCity()) and not isNull(orderFulfillment.getAddress().getStateCode()) and not isNull(orderFulfillment.getAddress().getPostalCode())>
+															#orderFulfillment.getAddress().getCity()#, #orderFulfillment.getAddress().getStateCode()# #orderFulfillment.getAddress().getPostalCode()#<br />
+														<cfelse>
+															<cfif not isNull(orderFulfillment.getAddress().getCity())>
+																#orderFulfillment.getAddress().getCity()#<br />
+															</cfif>
+															<cfif not isNull(orderFulfillment.getAddress().getStateCode())>
+																#orderFulfillment.getAddress().getStateCode()#<br />
+															</cfif>
+															<cfif not isNull(orderFulfillment.getAddress().getPostalCode())>
+																#orderFulfillment.getAddress().getPostalCode()#<br />
+															</cfif>
+														</cfif>
+														<cfif not isNull(orderFulfillment.getAddress().getCountryCode())>
+															#orderFulfillment.getAddress().getCountryCode()#<br />
+														</cfif>
+													</cfif>
+												</div>
+											</div>
+										</cfloop>
+										<hr>
+									</div>
+								</div>
+							</cfif>
+	
+							<!--- Payment Details --->
+							<div class="row-fluid">
+								<div class="span12">
+									<h5>Payment Details <a href="?step=payment">edit</a></h5>
+									
+									<cfset orderPaymentReviewIndex = 0 />
+									
+									<!--- List the payment methods applied to this order --->
+									<cfloop array="#$.slatwall.cart().getOrderPayments()#" index="orderPayment">
+										
+										<cfset orderPaymentReviewIndex++ />
+										
+										<div class="row-fluid">
+											
+											<!--- Display payment method details and payment amount --->
+											<div class="span6">
+												<h6>Method:</h6>
+												
+												<input type="hidden" name="orderPayments[#orderPaymentReviewIndex#].orderPaymentID" value="#orderPayment.getOrderPaymentID()#" />
+													
+												<cfif orderPayment.getPaymentMethodType() EQ "creditcard">
+													
+													Name on Card: #orderPayment.getNameOnCreditCard()#<br />
+													Card: #orderPayment.getCreditCardType()# ***#orderPayment.getCreditCardLastFour()#<br />
+													Expiration: #orderPayment.getExpirationMonth()# / #orderPayment.getExpirationYear()#<br />
+													Payment Amount: #dollarformat(orderPayment.getAmount())#<br />
+													
+													<cfif isNull(orderPayment.getProviderToken()) && !isNull(orderPayment.getSecurityCode())>
+														<input type="hidden" name="orderPayments[#orderPaymentReviewIndex#].securityCode" value="#orderPayment.getSecurityCode()#" />
+													<cfelseif isNull(orderPayment.getProviderToken())>
+														<div class="control-group">
+									    					<label class="control-label" for="rating">Re-Enter Security Code</label>
+									    					<div class="controls">
+									    						<input type="text" name="orderPayments[#orderPaymentReviewIndex#].securityCode" value="" class="required" />		
+									    					</div>
+									  					</div>
+													</cfif>
+													
+												<cfelse>
+													
+													#orderPayment.getSimpleRepresentation()#<br />
+													Payment Amount: #dollarformat(orderPayment.getAmount())#
+													
+												</cfif>
+											</div>
+											<!--- Display Payment Billing Address, if there one --->
+											<cfif not isNull(orderPayment.getBillingAddress())>
+												<div class="span6">
+													<h6>Billing Address:</h6>
+													#orderPayment.getBillingAddress().getName()#<br />
+													<cfif orderPayment.getBillingAddress().getCompany() NEQ "">#orderPayment.getBillingAddress().getCompany()#<br /></cfif>
+													<cfif orderPayment.getBillingAddress().getPhone() NEQ "">#orderPayment.getBillingAddress().getPhone()#<br /></cfif>
+													#orderPayment.getBillingAddress().getStreetAddress()#<br />
+													
+													<cfif not isNull(orderPayment.getBillingAddress().getStreet2Address())>#orderPayment.getBillingAddress().getStreet2Address()#<br /></cfif>
+													#orderPayment.getBillingAddress().getCity()#, #orderPayment.getBillingAddress().getStateCode()# #orderPayment.getBillingAddress().getPostalCode()#<br />
+													#orderPayment.getBillingAddress().getCountryCode()#
+												</div>
+											</cfif>
+										</div>
+									</cfloop>
+								</div>
+							</div>
 						
 							<div class="control-group pull-right">
 								<div class="controls">
@@ -964,7 +1027,7 @@ Notes:
 					
 					<!--- Account Details --->
 					<cfif not listFindNoCase(orderRequirementsList, "account") and not $.slatwall.cart().getAccount().isNew()>
-						<h5>Account Details</h5>
+						<h5>Account Details <a href="?step=account">edit</a></h5>
 						
 						<p>
 							<!--- Name --->
@@ -986,7 +1049,7 @@ Notes:
 					
 					<!--- Fulfillment Details --->
 					<cfif not listFindNoCase(orderRequirementsList, "account") and not $.slatwall.cart().getAccount().isNew()>
-						<h5>Fulfillment Details</h5>
+						<h5>Fulfillment Details <a href="?step=fulfillment">edit</a></h5>
 						<cfloop array="#$.slatwall.cart().getOrderFulfillments()#" index="orderFulfillment">
 							<p>
 								<!--- Fulfillment Method --->
