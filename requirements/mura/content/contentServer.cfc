@@ -534,6 +534,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif isdefined("servlet.doRequest")>
 		<cfset response=servlet.doRequest()>
 	<cfelse>
+		<cfset arguments.event.getValidator("standardEnableLockdown").validate(arguments.event)> 
+		
 		<cfset arguments.event.getHandler("standardSetContent").handle(arguments.event)>
 	
 		<cfset arguments.event.getValidator("standardWrongDomain").validate(arguments.event)> 

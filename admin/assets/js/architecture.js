@@ -1254,6 +1254,9 @@ buttons: {
 							location.href = './';
 						}
 						$("#mura-quickEditor").html(data);
+						$("#mura-quickEditor").find("input, select").bind('mousedown.ui-disableSelection selectstart.ui-disableSelection', function(e) {
+							e.stopImmediatePropagation();
+						});
 
 						setDatePickers(".mura-quickEdit-datepicker", dtLocale, dtCh);
 						setToolTips(".mura-quickEdit-datepicker");
