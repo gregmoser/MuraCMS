@@ -320,6 +320,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 		request.event=createObject("component", "mura.event").init(request.context);
 		request.context.$=request.event.getValue('MuraScope');
+		request.muraScope=request.context.$;
 		
 		if(request.context.moduleid neq ''){
 			session.moduleid = request.context.moduleid;
