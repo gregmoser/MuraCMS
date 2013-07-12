@@ -47,6 +47,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfcomponent extends="mura.cfobject" output="false">
 
 <!---- HANDLERS --->
+<cffunction name="standardEnableLockdownHandler" output="false" returnType="any">
+	<cfargument name="event" required="true">
+	
+	<cfinclude template="/muraWRM/config/lockdown.cfm">
+
+</cffunction>
+
 <cffunction name="standardWrongDomainHandler" output="false" returnType="any">
 	<cfargument name="event" required="true">
 	
@@ -496,6 +503,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction> 
 
 <!--- VALIDATORS --->
+<cffunction name="standardEnableLockdownValidator" output="false" returnType="any">
+	<cfargument name="event" required="true">
+	<cfset var valid = false>
+	
+	<cfif application.settingsManager.getSite(request.siteID).getEnableLockdown() and not getCurrentUser().getIsLoggedIn()>	
+
+		<cfif event.getValue('locks') eq "true">
+			<cfset valid = getBean('userUtility').login(event.getValue('locku'), event.getValue('lockp'), request.siteID)>
+		</cfif>
+				
+		<cfif not valid>
+			<cfset arguments.event.getHandler("standardEnableLockdown").handle(arguments.event)>
+		</cfif>
+	</cfif>
+
+</cffunction>
+
 <cffunction name="standardWrongDomainValidator" output="false" returnType="any">
 	<cfargument name="event" required="true">
 	
