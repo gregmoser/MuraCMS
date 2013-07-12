@@ -87,18 +87,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				#attributeBean.getLabel()#
 				</cfif>
 				<div class="controls">
-					#attributeBean.renderAttribute(attributeValue)#
+					#attributeBean.renderAttribute(attributeValue,contentBean)#
 				</div>
-				<cfif attributeBean.getType() eq "File" and len(attributeValue) and attributeValue neq 'useMuraDefault'> 
-					<!---
+					<!---<cfif attributeBean.getType() eq "File" and len(attributeValue) and attributeValue neq 'useMuraDefault'> 
+				
 					<cfif listFindNoCase("png,jpg,jpeg",application.serviceFactory.getBean("fileManager").readMeta(attributeValue).fileExt)>
 						<a href="./index.cfm?muraAction=cArch.imagedetails&contenthistid=#contentBean.getContentHistID()#&siteid=#contentBean.getSiteID()#&fileid=#attributeValue#"><img id="assocImage" src="#application.configBean.getContext()#/tasks/render/small/index.cfm?fileid=#attributeValue#&cacheID=#createUUID()#" /></a>
 					</cfif>
 
 					<a href="#application.configBean.getContext()#/tasks/render/file/?fileID=#attributeValue#" target="_blank">[Download]</a> <input type="checkbox" value="true" name="extDelete#attributeBean.getAttributeID()#"/> Delete
-					--->
-					<cf_filetools bean="#contentBean#" property="#attributeBean.getName()#" deleteKey="extDelete#attributeBean.getAttributeID()#" compactDisplay="#rc.compactDisplay#">
-				</cfif>
+					
+					
+				</cfif>--->
 				</label>
 				<!--- if it's an hidden type attribute then flip it to be a textbox so it can be editable through the admin --->
 				<cfif attributeBean.getType() IS "Hidden">

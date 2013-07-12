@@ -6,6 +6,8 @@
 <cfparam name="attributes.validation" default="">
 <cfparam name="attributes.regex" default="">
 <cfparam name="attributes.message" default="">
+<cfparam name="attributes.deleteKey" default="">
+<cfparam name="attributes.compactDisplay" default="false">
 
 <cfoutput>
 	<div data-name="#attributes.name#" class="mura-file-selector mura-resource-select #attributes.class#">
@@ -16,7 +18,7 @@
 		</div>
 
 		<div class="well">
-	
+
 			<div id="mura-file-upload-#attributes.name#" class="mura-file-option mura-file-upload fileTypeOption#attributes.name#">
 			
 				<div class="control-group">
@@ -40,5 +42,11 @@
 		
 			</div>
 		</div>
+
+		<cfif isObject(attributes.bean)>
+			<cf_filetools bean="#attributes.bean#" property="#attributes.name#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#">
+		</cfif>
 	</div>
+
+
 </cfoutput>

@@ -16,8 +16,8 @@
 				and (rc.type eq 'File' and not rc.contentBean.getIsNew())>
 				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')#</p>
 			</cfif>
-			
-			<cf_fileselector name="newfile">
+
+			<cf_fileselector name="newfile" bean="#rc.contentBean#" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#" >
 			<!---
 			<input type="file" id="file" name="NewFile" <cfif rc.ptype eq 'Gallery' or rc.type neq 'File'>accept="image/jpeg,image/png" message="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.newimagevalidate')#"</cfif>>--->
 
@@ -39,7 +39,9 @@
 			<cfif rc.type neq 'File'>			
 				<cfif len(rc.contentBean.getFileID())>
 				<!--- <div class="well"> --->
+					<!---
 					<cf_filetools bean="#rc.contentBean#" property="fileid" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#">
+						--->
 				</cfif>
 				<cfif rc.type neq 'File'>
 					<span id="selectAssocImage">
