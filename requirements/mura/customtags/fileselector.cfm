@@ -8,6 +8,7 @@
 <cfparam name="attributes.message" default="">
 <cfparam name="attributes.deleteKey" default="">
 <cfparam name="attributes.compactDisplay" default="false">
+<cfparam name="attributes.property" default="#attributes.name#">
 
 <cfoutput>
 	<div data-name="#attributes.name#" class="mura-file-selector mura-resource-select #attributes.class#">
@@ -44,7 +45,7 @@
 		</div>
 
 		<cfif isObject(attributes.bean)>
-			<cf_filetools bean="#attributes.bean#" property="#attributes.name#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#">
+			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#">
 		</cfif>
 	</div>
 
