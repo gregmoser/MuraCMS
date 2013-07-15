@@ -253,11 +253,11 @@ jQuery(document).ready(function(){
             <span class="preview"></span>
         </td>
         <td>
-            <div class="name">{%=file.name%}</div>
-            <div class="editable nolinebreaks" data-attribute="title" contenteditable="true">{%=file.name%}</div>
-            <div class="editable" data-attribute="summary" contenteditable="true"></div>
-            <div class="editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
-            <div class="editable nolinebreaks" data-attribute="alttext" contenteditable="true"></div>
+            <label>File name</label><div class="name">{%=file.name%}</div>
+            <label>Title</label><div class="editable nolinebreaks" data-attribute="title" contenteditable="true">{%=file.name%}</div>
+            <label>Summary/Caption</label><div class="editable" data-attribute="summary" contenteditable="true"></div>
+            <label>Credits</label><div class="editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
+            <label>Alt Text</label><div class="editable nolinebreaks" data-attribute="alttext" contenteditable="true"></div>
 
             {% if (file.error) { %}
                 <div><span class="label label-important">Error</span> {%=file.error%}</div>
@@ -286,6 +286,7 @@ jQuery(document).ready(function(){
     </tr>
 {% } %}
 </script>
+
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
