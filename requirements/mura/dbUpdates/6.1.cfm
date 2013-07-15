@@ -42,5 +42,8 @@
 
 	dbUtility.setTable("tcontentcategories")
 	.addColumn(column="isfeatureable",dataType="int");
+	
+	dbUtility.setTable("tsettings")
+	.addColumn(column="enableLockdown",datatype="tinyint",default=0);
 
 </cfscript>

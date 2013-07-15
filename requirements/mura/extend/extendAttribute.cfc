@@ -441,6 +441,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="renderAttribute" output="false" returntype="string">
 <cfargument name="theValue" required="true" default="useMuraDefault"/>
+<cfargument name="bean" default=""/>
+<cfargument name="compactDisplay" default="false">
+<cfargument name="size" default="medium">
 <cfset var renderValue= arguments.theValue />
 <cfset var optionValue= "" />
 <cfset var str=""/>
@@ -479,7 +482,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfsavecontent variable="str"><cfoutput><cfif listLen(optionlist,'^')><cfloop from="1" to="#listLen(optionlist,'^')#" index="o"><cfset optionValue=listGetAt(optionlist,o,'^') /><input type="radio" id="#key#" name="#key#" value="#XMLFormat(optionValue)#"<cfif optionValue eq renderValue> checked="checked"</cfif> /> <cfif len(optionlabellist)>#listGetAt(optionlabellist,o,'^')#<cfelse>#optionValue#</cfif> </cfloop></cfif></cfoutput></cfsavecontent>
 </cfcase>
 <cfcase value="File">
-<cfsavecontent variable="str"><cfoutput><cf_fileselector name="#key#" id="#key#" label="#getlabel()#" required="#getRequired()#" validation="#getValidation()#" regex="#getRegex()#" message="#getMessage()#"></cfoutput></cfsavecontent>
+<cfsavecontent variable="str"><cfoutput><cf_fileselector name="#key#" id="#key#" label="#getlabel()#" required="#getRequired()#" validation="#getValidation()#" regex="#getRegex()#" message="#getMessage()#" bean="#arguments.bean#" compactDisplay="#arguments.compactDisplay#"  deleteKey="extDelete#getAttributeID()#" size="#arguments.size#"></cfoutput></cfsavecontent>
 </cfcase>
 </cfswitch>
 

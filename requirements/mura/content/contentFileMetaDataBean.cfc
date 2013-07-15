@@ -69,6 +69,11 @@ component extends="mura.bean.beanORMVersioned"
 		}
 	}
 
+	function hasImageFileExt(){
+
+		return listFindNoCase("png,jpg,jpeg",getValue('fileExt'));
+	}
+
 	function getURLForImage(
 		size='large',
 		direct=false,

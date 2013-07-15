@@ -255,9 +255,9 @@ to your own modified versions of Mura CMS.
                 <label class="radio inline">
                 <input type="radio" name="CommentApprovalDefault" value="0" <cfif rc.siteBean.getCommentApprovalDefault() neq 1> CHECKED</CFIF>>
                 No</label>
-              </div>
+            </div>
           </div>
-          </div>
+        </div>
         <div class="control-group">
             <label class="control-label">Static HTML Export Location (BETA)</label>
             <div class="controls">
@@ -266,7 +266,18 @@ to your own modified versions of Mura CMS.
               </cfif>
             <input name="exportLocation" type="text" class="span12"  value="#rc.siteBean.getExportLocation()#" maxlength="100"/>
           </div>
-          </div>
+        </div>
+		<div class="control-group">
+            <label class="control-label">Enable Site Lockdown</label>
+            <div class="controls">
+            <label class="radio inline">
+                <input type="radio" name="enableLockdown" value="1" <cfif rc.siteBean.getEnableLockdown()  eq 1> CHECKED</CFIF>>
+                Yes</label>
+                <label class="radio inline">
+                <input type="radio" name="enableLockdown" value="0" <cfif rc.siteBean.getEnableLockdown() neq 1> CHECKED</CFIF>>
+                No</label>
+            </div>
+        </div>  
       </div>
     </div>
         

@@ -56,6 +56,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset variables.pluginConfigs=structNew()>
 <cfset variables.eventHandlers=arrayNew(1)>
 <cfset variables.zipTool=createObject("component","mura.Zip")>
+<cfset variables.eventHandlersLoaded = false>
 
 <cffunction name="init" returntype="any" access="public" output="false">
 	<cfargument name="configBean" required="true">
@@ -64,40 +65,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="standardEventsHandler" required="true">
 	<cfargument name="fileWriter" required="true">
 	
-	<cfset setConfigBean(arguments.configBean)>
-	<cfset setSettingsManager(arguments.settingsManager)>
-	<cfset setUtility(arguments.utility)>
-	<cfset setStandardEventsHandler(arguments.standardEventsHandler)>
+	<cfset variables.configBean=arguments.configBean>
+	<cfset variables.settingsManager=arguments.settingsManager>
+	<cfset variables.utility=arguments.utility>
+	<cfset variables.standardEventsHandler=arguments.standardEventsHandler>
 	<cfset variables.fileWriter=arguments.fileWriter>
-	
-<cfreturn this />
-</cffunction>
 
-<cffunction name="setConfigBean" returntype="void" access="public" output="false">
-<cfargument name="configBean">
-	
-	<cfset variables.configBean=arguments.configBean />
-	
 	<cfif isdefined("url.safemode") and isDefined("session.mura.memberships") and listFindNoCase(session.mura.memberships,"S2")>
 		<cfset loadPlugins(safeMode=true)>
 	<cfelse>	
 		<cfset loadPlugins(safeMode=false)>
 	</cfif>
-</cffunction>
-
-<cffunction name="setSettingsManager" returntype="void" access="public" output="false">
-<cfargument name="settingsManager">
-<cfset variables.settingsManager=arguments.settingsManager />
-</cffunction>
-
-<cffunction name="setstandardEventsHandler" returntype="void" access="public" output="false">
-<cfargument name="standardEventsHandler">
-<cfset variables.standardEventsHandler=arguments.standardEventsHandler />
-</cffunction>
-
-<cffunction name="setUtility" returntype="void" access="public" output="false">
-<cfargument name="utility">
-<cfset variables.utility=arguments.utility />
+	
+	<cfreturn this />
 </cffunction>
 
 <cffunction name="loadPlugins" returntype="void" access="public" output="false">
@@ -164,27 +144,31 @@ select * from rsScripts2
 select * from rsScripts order by loadPriority
 </cfquery>
 
-<cfloop query="variables.rsScripts">
-	<cfset arrayAppend(variables.eventHandlers,variables.rsScripts.currentrow)>
-	<cfset handlerData=structNew()>
-	<cfset handlerData.index=arrayLen(variables.eventHandlers)>
+<cfif not variables.eventHandlersLoaded>
+	<cfloop query="variables.rsScripts">
+		<cfset arrayAppend(variables.eventHandlers,variables.rsScripts.currentrow)>
+		<cfset handlerData=structNew()>
+		<cfset handlerData.index=arrayLen(variables.eventHandlers)>
 
-	<cfif left(variables.rsScripts.runat,8) neq "onGlobal" and variables.rsScripts.runat neq "onApplicationLoad">
-		<cfset siteIDadjusted=adjustSiteID(variables.rsScripts.siteID)>
-		<cfif not StructKeyExists(variables.siteListeners,siteIDadjusted)>
-			<cfset variables.siteListeners[siteIDadjusted]=structNew()>
+		<cfif left(variables.rsScripts.runat,8) neq "onGlobal" and variables.rsScripts.runat neq "onApplicationLoad">
+			<cfset siteIDadjusted=adjustSiteID(variables.rsScripts.siteID)>
+			<cfif not StructKeyExists(variables.siteListeners,siteIDadjusted)>
+				<cfset variables.siteListeners[siteIDadjusted]=structNew()>
+			</cfif>
+			<cfif not structKeyExists(variables.siteListeners[siteIDadjusted],variables.rsScripts.runat)>
+				<cfset variables.siteListeners[siteIDadjusted][variables.rsScripts.runat]=arrayNew(1)>
+			</cfif>
+			<cfset arrayAppend( variables.siteListeners[siteIDadjusted][variables.rsScripts.runat] , handlerData)>
+		<cfelse>	
+			<cfif not structKeyExists(variables.globalListeners,variables.rsScripts.runat)>
+				<cfset variables.globalListeners[variables.rsScripts.runat]=arrayNew(1)>
+			</cfif>
+			<cfset arrayAppend( variables.globalListeners[variables.rsScripts.runat], handlerData)>
 		</cfif>
-		<cfif not structKeyExists(variables.siteListeners[siteIDadjusted],variables.rsScripts.runat)>
-			<cfset variables.siteListeners[siteIDadjusted][variables.rsScripts.runat]=arrayNew(1)>
-		</cfif>
-		<cfset arrayAppend( variables.siteListeners[siteIDadjusted][variables.rsScripts.runat] , handlerData)>
-	<cfelse>	
-		<cfif not structKeyExists(variables.globalListeners,variables.rsScripts.runat)>
-			<cfset variables.globalListeners[variables.rsScripts.runat]=arrayNew(1)>
-		</cfif>
-		<cfset arrayAppend( variables.globalListeners[variables.rsScripts.runat], handlerData)>
-	</cfif>
-</cfloop>
+	</cfloop>
+	<cfset variables.eventHandlersLoaded=true>
+</cfif>
+
 
 <cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='variables.rsDisplayObjects')#">
 select tplugindisplayobjects.objectID, tplugindisplayobjects.moduleID, tplugindisplayobjects.name, 
@@ -439,6 +423,7 @@ select * from tplugins order by #arguments.orderby#
 	
 	</cflock>
 	
+
 	
 </cffunction>
 

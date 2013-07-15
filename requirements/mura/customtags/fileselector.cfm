@@ -6,17 +6,21 @@
 <cfparam name="attributes.validation" default="">
 <cfparam name="attributes.regex" default="">
 <cfparam name="attributes.message" default="">
+<cfparam name="attributes.deleteKey" default="">
+<cfparam name="attributes.compactDisplay" default="false">
+<cfparam name="attributes.property" default="#attributes.name#">
+<cfparam name="attributes.size" default="medium">
 
 <cfoutput>
 	<div data-name="#attributes.name#" class="mura-file-selector mura-resource-select #attributes.class#">
 		<div class="btn-group" data-toggle="buttons-radio">
 			<button type="button" style="display:none">HORRIBLE HACK</button>
-			<button type="button" class="btn" value="Upload"><i class="icon-upload-alt"></i> Via Upload</button>
+			<button type="button" class="btn active" value="Upload"><i class="icon-upload-alt"></i> Via Upload</button>
 			<button type="button" class="btn" value="URL"><i class="icon-download-alt"></i> Via URL </button>
 		</div>
 
 		<div class="well">
-	
+
 			<div id="mura-file-upload-#attributes.name#" class="mura-file-option mura-file-upload fileTypeOption#attributes.name#">
 			
 				<div class="control-group">
@@ -40,5 +44,11 @@
 		
 			</div>
 		</div>
+
+		<cfif isObject(attributes.bean)>
+			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#" size="#attributes.size#">
+		</cfif>
 	</div>
+
+
 </cfoutput>
