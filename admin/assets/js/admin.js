@@ -919,16 +919,14 @@ function openFileMetaData(contenthistid,fileid,siteid) {
 			position: getDialogPosition(),
 			buttons: {
 				Save:function(){
-					$('#' + fileInputID).val(
-						JSON.stringify(
-							{
-								caption: $('#file-caption').val(),
-								credits: $('#file-credits').val(),
-								alttext: $('#file-alttext').val()
 
-							}
-						)
-					);
+					var fileData={};
+
+					$('.filemeta').each(function(){
+						fileData[$(this).attr('data-property')]=$(this).val();
+					});
+
+					$('#' + fileInputID).val(JSON.stringify(fileData));
 
 					$(this).dialog( "close" );
 
@@ -951,24 +949,18 @@ function openFileMetaData(contenthistid,fileid,siteid) {
 					try{
 						var fileData= eval("(" + $('#' +fileInputID ).val() + ")");
 
-					} catch(err){
-						//alert(JSON.stringify(err))
-						var fileData={
-								caption:'',
-								alttext:'',
-								credits:''
-							};
+						for(var p in fileData){
+							$('.filemeta[data-property="' + p +'"]').val(fileData[p]);
+						}
 
-					}
+					} catch(err){}
 
-					$('#file-caption').val(fileData.caption);
-					$('#file-credits').val(fileData.alttext);
-					$('#file-alttext').val(fileData.credits);
 					$('#file-caption').ckeditor({
 							toolbar: 'Basic',
 							customConfig: 'config.js.cfm'
 						}, htmlEditorOnComplete);
 					$('#file-caption').focus();
+
 				}).error(function(data){
 					$('#newFileMetaContainer').html(data.responseText);
 					$("#newFileMetaContainer").dialog("option", "position", "center");
