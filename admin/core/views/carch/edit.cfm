@@ -211,7 +211,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					or type='Base'
 				<cfelse>
 					1=1
-					<cfloop list="subtypefilter" index="i">
+					<cfloop list="#subtypefilter#" index="i">
 						and (
 								type=<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#listFirst(i,'/')#"/>
 								and subtype=<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#listLast(i,'/')#"/>
