@@ -237,18 +237,18 @@ fieldset, .fieldset { // Using an actual fieldset causes ck editor to grow crazy
 		border-top: 1px solid @formBorderColor;
 		.clearfix;
 	
-	> div:first-of-type {
-		border-top: 0 !important;
-		padding-top: 0 !important;
-		}		
-		
-	.well {
-			background-color: #eee;
+		&:first-of-type {
+			border-top: 0 !important;
+			padding-top: 0 !important;
+			}		
 			
-			.control-group {
-				border-top: 0;
-				padding: 0;
-				}
+		.well {
+				background-color: @grayLight;
+				
+				.control-group {
+					border-top: 0;
+					padding: 0;
+					}
 			}
 		}
 	}
@@ -358,9 +358,11 @@ label:last-child {
 	display: block;
 }
 
+/*
 #selectAssocImage {
 	margin-left: 3em;
 }
+*/
 
 #mura-file-unlock {
 	clear: both;
