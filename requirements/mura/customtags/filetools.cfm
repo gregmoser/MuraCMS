@@ -39,8 +39,9 @@
 		</a>
 		<a class="btn" href=""><i class="icon-info-sign"></i></a>
 		
+		<!---
 		<a class="btn" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(attributes.bean.getSiteID())#','#htmlEditFormat(attributes.bean.getvalue(attributes.property))#','#htmlEditFormat(attributes.bean.getContentID())#','',1);return false;"><i class="icon-picture" data-toggle="tooltip" title="" data-original-title="Select an Existing Image"></i>
-		</a>
+		</a>--->
 	</div>
 </cfif>
 
