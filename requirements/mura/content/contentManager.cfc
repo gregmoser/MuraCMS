@@ -1157,6 +1157,22 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					
 				<!--- BEGIN CONTENT TYPE: FILE --->	
 				<!---<cfif newBean.gettype() eq 'File'>--->
+
+				<cfset request.handledfilemetas={}>
+				<cfset var fileMetas=newBean.getValue('fileMetaDataAssign')>
+				<cfif isArray(fileMetas) or isJSON(fileMetas)>
+					<cfif not isStruct(fileMetas)>
+						<cfset fileMetas=deserializeJSON(fileMetas)>
+					</cfif>
+					
+					<cfloop collection="#fileMetas#" item="local.i">
+						<cfif isJson(fileMetas[local.i])>
+							<cfset fileMetas[local.i]=deserializeJSON(fileMetas[local.i])>
+						</cfif>
+						<cfset local.fileMetaID=newBean.getFileMetaData(fileMetas[local.i].property).set(fileMetas[local.i]).save().getFileID()>
+						<cfset request.handledfilemetas[hash(local.fileMetaID & newBean.getContentHistID())]=true>
+					</cfloop>	
+				</cfif>
 					
 				<cfif newBean.gettype() neq 'File' and isDefined('arguments.data.deleteFile') and len(newBean.getFileID())>
 					<cfset variables.fileManager.deleteIfNotUsed(newBean.getFileID(),newBean.getContentHistID())>

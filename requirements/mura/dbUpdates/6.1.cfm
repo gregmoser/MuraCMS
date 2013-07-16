@@ -32,13 +32,16 @@
 	
 	// drop primary key before adding relatedContentID
 	if (!dbUtility.setTable("tcontentrelated").columnExists("relatedContentID")) {
-		dbUtility.setTable("tcontentrelated").dropPrimaryKey();
+		try{
+			dbUtility.setTable("tcontentrelated").dropPrimaryKey();
+		} catch (e any){}
 	}
 	
 	dbUtility.setTable("tcontentrelated")
 	.addColumn(column="relatedContentSetID",dataType="varchar",length="35")
 	.addColumn(column="orderNo",dataType="int")
-	.addColumn(column="relatedContentID",autoincrement=true);
+	.addColumn(column="relatedContentID",autoincrement=true)
+	.addPrimaryKey('relatedContentSetID');
 
 	dbUtility.setTable("tcontentcategories")
 	.addColumn(column="isfeatureable",dataType="int");

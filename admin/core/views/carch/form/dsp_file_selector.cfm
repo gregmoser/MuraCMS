@@ -21,29 +21,14 @@
 			<!---
 			<input type="file" id="file" name="NewFile" <cfif rc.ptype eq 'Gallery' or rc.type neq 'File'>accept="image/jpeg,image/png" message="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.newimagevalidate')#"</cfif>>--->
 
-			<cfif rc.type eq "file" and not rc.contentBean.getIsNew()>
-				<p style="display:none;" id="mura-revision-type">
-					<label class="radio inline">
-						<input type="radio" name="versionType" value="major">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.version.major')#
-					</label>
-					<label class="radio inline">
-						<input type="radio" name="versionType" value="minor" checked />#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.version.minor')#
-					</label>
-				</p>
-				<script>
-					jQuery(".mura-file-selector-newfile").change(function(){
-						jQuery("##mura-revision-type").fadeIn();
-					});	
-				</script>
-			</cfif>
 			<cfif rc.type neq 'File'>			
-				<cfif len(rc.contentBean.getFileID())>
+				<!---<cfif len(rc.contentBean.getFileID())>--->
 				<!--- <div class="well"> --->
 					<!---
 					<cf_filetools bean="#rc.contentBean#" property="fileid" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#">
 						--->
-				</cfif>
-				<cfif rc.type neq 'File'>
+				<!---</cfif>--->
+				<!---<cfif rc.type neq 'File'>--->
 					<span id="selectAssocImage">
 					<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getfileid())#" />		
 					<a class="selectImage btn btn-small" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(rc.siteid)#','#htmlEditFormat(rc.contentBean.getFileID())#','#htmlEditFormat(rc.contentID)#','',1);return false;">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</a>
@@ -53,18 +38,22 @@
 						<input type="hidden" name="fileidReInit" value="#htmlEditFormat(rc.contentBean.getfileid())#" />
 						<a class="btn btn-small" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(rc.siteid)#','#htmlEditFormat(rc.contentBean.getFileID())#','#htmlEditFormat(rc.contentID)#','',1);return false;">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</a>
 					</span>
+				<!---
 				<cfelse>
 					<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getFileID())#" />
-				</cfif>				
+				</cfif>	
+				--->			
 			<cfelse>
 				<cfif rc.type eq 'File' and not rc.contentBean.getIsNew()>
-					
+					<!---
 					<a class="mura-file #lcase(rc.contentBean.getFileExt())#" href="#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#rc.contentBean.getFileID()#&method=attachment" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',this.href);">#HTMLEditFormat(rc.contentBean.getAssocFilename())#<cfif rc.contentBean.getMajorVersion()> (v#rc.contentBean.getMajorVersion()#.#rc.contentBean.getMinorVersion()#)</cfif></a>
 									
+					
 					<cfif rc.contentBean.getcontentType() eq 'image'>				
 						<a href="./index.cfm?muraAction=cArch.imagedetails&contenthistid=#rc.contentBean.getContentHistID()#&siteid=#rc.contentBean.getSiteID()#&fileid=#rc.contentBean.getFileID()#&compactDisplay=#urlEncodedFormat(rc.compactDisplay)#"><img id="assocImage" src="#application.configBean.getContext()#/tasks/render/medium/index.cfm?fileid=#rc.contentBean.getFileID()#&cacheID=#createUUID()#" /></a>
 					</cfif>
-					
+					--->
+
 					<a id="mura-file-unlock" class="btn"  href=""<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
 				 	<a id="mura-file-offline-edit" class="btn"<cfif len(stats.getLockID())> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a>
 					
