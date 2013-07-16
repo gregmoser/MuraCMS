@@ -3,6 +3,7 @@
 <cfoutput>
 
  <div class="fieldset">
+ 	<!--
  	<div class="control-group">
 		<label class="control-label">
 			Image
@@ -11,6 +12,7 @@
 			<img src="#fileMetaData.getUrlForImage('medium')#"/>
 		</div>
 	</div>
+	--->
 	<div class="control-group">
 		<label class="control-label">
 			Caption

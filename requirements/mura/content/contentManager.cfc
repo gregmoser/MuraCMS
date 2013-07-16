@@ -1169,8 +1169,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfif isJson(fileMetas[local.i])>
 							<cfset fileMetas[local.i]=deserializeJSON(fileMetas[local.i])>
 						</cfif>
-						<cfset local.fileMetaID=newBean.getFileMetaData(fileMetas[local.i].property).set(fileMetas[local.i]).save().getFileID()>
-						<cfset request.handledfilemetas[hash(local.fileMetaID & newBean.getContentHistID())]=true>
+						<cfset local.fileMeta=newBean.getFileMetaData(fileMetas[local.i].property)>
+						<cfif not local.fileMeta.getIsNew()>
+							<cfset local.fileMeta.set(fileMetas[local.i]).save().getFileID()>
+						</cfif>
+						
+						<cfset request.handledfilemetas[hash(local.fileMeta.getFileID() & newBean.getContentHistID())]=true>
 					</cfloop>	
 				</cfif>
 					

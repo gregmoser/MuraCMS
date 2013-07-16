@@ -47,8 +47,10 @@ component extends="mura.bean.beanORMVersioned"
 
 		param name="request.handledfilemetas" default={};
 
+		//writeDump(var=properties,abort=true);
+
 		for(var prop in properties){
-			if(properties[prop] == getValue('fileid')
+			if(isSimpleValue(properties[prop]) && properties[prop] == getValue('fileid')
 				&& !structKeyExists(request.handledfilemetas,hash(getValue('fileid') & arguments.version2.getContentHistID()))
 			){
 				return true;
