@@ -21,6 +21,7 @@
 			<!---
 			<input type="file" id="file" name="NewFile" <cfif rc.ptype eq 'Gallery' or rc.type neq 'File'>accept="image/jpeg,image/png" message="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.newimagevalidate')#"</cfif>>--->
 
+
 			<cfif rc.type neq 'File'>			
 				<!---<cfif len(rc.contentBean.getFileID())>--->
 				<!--- <div class="well"> --->
@@ -28,7 +29,7 @@
 					<cf_filetools bean="#rc.contentBean#" property="fileid" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#">
 						--->
 				<!---</cfif>--->
-				<!---<cfif rc.type neq 'File'>--->
+				<!---<cfif rc.type neq 'File'>
 					<span id="selectAssocImage">
 					<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getfileid())#" />		
 					<a class="selectImage btn btn-small" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(rc.siteid)#','#htmlEditFormat(rc.contentBean.getFileID())#','#htmlEditFormat(rc.contentID)#','',1);return false;">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</a>
@@ -38,7 +39,7 @@
 						<input type="hidden" name="fileidReInit" value="#htmlEditFormat(rc.contentBean.getfileid())#" />
 						<a class="btn btn-small" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(rc.siteid)#','#htmlEditFormat(rc.contentBean.getFileID())#','#htmlEditFormat(rc.contentID)#','',1);return false;">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</a>
 					</span>
-				<!---
+				
 				<cfelse>
 					<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getFileID())#" />
 				</cfif>	
