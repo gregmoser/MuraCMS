@@ -904,6 +904,85 @@ function setCheckboxTrees() {
 	});
 }
 
+function openFileMetaData(contenthistid,fileid,siteid) {
+
+		var fileInputID='fmd-' + contenthistid + '-' + fileid;
+
+ 		$("#newFileMetaContainer").remove();
+		$("body").append('<div id="newFileMetaContainer" title="Loading..." style="display:none"><div id="newFileMeta"><div class="load-inline"></div></div></div>');
+
+		$("#newFileMetaContainer").dialog({
+			resizable: false,
+			modal: true,
+			width: 552,
+			title: 'Edit Image Properties',
+			position: getDialogPosition(),
+			buttons: {
+				Save:function(){
+					$('#' + fileInputID).val(
+						JSON.stringify(
+							{
+								caption: $('#file-caption').val(),
+								credits: $('#file-credits').val(),
+								alttext: $('#file-alttext').val()
+
+							}
+						)
+					);
+
+					$(this).dialog( "close" );
+
+				},
+				Cancel: function(){
+					 $(this).dialog( "close" );
+				}
+
+
+			},
+
+			open: function() {
+				$("#newFileMetaContainer").html('<div class="ui-dialog-content ui-widget-content"><div class="load-inline"></div></div>');
+				var url = 'index.cfm';
+				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
+				$.get(url + "?" + pars).done(function(data) {
+					$('#newFileMetaContainer').html(data);
+					$("#newFileMetaContainer").dialog("option", "position", "center");
+
+					try{
+						var fileData= eval("(" + $('#' +fileInputID ).val() + ")");
+
+					} catch(err){
+						//alert(JSON.stringify(err))
+						var fileData={
+								caption:'',
+								alttext:'',
+								credits:''
+							};
+
+					}
+
+					$('#file-caption').val(fileData.caption);
+					$('#file-credits').val(fileData.alttext);
+					$('#file-alttext').val(fileData.credits);
+					$('#file-caption').ckeditor({
+							toolbar: 'Basic',
+							customConfig: 'config.js.cfm'
+						}, htmlEditorOnComplete);
+					$('#file-caption').focus();
+				}).error(function(data){
+					$('#newFileMetaContainer').html(data.responseText);
+					$("#newFileMetaContainer").dialog("option", "position", "center");
+				});
+
+			},
+			close: function() {
+				$(this).dialog("destroy");
+				$("#newFileMetaContainer").remove();
+			}
+		});
+
+		return false;
+	}
 
 (function ($) {
 
