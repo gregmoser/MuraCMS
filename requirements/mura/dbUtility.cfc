@@ -388,30 +388,32 @@
 			</cftry>
 
 			<cfif arguments.autoincrement>				
+				<cfset var seq_name=left('seq_#arguments.table#_#arguments.column#',30)>
+				<cfset var trg_name=left('trg_#arguments.table#_#arguments.column#',30)>
 				
 				<cftry>
 				 <cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					DROP SEQUENCE seq_#arguments.table#_#arguments.column#
+					DROP SEQUENCE #seq_name#
 				</cfquery>
 				<cfcatch></cfcatch>
 				</cftry>
 				
 				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					CREATE SEQUENCE seq_#arguments.table#_#arguments.column#
+					CREATE SEQUENCE #seq_name#
 					MINVALUE 1
 					START WITH 1
 					INCREMENT BY 1
 					CACHE 10
 				</cfquery>
 				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					create or replace TRIGGER trg_#arguments.table#_#arguments.column# BEFORE INSERT ON #arguments.table#
+					create or replace TRIGGER #trg_name# BEFORE INSERT ON #arguments.table#
 					FOR EACH ROW
 					BEGIN
-					    SELECT  seq_#arguments.table#_#arguments.column#.NEXTVAL INTO :new.#arguments.column# FROM DUAL;
+					    SELECT  #seq_name#.NEXTVAL INTO :new.#arguments.column# FROM DUAL;
 					END;
 				</cfquery>
 				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TRIGGER "TPLUGINS_PLUGINID_TRG" ENABLE
+					ALTER TRIGGER #trg_name# ENABLE
 				</cfquery>
 				<cfset addPrimaryKey(argumentCollection=arguments)>
 			</cfif>
