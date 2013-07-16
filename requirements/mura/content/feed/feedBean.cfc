@@ -46,7 +46,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 --->
 <cfcomponent extends="mura.bean.beanFeed" output="false">
 
-<cfproperty name="feedID" type="string" default="" required="true" />
+<cfproperty name="feedID" type="string" default="" />
 <cfproperty name="siteID" type="string" default="" required="true" />
 <cfproperty name="dateCreated" type="date" default=""/>
 <cfproperty name="lastUpdate" type="date" default=""/>
