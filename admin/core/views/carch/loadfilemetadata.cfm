@@ -35,5 +35,6 @@
 			<input type="text" data-property="credits" value="#HTMLEditFormat(fileMetaData.getCredits())#"  maxlength="255" class="filemeta span4">
 		</div>
 	</div>
+	<input type="hidden" data-property="property" value="#HTMLEditFormat(rc.property)#" class="filemeta">
 </div>	
 </cfoutput>

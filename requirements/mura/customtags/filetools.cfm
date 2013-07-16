@@ -37,8 +37,7 @@
 	<div class="btn-group">
 		<a class="btn" href="./index.cfm?muraAction=cArch.imagedetails&contenthistid=#attributes.bean.getContentHistID()#&siteid=#attributes.bean.getSiteID()#&fileid=#attributes.bean.getvalue(attributes.property)#&compactDisplay=#urlEncodedFormat(attributes.compactDisplay)#"><i class="icon-crop"></i>
 		</a>
-		<div class="btn" href="" onclick="return openFileMetaData('#fileMetaData.getContentHistID()#','#fileMetaData.getFileID()#','#attributes.bean.getSiteID()#');"><i class="icon-info-sign"></i></div>
-		<input id="fmd-#fileMetaData.getContentHistID()#-#fileMetaData.getFileID()#"type="hidden" name="filemetadata" value=""/>
+		<div class="btn" href="" onclick="return openFileMetaData('#fileMetaData.getContentHistID()#','#fileMetaData.getFileID()#','#attributes.bean.getSiteID()#','#attributes.property#');"><i class="icon-info-sign"></i></div>
 		
 		<!---
 		<a class="btn" href="javascript:##;" onclick="javascript: siteManager.loadAssocImages('#htmlEditFormat(attributes.bean.getSiteID())#','#htmlEditFormat(attributes.bean.getvalue(attributes.property))#','#htmlEditFormat(attributes.bean.getContentID())#','',1);return false;"><i class="icon-picture" data-toggle="tooltip" title="" data-original-title="Select an Existing Image"></i>

@@ -904,9 +904,13 @@ function setCheckboxTrees() {
 	});
 }
 
-function openFileMetaData(contenthistid,fileid,siteid) {
+function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 		var fileInputID='fmd-' + contenthistid + '-' + fileid;
+
+		if (typeof fileMetaDataAssign === 'undefined') {
+			fileMetaDataAssign={};
+		}
 
  		$("#newFileMetaContainer").remove();
 		$("body").append('<div id="newFileMetaContainer" title="Loading..." style="display:none"><div id="newFileMeta"><div class="load-inline"></div></div></div>');
@@ -926,7 +930,9 @@ function openFileMetaData(contenthistid,fileid,siteid) {
 						fileData[$(this).attr('data-property')]=$(this).val();
 					});
 
-					$('#' + fileInputID).val(JSON.stringify(fileData));
+					fileMetaDataAssign[fileData.property]=fileData;
+					$('#filemetadataassign').val(JSON.stringify(fileMetaDataAssign));
+					//alert($('#filemetadataassign').val());
 
 					$(this).dialog( "close" );
 
@@ -939,22 +945,21 @@ function openFileMetaData(contenthistid,fileid,siteid) {
 			},
 
 			open: function() {
+
 				$("#newFileMetaContainer").html('<div class="ui-dialog-content ui-widget-content"><div class="load-inline"></div></div>');
 				var url = 'index.cfm';
-				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
+				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&property=' + property + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
 				$.get(url + "?" + pars).done(function(data) {
 					$('#newFileMetaContainer').html(data);
 					$("#newFileMetaContainer").dialog("option", "position", "center");
 
-					try{
-						var fileData= eval("(" + $('#' +fileInputID ).val() + ")");
-
+					if(property in fileMetaDataAssign){
+						var fileData=fileMetaDataAssign[property];
 						for(var p in fileData){
 							$('.filemeta[data-property="' + p +'"]').val(fileData[p]);
 						}
-
-					} catch(err){}
-
+					}
+					
 					$('#file-caption').ckeditor({
 							toolbar: 'Basic',
 							customConfig: 'config.js.cfm'

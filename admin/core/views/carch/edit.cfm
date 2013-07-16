@@ -657,6 +657,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<input type="hidden" name="homeID" value="#HTMLEditFormat(rc.homeID)#">
 	<input type="hidden" name="cancelpendingapproval" value="false">
 	<input type="hidden" name="murakeepediting" value="false">
+	<input type="hidden" name="filemetadataassign" id="filemetadataassign" value=""/>
+
 	<cfif not  listFind(session.mura.memberships,'S2')>
 		<input type="hidden" name="isLocked" value="#rc.contentBean.getIsLocked()#">
 	</cfif>

@@ -45,8 +45,12 @@ component extends="mura.bean.beanORMVersioned"
 	function persistToVersion(version1,version2){
 		var properties=arguments.version2.getAllValues();
 
+		param name="request.handledfilemetas" default={};
+
 		for(var prop in properties){
-			if(properties[prop] == getValue('fileid')){
+			if(properties[prop] == getValue('fileid')
+				&& !structKeyExists(request.handledfilemetas,hash(getValue('fileid') & arguments.version2.getContentHistID()))
+			){
 				return true;
 			}
 		}
