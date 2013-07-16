@@ -994,10 +994,35 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 	    	this.options.file=this.$element.attr('data-name');
 	    }
 
+	    var loadAssocImages=function(keywords,isnew) {
+			var url = 'index.cfm';
+			var pars = 'muraAction=cArch.assocImages&compactDisplay=true&siteid=' + $elm.attr('data-siteid') + '&fileid=' + $elm.attr('data-fileid') + '&contentid=' + $elm.attr('data-contentid') +  '&property=' + $elm.attr('data-property') +'&keywords=' + keywords + '&isNew=' + isnew + '&cacheid=' + Math.random();
+			$elm.find(".mura-file-existing").html('<div class="load-inline"></div>');
+			
+			$.ajax(url + "?" + pars)
+			.done( 
+				function(data) {
+					$elm.find(".mura-file-existing").html(data);
+					$elm.find(".mura-file-existing").find('.btn').click(function(){
+						loadAssocImages($elm.find(".mura-file-existing").find(".imagesearch").val(),0);
+					});
+				}
+			)
+			.error(
+				function(data) {
+				$elm.find(".mura-file-existing").html(data.responseText);
+				}
+			);
+		}
 	   
 
 	    var clickHandler=function(){
 	    	setTab($(this).val());
+	    	if($(this).val().toLowerCase() == 'existing'){
+	    		loadAssocImages('',1);
+	    	} else {
+	    		$elm.find(".mura-file-existing").html('<div class="load-inline"></div>')
+	    	}
 	    }
 
 	    var setTab=function(tab){
@@ -1035,47 +1060,6 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 function setFileSelectors() {
 
 	$('.mura-file-selector').fileselector();
-
-	/*
-	$('.mura-file-selector').each(
-		function(){
-				this.name=$(this).attr('data-name');	
-				$("#mura-file-upload-" + this.name).show();
-				$("#mura-file-url-" + this.name).hide();
-
-				$(this).find("button[value='Upload']")
-				.unbind('click')
-				.click(
-						function(){	
-								alert(name)
-								$("#mura-file-upload-" + self.name).show();
-								$("#mura-file-url-" + self.name).hide();
-								$("#mura-file-upload-" + self.name).find("input").attr('name',self.name);
-								$("#mura-file-url-" + self.name).find("input").attr('name','');
-							
-						}
-					);
-
-				$(this).$("button[value='URL']")
-				.unbind('click')
-				.click(
-						function(){	
-								alert(name)
-								$("#mura-file-upload-" + self.name).hide();
-								$("#mura-file-url-" + self.name).show();
-								$("#mura-file-upload-" + vname).find("input").attr('name','');
-								$("#mura-file-url-" + self.name).find("input").attr('name',self.name);
-							
-						}
-					);
-
-				//$(this).button();
-		
-		}
-	);
-	*/
-
-	//$().button('toggle')
 }
 
 function alertDialog(message) {

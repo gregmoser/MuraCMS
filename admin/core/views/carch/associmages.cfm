@@ -49,21 +49,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfparam name="rc.isNew" default="1">
 <cfset counter=0 />
 <cfoutput>
-<a class="selectImage btn btn-small" onclick="jQuery('##selectAssocImageReInit > input').attr('name','fileid');jQuery('##selectAssocImage').html(jQuery('##selectAssocImageReInit').html());jQuery('##selectAssocImageReInit > input').attr('name','fileidReInit');">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforassocimagecancel')#</a>
-<br/><br/>
 <cfif rc.isNew>
-<div style="display:none" id="selectAssocImageResults" class="well">
+<div id="selectAssocImageResults" class="well">
 </cfif>
 <dl>
 	<dt><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'tooltip.searchforassocimage'))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforassocimage')# <i class="icon-question-sign"></i></a></dt>
-	<dd><input id="imagesearch" name="imagesearch" value="#HTMLEditFormat(rc.keywords)#" type="text" maxlength="50"/><input type="button" class="btn" onclick="siteManager.loadAssocImages('#rc.siteid#','#htmlEditFormat(rc.fileid)#','#htmlEditFormat(rc.contentid)#',document.getElementById('imagesearch').value,0);return false;" value="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.search')#" /></dd>
+	<dd><input class="imagesearch" value="#HTMLEditFormat(rc.keywords)#" type="text" maxlength="50"/><input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.search')#" /></dd>
 </dl>
 <cfif rc.isNew>
 </div>
 </cfif>
 </cfoutput>
 <cfif not rc.isNew>
-<div style="display:none; overflow: auto;" id="selectAssocImageResults" class="well">
+<div style="overflow: auto;" id="selectAssocImageResults" class="well">
 <cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords,'','','image')/>
 <!---<cfoutput>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</cfoutput>--->
 <table>
@@ -79,7 +77,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif verdict neq 'none'>
 				<cfset filtered['#rc.rslist.fileid#']=true>
 				<cfset counter=counter+1/> 
-		        <td><img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rc.rslist.fileid#"><input type="radio" name="fileid" value="#rc.rslist.fileid#"></td>
+		        <td><img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rc.rslist.fileid#"><input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rc.rslist.fileid#"></td>
 		 	</cfif>
 	 	</cfif>
       </cfoutput>
@@ -92,6 +90,4 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </td>
 </table>
 </div>
-<cfelse>
-<cfoutput><input type="hidden" name="fileid" value="#htmlEditFormat(rc.fileid)#" /></cfoutput>
 </cfif>
