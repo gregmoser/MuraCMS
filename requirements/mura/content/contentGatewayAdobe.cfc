@@ -1850,7 +1850,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		and tcr.relatedContentSetID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
 	<cfelse>
 		<!--- pull in "default" related content.  AKA, content that hasn't been assigned to a content set --->
-		and (tcr.relatedContentSetID = '00000000000000000000000000000000001' or tcr.relatedContentSetID is null) 
+		and (tcr.relatedContentSetID = '00000000000000000000000000000000000' or tcr.relatedContentSetID is null) 
 	</cfif>
 	
 	WHERE

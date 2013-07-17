@@ -44,31 +44,109 @@ For clarity, if you create a modified version of Mura CMS, you are not obligated
 modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
-<cfset request.layout=false>
-<cfparam name="rc.keywords" default="">
 <cfparam name="rc.isNew" default="1">
+<cfparam name="rc.keywords" default="">
+<cfparam name="rc.searchTypeSelector" default="">
+<cfparam name="rc.rcStartDate" default="">
+<cfparam name="rc.rcEndDate" default="">
+<cfparam name="rc.rcCategoryID" default="">
+<cfset request.layout=false>
+<cfset baseTypeList = "Page,Folder,Calendar,Gallery,File,Link"/>
+<cfset rsSubTypes = application.classExtensionManager.getSubTypes(siteID=rc.siteID, activeOnly=true) />
 
 <cfoutput>
 	<div class="control-group">
 		<label class="control-label">Add Related Content</label>
 		<div id="internalContent" class="form-inline">
-			<input type="text" name="kewords" value="#rc.keywords#" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
-			<input type="button" name="btnSearch" value="Search" class="btn" onclick="siteManager.loadRelatedContent('#rc.siteid#', document.getElementById('rcSearch').value, 0); return false;" />
+			<input type="text" name="keywords" value="#rc.keywords#" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
+			<input type="button" name="btnSearch" value="Search" id="rcBtnSearch" class="btn" />
 		</div>
-		<a href="##" class="pull-right">Advanced Search</a>
+		<a href="##" class="pull-right" id="aAdvancedSearch">Advanced Search</a>
 	</div>
-	<div id="rcAdvancedSearch" class="control-group">
-		<label class="control-label">Available Categories</label>
-
-		<div id="mura-list-tree" class="controls">
-			<cf_dsp_categories_nest siteID="#rc.siteID#" parentID="" nestLevel="0" useID="0">
+	
+	<div id="rcAdvancedSearch" style="display:none;">
+		<div class="control-group">
+			<div class="span6">
+				<label class="control-label">Content Type</label>
+				<div class="controls">
+					<select name="searchTypeSelector" id="searchTypeSelector">
+						<option value="">All</option>
+						<cfloop list="#baseTypeList#" index="t">
+							<cfsilent>
+								<cfquery name="rsst" dbtype="query">select * from rsSubTypes where type = <cfqueryparam cfsqltype="cf_sql_varchar"  value="#t#"> and subtype not in ('Default','default')</cfquery>
+							</cfsilent>
+							<option value="#t#^Default"<cfif rc.searchTypeSelector eq "#t#^Default"> selected="selected"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#lcase(t)#")#</option>
+							<cfif rsst.recordcount>
+								<cfloop query="rsst">
+									<option value="#t#^#rsst.subtype#"<cfif rc.searchTypeSelector eq "#t#^#rsst.subtype#"> selected="selected"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#lcase(t)#")#  / #rsst.subtype#</option>
+								</cfloop>
+							</cfif>
+						</cfloop>
+					</select>
+				</div>
+			</div>	
+			<div class="span6">
+				<label class="control-label">Release Date Range</label>
+				<div class="controls">
+					<input type="text" name="rcStartDate" id="rcStartDate" class="datepicker span4 mura-relatedContent-datepicker" value="#rc.rcStartDate#" />
+					<input type="text" name="rcEndDate" id="rcEndDate" class="datepicker span4 mura-relatedContent-datepicker" value="#rc.rcEndDate#" />
+				</div>
+			</div>			
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<label class="control-label">Available Categories</label>
+		
+				<div id="mura-list-tree" class="controls">
+					<cf_dsp_categories_nest siteID="#rc.siteID#" parentID="" categoryID="#rc.rcCategoryID#" nestLevel="0" useID="0" elementName="rcCategoryID">
+				</div>
+			</div>
 		</div>
 	</div>
 </cfoutput>
 
-<div class="control-group">
-	<cfif not rc.isNew>
-		<cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords)/>
+
+<cfif not rc.isNew>
+	<cfscript>
+		$=application.serviceFactory.getBean("MuraScope");
+	
+		feed=$.getBean("feed");
+		feed.setMaxItems(100);
+		feed.setNextN(100);
+		feed.setLiveOnly(0);
+		feed.setShowNavOnly(0);
+		feed.setSortBy("lastupdate");
+		feed.setSortBy("desc");
+		
+		if (len($.event("searchTypeSelector"))) {
+			feed.addParam(field="tcontent.type",criteria=listFirst($.event("searchTypeSelector"), "/"),condition="in");	
+			if (listLen($.event("searchTypeSelector"), "/") == 2) {
+				feed.addParam(field="tcontent.subtype",criteria=listFirst($.event("searchTypeSelector"), "/"));	
+			} else {
+				feed.addParam(field="tcontent.subtype",criteria='Default');	
+			}
+		}
+		
+		if (len($.event("rcStartDate"))) {
+			feed.addParam(field="tcontent.releaseDate",datatype="date",condition="gte",criteria=$.event("rcStartDate"));	
+		}
+		
+		if (len($.event("rcEndDate"))) {
+			feed.addParam(field="tcontent.releaseDate",datatype="date",condition="lte",criteria=$.event("rcEndDate"));	
+		}
+		
+		if (len($.event("rcCategoryID"))) {
+			feed.setCategoryID($.event("rcCategoryID"));	
+		}
+		
+		if (len($.event("keywords"))) {	
+			subList=$.getBean("contentManager").getPrivateSearch($.event("siteID"),$.event("keywords"));
+			feed.addParam(field="tcontent.contentID",datatype="varchar",condition="in",criteria=valuelist(subList.contentID));
+		}
+		
+		rc.rslist=feed.getQuery();
+	</cfscript>
+	<div class="control-group">
 		<cfif rc.rslist.recordcount>
 			<div id="draggableContainment" class="list-table">
 				<div class="list-table-header">Matching Results</div>
@@ -88,5 +166,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</p>
 			</cfoutput>
 		</cfif>
-	</cfif>	
-</div>
+	</div>
+</cfif>	
+
