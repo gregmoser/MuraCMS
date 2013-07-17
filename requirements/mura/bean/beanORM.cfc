@@ -110,6 +110,7 @@ component extends="mura.bean.bean" versioned=false {
 		//writeDump(var=variables.instance);
 		//writeDump(var=variables.properties,abort=true);
 
+		return this;
 	}
 
 	function set(data){
