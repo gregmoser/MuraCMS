@@ -11,7 +11,7 @@
 <cfparam name="attributes.property" default="#attributes.name#">
 <cfparam name="attributes.size" default="medium">
 
-<cfif attributes.bean.getTypes() neq 'File' and attributes.property eq 'fileid'>
+<cfif attributes.bean.getType() neq 'File' and attributes.property eq 'fileid'>
 	<cfset filetype='Image'>
 <cfelse>
 	<cfset filetype='File'>
