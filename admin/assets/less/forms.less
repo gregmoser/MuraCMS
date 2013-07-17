@@ -243,6 +243,12 @@ fieldset, .fieldset { // Using an actual fieldset causes ck editor to grow crazy
 		 .control-group-nested {
 			 border-top: 0;
 			 padding: 0;
+			 
+			 label {
+				 font-weight: normal;
+				 font-size: 12px;
+				 }
+			 
 		 	}
 		
 		}
@@ -474,7 +480,11 @@ select[multiple] {
 			}
 	
 		.btn {
-			.buttonBackground(darken(@btnBackground,7%), darken(@btnBackgroundHighlight,7%), darken(@grayDark,7%), 0 1px 1px rgba(255,255,255,.75));
+			.buttonBackground(darken(@btnBackground,5%), darken(@btnBackgroundHighlight,5%), darken(@grayDark,5%), 0 1px 1px rgba(255,255,255,.75));
+			
+			&.active	{
+				.buttonBackground(darken(@btnBackground,12%), darken(@btnBackgroundHighlight,12%), darken(@grayDark,12%), 0 1px 1px rgba(255,255,255,.75));
+				}
 		}
 	}
 

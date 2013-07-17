@@ -22,7 +22,7 @@
 		<div class="btn-group" data-toggle="buttons-radio">
 			<button type="button" style="display:none">HORRIBLE HACK</button>
 			<button type="button" class="btn active" value="Upload"><i class="icon-upload-alt"></i> Via Upload</button>
-			<button type="button" class="btn" value="URL"><i class="icon-download-alt"></i> Via URL </button>
+			<button type="button" class="btn" value="URL"><i class="icon-download-alt"></i> Via URL</button>
 			<button type="button" class="btn" value="Existing"><i class="icon-picture"></i> Select Existing</button>
 		</div>
 
