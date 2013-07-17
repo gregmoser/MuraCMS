@@ -50,18 +50,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset counter=0 />
 <cfoutput>
 <cfif rc.isNew>
-<div id="selectAssocImageResults" class="well">
+<div id="selectAssocImageResults">
 </cfif>
-<dl>
-	<dt><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'tooltip.searchforassocfile'))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforassoc#rc.filetype#')# <i class="icon-question-sign"></i></a></dt>
-	<dd><input class="filesearch" value="#HTMLEditFormat(rc.keywords)#" type="text" maxlength="50"/><input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.search')#" /></dd>
-</dl>
+<div class="control-group control-group-nested">
+	<label class="control-label"><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'tooltip.searchforassocfile'))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforassoc#rc.filetype#')# <i class="icon-question-sign"></i></a></label>
+	<div class="controls">
+		<div class="input-append">
+			<input class="filesearch" value="#HTMLEditFormat(rc.keywords)#" type="text" maxlength="50"/><input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.search')#" />
+		</div>
+	</div>
+</div>
+
 <cfif rc.isNew>
 </div>
 </cfif>
 </cfoutput>
 <cfif not rc.isNew>
-<div style="overflow: auto;" id="selectAssocImageResults" class="well">
+<div style="overflow: auto;" id="selectAssocImageResults">
 <cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords,'','',rc.type)/>
 <!---<cfoutput>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</cfoutput>--->
 <table>
