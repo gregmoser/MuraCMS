@@ -424,7 +424,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<!--- check to see if it is cached. if not then pass in the context --->
 		<!--- otherwise grab it from the cache --->
 		<cfif NOT cacheFactory.has( key )>
-			<cfset bean=variables.DAO.readByUrlTitle(arguments.urlTitle,arguments.siteID,bean) >
+			<cfset bean=variables.DAO.readByURLTitle(arguments.urlTitle,arguments.siteID,bean) >
 			<cfif not isArray(bean) and not bean.getIsNew()>
 				<cfset cacheFactory.get( key, structCopy(bean.getAllValues()) ) />
 			</cfif>
@@ -437,7 +437,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset bean.setAllValues( structCopy(cacheFactory.get( key )) )>
 				<cfreturn bean />
 				<cfcatch>
-					<cfset bean=variables.DAO.readByUrlTitle(arguments.urlTitle,arguments.siteID,bean) >
+					<cfset bean=variables.DAO.readByURLTitle(arguments.urlTitle,arguments.siteID,bean) >
 					<cfif not isArray(bean) and not bean.getIsNew()>
 						<cfset cacheFactory.get( key, structCopy(bean.getAllValues()) ) />
 					</cfif>
@@ -446,7 +446,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cftry>
 		</cfif>
 	<cfelse>
-		<cfreturn variables.DAO.readByName(arguments.name,arguments.siteID,bean) />
+		<cfreturn variables.DAO.readByURLTitle(arguments.urlTitle,arguments.siteID,bean) />
 	</cfif>	
 
 </cffunction>
