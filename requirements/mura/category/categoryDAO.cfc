@@ -151,6 +151,45 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn bean />
 </cffunction>
 
+<cffunction name="readByURLTitle" access="public" output="false" returntype="any" >
+	<cfargument name="urlTitle" type="string" />
+	<cfargument name="siteID" type="string" />
+	<cfargument name="categoryBean" required="true" default=""/>
+	<cfset var rsCategory ="" />
+	<cfset var beanArray=arrayNew(1)>
+	<cfset var utility="">
+	<cfset var bean=arguments.categoryBean />
+	
+	<cfif not isObject(bean)>
+		<cfset bean=getBean("category")>
+	</cfif>
+	
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsCategory')#">
+	Select
+	#variables.fieldlist#
+	from tcontentcategories where 
+	urlTitle=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.urlTitle#" />
+	and siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#" />
+	</cfquery>
+	
+	<cfif rsCategory.recordcount gt 1>
+		<cfset utility=getBean("utility")>
+		<cfloop query="rsCategory">
+			<cfset bean=getBean("category").set(utility.queryRowToStruct(rsCategory,rsCategory.currentrow))>
+			<cfset bean.setIsNew(0)>
+			<cfset arrayAppend(beanArray,bean)>		
+		</cfloop>
+		<cfreturn beanArray>
+	<cfelseif rsCategory.recordcount>
+		<cfset bean.set(rsCategory) />
+		<cfset bean.setIsNew(0)>
+	<cfelse>
+		<cfset bean.setSiteID(arguments.siteID)>
+	</cfif>
+	
+	<cfreturn bean />
+</cffunction>
+
 <cffunction name="readByFilename" access="public" output="false" returntype="any" >
 	<cfargument name="filename" type="string" />
 	<cfargument name="siteID" type="string" />

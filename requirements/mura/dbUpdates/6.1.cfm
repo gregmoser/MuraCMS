@@ -44,7 +44,11 @@
 	.addPrimaryKey('relatedContentSetID');
 
 	dbUtility.setTable("tcontentcategories")
-	.addColumn(column="isfeatureable",dataType="int");
+	.addColumn(column="isfeatureable",dataType="int")
+	.addIndex('name')
+	.addIndex('urltitle')
+	.addIndex('parentid')
+	.addIndex('filename');
 	
 	dbUtility.setTable("tsettings")
 	.addColumn(column="enableLockdown",datatype="tinyint",default=0);
