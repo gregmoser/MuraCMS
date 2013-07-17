@@ -35,6 +35,7 @@
 					<div class="controls">
 						<input name="#attributes.name#" type="file" class="mura-file-selector-#attributes.name#"
 							data-label="#HTMLEditFormat(attributes.label)#" data-label="#HTMLEditFormat(attributes.required)#" data-validation="#HTMLEditFormat(attributes.validation)#" data-regex="#HTMLEditFormat(attributes.regex)#" data-message="#HTMLEditFormat(attributes.message)#">
+						<a style="display:none;" class="btn" href="" onclick="return openFileMetaData('#attributes.bean.getContentHistID()#','','#attributes.bean.getSiteID()#','#attributes.property#');"><i class="icon-info-sign"></i></a>
 					</div>
 				</div>
 				

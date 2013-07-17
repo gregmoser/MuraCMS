@@ -1157,26 +1157,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					
 				<!--- BEGIN CONTENT TYPE: FILE --->	
 				<!---<cfif newBean.gettype() eq 'File'>--->
-
-				<cfset request.handledfilemetas={}>
-				<cfset var fileMetas=newBean.getValue('fileMetaDataAssign')>
-				<cfif isArray(fileMetas) or isJSON(fileMetas)>
-					<cfif not isStruct(fileMetas)>
-						<cfset fileMetas=deserializeJSON(fileMetas)>
-					</cfif>
-					
-					<cfloop collection="#fileMetas#" item="local.i">
-						<cfif isJson(fileMetas[local.i])>
-							<cfset fileMetas[local.i]=deserializeJSON(fileMetas[local.i])>
-						</cfif>
-						<cfset local.fileMeta=newBean.getFileMetaData(fileMetas[local.i].property)>
-						<cfif not local.fileMeta.getIsNew()>
-							<cfset local.fileMeta.set(fileMetas[local.i]).save().getFileID()>
-						</cfif>
-						
-						<cfset request.handledfilemetas[hash(local.fileMeta.getFileID() & newBean.getContentHistID())]=true>
-					</cfloop>	
-				</cfif>
 					
 				<cfif newBean.gettype() neq 'File' and isDefined('arguments.data.deleteFile') and len(newBean.getFileID())>
 					<cfset variables.fileManager.deleteIfNotUsed(newBean.getFileID(),newBean.getContentHistID())>
@@ -1206,6 +1186,26 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						
 					<!--- Delete Files in temp directory --->
 						
+				</cfif>
+
+				<cfset request.handledfilemetas={}>
+				<cfset var fileMetas=newBean.getValue('fileMetaDataAssign')>
+				<cfif isArray(fileMetas) or isJSON(fileMetas)>
+					<cfif not isStruct(fileMetas)>
+						<cfset fileMetas=deserializeJSON(fileMetas)>
+					</cfif>
+					
+					<cfloop collection="#fileMetas#" item="local.i">
+						<cfif isJson(fileMetas[local.i])>
+							<cfset fileMetas[local.i]=deserializeJSON(fileMetas[local.i])>
+						</cfif>
+						<cfset local.fileMeta=newBean.getFileMetaData(fileMetas[local.i].property)>
+						<cfif not local.fileMeta.getIsNew()>
+							<cfset local.fileMeta.set(fileMetas[local.i]).save().getFileID()>
+						</cfif>
+						
+						<cfset request.handledfilemetas[hash(local.fileMeta.getFileID() & newBean.getContentHistID())]=true>
+					</cfloop>	
 				</cfif>
 		
 				<!--- Delete Files that are not attached to any version in versin history--->	

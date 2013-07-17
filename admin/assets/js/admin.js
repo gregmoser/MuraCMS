@@ -906,8 +906,6 @@ function setCheckboxTrees() {
 
 function openFileMetaData(contenthistid,fileid,siteid,property) {
 
-		var fileInputID='fmd-' + contenthistid + '-' + fileid;
-
 		if (typeof fileMetaDataAssign === 'undefined') {
 			fileMetaDataAssign={};
 		}
@@ -932,7 +930,6 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 					fileMetaDataAssign[fileData.property]=fileData;
 					$('#filemetadataassign').val(JSON.stringify(fileMetaDataAssign));
-					//alert($('#filemetadataassign').val());
 
 					$(this).dialog( "close" );
 
@@ -948,7 +945,7 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 				$("#newFileMetaContainer").html('<div class="ui-dialog-content ui-widget-content"><div class="load-inline"></div></div>');
 				var url = 'index.cfm';
-				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&property=' + property + + '&property=' + property + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
+				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&property=' + property  + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
 				$.get(url + "?" + pars).done(function(data) {
 					$('#newFileMetaContainer').html(data);
 					
@@ -996,7 +993,7 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 	    	this.options.file=this.$element.attr('data-name');
 	    }
 
-	    var loadAssocImages=function(keywords,isnew) {
+	    var loadAssocFiles=function(keywords,isnew) {
 			var url = 'index.cfm';
 			var pars = 'muraAction=cArch.assocfiles&compactDisplay=true&siteid=' + $elm.attr('data-siteid') + '&fileid=' + $elm.attr('data-fileid') + '&fileType=' + $elm.attr('data-filetype') + '&contentid=' + $elm.attr('data-contentid') +  '&property=' + $elm.attr('data-property') +'&keywords=' + keywords + '&isNew=' + isnew + '&cacheid=' + Math.random();
 			$elm.find(".mura-file-existing").html('<div class="load-inline"></div>');
@@ -1006,7 +1003,7 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 				function(data) {
 					$elm.find(".mura-file-existing").html(data);
 					$elm.find(".mura-file-existing").find('.btn').click(function(){
-						loadAssocImages($elm.find(".mura-file-existing").find(".imagesearch").val(),0);
+						loadAssocFiles($elm.find(".mura-file-existing").find(".filesearch").val(),0);
 					});
 				}
 			)
@@ -1021,7 +1018,7 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 	    var clickHandler=function(){
 	    	setTab($(this).val());
 	    	if($(this).val().toLowerCase() == 'existing'){
-	    		loadAssocImages('',1);
+	    		loadAssocFiles('',1);
 	    	} else {
 	    		$elm.find(".mura-file-existing").html('<div class="load-inline"></div>')
 	    	}
@@ -1036,6 +1033,17 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 	    }
 	
 	    $(this.$element).find("button.btn").click(clickHandler);
+	   
+	    $elm.find(".mura-file-upload").find('input[type="file"]').change(
+	    	function(){
+	    		 var reg = /^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpg|.jpeg|.png|.gif)$/;
+	    		if(reg.test( $(this).val().toLowerCase())){
+	    			$elm.find(".mura-file-upload").find('.btn').show();
+	    		}else{
+	    			$elm.find(".mura-file-upload").find('.btn').hide();
+	    		}
+	    });
+
 		setTab('Upload');
 
 	  }
