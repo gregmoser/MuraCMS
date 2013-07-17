@@ -137,7 +137,7 @@
 	<script src="#application.configBean.getContext()#/admin/assets/js/jquery/jquery-ui-i18n.min.js?coreversion=#application.coreversion#" type="text/javascript"></script>	
 
 	<!-- Mura Admin JS -->
-	<script src="#application.configBean.getContext()#/admin/assets/js/admin.js?coreversion=#application.coreversion#" type="text/javascript"></script>	
+	<script src="#application.configBean.getContext()#/admin/assets/js/admin.min.js?coreversion=#application.coreversion#" type="text/javascript"></script>	
 	
 	<cfif cgi.http_user_agent contains 'msie'>
 	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->

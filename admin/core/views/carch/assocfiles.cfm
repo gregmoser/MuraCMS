@@ -49,9 +49,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfparam name="rc.isNew" default="1">
 <cfset counter=0 />
 <cfoutput>
-<cfif rc.isNew>
-<div id="selectAssocImageResults">
-</cfif>
 <div class="control-group control-group-nested">
 	<label class="control-label"><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'tooltip.searchforassocfile'))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforassoc#rc.filetype#')# <i class="icon-question-sign"></i></a></label>
 	<div class="controls">
@@ -61,11 +58,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</div>
 </div>
 
-<cfif rc.isNew>
-</div>
-</cfif>
+
 </cfoutput>
-<cfif not rc.isNew>
+<cfif len(rc.keywords)>
 <div style="overflow: auto;" id="selectAssocImageResults">
 <cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords,'','',rc.type)/>
 <!---<cfoutput>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</cfoutput>--->
