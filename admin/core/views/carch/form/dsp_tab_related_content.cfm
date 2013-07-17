@@ -49,7 +49,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfset subtype = application.classExtensionManager.getSubTypeByName(rc.contentBean.getType(), rc.contentBean.getSubType(), rc.contentBean.getSiteID())>
 <cfset relatedContentSets = subtype.getRelatedContentSets()>
-<cfset arrayAppend(relatedContentSets, $.getBean('relatedContentSet'))>
+<cfset arrayAppend(relatedContentSets, $.getBean('relatedContentSet').setRelatedContentSetID('00000000000000000000000000000000000'))>
 
 <cfoutput>
 <div id="tabRelatedcontent" class="tab-pane">
@@ -58,26 +58,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<script>
 		$(document).ready(function(){
-			$(".rcSortable").sortable({
-				connectWith: ".rcSortable",
-				revert: true,
-				update: function( event, ui ) {
-					siteManager.updateBuckets();
-					if (ui.item.find('a.delete').length == 0) {
-						ui.item.append('<a class="delete"></a>');
-					}
-					siteManager.bindDelete();
-					siteManager.bindMouse();
-					siteManager.setDirtyRelatedContent();
-					siteManager.updateRCForm();
-				},
-				cancel: "li.empty"
-			}).disableSelection();
-		
-			siteManager.loadRelatedContent('#HTMLEditFormat(rc.siteid)#','',1)
-			siteManager.bindDelete();
-			siteManager.bindMouse();
-			siteManager.updateRCForm();
+			siteManager.setupRCSortable();
 		});
 	</script>
 	
