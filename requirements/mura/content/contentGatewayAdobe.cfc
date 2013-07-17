@@ -1424,7 +1424,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	LEFT JOIN tcontentstats on (tcontent.contentID=tcontentstats.contentID 
 								and tcontent.siteID=tcontentstats.siteID
 								)
-	<cfif arguments.searchType eq "image">
+	<cfif listFindNoCase("image,file",arguments.searchType)>
 		Inner Join tfiles ON (tcontent.fileID=tfiles.fileID)
 	<cfelse>
 		Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
@@ -1461,26 +1461,36 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfelse>
 						
 						and
-						(tcontent.Title #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
-						or tcontent.menuTitle #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
-						or tcontent.summary #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
-						or 
+						(
+							tcontent.Title #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
+							or tcontent.menuTitle #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
+							or tcontent.summary #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
+
+							<cfif listFindNoCase("image,file",arguments.searchType)>
+								or tfiles.caption #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
+								or tfiles.credits #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
+								or tfiles.alttext #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%"/>
+							</cfif>
+							
+							or 
 								(
 									tcontent.type not in ('Link','File')
 									and tcontent.body #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%">
 								)
-						or tcontent.contenthistid in (
+							or tcontent.contenthistid in (
 								select distinct tcontent.contenthistid from tclassextenddata 
 								inner join tcontent on (tclassextenddata.baseid=tcontent.contenthistid)
 								where tcontent.active=1
 								and tcontent.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/> 
 								and tclassextenddata.attributeValue #likeCi# <cfqueryparam cfsqltype="cf_sql_varchar" value="%#kw#%">
-							))
-						and not (
-						tcontent.Title = <cfqueryparam cfsqltype="cf_sql_varchar" value="#kw#"/>
-						or tcontent.menuTitle = <cfqueryparam cfsqltype="cf_sql_varchar" value="#kw#"/>	
+							)
 						)
-						</cfif>
+
+						and not (
+							tcontent.Title = <cfqueryparam cfsqltype="cf_sql_varchar" value="#kw#"/>
+							or tcontent.menuTitle = <cfqueryparam cfsqltype="cf_sql_varchar" value="#kw#"/>	
+						)
+					</cfif>
 					
 		<cfelse>
 		0=1

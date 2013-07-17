@@ -11,8 +11,14 @@
 <cfparam name="attributes.property" default="#attributes.name#">
 <cfparam name="attributes.size" default="medium">
 
+<cfif attributes.bean.getTypes() neq 'File' and attributes.property eq 'fileid'>
+	<cfset filetype='Image'>
+<cfelse>
+	<cfset filetype='File'>
+</cfif>
+
 <cfoutput>
-	<div data-name="#attributes.name#" data-property="#attributes.property#" data-fileid="#attributes.bean.getValue(attributes.property)#" data-contentid="#attributes.bean.getcontentid()#" data-siteid="#attributes.bean.getSiteID()#"class="mura-file-selector mura-resource-select #attributes.class#">
+	<div data-name="#attributes.name#" data-property="#attributes.property#" data-fileid="#attributes.bean.getValue(attributes.property)#" data-filetype="#filetype#" data-contentid="#attributes.bean.getcontentid()#" data-siteid="#attributes.bean.getSiteID()#"class="mura-file-selector mura-resource-select #attributes.class#">
 		<div class="btn-group" data-toggle="buttons-radio">
 			<button type="button" style="display:none">HORRIBLE HACK</button>
 			<button type="button" class="btn active" value="Upload"><i class="icon-upload-alt"></i> Via Upload</button>
@@ -52,7 +58,7 @@
 		</div>
 
 		<cfif isObject(attributes.bean)>
-			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#" size="#attributes.size#">
+			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#" size="#attributes.size#" filetype="#filetype#">
 		</cfif>
 	</div>
 

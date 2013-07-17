@@ -948,11 +948,10 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 				$("#newFileMetaContainer").html('<div class="ui-dialog-content ui-widget-content"><div class="load-inline"></div></div>');
 				var url = 'index.cfm';
-				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&property=' + property + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
+				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&property=' + property + + '&property=' + property + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
 				$.get(url + "?" + pars).done(function(data) {
 					$('#newFileMetaContainer').html(data);
-					$("#newFileMetaContainer").dialog("option", "position", "center");
-
+					
 					if(property in fileMetaDataAssign){
 						var fileData=fileMetaDataAssign[property];
 						for(var p in fileData){
@@ -964,11 +963,14 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 							toolbar: 'Basic',
 							customConfig: 'config.js.cfm'
 						}, htmlEditorOnComplete);
+
+					$("#newFileMetaContainer").dialog("option", "position", getDialogPosition());
+
 					$('#file-caption').focus();
 
 				}).error(function(data){
 					$('#newFileMetaContainer').html(data.responseText);
-					$("#newFileMetaContainer").dialog("option", "position", "center");
+					$("#newFileMetaContainer").dialog("option", "position", getDialogPosition());
 				});
 
 			},
@@ -996,9 +998,9 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 	    var loadAssocImages=function(keywords,isnew) {
 			var url = 'index.cfm';
-			var pars = 'muraAction=cArch.assocImages&compactDisplay=true&siteid=' + $elm.attr('data-siteid') + '&fileid=' + $elm.attr('data-fileid') + '&contentid=' + $elm.attr('data-contentid') +  '&property=' + $elm.attr('data-property') +'&keywords=' + keywords + '&isNew=' + isnew + '&cacheid=' + Math.random();
+			var pars = 'muraAction=cArch.assocfiles&compactDisplay=true&siteid=' + $elm.attr('data-siteid') + '&fileid=' + $elm.attr('data-fileid') + '&fileType=' + $elm.attr('data-filetype') + '&contentid=' + $elm.attr('data-contentid') +  '&property=' + $elm.attr('data-property') +'&keywords=' + keywords + '&isNew=' + isnew + '&cacheid=' + Math.random();
 			$elm.find(".mura-file-existing").html('<div class="load-inline"></div>');
-			
+
 			$.ajax(url + "?" + pars)
 			.done( 
 				function(data) {
