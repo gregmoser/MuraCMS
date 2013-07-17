@@ -1025,16 +1025,17 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 	    }
 
 	    var setTab=function(tab){
-	    	//alert($opts.file)
+	    	
+	    	if(tab.toLowerCase() != 'upload'){
+				$elm.find(".mura-file-upload").find('input[type="file"]').val('');
+				$elm.find(".mura-file-upload").find('.btn').hide();
+			}
+
 	    	$elm.find(".mura-file-option").hide();
 	    	$elm.find(".mura-file-" + tab.toLowerCase()).show();
 			$elm.find(".mura-file-option").find("input").attr('name','');
 			$elm.find(".mura-file-" + tab.toLowerCase()).find("input").attr('name',$opts.file);
 
-			if(tab != 'upload'){
-				$elm.find(".mura-file-upload").find('input[type="file"]').val('');
-				$elm.find(".mura-file-upload").find('.btn').hide();
-			}
 	    }
 	
 	    $(this.$element).find("button.btn").click(clickHandler);
