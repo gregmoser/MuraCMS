@@ -128,16 +128,6 @@ input + .help-block {
 .controls ul {
 	margin: 0;
 	list-style: none;
-	
-	select {
-		/*
-font-size: @baseFontSize - 1;
-		padding: 0;
-		line-height: 1;
-		height: 18px;
-		width: auto;
-*/
-	}
 }
 
 .help-inline, .help-block {
@@ -170,8 +160,7 @@ font-size: @baseFontSize - 1;
 			}
 			
 			dd {
-				margin: 0;
-				
+				margin: 0;				
 				}
 			}
 		
@@ -250,6 +239,12 @@ fieldset, .fieldset { // Using an actual fieldset causes ck editor to grow crazy
 					padding: 0;
 					}
 			}
+		
+		 .control-group-nested {
+			 border-top: 0;
+			 padding: 0;
+		 	}
+		
 		}
 	}
 
@@ -464,15 +459,25 @@ select[multiple] {
 }
 
 // Resource Select File or URL 
-.mura-resource-select {
+.mura-file-selector {
 
 	> .well {
 		background-color: @grayLighter;
+		margin-bottom: 0;
 		}
 		
 	.btn-group {
-		margin-bottom: @baseLineHeight;
+		margin-bottom: @baseLineHeight/2;
+		
+		button[value="Upload"] {
+			.border-left-radius(4px);
+			}
+	
+		.btn {
+			.buttonBackground(darken(@btnBackground,7%), darken(@btnBackgroundHighlight,7%), darken(@grayDark,7%), 0 1px 1px rgba(255,255,255,.75));
 		}
+	}
+
 		
 	form {
 		margin-bottom: 0;
