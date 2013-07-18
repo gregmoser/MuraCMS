@@ -589,6 +589,8 @@ component extends="mura.bean.bean" versioned=false {
 
 
 					qs.execute(sql=sql);
+			
+					variables.instance.isnew=0;
 
 					if(isdefined('postCreate')){
 						evaluate('postCreate()');
