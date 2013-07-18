@@ -52,7 +52,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfparam name="objectparams.imagesize" default="desc">
 <cfparam name="objectparams.imageHeight" default="#$.siteConfig('smallImageHeight')#">
 <cfparam name="objectparams.imageWidth" default="#$.siteConfig('smallImageWidth')#">
-<cfset variables.iterator=variables.$.content().getRelatedContentIterator(liveOnly=true,sortBy=objectparams.sortBy,sortDirection=objectparams.sortDirection)>
+<cfset variables.iterator=variables.$.content().getRelatedContentIterator(liveOnly=true,sortBy=objectparams.sortBy,sortDirection=objectparams.sortDirection,relatedContentSetID=objectparams.relatedContentSetID)>
 <cfif variables.iterator.getRecordCount()>
 	<div class="svRelContent svIndex">
 	<#variables.$.getHeaderTag('subHead1')#>#variables.$.rbKey('list.relatedcontent')#</#variables.$.getHeaderTag('subHead1')#>

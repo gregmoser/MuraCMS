@@ -36,7 +36,26 @@
 						<input name="#attributes.name#" type="file" class="mura-file-selector-#attributes.name#"
 							data-label="#HTMLEditFormat(attributes.label)#" data-label="#HTMLEditFormat(attributes.required)#" data-validation="#HTMLEditFormat(attributes.validation)#" data-regex="#HTMLEditFormat(attributes.regex)#" data-message="#HTMLEditFormat(attributes.message)#">
 						<a style="display:none;" class="btn" href="" onclick="return openFileMetaData('#attributes.bean.getContentHistID()#','','#attributes.bean.getSiteID()#','#attributes.property#');"><i class="icon-info-sign"></i></a>
+
+						<cfif attributes.bean.getType() eq 'File' and attributes.property eq 'fileid' and len(attributes.bean.getFileID())>
+						
+						<p style="display:none;" id="mura-revision-type">
+							<label class="radio inline">
+								<input type="radio" name="versionType" value="major">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.version.major')#
+							</label>
+							<label class="radio inline">
+									<input type="radio" name="versionType" value="minor" checked />#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.version.minor')#
+							</label>
+						</p>
+						<script>
+							jQuery(".mura-file-selector-newfile").change(function(){
+								jQuery("##mura-revision-type").fadeIn();
+								});	
+						</script>
+					</cfif>
+
 					</div>
+
 				</div>
 				
 			</div>
@@ -59,7 +78,9 @@
 		<!--- </div> --->
 
 		<cfif isObject(attributes.bean)>
+			<div class="controls">
 			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#" size="#attributes.size#" filetype="#filetype#">
+			</div>
 		</cfif>
 	</div>
 </cfoutput>

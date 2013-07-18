@@ -127,7 +127,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfif rc.contentBean.getType() eq "file" and stats.getMajorVersion()>
 	<td>
 	<cfif rc.item.getmajorversion()>
-		#rc.item.getmajorversion()#.#rc.item.get.minorversion()#
+		#rc.item.getmajorversion()#.#rc.item.getminorversion()#
 		<cfelse>&nbsp;
 	</cfif>
 	</td>

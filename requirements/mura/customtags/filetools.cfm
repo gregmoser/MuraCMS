@@ -8,22 +8,6 @@
 
 <cfoutput>
 <cfif not fileMetaData.getIsNew() and attributes.bean.getType() eq 'File' and attributes.property eq 'fileid'>
-	
-	<p style="display:none;" id="mura-revision-type">
-		<label class="radio inline">
-			<input type="radio" name="versionType" value="major">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.version.major')#
-		</label>
-		<label class="radio inline">
-				<input type="radio" name="versionType" value="minor" checked />#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.version.minor')#
-		</label>
-	</p>
-	<script>
-		jQuery(".mura-file-selector-newfile").change(function(){
-			jQuery("##mura-revision-type").fadeIn();
-			});	
-	</script>
-	
-
      <p>
      <a class="mura-file #lcase(attributes.bean.getFileExt())#" href="#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getFileID()#&method=attachment" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',this.href);">#HTMLEditFormat(attributes.bean.getAssocFilename())#<cfif attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif></a>
      </p>

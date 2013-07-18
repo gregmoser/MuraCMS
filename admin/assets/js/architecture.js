@@ -585,12 +585,10 @@ buttons: {
 		});
 	},
 	
-	loadRelatedContent: function(siteid, keywords, isNew) {
+	loadRelatedContent: function(siteid, isNew, values, advSearch) {
 		var url = 'index.cfm';
-		var pars = 'muraAction=cArch.loadRelatedContent&compactDisplay=true&siteid=' + siteid + '&keywords=' + keywords + '&isNew=' + isNew + '&cacheid=' + Math.random();
-		/*if(keywords != ''){
-		location.href="?" + pars;
-		}*/
+		var pars = 'muraAction=cArch.loadRelatedContent&compactDisplay=true&siteid=' + siteid + '&isNew=' + isNew + '&' + values + '&cacheid=' + Math.random();
+		
 		var d = $('#selectRelatedContent');
 		d.html('<div class="load-inline"></div>');
 		$.get(url + "?" + pars, function(data) {
@@ -606,10 +604,58 @@ buttons: {
 				zIndex: 100
 			}).disableSelection();
 			
+			setDatePickers(".mura-relatedContent-datepicker", dtLocale, dtCh);
+			
+			$('#aAdvancedSearch').click(function(e){
+				e.preventDefault();
+				$('#rcAdvancedSearch').slideToggle('fast');
+			});	
+			
+			if (isNew == 0 && advSearch == true) {
+				$('#rcAdvancedSearch').show();
+			}
+			
 			siteManager.bindMouse();
 			setCheckboxTrees();
+			
 			$('#rcAdvancedSearch').find('ul.categories:not(.checkboxTrees)').css("margin-left", "10px");
+			
+			$('#rcBtnSearch').click(function(e){
+				console.log('clickme');
+				e.preventDefault();
+				var advSearching = $('#rcAdvancedSearch').is(':visible');
+				var valueSelector = '#internalContent input';
+				// if doing an advanced search, then serialze all elements
+				if (advSearching) {
+					valueSelector = '#selectRelatedContent input, #selectRelatedContent select';	
+				}
+								
+				siteManager.loadRelatedContent(siteid, 0, $(valueSelector).serialize(), advSearching);
+			});
 		});
+	},
+	
+	setupRCSortable: function() {
+		$(".rcSortable").sortable({
+			connectWith: ".rcSortable",
+			revert: true,
+			update: function( event, ui ) {
+				siteManager.updateBuckets();
+				if (ui.item.find('a.delete').length == 0) {
+					ui.item.append('<a class="delete"></a>');
+				}
+				siteManager.bindDelete();
+				siteManager.bindMouse();
+				siteManager.setDirtyRelatedContent();
+				siteManager.updateRCForm();
+			},
+			cancel: "li.empty"
+		}).disableSelection();
+	
+		siteManager.loadRelatedContent(siteid, 1, '', false);
+		siteManager.bindDelete();
+		siteManager.bindMouse();
+		siteManager.updateRCForm();
 	},
 	
 	updateRCForm: function() {
