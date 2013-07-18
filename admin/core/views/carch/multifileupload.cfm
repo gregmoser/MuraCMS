@@ -302,12 +302,12 @@ jQuery(document).ready(function(){
         	<div class="btn-group">
             {% if (!o.files.error && !i && !o.options.autoUpload) { %}
                 <button class="btn">
-                    <i class="icon-upload"></i>
+                    <i class="icon-upload"></i><span>Upload</span>
                 </button>
             {% } %}
             {% if (!i) { %}
                 <button class="btn">
-                    <i class="icon-ban-circle"></i>
+                    <i class="icon-ban-circle"></i><span>Cancel</span>
                 </button>
             {% } %}
 			</div>

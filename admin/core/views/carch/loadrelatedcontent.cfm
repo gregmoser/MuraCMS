@@ -57,16 +57,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfoutput>
 	<div class="control-group">
 		<label class="control-label">Add Related Content</label>
-		<div id="internalContent" class="form-inline">
-			<input type="text" name="keywords" value="#rc.keywords#" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
+		<div id="internalContent" class="form-inline input-append">
+			<input type="text" class="span12" name="keywords" value="#rc.keywords#" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
 			<input type="button" name="btnSearch" value="Search" id="rcBtnSearch" class="btn" />
-		</div>
-		<a href="##" class="pull-right" id="aAdvancedSearch">Advanced Search</a>
+			<a href="##" class="btn" id="aAdvancedSearch">Advanced Search</a>
+		</div>		
 	</div>
 	
 	<div id="rcAdvancedSearch" style="display:none;">
 		<div class="control-group">
-			<div class="span6">
+			<div class="span4">
 				<label class="control-label">Content Type</label>
 				<div class="controls">
 					<select name="searchTypeSelector" id="searchTypeSelector">
@@ -85,7 +85,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</select>
 				</div>
 			</div>	
-			<div class="span6">
+			<div class="span8">
 				<label class="control-label">Release Date Range</label>
 				<div class="controls">
 					<input type="text" name="rcStartDate" id="rcStartDate" class="datepicker span4 mura-relatedContent-datepicker" value="#rc.rcStartDate#" />
