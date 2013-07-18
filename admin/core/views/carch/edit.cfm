@@ -202,7 +202,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset rsSubTypes=application.classExtensionManager.getSubTypes(siteID=rc.siteID,activeOnly=true) />
 		<!---
 		<cfif rc.compactDisplay neq "true" and listFindNoCase("#pageLevelList#",rc.type)>
-		--->
+		--->	
 			<cfquery name="rsSubTypes" dbtype="query">
 			select * from rsSubTypes
 			where 
@@ -210,15 +210,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					type in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#pageLevelList#"/>)
 					or type='Base'
 				<cfelse>
-					1=1 AND
+					1=1
 					<cfloop list="#subtypefilter#" index="i">
-						<cfif i neq listFirst(subtypefilter)>
-							OR
-						</cfif>
-						(
+						and (
 								type=<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#listFirst(i,'/')#"/>
 								and subtype=<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#listLast(i,'/')#"/>
-						)
+							)
 					</cfloop>
 				</cfif>
 			</cfquery>
@@ -660,6 +657,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<input type="hidden" name="homeID" value="#HTMLEditFormat(rc.homeID)#">
 	<input type="hidden" name="cancelpendingapproval" value="false">
 	<input type="hidden" name="murakeepediting" value="false">
+	<input type="hidden" name="filemetadataassign" id="filemetadataassign" value=""/>
+
 	<cfif not  listFind(session.mura.memberships,'S2')>
 		<input type="hidden" name="isLocked" value="#rc.contentBean.getIsLocked()#">
 	</cfif>
