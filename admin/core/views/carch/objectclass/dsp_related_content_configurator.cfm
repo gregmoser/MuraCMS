@@ -47,6 +47,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfset $=application.serviceFactory.getBean("muraScope").init(rc.siteID)>
 <cfset feed=$.getBean("feed").loadBy(name=createUUID())>
+
+<cfset rc.contentBean = $.getBean('content').loadBy(contentID=rc.contentID, siteID=rc.siteID)>
+<cfset subtype = application.classExtensionManager.getSubTypeByName(rc.contentBean.getType(), rc.contentBean.getSubType(), rc.contentBean.getSiteID())>
+<cfset relatedContentSets = subtype.getRelatedContentSets()>
+<cfset arrayAppend(relatedContentSets, $.getBean('relatedContentSet').setRelatedContentSetID('00000000000000000000000000000000000'))>
+
 <cfif isDefined("form.params") and isJSON(form.params)>
 	<cfset feed.set(deserializeJSON(form.params))>
 <cfelse>
@@ -112,7 +118,22 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</div>
 		</div>	
 	</div>
-			
+	
+	<cfif rc.classid eq "related_content">
+		<div class="control-group">
+			<label class="control-label">
+				Related Content Set
+			</label>
+			<div class="controls">
+				<select name="relatedContentSetID" class="objectParam">
+					<cfloop from="1" to="#arrayLen(relatedContentSets)#" index="s">
+						<cfset rcsBean = relatedContentSets[s]/>
+						<option value="#rcsBean.getRelatedContentSetID()#"<cfif feed.getRelatedContentSetID() eq rcsBean.getRelatedContentSetID()> selected</cfif>>#rcsBean.getName()#</option>
+					</cfloop>
+				</select>
+			</div>
+		</div>
+	<cfelse>		
 	<div class="control-group">
 			<div class="span6">
 				<label class="control-label">
@@ -154,6 +175,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</div>
 				</div>
 			</div>
+		</cfif>
 			
 			<div class="control-group" id="availableFields">
 				<label class="control-label">
