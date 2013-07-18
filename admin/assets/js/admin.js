@@ -921,7 +921,6 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 			position: getDialogPosition(),
 			buttons: {
 				Save:function(){
-
 					var fileData={};
 
 					$('.filemeta').each(function(){
@@ -930,7 +929,6 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 					fileMetaDataAssign[fileData.property]=fileData;
 					$('#filemetadataassign').val(JSON.stringify(fileMetaDataAssign));
-
 					$(this).dialog( "close" );
 
 				},

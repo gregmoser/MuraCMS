@@ -21,9 +21,9 @@
 	<div data-name="#attributes.name#" data-property="#attributes.property#" data-fileid="#attributes.bean.getValue(attributes.property)#" data-filetype="#filetype#" data-contentid="#attributes.bean.getcontentid()#" data-siteid="#attributes.bean.getSiteID()#"class="mura-file-selector #attributes.class#">
 		<div class="btn-group" data-toggle="buttons-radio">
 			<button type="button" style="display:none">HORRIBLE HACK</button>
-			<button type="button" class="btn active" value="Upload"><i class="icon-upload-alt"></i> Via Upload</button>
-			<button type="button" class="btn" value="URL"><i class="icon-download-alt"></i> Via URL</button>
-			<button type="button" class="btn" value="Existing"><i class="icon-picture"></i> Select Existing</button>
+			<button type="button" class="btn active" value="Upload"><i class="icon-upload-alt"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.viaupload')#</button>
+			<button type="button" class="btn" value="URL"><i class="icon-download-alt"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.viaurl')#</button>
+			<button type="button" class="btn" value="Existing"><i class="icon-picture"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.selectexisting')#</button>
 		</div>
 
 		<!--- <div class="well"> --->
@@ -31,7 +31,7 @@
 			<div id="mura-file-upload-#attributes.name#" class="mura-file-option mura-file-upload fileTypeOption#attributes.name#">
 			
 				<div class="control-group control-group-nested">
-					<label class="control-label">Select File to Upload</label>
+					<label class="control-label"> #application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.selectfiletoupload')#</label>
 					<div class="controls">
 						<input name="#attributes.name#" type="file" class="mura-file-selector-#attributes.name#"
 							data-label="#HTMLEditFormat(attributes.label)#" data-label="#HTMLEditFormat(attributes.required)#" data-validation="#HTMLEditFormat(attributes.validation)#" data-regex="#HTMLEditFormat(attributes.regex)#" data-message="#HTMLEditFormat(attributes.message)#">
@@ -62,7 +62,7 @@
 			<div id="mura-file-url-#attributes.name#" class="mura-file-option mura-file-url fileTypeOption#attributes.name#">
 				
 				<div class="control-group control-group-nested">
-					<label class="control-label">Enter URL</label>
+					<label class="control-label">#application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.selecturl')#</label>
 					<div class="controls">		
 						<input type="text" name="#attributes.name#" class="mura-file-selector-#attributes.name# input-xxlarge" type="url" placeholder="http://www.domain.com/yourfile.zip"	value=""
 						data-label="#HTMLEditFormat(attributes.label)#" data-label="#HTMLEditFormat(attributes.required)#" data-validate="#HTMLEditFormat(attributes.validation)#" data-regex="#HTMLEditFormat(attributes.regex)#" data-message="#HTMLEditFormat(attributes.message)#">

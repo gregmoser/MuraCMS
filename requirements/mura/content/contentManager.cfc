@@ -737,6 +737,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var doPurgeOutputCache=false>
 		<cfset var doPurgeContentDescendentsCache=false>
 		<cfset var doTrimVersionHistory=false>
+		<cfset var doPreserveVersionedObjects=false>
 		<cfset var activeBean="">
 		
 		<!---IF THE DATA WAS SUBMITTED AS AN OBJECT UNPACK THE VALUES --->
@@ -747,7 +748,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfthrow type="custom" message="The attribute 'DATA' is not of type 'mura.content.contentBean'.">
 			</cfif>
 		</cfif>
-		
+
 		<cfset pluginEvent=pluginEvent.init(arguments.data).getEvent()>
 		
 		<!--- MAKE SURE ALL REQUIRED DATA IS THERE--->
@@ -960,7 +961,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 
 				<cfif not newBean.getIsNew()>
-					<cfset variables.contentDAO.persistVersionedObjects(currentBean,newBean)>
+					<cfset doPreserveVersionedObjects=true>
 				</cfif>
 				
 				<!--- Category Persistence --->	
@@ -1187,26 +1188,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<!--- Delete Files in temp directory --->
 						
 				</cfif>
-
-				<cfset request.handledfilemetas={}>
-				<cfset var fileMetas=newBean.getValue('fileMetaDataAssign')>
-				<cfif isArray(fileMetas) or isJSON(fileMetas)>
-					<cfif not isStruct(fileMetas)>
-						<cfset fileMetas=deserializeJSON(fileMetas)>
-					</cfif>
-					
-					<cfloop collection="#fileMetas#" item="local.i">
-						<cfif isJson(fileMetas[local.i])>
-							<cfset fileMetas[local.i]=deserializeJSON(fileMetas[local.i])>
-						</cfif>
-						<cfset local.fileMeta=newBean.getFileMetaData(fileMetas[local.i].property)>
-						<cfif not local.fileMeta.getIsNew()>
-							<cfset local.fileMeta.set(fileMetas[local.i]).save().getFileID()>
-						</cfif>
-						
-						<cfset request.handledfilemetas[hash(local.fileMeta.getFileID() & newBean.getContentHistID())]=true>
-					</cfloop>	
-				</cfif>
 		
 				<!--- Delete Files that are not attached to any version in versin history--->	
 				<cfif variables.configBean.getPurgeDrafts() and newBean.getApproved() and not newBean.getIsNew()>
@@ -1325,14 +1306,39 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					
 				<cfset variables.utility.logEvent("ContentID:#newBean.getcontentID()# ContentHistID:#newBean.getcontentHistID()# MenuTitle:#newBean.getMenuTitle()# Type:#newBean.getType()# was created","mura-content","Information",true) />
 				<cfset variables.contentDAO.create(newBean) />
-				<!---
-					<cfif isQuery(newBean.getValue("commentsFromMuraTrash") ) >
-						<cfset rsComments=newBean.getValue("commentsFromMuraTrash")>
-						<cfloop query="rsComments">
-							<cfset getBean("contentCommentBean").set( variables.utility.queryRowToStruct(rsComments, currentrow)  ).save()>
-						</cfloop>
-					</cfif>
-					--->
+
+				<cfset getBean('contentSourceMap')
+						.setContentHistID(newBean.getContentHistID())
+						.setSourceID(arguments.data.sourceID)
+						.setSiteID(newBean.getSiteID())
+						.setContentID(newBean.getContentID())
+						.setCreated(now())
+						.save()>
+
+
+				<cfset newBean=read(contenthistid=newbean.getContentHistID(),siteid=newBean.getSiteID())>
+
+				<cfset request.handledfilemetas={}>
+				<cfparam name="arguments.data.fileMetaDataAssign" default="">
+				
+				<cfif isJSON(arguments.data.fileMetaDataAssign)>
+					<cfset arguments.data.fileMetaDataAssign=deserializeJSON(arguments.data.fileMetaDataAssign)>
+				</cfif>
+
+				<cfif isStruct(arguments.data.fileMetaDataAssign)>
+
+					<cfloop collection="#arguments.data.fileMetaDataAssign#" item="local.i">	
+						<cfset local.fileMeta=newBean.getFileMetaData(arguments.data.fileMetaDataAssign[local.i].property)>			
+						<cfset local.fileMeta.set(arguments.data.fileMetaDataAssign[local.i])>		
+						<cfset local.fileMeta.save()>
+						<cfset request.handledfilemetas[hash(local.fileMeta.getFileID() & newBean.getContentHistID())]=true>
+					</cfloop>	
+				</cfif>
+
+				<cfif doPreserveVersionedObjects>
+					<cfset variables.contentDAO.persistVersionedObjects(currentBean,newBean)>
+				</cfif>
+
 				<cfset request.muratransaction=false>
 				</cftransaction>
 					
@@ -1363,14 +1369,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfset getBean('approvalRequest').loadBy(requestID=local.rsApprovalsDelete.requestID).delete()>
 					</cfloop>
 				</cfif>
-
-				<cfset getBean('contentSourceMap')
-						.setContentHistID(newBean.getContentHistID())
-						.setSourceID(arguments.data.sourceID)
-						.setSiteID(newBean.getSiteID())
-						.setContentID(newBean.getContentID())
-						.setCreated(now())
-						.save()>
 
 				<!---
 				<cfif len(newBean.getChangesetID())>
