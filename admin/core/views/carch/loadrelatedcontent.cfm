@@ -57,11 +57,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfoutput>
 	<div class="control-group">
 		<label class="control-label">Add Related Content</label>
-		<div id="internalContent" class="form-inline input-append">
-			<input type="text" class="span12" name="keywords" value="#rc.keywords#" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
-			<input type="button" name="btnSearch" value="Search" id="rcBtnSearch" class="btn" />
+		<div id="internalContent" class="form-inline">
+			<div class="input-append">
+				<input type="text" name="keywords" value="#rc.keywords#" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
+				<button type="button" name="btnSearch" id="rcBtnSearch" class="btn"><i class="icon-search"></i></button>
+			</div>
 			<a href="##" class="btn" id="aAdvancedSearch">Advanced Search</a>
-		</div>		
+		</div>	
 	</div>
 	
 	<div id="rcAdvancedSearch" style="display:none;">
@@ -145,7 +147,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<div class="control-group">
 		<cfif rc.rslist.recordcount>
 			<div id="draggableContainment" class="list-table">
-				<div class="list-table-header">Matching Results</div>
+				<label>Matching Results</label>
 				<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
 					<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
 					<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
