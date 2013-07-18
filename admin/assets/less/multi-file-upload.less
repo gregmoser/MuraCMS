@@ -3,18 +3,99 @@
 	table {
 		
 		td {
+		
+			vertical-align: top;
+			padding: 1em;
 			
-			.editable {
-				background: red;
+			&.file-preview {
+				//vertical-align: middle;
+				
+				img {
+					.img-rounded;
+					}
+					
+				> .preview {
+				
+					position: relative;
+					
+					> i {
+						font-size: 84px;
+					}
+				
+					> .badge {
+						.center-block;
+						width: 32px;
+						background: @black;
+						color: @white;
+						font-weight: normal;
+						font-size: 10px;
+						}
+					}
+				}
+				
+			.control-group {
+				margin-bottom: @baseLineHeight/2;
+				}
+				
+			.control-label {
+					width: 120px;
+				}
+				
+			.controls {
+					
+					line-height: 1;
+					margin-left: 130px;
+					text-align: left;
+					min-height: @baseLineHeight;
+					
+				
+					
+				> div {
+					line-height: 1.2;
+					min-height: 32px;
+					padding: 8px;
+					.box-sizing(border-box);
+					
+					&[data-attribute="summary"] {
+						min-height: 56px;
+						overflow-y: auto;
+					}
+			
+					&.editable {
+						background: @grayLighter;
+						}
+						
+						p {
+							margin: 0;
+							line-height: 1.2;
+						}
+					
+					}
+				}
+			
+			> .progress {
+				margin: 0;
+				height: 30px;
+				width:160px;
+				.center-block;
+				
+				+ p {
+					line-height: 2;
+					}
+				
+				}
+			
+			.btn > i {
+						font-size: 20px;
+						vertical-align: -2px;
+					}
+				
 			}
 			
-			.progress {
-				margin: 0;
-				.center-block;
+		tr:nth-child(odd) > td .controls > .editable {
+			background-color: darken(#ebf4fe,3%);
 			}
 			
 		}
 		
 	}
-	
-}

@@ -99,16 +99,16 @@ jQuery(document).ready(function(){
             <div class="span7">
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn fileinput-button">
-                    <i class="icon-plus icon-white"></i>
+                    <i class="icon-plus"></i>
                     <span>Add files...</span>
                     <input type="file" name="files" multiple>
                 </span>
                 <button type="submit" class="btn start">
-                    <i class="icon-upload icon-white"></i>
+                    <i class="icon-upload"></i>
                     <span>Start upload</span>
                 </button>
                 <button type="reset" class="btn cancel">
-                    <i class="icon-ban-circle icon-white"></i>
+                    <i class="icon-ban-circle"></i>
                     <span>Cancel upload</span>
                 </button>
                 <!---
@@ -250,41 +250,67 @@ jQuery(document).ready(function(){
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
-        <td>
-            <span class="preview"></span><!--- Need to add class="img-polaroid" to img tags when they get rendered.  --->
+        <td class="file-preview">
+            <span class="preview">
+            	<i class="icon-file-text-alt"></i>
+				<span class="badge">XXXX</span>
+			</span>
         </td>
         <td class="var-width form-horizontal">
         	<div class="control-group">
-	            <label class="control-label">File name</label><div class="controls name">{%=file.name%}</div>
-	            <label class="control-label">Title</label><div class="controls editable nolinebreaks" data-attribute="title" contenteditable="true">{%=file.name%}</div>
-	            <label class="control-label">Summary/Caption</label><div class="controls editable" data-attribute="summary" contenteditable="true"></div>
-	            <label class="control-label">Credits</label><div class="controls editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
-	            <label class="control-label">Alt Text</label><div class="controls editable nolinebreaks" data-attribute="alttext" contenteditable="true"></div>
+	            <label class="control-label">File name</label>
+            	<div class="controls">
+            		<div class="name">{%=file.name%}</div>
+            	</div>
 			</div>
-
+	        <div class="control-group">
+	           	<label class="control-label">Title</label>
+	           	<div class="controls">
+	           		<div class="editable" data-attribute="title" contenteditable="true">{%=file.name%}</div>
+			   	</div>
+	        </div>
+	        <div class="control-group">
+	            <label class="control-label">Summary/Caption</label>
+				<div class="controls">
+					<div class="editable" data-attribute="summary" contenteditable="true"></div>
+				</div>
+	        </div>
+	        <div class="control-group">
+	        	<label class="control-label">Credits</label>
+	        	<div class="controls">
+	        		<div class="editable" data-attribute="credits" contenteditable="true"></div>
+	        	</div>
+	        </div>
+	        <div class="control-group">
+	        	<label class="control-label">Alt Text</label>
+	        	<div class="controls">
+	        		<div class="editable" data-attribute="alttext" contenteditable="true"></div>
+				</div>
+			</div>
             {% if (file.error) { %}
                 <div><span class="label label-important">Error</span> {%=file.error%}</div>
             {% } %}
         </td>
         <td>
-            <p class="size">{%=o.formatFileSize(file.size)%}</p>
+            
             {% if (!o.files.error) { %}
                 <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:0%;"></div></div>
+                <p class="size">{%=o.formatFileSize(file.size)%}</p>
             {% } %}
         </td>
         <td>
+        	<div class="btn-group">
             {% if (!o.files.error && !i && !o.options.autoUpload) { %}
                 <button class="btn">
-                    <i class="icon-upload icon-white"></i>
-                    <span>Start</span>
+                    <i class="icon-upload"></i>
                 </button>
             {% } %}
             {% if (!i) { %}
                 <button class="btn">
-                    <i class="icon-ban-circle icon-white"></i>
-                    <span>Cancel</span>
+                    <i class="icon-ban-circle"></i>
                 </button>
             {% } %}
+			</div>
         </td>
     </tr>
 {% } %}
