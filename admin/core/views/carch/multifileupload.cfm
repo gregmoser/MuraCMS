@@ -89,7 +89,7 @@ jQuery(document).ready(function(){
 </cfif>
 
     <!--- <h2>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.multifileuploadinstructions")#</h2> --->
-
+<div id="multi-file-upload">
     <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="#application.configBean.getContext()#/admin/" method="POST" enctype="multipart/form-data">
     	<!-- Creating a visual target for files. Doesn't actually do anything. Pure eye candy. -->
@@ -134,7 +134,8 @@ jQuery(document).ready(function(){
 
         <br> -->
         <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"></tbody></table>
+        <table role="presentation">
+        <tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"></tbody></table>
       <input type="hidden" name="muraAction" value="cArch.update"/>
       <input type="hidden" name="action" value="multiFileUpload"/>
       <input type="hidden" name="siteid" value="#htmlEditFormat(rc.siteid)#"/>
@@ -149,7 +150,7 @@ jQuery(document).ready(function(){
       <input type="hidden" name="orderno" value="0"/>
       <input type="hidden" name="approved" value="<cfif rc.perm eq 'editor'>1<cfelse>0</cfif>" />
     </form>
-   
+</div>
 </div>
 
 <!---
@@ -250,14 +251,16 @@ jQuery(document).ready(function(){
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
         <td>
-            <span class="preview"></span>
+            <span class="preview"></span><!--- Need to add class="img-polaroid" to img tags when they get rendered.  --->
         </td>
-        <td>
-            <label>File name</label><div class="name">{%=file.name%}</div>
-            <label>Title</label><div class="editable nolinebreaks" data-attribute="title" contenteditable="true">{%=file.name%}</div>
-            <label>Summary/Caption</label><div class="editable" data-attribute="summary" contenteditable="true"></div>
-            <label>Credits</label><div class="editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
-            <label>Alt Text</label><div class="editable nolinebreaks" data-attribute="alttext" contenteditable="true"></div>
+        <td class="var-width form-horizontal">
+        	<div class="control-group">
+	            <label class="control-label">File name</label><div class="controls name">{%=file.name%}</div>
+	            <label class="control-label">Title</label><div class="controls editable nolinebreaks" data-attribute="title" contenteditable="true">{%=file.name%}</div>
+	            <label class="control-label">Summary/Caption</label><div class="controls editable" data-attribute="summary" contenteditable="true"></div>
+	            <label class="control-label">Credits</label><div class="controls editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
+	            <label class="control-label">Alt Text</label><div class="controls editable nolinebreaks" data-attribute="alttext" contenteditable="true"></div>
+			</div>
 
             {% if (file.error) { %}
                 <div><span class="label label-important">Error</span> {%=file.error%}</div>
