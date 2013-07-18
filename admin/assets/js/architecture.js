@@ -630,7 +630,7 @@ buttons: {
 					valueSelector = '#selectRelatedContent input, #selectRelatedContent select';	
 				}
 								
-				siteManager.loadRelatedContent(siteID, 0, $(valueSelector).serialize(), advSearching);
+				siteManager.loadRelatedContent(siteid, 0, $(valueSelector).serialize(), advSearching);
 			});
 		});
 	},
@@ -652,7 +652,7 @@ buttons: {
 			cancel: "li.empty"
 		}).disableSelection();
 	
-		siteManager.loadRelatedContent('#HTMLEditFormat(rc.siteid)#', 1, '', false);
+		siteManager.loadRelatedContent(siteid, 1, '', false);
 		siteManager.bindDelete();
 		siteManager.bindMouse();
 		siteManager.updateRCForm();

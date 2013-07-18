@@ -119,12 +119,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		feed.setSortBy("desc");
 		
 		if (len($.event("searchTypeSelector"))) {
-			feed.addParam(field="tcontent.type",criteria=listFirst($.event("searchTypeSelector"), "/"),condition="in");	
-			if (listLen($.event("searchTypeSelector"), "/") == 2) {
-				feed.addParam(field="tcontent.subtype",criteria=listFirst($.event("searchTypeSelector"), "/"));	
-			} else {
-				feed.addParam(field="tcontent.subtype",criteria='Default');	
-			}
+			feed.addParam(field="tcontent.type",criteria=listFirst($.event("searchTypeSelector"), "^"),condition="eq");	
+			feed.addParam(field="tcontent.subtype",criteria=listLast($.event("searchTypeSelector"), "^"),condition="eq");	
 		}
 		
 		if (len($.event("rcStartDate"))) {
