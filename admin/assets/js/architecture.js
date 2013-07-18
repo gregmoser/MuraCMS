@@ -1855,10 +1855,12 @@ buttons: {
 			init: function(data, config) {
 				//alert(JSON.stringify(data));
 				if(data.type.toLowerCase() == 'remote') {
-					$("#ui-dialog-title-configuratorContainer").html(remoteFeedConfiguratorTitle);
+					$("#configuratorContainer").dialog('option','title',remoteFeedConfiguratorTitle);
+					//$("#ui-dialog-title-configuratorContainer").html(remoteFeedConfiguratorTitle);
 					$("#configuratorHeader").html(remoteFeedConfiguratorTitle);
 				} else {
-					$("#ui-dialog-title-configuratorContainer").html(localIndexConfiguratorTitle);
+					$("#configuratorContainer").dialog('option','title',localIndexConfiguratorTitle);
+					//$("#ui-dialog-title-configuratorContainer").html(localIndexConfiguratorTitle);
 					$("#configuratorHeader").html(localIndexConfiguratorTitle);
 				}
 
@@ -2157,9 +2159,9 @@ buttons: {
 			} else {
 				$("#configurator").html(resp);
 			}
-
-
-			$("#ui-dialog-title-configuratorContainer").html(config.title);
+			
+			//$("#configuratorContainer").parent().find("span.ui-dialog-title").html(test);
+			$("#configuratorContainer").dialog('option','title',config.title);
 			$("#configuratorHeader").html(config.title);
 
 			if(siteManager.availableObjectTemplate == "") {
