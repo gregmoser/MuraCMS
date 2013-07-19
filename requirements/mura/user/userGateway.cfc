@@ -141,6 +141,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var sortOptions="fname,lname,username,company,lastupdate,created,isPubic,email">
 	<cfset var isExtendedSort="">
 	<cfset var isListParam=false>
+	<cfset var baseIDList="">
 
 	<cfif not isObject(arguments.data)>
 		<cfset params=getBean("userFeedBean")>
@@ -182,9 +183,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<!--- Generate a list of baseIDs that match the criteria from tclassextenddatauseractivity --->
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAdvancedUserSearch')#">
-		select distinct baseID
-		from tclassextenddatauseractivity
-		where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#params.getSiteID()#">
+		select distinct userid
+		from tusers
+		where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#userPoolID#">
 		
 		<cfif rsParams.recordcount>
 		<cfset started = false />
@@ -221,12 +222,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				
 				<cfset started = true />
 				<cfif  listLen(param.getField(),".") gt 1>					
-					baseID IN (
+					userid IN (
 						select userID
 						from tusers
 						where #param.getField()# #param.getCondition()# <cfif isListParam>(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#"><cfif isListParam>)</cfif>)
 				<cfelseif len(param.getField())>
-					baseID IN (
+					userid IN (
 						select tclassextenddatauseractivity.baseID from tclassextenddatauseractivity
 						<cfif isNumeric(param.getField())>
 						where tclassextenddatauseractivity.attributeID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">

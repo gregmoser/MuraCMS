@@ -66,6 +66,7 @@
 					<div class="controls">		
 						<input type="text" name="#attributes.name#" class="mura-file-selector-#attributes.name# input-xxlarge" type="url" placeholder="http://www.domain.com/yourfile.zip"	value=""
 						data-label="#HTMLEditFormat(attributes.label)#" data-label="#HTMLEditFormat(attributes.required)#" data-validate="#HTMLEditFormat(attributes.validation)#" data-regex="#HTMLEditFormat(attributes.regex)#" data-message="#HTMLEditFormat(attributes.message)#">
+						<a style="display:none;" class="btn" href="" onclick="return openFileMetaData('#attributes.bean.getContentHistID()#','','#attributes.bean.getSiteID()#','#attributes.property#');"><i class="icon-info-sign"></i></a>
 					</div>
 				</div>
 		

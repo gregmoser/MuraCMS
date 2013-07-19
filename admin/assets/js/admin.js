@@ -1024,10 +1024,10 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 	    var setTab=function(tab){
 	    	
-	    	if(tab.toLowerCase() != 'upload'){
-				$elm.find(".mura-file-upload").find('input[type="file"]').val('');
-				$elm.find(".mura-file-upload").find('.btn').hide();
-			}
+	    	//if(tab.toLowerCase() != 'upload'){
+			$elm.find(".mura-file-option").find('input').val('');
+			$elm.find(".mura-file-option").find('.btn').hide();
+			//}
 
 	    	$elm.find(".mura-file-option").hide();
 	    	$elm.find(".mura-file-" + tab.toLowerCase()).show();
@@ -1038,15 +1038,18 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 	
 	    $(this.$element).find("button.btn").click(clickHandler);
 	   
-	    $elm.find(".mura-file-upload").find('input[type="file"]').change(
+	    $elm.find(".mura-file-option").find('input').change(
 	    	function(){
-	    		 var reg = /^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpg|.jpeg|.png|.gif)$/;
-	    		if(reg.test( $(this).val().toLowerCase())){
-	    			$elm.find(".mura-file-upload").find('.btn').show();
+	    		var reg1 = /^(([a-zA-Z]:)|(\\{2}\w+)\$?)(\\(\w[\w].*))+(.jpg|.jpeg|.png|.gif)$/;
+	    		var reg2 = /(http(s?):)|([/|.|\w|\s])*\.(?:jpg|gif|png)/;
+	    		if(reg1.test( $(this).val().toLowerCase()) || reg2.test( $(this).val().toLowerCase())){
+	    			$(this).parent().find('.btn').show();
 	    		}else{
-	    			$elm.find(".mura-file-upload").find('.btn').hide();
+	    			$(this).parent().find('.btn').hide()
 	    		}
 	    });
+
+		
 
 		setTab('Upload');
 
