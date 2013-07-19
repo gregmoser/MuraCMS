@@ -99,5 +99,19 @@ component extends="mura.bean.beanORMVersioned"
 		};
 	}
 
+	function save(setAsDefault=false){
+		super.save();
+
+		if(arguments.setAsDefault){
+			getBean('file').loadBy(fileid=getValue('fileid'))
+			.setCaption(getValue('caption'))
+			.setAltText(getValue('alttext'))
+			.setCredits(getValue('credits'))
+			.save(processFile=false);
+		}
+
+		return this
+	}
+
 
 }

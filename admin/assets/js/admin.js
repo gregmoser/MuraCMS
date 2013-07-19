@@ -927,8 +927,11 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 						fileData[$(this).attr('data-property')]=$(this).val();
 					});
 
+					fileData.setasdefault=$('#filemeta-setasdefault').is(':checked');
+
 					fileMetaDataAssign[fileData.property]=fileData;
 					$('#filemetadataassign').val(JSON.stringify(fileMetaDataAssign));
+					//alert($('#filemetadataassign').val());
 					$(this).dialog( "close" );
 
 				},
@@ -952,6 +955,8 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 						for(var p in fileData){
 							$('.filemeta[data-property="' + p +'"]').val(fileData[p]);
 						}
+
+						$('#filemeta-setasdefault').prop('checked',fileData.setasdefault);
 					}
 					
 					$('#file-caption').ckeditor({
