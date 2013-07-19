@@ -5,7 +5,7 @@ component extends="mura.bean.beanORMVersioned"
 	versioned=true {
 	
 	property name="metaID" fieldType="id";
-	property name="fileID" fieldType="index" dataType="char" length="35";
+	property name="file" fieldType="many-to-one" cfc="file" fkcolumn="fileid";
 	property name="altText" dataType="varchar" length="255";
 	property name="caption" datatype="text";
 	property name="credits" datatype="varchar" length=255;
