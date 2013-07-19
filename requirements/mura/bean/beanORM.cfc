@@ -486,6 +486,10 @@ component extends="mura.bean.bean" versioned=false {
 				}
 			}
 
+			if( !len(variables.instance[getPrimaryKey()]) || getPrimaryKey() == 'primarykey'){
+				throw "Mura ORM ERROR: You cannot save an entity with an empty primary key";
+			}
+
 			qs.addParam(name='primarykey',value=variables.instance[getPrimaryKey()],cfsqltype='cf_sql_varchar');
 
 			if(qs.execute(sql='select #getPrimaryKey()# from #getTable()# where #getPrimaryKey()# = :primarykey').getResult().recordcount){
@@ -511,7 +515,10 @@ component extends="mura.bean.bean" versioned=false {
 						}
 
 						writeOutput(" where #getPrimaryKey()# = :primarykey");
+						
 					}
+
+
 
 					if(arrayLen(variables.removeObjects)){
 						for(var obj in variables.removeObjects){	
