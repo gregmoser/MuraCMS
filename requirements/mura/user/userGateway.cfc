@@ -180,32 +180,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 	</cfloop>
 
+	<!--- Generate a list of baseIDs that match the criteria from tclassextenddatauseractivity --->
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAdvancedUserSearch')#">
-	Select #variables.fieldList# <cfif len(params.getAdditionalColumns())>,#params.getAdditionalColumns()#</cfif> from tusers 
-	left join tfiles on tusers.photofileID=tfiles.fileID
-	<cfloop list="#jointables#" index="jointable">
-	inner join #jointable# on (tusers.userid=#jointable#.userid)
-	</cfloop>
-	
-	<cfloop array="#params.getJoins()#" index="join">
-		#join.joinType# join #join.table# on #preserveSingleQuotes(join.clause)#
-	</cfloop>
-	
-	<cfif isExtendedSort>
-	left Join (select 
-			#variables.classExtensionManager.getCastString(data.getSortBy(),data.getSiteID())# extendedSort
-			 ,tclassextenddatauseractivity.baseID 
-			from tclassextenddatauseractivity inner join tclassextendattributes
-			on (tclassextenddatauseractivity.attributeID=tclassextendattributes.attributeID)
-			where tclassextendattributes.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#data.getSiteID()#">
-			and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#data.getSortBy()#">
-	) qExtendedSort
-	
-	on (tusers.userID=qExtendedSort.baseID)
-	</cfif>
-	
-	where tusers.type=#params.getType()# and tusers.isPublic =#params.getIsPublic()# and 
-	tusers.siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#userPoolID#">
+		select distinct baseID
+		from tclassextenddatauseractivity
+		where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#params.getSiteID()#">
 		
 		<cfif rsParams.recordcount>
 		<cfset started = false />
@@ -241,11 +220,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 				
 				<cfset started = true />
-				<cfset isListParam=listFindNoCase("IN,NOT IN",param.getCondition())>		
 				<cfif  listLen(param.getField(),".") gt 1>					
-					#param.getField()# #param.getCondition()# <cfif isListParam>(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#"><cfif isListParam>)</cfif>  	
+					baseID IN (
+						select userID
+						from tusers
+						where #param.getField()# #param.getCondition()# <cfif isListParam>(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#"><cfif isListParam>)</cfif>)
 				<cfelseif len(param.getField())>
-					tusers.userid IN (
+					baseID IN (
 						select tclassextenddatauseractivity.baseID from tclassextenddatauseractivity
 						<cfif isNumeric(param.getField())>
 						where tclassextenddatauseractivity.attributeID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
@@ -260,6 +241,42 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfloop>
 		<cfif started>)</cfif>
 	</cfif> 
+	</cfquery>
+
+	<!--- Convert base query to list --->
+	<cfif rsAdvancedUserSearch.RecordCount>
+		<cfset baseIDList = QuotedValueList(rsAdvancedUserSearch.baseID)>
+	</cfif>
+
+	<!--- Generate a sorted (if specified) list of baseIDs with additional fields --->
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAdvancedUserSearch')#">
+	select <cfif params.getMaxItems()>top #params.getMaxItems()# </cfif>
+	#variables.fieldList# <cfif len(params.getAdditionalColumns())>,#params.getAdditionalColumns()#</cfif> from tusers 
+	left join tfiles on tusers.photofileID=tfiles.fileID
+	<cfloop list="#jointables#" index="jointable">
+	inner join #jointable# on (tusers.userid=#jointable#.userid)
+	</cfloop>
+	
+	<cfloop array="#params.getJoins()#" index="join">
+		#join.joinType# join #join.table# on #preserveSingleQuotes(join.clause)#
+	</cfloop>
+	
+	<cfif isExtendedSort>
+	left Join (select 
+			#variables.classExtensionManager.getCastString(data.getSortBy(),data.getSiteID())# extendedSort
+			 ,tclassextenddatauseractivity.baseID 
+			from tclassextenddatauseractivity inner join tclassextendattributes
+			on (tclassextenddatauseractivity.attributeID=tclassextendattributes.attributeID)
+			where tclassextendattributes.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#data.getSiteID()#">
+			and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#data.getSortBy()#">
+	) qExtendedSort
+	
+	on (tusers.userID=qExtendedSort.baseID)
+	</cfif>
+	
+	where tusers.type=#params.getType()# and tusers.isPublic =#params.getIsPublic()# and 
+	tusers.siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#userPoolID#">
+	and tusers.userID IN (#PreserveSingleQuotes(baseIDList)#)
 	<!---
 	<cfif arrayLen(paramArray)>
 		<cfloop from="1" to="#arrayLen(paramArray)#" index="i">
