@@ -296,16 +296,18 @@
 				<cfif  listLen(param.getField(),".") gt 1>			
 					(#param.getField()# #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
 				<cfelseif len(param.getField())>
-					(#dataTable#.attributeID
-						<cfif isNumeric(param.getField())>
+					<cfif isNumeric(param.getField())>
+						(select #dataTable#.baseID from #dataTable# #tableModifier# where attributeID
 						= <cfqueryparam cfsqltype="cf_sql_numeric" value="#param.getField()#">
-						<cfelse>
+					<cfelse>
+						#dataTable#.baseID
 						IN (
-						select tclassextendattributes.attributeID from tclassextendattributes #tableModifier#
+						select #dataTable#.baseID from #dataTable# #tableModifier# INNER JOIN tclassextendattributes #tableModifier#
+							on (#dataTable#.attributeID = tclassextendattributes.attributeID)
 						where tclassextendattributes.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#">
-						and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">)
-						</cfif>
-						and <cfif param.getCondition() neq "like">#variables.configBean.getClassExtensionManager().getCastString(param.getField(),getSiteID())#<cfelse>attributeValue</cfif> #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
+						and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
+					</cfif>
+					and <cfif param.getCondition() neq "like">#variables.configBean.getClassExtensionManager().getCastString(param.getField(),getSiteID())#<cfelse>attributeValue</cfif> #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
 				</cfif>
 			</cfif>						
 		</cfloop>
