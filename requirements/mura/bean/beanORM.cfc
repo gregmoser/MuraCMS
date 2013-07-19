@@ -470,7 +470,7 @@ component extends="mura.bean.bean" versioned=false {
 	function validate(){
 		super.validate();
 
-		if( !len(variables.instance[getPrimaryKey()]) || getPrimaryKey() == 'primarykey'){
+		if( !len(getPrimaryKey()) || !len(variables.instance[getPrimaryKey()]) || getPrimaryKey() == 'primarykey'){
 			variables.instance.errors.primarykey="The primary key '#getPrimaryKey()#' is required.";
 		}
 
