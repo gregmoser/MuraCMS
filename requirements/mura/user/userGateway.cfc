@@ -142,6 +142,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var isExtendedSort="">
 	<cfset var isListParam=false>
 	<cfset var baseIDList="">
+	<cfset var hasextendedparams=false>
+	<cfset var baseIDList="">
 
 	<cfif not isObject(arguments.data)>
 		<cfset params=getBean("userFeedBean")>
@@ -178,56 +180,54 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif jointable neq "tusers" and not listFind(jointables,jointable) and not params.hasJoin(jointable)>
 				<cfset jointables=listAppend(jointables,jointable)>
 			</cfif>
+		<cfelse>
+			<cfset hasextendedparams=true>
 		</cfif>
 	</cfloop>
 
-	<!--- Generate a list of baseIDs that match the criteria from tclassextenddatauseractivity --->
-	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAdvancedUserSearch')#">
-		select distinct userid
-		from tusers
-		where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#userPoolID#">
-		
-		<cfif rsParams.recordcount>
-		<cfset started = false />
-		<cfloop query="rsParams">
-			<cfset param=createObject("component","mura.queryParam").init(rsParams.relationship,
-					rsParams.field,
-					rsParams.dataType,
-					rsParams.condition,
-					rsParams.criteria
-				) />
-								 
-			<cfif param.getIsValid()>	
-				<cfif not started >
-					and (
-				</cfif>
-				<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
-					(
-					<cfset openGrouping=true />
-				<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
-					<cfif started>or</cfif> (
-					<cfset openGrouping=true />
-				<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
-					<cfif started>and</cfif> (
-					<cfset openGrouping=true />
-				<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
-					)
-				<cfelse>
-					<cfif not openGrouping and started>
-						#param.getRelationship()#
-					<cfelse>
-						<cfset openGrouping=false />
+	<cfif hasextendedparams>
+		<!--- Generate a list of baseIDs that match the criteria from tclassextenddatauseractivity --->
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAdvancedUserSearch')#">
+			select distinct baseid
+			from tclassextenddatauseractivity
+			where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#userPoolID#">
+			
+			<cfif rsParams.recordcount>
+			<cfset started = false />
+			<cfloop query="rsParams">
+				<cfset param=createObject("component","mura.queryParam").init(rsParams.relationship,
+						rsParams.field,
+						rsParams.dataType,
+						rsParams.condition,
+						rsParams.criteria
+					) />
+									 
+				<cfif param.getIsValid() and listLen(param.getField(),".") eq 1>	
+					<cfif not started >
+						and (
 					</cfif>
-				</cfif>
-				
-				<cfset started = true />
-				<cfif  listLen(param.getField(),".") gt 1>					
-					userid IN (
-						select userID
-						from tusers
-						where #param.getField()# #param.getCondition()# <cfif isListParam>(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#"><cfif isListParam>)</cfif>)
-				<cfelseif len(param.getField())>
-					userid IN (
+					<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
+						(
+						<cfset openGrouping=true />
+					<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
+						<cfif started>or</cfif> (
+						<cfset openGrouping=true />
+					<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
+						<cfif started>and</cfif> (
+						<cfset openGrouping=true />
+					<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
+						)
+					<cfelse>
+						<cfif not openGrouping and started>
+							#param.getRelationship()#
+						<cfelse>
+							<cfset openGrouping=false />
+						</cfif>
+					</cfif>
+					
+					<cfset started = true />
+			
+					baseid IN (
 						select tclassextenddatauseractivity.baseID from tclassextenddatauseractivity
 						<cfif isNumeric(param.getField())>
 						where tclassextenddatauseractivity.attributeID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
@@ -237,16 +237,21 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
 						</cfif>
 						and #variables.classExtensionManager.getCastString(param.getField(),params.getSiteID())# #param.getCondition()# <cfif isListParam>(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#"><cfif isListParam>)</cfif>)
-				</cfif>
-			</cfif>						
-		</cfloop>
-		<cfif started>)</cfif>
-	</cfif> 
-	</cfquery>
+					
+				</cfif>						
+			</cfloop>
+			<cfif started>)</cfif>
+		</cfif>
 
-	<!--- Convert base query to list --->
-	<cfif rsAdvancedUserSearch.RecordCount>
-		<cfset baseIDList = QuotedValueList(rsAdvancedUserSearch.baseID)>
+		<cfif not started>
+			and 0=1
+		</cfif> 
+		</cfquery>
+
+		<!--- Convert base query to list --->
+		<cfif rsAdvancedUserSearch.RecordCount>
+			<cfset baseIDList = QuotedValueList(rsAdvancedUserSearch.baseID)>
+		</cfif>
 	</cfif>
 
 	<!--- Generate a sorted (if specified) list of baseIDs with additional fields --->
@@ -277,7 +282,54 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	where tusers.type=#params.getType()# and tusers.isPublic =#params.getIsPublic()# and 
 	tusers.siteid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#userPoolID#">
-	and tusers.userID IN (#PreserveSingleQuotes(baseIDList)#)
+
+	<cfif rsParams.recordcount>
+		<cfset started=false>
+		<cfloop query="rsParams">
+			<cfset param=createObject("component","mura.queryParam").init(rsParams.relationship,
+					rsParams.field,
+					rsParams.dataType,
+					rsParams.condition,
+					rsParams.criteria
+				) />
+								 
+			<cfif param.getIsValid() and listLen(param.getField(),".") gt 1>	
+				<cfif not started >
+					and (
+				</cfif>
+				<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
+					(
+					<cfset openGrouping=true />
+				<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
+					<cfif started>or</cfif> (
+					<cfset openGrouping=true />
+				<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
+					<cfif started>and</cfif> (
+					<cfset openGrouping=true />
+				<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
+					)
+				<cfelse>
+					<cfif not openGrouping and started>
+						#param.getRelationship()#
+					<cfelse>
+						<cfset openGrouping=false />
+					</cfif>
+				</cfif>
+				
+				<cfset started = true />
+				<cfset isListParam=listFindNoCase("IN,NOT IN",param.getCondition())>	
+				
+				#param.getField()# #param.getCondition()# <cfif isListParam>(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#"><cfif isListParam>)</cfif>
+				
+			</cfif>						
+		</cfloop>
+		<cfif started>)</cfif>
+	</cfif>
+
+	<cfif len(baseIDList)>
+		and tusers.userID IN (#PreserveSingleQuotes(baseIDList)#)
+	</cfif>
+	
 	<!---
 	<cfif arrayLen(paramArray)>
 		<cfloop from="1" to="#arrayLen(paramArray)#" index="i">

@@ -1049,8 +1049,6 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 	    		}
 	    });
 
-		
-
 		setTab('Upload');
 
 	  }
