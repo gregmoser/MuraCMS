@@ -94,7 +94,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="isPublic" type="numeric" default="0" />
 	<cfset var rsUserSearch = "" />
 
-	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsUserSearch')#">
+	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsUserSearch',maxrows=2100)#">
 	Select #variables.fieldList# from tusers 
 	left join tfiles on tusers.photofileID=tfiles.fileID
 	where tusers.type=2 and tusers.isPublic = <cfqueryparam cfsqltype="cf_sql_numeric" value="#arguments.isPublic#"> and 

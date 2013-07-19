@@ -172,7 +172,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfif hasextendedparams>
 		<!--- Generate a list of baseIDs that match the criteria from tclassextenddata --->
-		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsFeed')#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsFeed',maxrows=2100)#">
 			select distinct baseid
 			from tclassextenddata
 			where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.feedBean.getSiteID()#">
