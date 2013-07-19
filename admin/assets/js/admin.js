@@ -982,7 +982,7 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 		return false;
 	}
-
+ 
 (function ($) {
 
 	 /* BUTTON PUBLIC CLASS DEFINITION
