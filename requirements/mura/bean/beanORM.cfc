@@ -467,9 +467,22 @@ component extends="mura.bean.bean" versioned=false {
 
 	}
 
+	function validate(){
+		super.validate();
+
+		if( !len(variables.instance[getPrimaryKey()]) || getPrimaryKey() == 'primarykey'){
+			variables.instance.errors.primarykey="The primary key '#getPrimaryKey()#' is required.";
+		}
+
+		return this;
+	}
+
 	function save(){
 		var pluginManager=getBean('pluginManager');
 		var event=new mura.event({siteID=variables.instance.siteid,bean=this});
+		
+		validate();
+
 		pluginManager.announceEvent('onBefore#variables.entityName#Save',event);
 		
 		if(!hasErrors()){
@@ -484,10 +497,6 @@ component extends="mura.bean.bean" versioned=false {
 				if(props[prop].persistent){
 					addQueryParam(qs,props[prop],variables.instance[props[prop].column]);
 				}
-			}
-
-			if( !len(variables.instance[getPrimaryKey()]) || getPrimaryKey() == 'primarykey'){
-				throw "Mura ORM ERROR: You cannot save an entity with an empty primary key";
 			}
 
 			qs.addParam(name='primarykey',value=variables.instance[getPrimaryKey()],cfsqltype='cf_sql_varchar');
