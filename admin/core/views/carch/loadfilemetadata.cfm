@@ -2,7 +2,8 @@
 <cfset fileMetaData=$.getBean('fileMetaData').loadBy(fileid=rc.fileid,contenthistid=rc.contenthistid,siteid=rc.siteid)>
 <cfoutput>
  <div class="fieldset">
- 	<div class="control-group">
+ 	<cfif fileMetaData.hasImageFileExt()>
+	<div class="control-group">
 		<label class="control-label">
 			#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.image')#
 		</label>
@@ -26,6 +27,7 @@
 			<input type="text" data-property="alttext" value="#HTMLEditFormat(fileMetaData.getAltText())#"  maxlength="255" class="filemeta span4">
 		</div>
 	</div>
+	</cfif>
 	<div class="control-group">
 		<label class="control-label">
 			#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.credits')#
