@@ -301,13 +301,13 @@ jQuery(document).ready(function(){
         <td>
         	<div class="btn-group">
             {% if (!o.files.error && !i && !o.options.autoUpload) { %}
-                <button class="btn">
-                    <i class="icon-upload"></i><span>Upload</span>
+                <button class="btn start">
+                    <i class="icon-upload"></i><span> Upload</span>
                 </button>
             {% } %}
             {% if (!i) { %}
-                <button class="btn">
-                    <i class="icon-ban-circle"></i><span>Cancel</span>
+                <button class="btn cancel">
+                    <i class="icon-ban-circle"></i><span> Cancel</span>
                 </button>
             {% } %}
 			</div>
@@ -320,7 +320,7 @@ jQuery(document).ready(function(){
 <script id="template-download" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
-        <td>
+        <td class="file-preview">
             <span class="preview">
                 {% if (file.thumbnail_url) { %}
                     <a href="{%=file.url%}" title="{%=file.name%}" class="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
