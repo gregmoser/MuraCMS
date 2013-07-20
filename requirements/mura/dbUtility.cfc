@@ -271,10 +271,15 @@
 			or existing.default neq arguments.default
 			)
 		>
-			<!---<cftry>--->
+			<cftry>
 			<cfset alterColumn(argumentCollection=arguments)>
-			<!---<cfcatch></cfcatch>
-			</cftry>--->
+			<cfcatch>
+			<cfdump var="#existing#">
+			<cfdump var="#arguments#">
+			<cfdump var="#cfcatch#">
+			<cfabort>
+			</cfcatch>
+			</cftry>
 
 	<cfelseif not hasTable or not len(existing.column)>
 		

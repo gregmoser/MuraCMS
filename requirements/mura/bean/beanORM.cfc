@@ -410,7 +410,15 @@ component extends="mura.bean.bean" versioned=false {
 
 	private function setPropAsIDColumn(prop){
 		arguments.prop.type="string";
-		arguments.prop.nullable=false;
+	
+		if(!structKeyExists(arguments.prop, "required")){
+			arguments.prop.required=true;
+		}
+			
+		if(!structKeyExists(arguments.prop, "nullable")){
+			arguments.prop.nullable=false;
+		}
+		
 		arguments.prop.default="";
 
 		if(arguments.prop.name eq 'site'){
