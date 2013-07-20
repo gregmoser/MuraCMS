@@ -278,7 +278,7 @@
 		<cfif (arguments.rc.closeCompactDisplay neq 'true'  or arguments.rc.murakeepediting) and arguments.rc.action neq 'multiFileUpload'>
 			
 				<cfif len(arguments.rc.returnURL) and (arguments.rc.action eq 'delete' or arguments.rc.action eq 'deletehistall' or (arguments.rc.preview eq 0 and not arguments.rc.murakeepediting))>
-						<cflocation url="#rc.returnURL#" addtoken="false"/>
+					<cflocation url="#rc.returnURL#" addtoken="false"/>
 				</cfif>
 				
 				<cfif arguments.rc.action eq 'delete' or arguments.rc.action eq 'deletehistall' or (arguments.rc.return eq 'hist' and arguments.rc.preview eq 0 and not arguments.rc.murakeepediting)>
@@ -302,6 +302,7 @@
 						<cfset variables.fw.redirect(action="cArch.edit",append="contenthistid,contentid,type,parentid,topid,siteid,moduleid,preview,startrow,return,compactDisplay")>
 					</cfif>
 				</cfif>
+
 		</cfif>
 
 	 </cfif>

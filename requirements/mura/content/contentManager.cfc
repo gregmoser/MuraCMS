@@ -947,7 +947,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 				</cfif>	
 				
-				<cftransaction>
+				<cftransaction isolation="read_uncommitted">
 				<cfset request.muratransaction=true>
 				<!--- BEGIN CONTENT TYPE: ALL EXTENDABLE CONTENT TYPES --->
 				<cfif  listFindNoCase(this.ExtendableList,newBean.getType())>
@@ -999,7 +999,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfset updateMaterializedPath(newBean.getPath(),currentBean.getPath(),newBean.getSiteID()) />
 					</cfif>
 					
-					<!--- Related content persistence --->	
+					<!--- Related content persistence --->
 					<cfif not newBean.getIsNew()>
 						<cfset variables.contentDAO.createRelatedItems(newBean.getcontentID(),
 						newBean.getcontentHistID(),arguments.data,newBean.getSiteID(),currentBean.getcontentHistID()) />
@@ -1007,7 +1007,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfelse>
 						<cfset variables.contentDAO.createRelatedItems(newBean.getcontentID(),
 						newBean.getcontentHistID(),arguments.data,newBean.getSiteID(),'') />
-					</cfif>
+					</cfif> 	
 					
 					<!--- Content expiration assignments --->
 					<cfif isDefined("arguments.data.expiresnotify") and len(arguments.data.expiresnotify)>
@@ -1315,9 +1315,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						.setCreated(now())
 						.save()>
 
-
-				<cfset newBean=read(contenthistid=newbean.getContentHistID(),siteid=newBean.getSiteID())>
-
+				<cfset newBean=variables.contentDAO.readVersion(contenthistid=newbean.getContentHistID(),siteid=newBean.getSiteID())>
+				
 				<cfset request.handledfilemetas={}>
 				<cfparam name="arguments.data.fileMetaDataAssign" default="">
 				
@@ -1390,6 +1389,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					
 				<cfset newBean.setIsNew(0)>
 				<cfset pluginEvent.setValue("contentBean",newBean)>
+				<cfset pluginEvent.setValue("newBean",newBean)>
 				<cfif  ListFindNoCase(this.TreeLevelList,newBean.getType())>			
 					<cfset variables.pluginManager.announceEvent("onContentSave",pluginEvent)>
 					<cfset variables.pluginManager.announceEvent("onAfterContentSave",pluginEvent)>		

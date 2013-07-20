@@ -1817,6 +1817,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn rsCategoriesByHistID />
 </cffunction>
 
+<!---
 <cffunction name="getRelatedContent" access="public" output="false" returntype="query">
 	<cfargument name="siteID" type="String">
 	<cfargument name="contentHistID" type="String">
@@ -1929,7 +1930,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 </cffunction>
 
-<!---
+--->
 
 <cffunction name="getRelatedContent" access="public" output="false" returntype="query">
 	<cfargument name="siteID" type="String">
@@ -2043,7 +2044,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn rsRelatedContent />
 
 </cffunction>
---->
 
 <cffunction name="getUsage" access="public" output="false" returntype="query">
 	<cfargument name="objectID" type="String">

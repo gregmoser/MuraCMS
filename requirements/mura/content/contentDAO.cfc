@@ -1075,7 +1075,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	</cfif>
 </cffunction>
 
-<cffunction name="createRelatedItems" returntype="void" access="public" output="false">
+<cffunction name="createRelatedItems" access="public" output="false">
 	<cfargument name="contentID" type="string" required="yes" default="" />
 	<cfargument name="contentHistID" type="string" required="yes" default="" />
 	<cfargument name="data" type="struct" required="yes" default="#structNew()#" />
@@ -1087,7 +1087,8 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfset var item = "">
 	<cfset var rcsData = "">
 	<cfset var rsRelatedContent = "">
-	
+	<cfset var relatedID="">
+
 	<cfif isDefined('arguments.data.relatedContentSetData')>
 		<cfset rcsData = deserializeJSON(arguments.data.relatedContentSetData)>
 		<cfloop from="1" to="#arrayLen(rcsData)#" index="i">
@@ -1109,7 +1110,9 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 					<cfcatch></cfcatch>
 				</cftry>
 			</cfloop>
+			
 		</cfloop>
+		--->
 	<cfelseif arguments.oldContentHistID neq ''>
 		<cfset rsRelatedContent = readRelatedItems(arguments.oldContentHistID, arguments.siteID)>
 		<cfloop query="rsRelatedContent">
@@ -1129,6 +1132,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			</cftry>
 		</cfloop>
 	</cfif>
+
 </cffunction> 
 
 <cffunction name="deleteRelatedItems" access="public" output="false" returntype="void" >
