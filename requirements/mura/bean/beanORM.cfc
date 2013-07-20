@@ -282,6 +282,14 @@ component extends="mura.bean.bean" versioned=false {
 			       	 		prop.comparable=true;
 			       	 	}
 
+			       	 	if(structKeyExists(prop,'required') and prop.required){
+			       	 		prop.nullable=false;
+			       	 	}
+
+			       	 	if(structKeyExists(prop,'nullable') and prop.nullable){
+			       	 		prop.required=false;
+			       	 	}
+
 			       	 	if(!structKeyExists(prop,"dataType")){
 			       	 		if(structKeyExists(prop,"ormtype")){
 			       	 			prop.dataType=prop.ormtype;
@@ -418,7 +426,7 @@ component extends="mura.bean.bean" versioned=false {
 		if(!structKeyExists(arguments.prop, "nullable")){
 			arguments.prop.nullable=false;
 		}
-		
+
 		arguments.prop.default="";
 
 		if(arguments.prop.name eq 'site'){
