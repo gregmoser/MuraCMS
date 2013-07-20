@@ -1816,7 +1816,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfreturn rsCategoriesByHistID />
 </cffunction>
-
+s
 <cffunction name="getRelatedContent" access="public" output="false" returntype="query">
 	<cfargument name="siteID" type="String">
 	<cfargument name="contentHistID" type="String">
@@ -1845,6 +1845,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	FROM  tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 	
 	inner join tcontentrelated tcr on tcontent.contentID = tcr.relatedID and tcr.contentHistID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
+	
 	<cfif len(arguments.relatedContentSetID)>
 		<!--- pull in related content by relatedContentSetID --->
 		and tcr.relatedContentSetID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
@@ -2042,8 +2043,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn rsRelatedContent />
 
 </cffunction>
-
 --->
+
 <cffunction name="getUsage" access="public" output="false" returntype="query">
 	<cfargument name="objectID" type="String">
 	

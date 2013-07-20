@@ -1855,8 +1855,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="liveOnly" type="boolean" required="yes" default="false" />
 		<cfargument name="today" type="date" required="yes" default="#now()#" />
 		<cfargument name="relatedContentSetID" type="string" default="">
+		<cfargument name="type" type="string" default="Default">
 	
-		<cfset var rs=getRelatedContent(arguments.siteID,arguments.contentHistID,arguments.liveOnly,arguments.today,arguments.relatedContentSetID) />
+		<cfset var rs=getRelatedContent(arguments.siteID,arguments.contentHistID,arguments.liveOnly,arguments.today,arguments.relatedContentSetID,arguments.type) />
 		<cfset var it = getBean("contentIterator")>
 		<cfset it.setQuery(rs)>
 		<cfreturn it/>
