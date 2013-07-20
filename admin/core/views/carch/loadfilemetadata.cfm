@@ -11,6 +11,7 @@
 			<img src="#fileMetaData.getUrlForImage('medium')#"/>
 		</div>
 	</div>
+	</cfif>
 	<div class="control-group">
 		<label class="control-label">
 			#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.caption')#
@@ -27,7 +28,6 @@
 			<input type="text" data-property="alttext" value="#HTMLEditFormat(fileMetaData.getAltText())#"  maxlength="255" class="filemeta span4">
 		</div>
 	</div>
-	</cfif>
 	<div class="control-group">
 		<label class="control-label">
 			#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.credits')#
