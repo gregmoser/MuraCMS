@@ -1844,6 +1844,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="sortBy" type="string" default="created" >
 		<cfargument name="sortDirection" type="string" default="desc" >
 		<cfargument name="relatedContentSetID" type="string" default="">
+		<cfargument name="type" type="string" default="Default">
 	
 		<cfreturn variables.contentGateway.getRelatedContent(argumentCollection=arguments) />
 	</cffunction>

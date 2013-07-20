@@ -912,8 +912,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="sortBy" type="string" default="created">
 	<cfargument name="sortDirection" type="string" default="desc">
 	<cfargument name="relatedContentSetID" type="string" default="">
+	<cfargument name="type" type="string" default="Default">
 	
-	<cfreturn variables.contentManager.getRelatedContent(variables.instance.siteID, getContentHistID(), arguments.liveOnly, arguments.today,arguments.sortBy,arguments.sortDirection,arguments.relatedContentSetID) />
+	<cfreturn variables.contentManager.getRelatedContent(argumentCollection=arguments) />
 </cffunction>
 
 <cffunction name="getRelatedContentIterator" returnType="any" output="false" access="public">
@@ -922,8 +923,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="sortBy" type="string" default="created" >
 	<cfargument name="sortDirection" type="string" default="desc">
 	<cfargument name="relatedContentSetID" type="string" default="">
+		<cfargument name="type" type="string" default="Default">
 	
-	<cfset var q=getRelatedContentQuery(arguments.liveOnly, arguments.today,arguments.sortBy,arguments.sortDirection,arguments.relatedContentSetID) />
+	<cfset var q=getRelatedContentQuery(argumentCollection=arguments) />
 	<cfset var it=getBean("contentIterator")>
 	<cfset it.setQuery(q)>
 	<cfreturn it>

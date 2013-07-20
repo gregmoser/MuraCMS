@@ -1825,6 +1825,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="sortBy" type="string" default="created" >
 	<cfargument name="sortDirection" type="string" default="desc" >
 	<cfargument name="relatedContentSetID" type="string" default="">
+	<cfargument name="type" type="string" default="Default">
 	<cfset var rs ="" />
 
 	<cfif not listFindNoCase('menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype,comments,rating',arguments.sortby)>
@@ -1845,6 +1846,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	FROM  tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 	
 	inner join tcontentrelated tcr on tcontent.contentID = tcr.relatedID and tcr.contentHistID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
+	
+	<!---
 	<cfif len(arguments.relatedContentSetID)>
 		<!--- pull in related content by relatedContentSetID --->
 		and tcr.relatedContentSetID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
@@ -1852,17 +1855,35 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<!--- pull in "default" related content.  AKA, content that hasn't been assigned to a content set --->
 		and (tcr.relatedContentSetID = '00000000000000000000000000000000000' or tcr.relatedContentSetID is null) 
 	</cfif>
-	
+	--->
 	WHERE
 	tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 	and tcontent.active=1 
 	
-	<!---<cfif not len(arguments.relatedContentSetID)>
+	<cfif not len(arguments.relatedContentSetID) and not len(arguments.type)>
 		and
 		tcontent.contentID in (
 		select relatedID from tcontentrelated where contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
 		)
-	</cfif>--->
+	<cfelseif len(arguments.relatedContentSetID)>
+		and
+		tcontent.contentID in (
+		select relatedID from tcontentrelated where contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
+		and relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
+		)
+	<cfelseif len(arguments.type)>
+		and
+		tcontent.contentID in (
+		select tcontentrelated.relatedID from tcontentrelated 
+		left join tclassextendrelatedcontentsets on (tcontentrelated.relatedContentSetID=tclassextendrelatedcontentsets.relatedContentSetID)
+		where tcontentrelated.contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
+		and (tclassextendrelatedcontentsets.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.type#"/>
+			<cfif arguments.type eq 'Default'>
+				or tclassextendrelatedcontentsets.name is null
+			</cfif>
+			)
+		)
+	</cfif>
 	
 	<cfif arguments.liveOnly>
 	  AND (
