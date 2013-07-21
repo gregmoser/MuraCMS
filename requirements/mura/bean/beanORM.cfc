@@ -53,61 +53,62 @@ component extends="mura.bean.bean" versioned=false {
 		variables.entityName="";
 		variables.addObjects=[];
 		variables.removeObjects=[];
-		
+
 		var props=getProperties();
 
 		for(var prop in props){
-			prop=props[prop];
+			if(!structKeyExists(variables.instance,prop)){
+				prop=props[prop];
 
-			if(structKeyExists(prop,"type") and listFindNoCase("struct,array",prop.type)){
-				if(prop.type eq "struct"){
-					variables.instance[prop.name]={};
-				} else if(prop.type eq "array"){
-					variables.instance[prop.name]=[];
-				}
-			} else if(prop.persistent){
-
-				if(structKeyExists(prop,"fieldType") and prop.fieldType eq "id"){
-					variables.instance[prop.column]=createUUID();
-				}else if (listFindNoCase("date,datetime,timestamp",prop.datatype)){
-					variables.instance[prop.column]=now();
-				} else if(structKeyExists(prop,"default")){
-					if(prop.default neq 'null'){
-						variables.instance[prop.column]=prop.default;
-					} else {
-						variables.instance[prop.column]='';
+				if(structKeyExists(prop,"type") and listFindNoCase("struct,array",prop.type)){
+					if(prop.type eq "struct"){
+						variables.instance[prop.name]={};
+					} else if(prop.type eq "array"){
+						variables.instance[prop.name]=[];
 					}
+				} else if(prop.persistent){
+
+					if(structKeyExists(prop,"fieldType") and prop.fieldType eq "id"){
+						variables.instance[prop.column]=createUUID();
+					}else if (listFindNoCase("date,datetime,timestamp",prop.datatype)){
+						variables.instance[prop.column]=now();
+					} else if(structKeyExists(prop,"default")){
+						if(prop.default neq 'null'){
+							variables.instance[prop.column]=prop.default;
+						} else {
+							variables.instance[prop.column]='';
+						}
+					} 
+
+					if (prop.name eq 'lastupdateby'){
+						if(isDefined("session.mura") and session.mura.isLoggedIn){
+							variables.instance.LastUpdateBy = left(session.mura.fname & " " & session.mura.lname,50);
+						} else {
+							variables.instance.LastUpdateBy='';
+						}
+					} else if (prop.name eq 'lastupdatebyid'){
+						if(isDefined("session.mura") and session.mura.isLoggedIn){
+							variables.instance.LastUpdateById = session.mura.userID;
+						} else {
+							variables.instance.LastUpdateById='';
+						}
+					}
+
 				} 
-
-				if (prop.name eq 'lastupdateby'){
-					if(isDefined("session.mura") and session.mura.isLoggedIn){
-						variables.instance.LastUpdateBy = left(session.mura.fname & " " & session.mura.lname,50);
-					} else {
-						variables.instance.LastUpdateBy='';
-					}
-				} else if (prop.name eq 'lastupdatebyid'){
-					if(isDefined("session.mura") and session.mura.isLoggedIn){
-						variables.instance.LastUpdateById = session.mura.userID;
-					} else {
-						variables.instance.LastUpdateById='';
-					}
+				else {
+					if(listFindNoCase("date,datetime,timestamp",prop.datatype)){
+						variables.instance[prop.column]=now();
+					} else if(structKeyExists(prop,"default")){
+						if(prop.default neq 'null'){
+							variables.instance[prop.column]=prop.default;
+						} else {
+							variables.instance[prop.column]='';
+						}
+					} 
 				}
-
-			} 
-			else {
-				if(listFindNoCase("date,datetime,timestamp",prop.datatype)){
-					variables.instance[prop.column]=now();
-				} else if(structKeyExists(prop,"default")){
-					if(prop.default neq 'null'){
-						variables.instance[prop.column]=prop.default;
-					} else {
-						variables.instance[prop.column]='';
-					}
-				} 
 			}
 		}
 
-		//writeDump(var=variables.instance);
 		//writeDump(var=variables.properties,abort=true);
 
 		return this;
@@ -281,6 +282,7 @@ component extends="mura.bean.bean" versioned=false {
 			       	 	if(!structKeyExists(prop,'comparable')){
 			       	 		prop.comparable=true;
 			       	 	}
+
 
 			       	 	if(structKeyExists(prop,'required') and prop.required){
 			       	 		prop.nullable=false;
@@ -497,10 +499,11 @@ component extends="mura.bean.bean" versioned=false {
 		var pluginManager=getBean('pluginManager');
 		var event=new mura.event({siteID=variables.instance.siteid,bean=this});
 		
-		validate();
+		//validate();
 
 		pluginManager.announceEvent('onBefore#variables.entityName#Save',event);
-		
+
+		//writeDump(var=getErrors(),abort=true);
 		if(!hasErrors()){
 			var props=getProperties();
 			var columns=getColumns();
