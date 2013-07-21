@@ -144,6 +144,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var baseIDList="">
 	<cfset var hasextendedparams=false>
 	<cfset var baseIDList="">
+	<cfset var join="">
 
 	<cfif not isObject(arguments.data)>
 		<cfset params=getBean("userFeedBean")>

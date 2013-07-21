@@ -1272,14 +1272,14 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfargument name="isEditor" type="boolean" required="true" default="false">
 	<cfset var rs= ''/>
 	
-	<cfquery name="rsCommentCount">
+	<cfquery name="rs">
 	select count(*) TotalComments from tcontentcomments where contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#"/> and siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 	<cfif not arguments.isEditor >
 	and isApproved=1
 	</cfif>
 	</cfquery>
 	
-	<cfreturn rsCommentCount.TotalComments />
+	<cfreturn rs.TotalComments />
 </cffunction>
 
 <cffunction name="getCommentSubscribers" access="public" output="false" returntype="query">

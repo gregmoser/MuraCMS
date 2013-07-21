@@ -1200,8 +1200,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="requiresApproval" output="false">
 	<cfset var crumbs=getCrumbIterator()>
-	<cfset crumb="">
-	<cfset chain="">
+	<cfset var crumb="">
+	<cfset var chain="">
 
 	<cfloop condition="crumbs.hasNext()">
 		<cfset crumb=crumbs.next()>

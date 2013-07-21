@@ -94,6 +94,7 @@
 			var entryPath = "";
 			var entryFile = "";
 			var skip="no";
+			var files="";
 			try
 			{
 				/* Initialize Zip file */

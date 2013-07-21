@@ -184,7 +184,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="editAddress" output="false">
 	<cfargument name="rc">
-	<cfif not isdefined('rc.userBean')>
+	<cfif not isdefined('arguments.rc.userBean')>
 		<cfset arguments.rc.userBean=variables.userManager.read(arguments.rc.userid) />
 	</cfif>
 </cffunction>
@@ -209,14 +209,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	  </cfif>
 	  
 	   <cfif arguments.rc.action eq 'Add' and structIsEmpty(arguments.rc.userBean.getErrors())>
-	   	<cfset arguments.rc.userid=rc.userBean.getUserID() />
+	   	<cfset arguments.rc.userid=arguments.rc.userBean.getUserID() />
 	   </cfif>
 	   
 	   <cfset arguments.rc.siteID=origSiteID>
 	   
 	   <cfif len(request.newImageIDList)>
-			<cfset rc.fileid=request.newImageIDList>
-			<cfset rc.userid=arguments.rc.userBean.getUserID()>
+			<cfset arguments.rc.fileid=request.newImageIDList>
+			<cfset arguments.rc.userid=arguments.rc.userBean.getUserID()>
 			<cfset variables.fw.redirect(action="cArch.imagedetails",append="userid,siteid,fileid,compactDisplay")>
 		</cfif>
 		

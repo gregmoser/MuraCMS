@@ -286,6 +286,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="getQuery" returntype="query" output="false">
 	<cfset var rs="">
+	<cfset var isListParam=false>
 	<cfset var param="">
 	<cfset var started=false>
 	<cfset var openGrouping=false>

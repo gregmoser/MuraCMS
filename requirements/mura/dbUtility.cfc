@@ -74,7 +74,7 @@
 
 <cffunction name="tables" output="false">
 	<cfset var rscheck="">
-	<cfset var tablesStruct={}>
+	<cfset var tableStruct={}>
 
 	<cfif variables.configBean.getDbType() neq 'oracle'>
 		<cfdbinfo 

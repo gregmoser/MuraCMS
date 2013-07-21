@@ -1539,7 +1539,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="column">
 	<cfargument name="table">
 	<cfset var datatype=variables.dbUtility.columnMetaData(argumentCollection=arguments).datatype>
-
+	<cfset var columnArgs={}>
+	
 	<cfswitch expression="#arguments.rs.type_name#">
 			<cfcase value="varchar,nvarchar,varchar2">
 				<!--- Add MSSQL nvarchar(max)--->

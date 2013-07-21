@@ -254,8 +254,8 @@
 			 <cfset arguments.rc.contentBean=getBean('content').loadBy(contentID=arguments.rc.contentID, siteid=arguments.rc.siteid).set(arguments.rc).save() />
 		</cfif>
 		<cfif not arguments.rc.ajaxrequest and len(request.newImageIDList) and not arguments.rc.murakeepediting>
-			<cfset rc.fileid=request.newImageIDList>
-			<cfset rc.contenthistid=arguments.rc.contentBean.getContentHistID()>
+			<cfset arguments.rc.fileid=request.newImageIDList>
+			<cfset arguments.rc.contenthistid=arguments.rc.contentBean.getContentHistID()>
 			<cfset variables.fw.redirect(action="cArch.imagedetails",append="contenthistid,siteid,fileid,compactDisplay")>
 		</cfif>
 	 </cfif>
@@ -359,7 +359,7 @@
 	<cfargument name="rc">
 	<cfparam name="session.flatViewArgs" default="#structNew()#">
 	<cfparam name="session.flatViewArgs.#session.siteID#" default="#structNew()#">
-	<cfset session.flatViewArgs[session.siteID].tab=rc.tab  />
+	<cfset session.flatViewArgs[session.siteID].tab=arguments.rc.tab  />
 	<cfabort>
 </cffunction>
 
@@ -402,19 +402,19 @@
 	</cfif>
 
 	<cfif arguments.rc.perm eq "author">
-		<cfset versionBean.setApproved(0)>
+		<cfset local.versionBean.setApproved(0)>
 	<cfelseif arguments.rc.perm eq "editor" >
-		<cfset versionBean.setApproved(arguments.rc.approved)>
+		<cfset local.versionBean.setApproved(arguments.rc.approved)>
 	<cfelse>
 		<cfabort>
 	</cfif>
 
 	<cfif isJSON(arguments.rc.params)>
-		<cfset versionBean.addDisplayObject(argumentCollection=arguments.rc)>
+		<cfset local.versionBean.addDisplayObject(argumentCollection=arguments.rc)>
 		<cfset versionBean.save()>
 	</cfif>
 	
-	<cfset rc.versionBean=versionBean>
+	<cfset arguments.rc.versionBean=local.versionBean>
 	
 </cffunction>
 
@@ -455,11 +455,11 @@
 	<cfargument name="rc">
 	<cfset var trail=[]>
 
-	<cfset rc.item=rc.$.getBean('content').loadBy(contenthistid=rc.contenthistid,siteid=rc.siteid)>
+	<cfset arguments.rc.item=rc.$.getBean('content').loadBy(contenthistid=arguments.rc.contenthistid,siteid=arguments.rc.siteid)>
 	
-	<cfloop condition="not rc.item.getIsNew()">
-		<cfset arrayAppend(trail, rc.item.getContentHistID())>
-		<cfset rc.item=rc.item.getSource()>
+	<cfloop condition="not arguments.rc.item.getIsNew()">
+		<cfset arrayAppend(trail, arguments.rc.item.getContentHistID())>
+		<cfset arguments.rc.item=arguments.rc.item.getSource()>
 	</cfloop>
 	<cfcontent type="application/json">
 	<cfoutput>#createObject("component","mura.json").encode(trail)#</cfoutput>

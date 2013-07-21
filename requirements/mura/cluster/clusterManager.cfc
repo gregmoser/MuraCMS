@@ -203,7 +203,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>		
 
 <cffunction name="getPeers" output="false">
-	<cfset rsPeers="">
+	<cfset var rsPeers="">
 
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPeers')#">
 		select instanceID from tclusterpeers where instanceID <> <cfqueryparam cfsqltype="cf_sql_varchar" value="#application.instanceID#">
