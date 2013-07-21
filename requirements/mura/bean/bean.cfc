@@ -218,7 +218,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	
 	<cfif structKeyExists(this,"set#arguments.property#")>
-		<cfset evaluate("set#property#(arguments.propertyValue)") />
+		<cfset evaluate("set#arguments.property#(arguments.propertyValue)") />
 	<cfelse>
 		<cfset variables.instance["#arguments.property#"]=arguments.propertyValue />
 	</cfif>
