@@ -106,7 +106,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 		<cfif requiresApproval>
 			<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending'>
-				<li><strong>Waiting For Group:</strong> #HTMLEditFormat(group.getGroupName())#</li>
+				<li><strong>
+					 <cfif group.getType() eq 1>
+						Waiting For Group: #HTMLEditFormat(group.getGroupName())#
+					<cfelse>
+						Waiting For User: #HTMLEditFormat(action.getUser().getFullName())#
+					</cfif>
+				</strong></li>
 			</cfif>
 	</ul>
 		
