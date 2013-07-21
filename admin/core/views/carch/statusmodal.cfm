@@ -108,9 +108,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending'>
 				<li><strong>
 					 <cfif group.getType() eq 1>
-						Waiting For Group: #HTMLEditFormat(group.getGroupName())#
+						#application.rbFactory.getKeyValue(session.rb,"approvalchains.waitingforgroup")#: #HTMLEditFormat(group.getGroupName())#
 					<cfelse>
-						Waiting For User: #HTMLEditFormat(action.getUser().getFullName())#
+						#application.rbFactory.getKeyValue(session.rb,"approvalchains.waitingforuser")#: #HTMLEditFormat(action.getUser().getFullName())#
 					</cfif>
 				</strong></li>
 			</cfif>
@@ -130,16 +130,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 			<cfif not content.getApproved() and approvalRequest.getStatus() eq 'Pending' and (listfindNoCase(session.mura.membershipids,approvalRequest.getGroupID()) or $.currentUser().isAdminUser() or $.currentUser().isSuperUser())>
 				<dl>
-				<dt>Action</dt>
+				<dt>#application.rbFactory.getKeyValue(session.rb,"approvalchains.action")#</dt>
 				<dd>
 					<label class="radio inline">
-						<input class="approval-action" id="approval-approve" name="approval-action"type="radio" value="Approve" checked/> Approve 
+						<input class="approval-action" id="approval-approve" name="approval-action"type="radio" value="Approve" checked/> #application.rbFactory.getKeyValue(session.rb,"approvalchains.approve")# 
 					</label>
 					<label class="radio inline">
-						<input class="approval-action" id="approval-reject" name="approval-action" type="radio" value="Reject" checked/> Reject
+						<input class="approval-action" id="approval-reject" name="approval-action" type="radio" value="Reject" checked/> #application.rbFactory.getKeyValue(session.rb,"approvalchains.reject")#
 					</label>
 				</dd>
-				<dt>Comments</dt>
+				<dt>#application.rbFactory.getKeyValue(session.rb,"approvalchains.comments")#</dt>
 				<dd><textarea id="approval-comments" rows="4"></textarea></dd>
 				<input type="button" class="btn" value="Apply" onclick="applyApprovalAction('#approvalRequest.getRequestID()#',$('input:radio[name=approval-action]:checked').val(),$('##approval-comments').val(),'#approvalRequest.getSiteID()#');"/></dd>
 				</dl>
@@ -155,7 +155,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		function applyApprovalAction(requestid,action,comment,siteid){
 			
 			if(action == 'Reject' && comment == ''){
-				alertDialog('#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.rejectioncommentrequired"))#');
+				alertDialog('#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"approvalchains.rejectioncommentrequired"))#');
 			} else {
 				var pars={
 							muraAction:'carch.approvalaction',
