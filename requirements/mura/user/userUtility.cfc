@@ -255,6 +255,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif rsuser.s2>
 			<cfset rolelist=listappend(rolelist, 'S2')>
 		</cfif>
+
+		<cfset rolelist=listAppend(rolelist,'#rsuser.username#;username;#rsuser.siteid#')>
 				
 		<cfif yesNoFormat(variables.configBean.getValue("useLegacySessions"))>
 			<cflogout>
@@ -287,7 +289,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		WHERE tusers.UserID='#rsUser.UserID#'
 		</cfquery>
 				
-		<cfset setUserStruct(rsuser,rolelist,valueList(RsGetRoles.userID))>
+		<cfset setUserStruct(rsuser,rolelist,listAppend(valueList(RsGetRoles.userID),rsuser.userid))>
 		
 		<cfset variables.globalUtility.logEvent("UserID:#rsuser.userid# Name:#rsuser.fname# #rsuser.lname# logged in at #now()#","mura-users","Information",true) />
 
