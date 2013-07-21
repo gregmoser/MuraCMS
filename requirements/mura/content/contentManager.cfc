@@ -947,7 +947,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					</cfif>
 				</cfif>	
 				
-				<cftransaction isolation="read_uncommitted">
+				<cftransaction>
 				<cfset request.muratransaction=true>
 				<!--- BEGIN CONTENT TYPE: ALL EXTENDABLE CONTENT TYPES --->
 				<cfif  listFindNoCase(this.ExtendableList,newBean.getType())>
@@ -1307,6 +1307,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset variables.utility.logEvent("ContentID:#newBean.getcontentID()# ContentHistID:#newBean.getcontentHistID()# MenuTitle:#newBean.getMenuTitle()# Type:#newBean.getType()# was created","mura-content","Information",true) />
 				<cfset variables.contentDAO.create(newBean) />
 
+				<cfset request.muratransaction=false>
+				</cftransaction>
+
 				<cfset getBean('contentSourceMap')
 						.setContentHistID(newBean.getContentHistID())
 						.setSourceID(arguments.data.sourceID)
@@ -1338,9 +1341,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif doPreserveVersionedObjects>
 					<cfset variables.contentDAO.persistVersionedObjects(currentBean,newBean)>
 				</cfif>
-
-				<cfset request.muratransaction=false>
-				</cftransaction>
 					
 				<cfif doPurgeOutputCache>
 					<cfset variables.settingsManager.getSite(arguments.data.siteid).purgeCache(name="output") />
