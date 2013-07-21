@@ -60,6 +60,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfset rc.parentBean=$.getBean('content').loadBy(contentid=rc.parentID)>
 <cfset subtypefilter=rc.parentBean.getClassExtension().getAvailableSubTypes()>
+<cfset subtypefilter&=",#rc.contentBean.getType()#/#rc.contentBean.getSubType()#">
 <cfif rc.contentBean.getIsNew()>
 	<cfset requiresApproval=rc.parentBean.requiresApproval()>
 <cfelse>
