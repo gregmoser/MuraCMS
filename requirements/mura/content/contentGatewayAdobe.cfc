@@ -1940,7 +1940,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="sortBy" type="string" default="created" >
 	<cfargument name="sortDirection" type="string" default="desc" >
 	<cfargument name="relatedContentSetID" type="string" default="">
-	<cfargument name="type" type="string" default="Default">
+	<cfargument name="name" type="string" default="Default">
 	<cfset var rs ="" />
 
 	<cfif not listFindNoCase('menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype,comments,rating',arguments.sortby)>
@@ -1969,8 +1969,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	where tcr.contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
 
 	<cfif not len(arguments.relatedContentSetID)>
-		and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.type#"/>
-			<cfif arguments.type eq 'Default'>
+		and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.name#"/>
+			<cfif arguments.name eq 'Default'>
 				or tcrs.name is null
 			</cfif>
 			)
