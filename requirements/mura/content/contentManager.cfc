@@ -1844,7 +1844,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="sortBy" type="string" default="created" >
 		<cfargument name="sortDirection" type="string" default="desc" >
 		<cfargument name="relatedContentSetID" type="string" default="">
-		<cfargument name="type" type="string" default="Default">
+		<cfargument name="name" type="string" default="Default">
 	
 		<cfreturn variables.contentGateway.getRelatedContent(argumentCollection=arguments) />
 	</cffunction>
@@ -1855,9 +1855,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="liveOnly" type="boolean" required="yes" default="false" />
 		<cfargument name="today" type="date" required="yes" default="#now()#" />
 		<cfargument name="relatedContentSetID" type="string" default="">
-		<cfargument name="type" type="string" default="Default">
+		<cfargument name="name" type="string" default="Default">
 	
-		<cfset var rs=getRelatedContent(arguments.siteID,arguments.contentHistID,arguments.liveOnly,arguments.today,arguments.relatedContentSetID,arguments.type) />
+		<cfset var rs=getRelatedContent(arguments.siteID,arguments.contentHistID,arguments.liveOnly,arguments.today,arguments.relatedContentSetID,arguments.name) />
 		<cfset var it = getBean("contentIterator")>
 		<cfset it.setQuery(rs)>
 		<cfreturn it/>
