@@ -170,20 +170,22 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		.noShow {
 			display: none !important;
 		}
+		
+		.list-table .icons {
+			float: right;
+		}
 	</style>
 	
 	<div class="fieldset">
 		<div id="selectRelatedContent"><!--- target for ajax ---></div>
-		
-		<cfloop from="1" to="#arrayLen(relatedContentSets)#" index="s">
-			<cfset rcsBean = relatedContentSets[s]/>
-			<cfset rcsRs = rcsBean.getRelatedContentQuery(rc.contentBean.getContentHistID())>
-			<cfset emptyClass = "item empty">
-			<cfoutput>
-				<div class="control-group">
+		<div class="control-group">
+			<cfloop from="1" to="#arrayLen(relatedContentSets)#" index="s">
+				<cfset rcsBean = relatedContentSets[s]/>
+				<cfset rcsRs = rcsBean.getRelatedContentQuery(rc.contentBean.getContentHistID())>
+				<cfset emptyClass = "item empty">
+				<cfoutput>
 					<div id="rcGroup-#rcsBean.getRelatedContentSetID()#" class="list-table">
-						<div class="list-table-content-set">#rcsBean.getName()#</div>
-						<div class="list-table-header">Content Type<cfif listLen(rcsBean.getAvailableSubTypes()) gte 2>s</cfif>: <cfif len(rcsBean.getAvailableSubTypes()) gt 0>#replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#<cfelse>All</cfif></div>
+						<div class="list-table-content-set">#rcsBean.getName()# <span class="icons">Content Type<cfif listLen(rcsBean.getAvailableSubTypes()) gte 2>s</cfif>: <cfif len(rcsBean.getAvailableSubTypes()) gt 0>#replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#<cfelse>All</cfif></span></div>
 						<ul id="rcSortable-#rcsBean.getRelatedContentSetID()#" class="list-table-items rcSortable" data-accept="#rcsBean.getAvailableSubTypes()#" data-relatedcontentsetid="#rcsBean.getRelatedContentSetID()#"> 
 							<cfif rcsRS.recordCount>
 								<cfset emptyClass = emptyClass & " noShow">
@@ -200,9 +202,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							</li>
 						</ul>
 					</div>
-				</div>
-			</cfoutput>
-		</cfloop>
+				</cfoutput>
+			</cfloop>
+		</div>
 		<input id="relatedContentSetData" type="hidden" name="relatedContentSetData" value="" />	
 	</div>
 </div>
