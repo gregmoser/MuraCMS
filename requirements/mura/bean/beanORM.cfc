@@ -499,11 +499,10 @@ component extends="mura.bean.bean" versioned=false {
 		var pluginManager=getBean('pluginManager');
 		var event=new mura.event({siteID=variables.instance.siteid,bean=this});
 		
-		//validate();
+		validate();
 
 		pluginManager.announceEvent('onBefore#variables.entityName#Save',event);
 
-		//writeDump(var=getErrors(),abort=true);
 		if(!hasErrors()){
 			var props=getProperties();
 			var columns=getColumns();

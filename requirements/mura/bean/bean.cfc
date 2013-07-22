@@ -434,7 +434,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						arrayAppend(rules, rule);
 					}
 
-					if(structKeyExists(props[prop], "required")){
+					if(structKeyExists(props[prop], "required") && props[prop].required){
 						structAppend(rule,{required=props[prop].required});
 						arrayAppend(rules,rule);
 					}
