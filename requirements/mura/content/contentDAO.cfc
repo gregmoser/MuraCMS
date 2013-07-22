@@ -288,11 +288,25 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfset bean.setPreserveID(rsContent.contentHistID)>
 				<cfset arrayAppend(beanArray,bean)>				
 				</cfloop>
-				<cfreturn beanArray>
-		<cfelseif rsContent.recordCount>
+		<cfelseif rsContent.recordCount eq 1>
 			<cfset bean.set(rsContent) />
 			<cfset bean.setIsNew(0) />
 			<cfset bean.setPreserveID(rsContent.contentHistID) />
+		<cfelseif arguments.use404>
+			<cfset bean.setType("Page") />
+			<cfset bean.setSubType("Default") />
+			<cfset bean.setBody('The requested page could not be found.')/>
+			<cfset bean.setTitle('404')/>
+			<cfset bean.setMenuTitle('404')/>
+			<cfset bean.setIsNew(1) />
+			<cfset bean.setActive(1) />
+			<cfset bean.setFilename('404') />
+			<cfset bean.setParentID('00000000000000000000000000000000END') />
+			<cfset bean.setcontentID('00000000000000000000000000000000001') />
+			<cfset bean.setPath('00000000000000000000000000000000001') />
+			<cfset bean.setSiteID(arguments.siteID) />
+			<cfset bean.setDisplay(1) />
+			<cfset bean.setApproved(1) />
 		<cfelse>
 			<cfset bean.setIsNew(1) />
 			<cfset bean.setActive(1) />
@@ -342,11 +356,25 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfset bean.setPreserveID(rsContent.contentHistID)>
 				<cfset arrayAppend(beanArray,bean)>				
 				</cfloop>
-				<cfreturn beanArray>
-		<cfelseif rsContent.recordCount>
+		<cfelseif rsContent.recordCount eq 1>
 			<cfset bean.set(rsContent) />
 			<cfset bean.setIsNew(0) />
 			<cfset bean.setPreserveID(rsContent.contentHistID) />
+		<cfelseif arguments.use404>
+			<cfset bean.setType("Page") />
+			<cfset bean.setSubType("Default") />
+			<cfset bean.setBody('The requested page could not be found.')/>
+			<cfset bean.setTitle('404')/>
+			<cfset bean.setMenuTitle('404')/>
+			<cfset bean.setIsNew(1) />
+			<cfset bean.setActive(1) />
+			<cfset bean.setFilename('404') />
+			<cfset bean.setParentID('00000000000000000000000000000000END') />
+			<cfset bean.setcontentID('00000000000000000000000000000000001') />
+			<cfset bean.setPath('00000000000000000000000000000000001') />
+			<cfset bean.setSiteID(arguments.siteID) />
+			<cfset bean.setDisplay(1) />
+			<cfset bean.setApproved(1) />
 		<cfelse>
 			<cfset bean.setIsNew(1) />
 			<cfset bean.setActive(1) />
@@ -396,17 +424,31 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfset bean.setPreserveID(rsContent.contentHistID)>
 				<cfset arrayAppend(beanArray,bean)>				
 				</cfloop>
-				<cfreturn beanArray>
-		<cfelseif rsContent.recordCount>
+		<cfelseif rsContent.recordCount eq 1>
 			<cfset bean.set(rsContent) />
 			<cfset bean.setIsNew(0) />
 			<cfset bean.setPreserveID(rsContent.contentHistID) />
+		<cfelseif arguments.use404>
+			<cfset bean.setType("Page") />
+			<cfset bean.setSubType("Default") />
+			<cfset bean.setBody('The requested page could not be found.')/>
+			<cfset bean.setTitle('404')/>
+			<cfset bean.setMenuTitle('404')/>
+			<cfset bean.setIsNew(1) />
+			<cfset bean.setActive(1) />
+			<cfset bean.setFilename('404') />
+			<cfset bean.setParentID('00000000000000000000000000000000END') />
+			<cfset bean.setcontentID('00000000000000000000000000000000001') />
+			<cfset bean.setPath('00000000000000000000000000000000001') />
+			<cfset bean.setSiteID(arguments.siteID) />
+			<cfset bean.setDisplay(1) />
+			<cfset bean.setApproved(1) />
 		<cfelse>
 			<cfset bean.setIsNew(1) />
 			<cfset bean.setActive(1) />
 			<cfset bean.setSiteID(arguments.siteid) />
 		</cfif>
-		
+
 		<cfreturn bean />
 </cffunction>
 
