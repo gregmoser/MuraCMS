@@ -367,7 +367,7 @@ jQuery(document).ready(function(){
             <span class="size">{%=o.formatFileSize(file.size)%}</span>
         </td>
         <td>
-        <a class="btn" onclick="confirmDialog('If you leave you will loose state','{%=file.edit_url%}');"><i class="icon-pencil"></i> Edit in Site Manager</a>
+        <a class="btn" onclick="confirmDialog('Would you like to edit this file in the site manager?','{%=file.edit_url%}');"><i class="icon-pencil"></i> Edit in Site Manager</a>
         <!---
             <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                 <i class="icon-trash icon-white"></i>
