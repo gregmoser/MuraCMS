@@ -310,7 +310,7 @@ component extends="mura.bean.bean" versioned=false {
 			       	 			prop.persistent=false;
 			       	 		} else {
 			       	 			prop.persistent=true;
-			       	 			setPropAsIDColumn(prop);
+			       	 			setPropAsIDColumn(prop,false);
 			       	 			//writeDump(var=prop,abort=true);
 			       	 		}
 
@@ -418,15 +418,17 @@ component extends="mura.bean.bean" versioned=false {
 		return application.objectMappings[variables.entityName].properties;
 	}
 
-	private function setPropAsIDColumn(prop){
+	private function setPropAsIDColumn(prop,isPrimaryKey=true){
 		arguments.prop.type="string";
 	
-		if(!structKeyExists(arguments.prop, "required")){
-			arguments.prop.required=true;
-		}
-			
-		if(!structKeyExists(arguments.prop, "nullable")){
-			arguments.prop.nullable=false;
+		if(arguments.isPrimaryKey){
+			if(!structKeyExists(arguments.prop, "required")){
+				arguments.prop.required=true;
+			}
+				
+			if(!structKeyExists(arguments.prop, "nullable")){
+				arguments.prop.nullable=false;
+			}
 		}
 
 		arguments.prop.default="";
