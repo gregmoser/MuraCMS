@@ -483,14 +483,19 @@ component extends="mura.bean.bean" versioned=false {
 			}
 
 			arguments.qs.addParam(argumentCollection=paramArgs);
+
+			return true;
+		} else {
+			return false;
 		}
 
 	}
 
 	function validate(){
 		super.validate();
+		var props=getProperties();
 
-		if( !len(getPrimaryKey()) || !len(variables.instance[getPrimaryKey()]) || getPrimaryKey() == 'primarykey'){
+		if(!len(getPrimaryKey()) || !props[getPrimaryKey()].persistent || !len(variables.instance[getPrimaryKey()]) || getPrimaryKey() == 'primarykey'){
 			variables.instance.errors.primarykey="The primary key '#getPrimaryKey()#' is required.";
 		}
 
