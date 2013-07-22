@@ -2731,6 +2731,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var rstclassextenddatauseractivity="">
 		<cfset var rsFeedParams="">
 		<cfset var rssite="">
+		<cfset var tclassextendrcsets="">
 		
 		<cfparam name="arguments.rsUserConflicts" default="#queryNew('userID')#">
 		

@@ -615,11 +615,6 @@ WHERE tcontent.ContentID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#argum
 		<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.data.siteid#"/>
 		)</cfquery>
 
-		<!---
-		<cfquery name="rs" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDBUsername()#" password="#variables.configBean.getDBPassword()#">
-	 		select * from tpermissions where groupid='#arguments.data.groupid#'
-		</cfquery>
-		--->
 	</cfloop>
 
 	<cfset variables.settingsManager.getSite(arguments.data.siteid).purgeCache(name="output")>
@@ -826,6 +821,8 @@ WHERE tcontent.ContentID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#argum
 <cfargument name="path" type="string" required="true">
 
 <cfset var loc = StructNew()>
+<cfset var usrGroups="">
+
 <cfset loc.return = "deny">
 
 	<!--- Check for super admin --->

@@ -999,7 +999,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfset updateMaterializedPath(newBean.getPath(),currentBean.getPath(),newBean.getSiteID()) />
 					</cfif>
 					
-					<!--- Related content persistence --->	
+					<!--- Related content persistence --->
 					<cfif not newBean.getIsNew()>
 						<cfset variables.contentDAO.createRelatedItems(newBean.getcontentID(),
 						newBean.getcontentHistID(),arguments.data,newBean.getSiteID(),currentBean.getcontentHistID()) />
@@ -1007,7 +1007,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfelse>
 						<cfset variables.contentDAO.createRelatedItems(newBean.getcontentID(),
 						newBean.getcontentHistID(),arguments.data,newBean.getSiteID(),'') />
-					</cfif>
+					</cfif> 	
 					
 					<!--- Content expiration assignments --->
 					<cfif isDefined("arguments.data.expiresnotify") and len(arguments.data.expiresnotify)>
@@ -1307,6 +1307,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset variables.utility.logEvent("ContentID:#newBean.getcontentID()# ContentHistID:#newBean.getcontentHistID()# MenuTitle:#newBean.getMenuTitle()# Type:#newBean.getType()# was created","mura-content","Information",true) />
 				<cfset variables.contentDAO.create(newBean) />
 
+				<cfset request.muratransaction=false>
+				</cftransaction>
+
 				<cfset getBean('contentSourceMap')
 						.setContentHistID(newBean.getContentHistID())
 						.setSourceID(arguments.data.sourceID)
@@ -1315,9 +1318,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						.setCreated(now())
 						.save()>
 
-
-				<cfset newBean=read(contenthistid=newbean.getContentHistID(),siteid=newBean.getSiteID())>
-
+				<cfset newBean=variables.contentDAO.readVersion(contenthistid=newbean.getContentHistID(),siteid=newBean.getSiteID())>
+				
 				<cfset request.handledfilemetas={}>
 				<cfparam name="arguments.data.fileMetaDataAssign" default="">
 				
@@ -1329,7 +1331,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 					<cfloop collection="#arguments.data.fileMetaDataAssign#" item="local.i">	
 						<cfset local.fileMeta=newBean.getFileMetaData(arguments.data.fileMetaDataAssign[local.i].property)>			
-						<cfset local.fileMeta.set(arguments.data.fileMetaDataAssign[local.i])>		
+						<cfset local.fileMeta.set(arguments.data.fileMetaDataAssign[local.i])>	
+						<cfparam name="arguments.data.fileMetaDataAssign.#local.i#.setAsDefault" default="false">	
 						<cfset local.fileMeta.save(setAsDefault=arguments.data.fileMetaDataAssign[local.i].setAsDefault)>
 						<cfset request.handledfilemetas[hash(local.fileMeta.getFileID() & newBean.getContentHistID())]=true>
 					</cfloop>	
@@ -1338,9 +1341,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif doPreserveVersionedObjects>
 					<cfset variables.contentDAO.persistVersionedObjects(currentBean,newBean)>
 				</cfif>
-
-				<cfset request.muratransaction=false>
-				</cftransaction>
 					
 				<cfif doPurgeOutputCache>
 					<cfset variables.settingsManager.getSite(arguments.data.siteid).purgeCache(name="output") />
@@ -1389,6 +1389,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					
 				<cfset newBean.setIsNew(0)>
 				<cfset pluginEvent.setValue("contentBean",newBean)>
+				<cfset pluginEvent.setValue("newBean",newBean)>
 				<cfif  ListFindNoCase(this.TreeLevelList,newBean.getType())>			
 					<cfset variables.pluginManager.announceEvent("onContentSave",pluginEvent)>
 					<cfset variables.pluginManager.announceEvent("onAfterContentSave",pluginEvent)>		
@@ -1843,6 +1844,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="sortBy" type="string" default="created" >
 		<cfargument name="sortDirection" type="string" default="desc" >
 		<cfargument name="relatedContentSetID" type="string" default="">
+		<cfargument name="type" type="string" default="Default">
 	
 		<cfreturn variables.contentGateway.getRelatedContent(argumentCollection=arguments) />
 	</cffunction>
@@ -1853,8 +1855,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="liveOnly" type="boolean" required="yes" default="false" />
 		<cfargument name="today" type="date" required="yes" default="#now()#" />
 		<cfargument name="relatedContentSetID" type="string" default="">
+		<cfargument name="type" type="string" default="Default">
 	
-		<cfset var rs=getRelatedContent(arguments.siteID,arguments.contentHistID,arguments.liveOnly,arguments.today,arguments.relatedContentSetID) />
+		<cfset var rs=getRelatedContent(arguments.siteID,arguments.contentHistID,arguments.liveOnly,arguments.today,arguments.relatedContentSetID,arguments.type) />
 		<cfset var it = getBean("contentIterator")>
 		<cfset it.setQuery(rs)>
 		<cfreturn it/>

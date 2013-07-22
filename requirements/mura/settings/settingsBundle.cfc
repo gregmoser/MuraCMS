@@ -460,6 +460,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset var rstadplacementcategories="">
 		<cfset var rstformresponsepackets="">
 		<cfset var rsCleanDir="">
+		<cfset var rstclassextendrcsets="">
 
 		<cfsetting requestTimeout = "7200">
 		

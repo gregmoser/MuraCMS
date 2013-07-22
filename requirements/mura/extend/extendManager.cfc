@@ -1471,6 +1471,7 @@ and tclassextendattributes.type='File'
 	<cfset var imagesizeXML="">
 	<cfset var site=getBean('settingsManager').getSite(arguments.siteid)>
 	<cfset var dirty=false>
+	<cfset var extendset="">
 
 	<cfif isDefined("arguments.configXML.plugin")>
 		<cfset baseElement="plugin">

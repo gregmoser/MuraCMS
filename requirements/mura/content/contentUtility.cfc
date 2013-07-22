@@ -1370,8 +1370,13 @@ and parentID is null
 		<cfset var delim = variables.configBean.getFileDelim() />
 		<cfset var sourceFileLocation = "#variables.configBean.getFileDir()##delim##arguments.sourceSiteID##delim#cache#delim#file#delim#" />
 		<cfset var destFileLocation = "#variables.configBean.getFileDir()##delim##arguments.destinationSiteID##delim#cache#delim#file#delim#" />
-	
+		<cfset var sArgs={}>
+		<cfset var rsFileDate="">
+		<cfset var tempFile="">
+		<cfset var theFileStruct={}>
+		<cfset var childContentBean="">
 		<cfset var sResponse = StructNew() />
+		<cfset var rsfileData="">
 
 		<cfset sResponse.success = false />
 	
@@ -1543,7 +1548,7 @@ and parentID is null
 			</cfloop>
 		</cfif>
 
-		<cfset sRespose.success = true />
+		<cfset sResponse.success = true />
 
 		<cfreturn sResponse />
 	</cffunction>

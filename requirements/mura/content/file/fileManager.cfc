@@ -494,6 +494,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rsDIR="">
 	<cfset var rsCheck="">
 	<cfset var filePath="#application.configBean.getFileDir()#/#arguments.siteID#/cache/file/">
+	<cfset var check="">
 
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsDB')#">
 	select fileID from tfiles where siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#">
@@ -546,6 +547,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var currentSite=variables.settingsManager.getSite(arguments.siteID)>
 	<cfset var check="">
 	<cfset var currentSource="">
+	<cfset var i="">
 
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsDB')#">
 	select fileID,fileEXT from tfiles 

@@ -70,7 +70,7 @@ to your own modified versions of Mura CMS.
 	<cfparam name="arguments.rc.siteSortBy" default="site" />
 
 	<cfif isdefined("arguments.rc.ckUpdate")>
-		<cfset rc.sitesUpdated = updateSiteFilesToLatestVersion(rc) />
+		<cfset arguments.rc.sitesUpdated = updateSiteFilesToLatestVersion(arguments.rc) />
 	</cfif>
 
 	<cfif isdefined("arguments.rc.refresh")>
@@ -150,7 +150,7 @@ to your own modified versions of Mura CMS.
 				<cfset getCurrentUser().setValue("errors",bean.getErrors())>
 			<cfelse>
 				<cfif len(request.newImageIDList)>
-					<cfset rc.fileid=request.newImageIDList>
+					<cfset arguments.rc.fileid=request.newImageIDList>
 					<cfset variables.fw.redirect(action="cArch.imagedetails",append="siteid,fileid,compactDisplay")>
 				</cfif>
 			</cfif>
@@ -160,12 +160,12 @@ to your own modified versions of Mura CMS.
 			<cfset variables.settingsManager.setSites()  />
 			<cfset variables.clusterManager.reload() />
 			<cfset session.userFilesPath = "#application.configBean.getAssetPath()#/#rc.siteid#/assets/">
-			<cfset session.siteid=rc.siteid />
+			<cfset session.siteid=arguments.rc.siteid />
 			<cfif not structIsEmpty(bean.getErrors())>
 				<cfset getCurrentUser().setValue("errors",bean.getErrors())>
 			<cfelse>
 				<cfif len(request.newImageIDList)>
-					<cfset rc.fileid=request.newImageIDList>
+					<cfset arguments.rc.fileid=request.newImageIDList>
 					<cfset variables.fw.redirect(action="cArch.imagedetails",append="siteid,fileid,compactDisplay")>
 				</cfif>
 			</cfif>

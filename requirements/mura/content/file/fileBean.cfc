@@ -1,7 +1,7 @@
 component extends="mura.bean.beanORM" table='tfiles' entityName="file" {
 
 	property name="fileid" fieldtype="id";
-	property name="content" fieldtype="one-to-one" fkcolumn="contentid" cfc="content";
+	property name="content" fieldtype="one-to-one" fkcolumn="contentid" cfc="content" required=false nullable=true;
 	property name="site" fieldtype="many-to-one" fkcolumn="siteid" cfc="site";
 	property name="filename" datatype="varchar" length=200;
 	property name="contentType" datatype="varchar" length=100;

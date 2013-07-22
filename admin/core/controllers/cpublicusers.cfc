@@ -239,8 +239,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	 
 
 	   <cfif len(request.newImageIDList)>
-			<cfset rc.fileid=request.newImageIDList>
-			<cfset rc.userid=arguments.rc.userBean.getUserID()>
+			<cfset arguments.rc.fileid=request.newImageIDList>
+			<cfset arguments.rc.userid=arguments.rc.userBean.getUserID()>
 			<cfset variables.fw.redirect(action="cArch.imagedetails",append="userid,siteid,fileid,compactDisplay")>
 	   </cfif>
 

@@ -110,7 +110,7 @@ component extends="mura.bean.beanORMVersioned"
 			.save(processFile=false);
 		}
 
-		return this
+		return this;
 	}
 
 

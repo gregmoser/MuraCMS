@@ -697,6 +697,7 @@ select * from tplugins order by #arguments.orderby#
 	<cfset var item="">
 	<cfset var rsCheckDiscoveredPlugin="">
 	<cfset var tempDir="">
+	<cfset var currentPlugin="">
 
 	<cflock name="pluginDiscovery#application.instanceID#" type="exclusive" timeout="200">
 		<cfdirectory action="list" directory="#baseDir#" name="rsRequirements">

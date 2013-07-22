@@ -48,14 +48,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset subType = application.classExtensionManager.getSubTypeByID(rc.subTypeID)>
 <cfset rcsBean = $.getBean('relatedContentSet').loadBy(relatedContentSetID=rc.relatedContentSetID)>
 
-<!---getBean('approvalAction').loadBy(requestID=getValue('requestID'), groupID=getValue('groupID'))
-		    	.setComments(arguments.comments)
-		    	.setActionType('Approval')
-		    	.setUserID(getCurrentUser().getUserID())
-		    	.setChainID(getValue('chainID'))
-		    	.save();--->
-
-
 <h1><cfif len(rc.relatedContentSetID)>Edit<cfelse>Add</cfif> Attribute Set</h1>
 <cfoutput>
 

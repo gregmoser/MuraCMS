@@ -66,7 +66,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="list" output="false">
 <cfargument name="rc">
-<cfset var feed=variables.changesetManager.getFeed(argumentCollection=rc)>
+<cfset var feed=variables.changesetManager.getFeed(argumentCollection=arguments.rc)>
 
 <cfset feed.setSiteID(arguments.rc.siteid)>
 
@@ -86,10 +86,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset feed.addParam(column='name',criteria=arguments.rc.keywords,condition="contains")>	
 </cfif>
 
-<cfset rc.changesets=feed.getIterator()>
+<cfset arguments.rc.changesets=feed.getIterator()>
 
-<cfset rc.changesets.setNextN(20)>
-<cfset rc.changesets.setPage(rc.page)>
+<cfset arguments.rc.changesets.setNextN(20)>
+<cfset arguments.rc.changesets.setPage(arguments.rc.page)>
 </cffunction>
 
 <cffunction name="publish" output="false">
@@ -106,10 +106,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="assignments" output="false">
 <cfargument name="rc">
-<cfset rc.siteAssignments=variables.changesetManager.getAssignmentsIterator(rc.changesetID,rc.keywords,'00000000000000000000000000000000000')>
-<cfset rc.componentAssignments=variables.changesetManager.getAssignmentsIterator(rc.changesetID,rc.keywords,'00000000000000000000000000000000003')>
-<cfset rc.formAssignments=variables.changesetManager.getAssignmentsIterator(rc.changesetID,rc.keywords,'00000000000000000000000000000000004')>
-<cfset rc.changeset=variables.changesetManager.read(rc.changesetID)>
+<cfset arguments.rc.siteAssignments=variables.changesetManager.getAssignmentsIterator(arguments.rc.changesetID,arguments.rc.keywords,'00000000000000000000000000000000000')>
+<cfset arguments.rc.componentAssignments=variables.changesetManager.getAssignmentsIterator(arguments.rc.changesetID,arguments.rc.keywords,'00000000000000000000000000000000003')>
+<cfset arguments.rc.formAssignments=variables.changesetManager.getAssignmentsIterator(arguments.rc.changesetID,arguments.rc.keywords,'00000000000000000000000000000000004')>
+<cfset arguments.rc.changeset=variables.changesetManager.read(arguments.rc.changesetID)>
 </cffunction>
 
 <cffunction name="removeitem" output="false">
@@ -120,19 +120,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="edit" output="false">
 <cfargument name="rc">
-<cfset rc.changeset=variables.changesetManager.read(rc.changesetID)>
+<cfset arguments.rc.changeset=variables.changesetManager.read(arguments.rc.changesetID)>
 </cffunction>
 
 <cffunction name="save" output="false">
 <cfargument name="rc">
-<cfset rc.changeset=variables.changesetManager.read(rc.changesetID).set(rc).save()>
-<cfset rc.changesetID=rc.changeset.getChangesetID()>
+<cfset arguments.rc.changeset=variables.changesetManager.read(arguments.rc.changesetID).set(arguments.rc).save()>
+<cfset arguments.rc.changesetID=arguments.rc.changeset.getChangesetID()>
 <cfset variables.fw.redirect(action="cChangesets.list",append="changesetID,siteID")>
 </cffunction>
 
 <cffunction name="delete" output="false">
 <cfargument name="rc">
-<cfset rc.changeset=variables.changesetManager.read(rc.changesetID).delete()>
+<cfset arguments.rc.changeset=variables.changesetManager.read(arguments.rc.changesetID).delete()>
 <cfset variables.fw.redirect(action="cChangesets.list",append="changesetID,siteID")>
 </cffunction>
 </cfcomponent>

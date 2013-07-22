@@ -948,6 +948,11 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 				var url = 'index.cfm';
 				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&property=' + property  + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
 				$.get(url + "?" + pars).done(function(data) {
+
+					if(data.indexOf('mura-primary-login-token') != -1) {
+						location.href = './';
+					}
+					
 					$('#newFileMetaContainer').html(data);
 					
 					if(property in fileMetaDataAssign){
@@ -1193,6 +1198,7 @@ function loadjscssfile(filename, filetype) {
 }
 
 function getDialogPosition() {
+
 	if(top.location != self.location) {
 		try {
 			var windowHeight = $(window.parent).height();

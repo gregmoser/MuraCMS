@@ -2,8 +2,8 @@
 <cfset fileMetaData=$.getBean('fileMetaData').loadBy(fileid=rc.fileid,contenthistid=rc.contenthistid,siteid=rc.siteid)>
 <cfoutput>
  <div class="fieldset">
- 	<!--
- 	<div class="control-group">
+ 	<cfif fileMetaData.hasImageFileExt()>
+	<div class="control-group">
 		<label class="control-label">
 			#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.image')#
 		</label>
@@ -11,7 +11,7 @@
 			<img src="#fileMetaData.getUrlForImage('medium')#"/>
 		</div>
 	</div>
-	--->
+	</cfif>
 	<div class="control-group">
 		<label class="control-label">
 			#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.caption')#
@@ -38,10 +38,10 @@
 	</div>
 	<div class="control-group">
 		<label class="control-label">
-			#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.setasdefault')#
+			#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.updatedefaults')#
 		</label>
-		<div class="controls">
-			<input type="checkbox" id="filemeta-setasdefault">
+		<div class="controls checkbox">
+			<input type="checkbox" id="filemeta-setasdefault"> #application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.setasdefault')#
 		</div>
 	</div>
 	<input type="hidden" data-property="property" value="#HTMLEditFormat(rc.property)#" class="filemeta">
