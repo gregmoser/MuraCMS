@@ -413,34 +413,51 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				var props=getProperties();
 				var rules=[];
 				var rule={};
+				var ruleKey='';
+
 
 				for(var prop in props){
 
 					rules=[];
 
-					if(structKeyExists(props[prop], "message")){
-						rule={message=props[prop].message};
+					if(structKeyExists(props[prop], "fkcolumn")){
+						ruleKey=props[prop].fkcolumn;
 					} else {
-						rule={};
+						ruleKey=prop;
 					}
 
 					if(structKeyExists(props[prop], "datatype") && props[prop].datatype != 'any'){
+						if(structKeyExists(props[prop], "message")){
+							rule={message=props[prop].message};
+						} else {
+							rule={};
+						}
 						structAppend(rule,{datatype=props[prop].datatype});
 						arrayAppend(rules, rule);
 					}
 
 					if(structKeyExists(props[prop], "regex")){
+						if(structKeyExists(props[prop], "message")){
+							rule={message=props[prop].message};
+						} else {
+							rule={};
+						}
 						structAppend(rule,{regex=props[prop].regex});
 						arrayAppend(rules, rule);
 					}
 
 					if(structKeyExists(props[prop], "required") && props[prop].required){
+						if(structKeyExists(props[prop], "message")){
+							rule={message=props[prop].message};
+						} else {
+							rule={};
+						}
 						structAppend(rule,{required=props[prop].required});
 						arrayAppend(rules,rule);
 					}
 					
 					if(arrayLen(rules)){
-						application.objectMappings[variables.entityName].validations.properties[prop]=rules;
+						application.objectMappings[variables.entityName].validations.properties[ruleKey]=rules;
 					}
 				}
 
