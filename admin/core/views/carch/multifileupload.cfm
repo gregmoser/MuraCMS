@@ -252,21 +252,19 @@ jQuery(document).ready(function(){
     <tr class="template-upload fade">
         <td class="file-preview">
             <span class="preview">
-            	<i class="icon-file-text-alt"></i>
-				<span class="badge">XXXX</span>
 			</span>
         </td>
         <td class="var-width form-horizontal">
         	<div class="control-group">
 	            <label class="control-label">File name</label>
             	<div class="controls">
-            		<div class="name">{%=file.name%}</div>
+            		<div class="name ">{%=file.name%}</div>
             	</div>
 			</div>
 	        <div class="control-group">
 	           	<label class="control-label">Title</label>
 	           	<div class="controls">
-	           		<div class="editable" data-attribute="title" contenteditable="true">{%=file.name%}</div>
+	           		<div class="editable nolinebreaks" data-attribute="title" contenteditable="true">{%=file.name%}</div>
 			   	</div>
 	        </div>
 	        <div class="control-group">
@@ -278,13 +276,13 @@ jQuery(document).ready(function(){
 	        <div class="control-group">
 	        	<label class="control-label">Credits</label>
 	        	<div class="controls">
-	        		<div class="editable" data-attribute="credits" contenteditable="true"></div>
+	        		<div class="editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
 	        	</div>
 	        </div>
 	        <div class="control-group">
 	        	<label class="control-label">Alt Text</label>
 	        	<div class="controls">
-	        		<div class="editable" data-attribute="alttext" contenteditable="true"></div>
+	        		<div class="editable nolinebreaks" data-attribute="alttext" contenteditable="true"></div>
 				</div>
 			</div>
             {% if (file.error) { %}
@@ -339,7 +337,7 @@ jQuery(document).ready(function(){
             <span class="size">{%=o.formatFileSize(file.size)%}</span>
         </td>
         <td>
-        <a class="btn"><i class="icon-pencil"></i> Edit in Site Manager</a>
+        <a class="btn" onclick="confirmDialog('If you leave you will loose state','{%=file.edit_url%}');"><i class="icon-pencil"></i> Edit in Site Manager</a>
         <!---
             <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                 <i class="icon-trash icon-white"></i>
@@ -386,9 +384,12 @@ $(function () {
  
     $.blueimp.fileupload.prototype._renderPreviews= function (data) {
             data.context.find('.preview').each(function (index, elm) {
-                var fileext=$(data.files[index].name.split(".")).get(-1).toLowerCase();
-                //alert(fileext);
-                $(elm).append(data.files[index].preview);
+                var fileext=$(data.files[index].name.split(".")).get(-1).toUpperCase();
+                if(fileext=='JPEG' || fileext=='JPG' || fileext=='GIF' || fileext=='PNG'){
+                    $(elm).append(data.files[index].preview);
+                } else {
+                    $(elm).append('<i class="icon-file-text-alt"></i><span class="badge">' + fileext + '</span>' );
+                }
             });
         }
 
