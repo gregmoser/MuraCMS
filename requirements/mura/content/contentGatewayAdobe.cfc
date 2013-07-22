@@ -1963,7 +1963,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	inner join tcontentrelated tcr on (tcontent.contentID = tcr.relatedID)
 
 	<cfif not len(arguments.relatedContentSetID)>
-		left join tclassextendrelatedcontentsets tcrs on (tcr.relatedContentSetID=tcrs.relatedContentSetID)
+		left join tclassextendrcsets tcrs on (tcr.relatedContentSetID=tcrs.relatedContentSetID)
 	</cfif>
 
 	where tcr.contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
