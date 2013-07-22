@@ -134,7 +134,7 @@ jQuery(document).ready(function(){
 
         <br> -->
         <!-- The table listing the files available for upload/download -->
-        <table role="presentation">
+        <table role="presentation" class="mura-table-grid">
         <tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"></tbody></table>
       <input type="hidden" name="muraAction" value="cArch.update"/>
       <input type="hidden" name="action" value="multiFileUpload"/>
@@ -327,7 +327,7 @@ jQuery(document).ready(function(){
                 {% } %}
             </span>
         </td>
-        <td>
+        <td class="var-width">
             <p class="name">
                 <a href="{%=file.url%}" title="{%=file.name%}" class="{%=file.thumbnail_url?'gallery':''%}" download="{%=file.name%}">{%=file.name%}</a>
             </p>
