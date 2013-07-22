@@ -323,8 +323,9 @@ jQuery(document).ready(function(){
                 {% if (file.thumbnail_url) { %}
                     <a href="{%=file.url%}" title="{%=file.name%}" class="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
                 {% } else { %}
-                    <i class="icon-file-text-alt"></i><span class="badge">{%=$(file.name.split(".")).get(-1).toUpperCase()%}</span>
+                    <i class="icon-file-text-alt"></i>
                 {% } %}
+                <span class="badge">{%=$(file.name.split(".")).get(-1).toUpperCase()%}</span>
             </span>
         </td>
         <td class="var-width">
@@ -417,6 +418,7 @@ $(function () {
                 var fileext=$(data.files[index].name.split(".")).get(-1).toUpperCase();
                 if(fileext=='JPEG' || fileext=='JPG' || fileext=='GIF' || fileext=='PNG'){
                     $(elm).append(data.files[index].preview);
+                    $(elm).append('<span class="badge">' + fileext + '</span>' )
                 } else {
                     $(elm).append('<i class="icon-file-text-alt"></i><span class="badge">' + fileext + '</span>' );
                 }
