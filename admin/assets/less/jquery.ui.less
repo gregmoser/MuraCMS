@@ -7,13 +7,9 @@
 @import "jquery-ui-bootstrap/jquery-ui-1.10.0.custom.less";
 @import "fonts.less";
 
-.ui-dialog {
-	position: absolute !important; // Overriding position: fixed being set in DOM via jQuery UI (but where?)
-}
-
-.ui-widget-overlay {
-	position: fixed;
-}
+// Overriding position: fixed being set in DOM via jQuery UI (but where?)
+.ui-dialog { position: absolute !important; }
+.ui-widget-overlay { position: fixed; }
 
 .ui-widget-content {
 	border-color: @grayLight;
