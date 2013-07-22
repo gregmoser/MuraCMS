@@ -185,7 +185,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	 FindNoCase( "Python", request.userAgent ) OR
 	 FindNoCase( "Synapse", request.userAgent ) OR
 	 FindNoCase( "facebookexternalhit", request.userAgent ) OR
-	 Find( "spider", request.userAgent ))>
+	 Find( "spider", request.userAgent ) OR
+	 Find( "semantic-visions", request.userAgent ))>
 	 
 	<!--- How long do session vars persist? --->
 	<cfif request.trackSession>
