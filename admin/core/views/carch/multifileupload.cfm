@@ -258,7 +258,7 @@ jQuery(document).ready(function(){
         	<div class="control-group">
 	            <label class="control-label">File name</label>
             	<div class="controls">
-            		<div class="name ">{%=file.name%}</div>
+            		<div class="name">{%=file.name%}</div>
             	</div>
 			</div>
 	        <div class="control-group">
@@ -322,18 +322,48 @@ jQuery(document).ready(function(){
             <span class="preview">
                 {% if (file.thumbnail_url) { %}
                     <a href="{%=file.url%}" title="{%=file.name%}" class="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+                {% } else { %}
+                    <i class="icon-file-text-alt"></i><span class="badge">{%=$(file.name.split(".")).get(-1).toUpperCase()%}</span>
                 {% } %}
             </span>
         </td>
         <td class="var-width">
-            <p class="name">
-                <a href="{%=file.url%}" title="{%=file.name%}" class="{%=file.thumbnail_url?'gallery':''%}" download="{%=file.name%}">{%=file.name%}</a>
-            </p>
+            <div class="control-group">
+                <label class="control-label">File name</label>
+                <div class="controls">
+                    <div class="name">{%=file.name%}</div>
+                </div>
+            </div>
             {% if (file.error) { %}
                 <div><span class="label label-important">Error</span> {%=file.error%}</div>
+            {% }  else { %}
+                <div class="control-group">
+                    <label class="control-label">Title</label>
+                    <div class="controls">
+                        <div data-attribute="title">{%=file.name%}</div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Summary/Caption</label>
+                    <div class="controls">
+                        <div data-attribute="summary">{%=file.summary%}</div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Credits</label>
+                    <div class="controls">
+                        <div data-attribute="credits">{%=file.credits%}</div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Alt Text</label>
+                    <div class="controls">
+                        <div data-attribute="alttext">{%=file.alttext%}</div>
+                    </div>
+                </div>
             {% } %}
         </td>
-        <td>
+        <td><div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:100%;"></div></div>
             <span class="size">{%=o.formatFileSize(file.size)%}</span>
         </td>
         <td>
