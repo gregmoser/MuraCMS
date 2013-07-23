@@ -6,10 +6,18 @@
 				font-size: 16px;	
 			}
 		}
-		
+	
+	.progress {
+			margin: 0;
+			height: 28px;
+			}
+	
 	.fileupload-progress {
 		
-		}
+		.progress-extended {
+				margin: @baseLineHeight/4 0;
+			}	
+	}
 	
 	table {
 		
@@ -39,7 +47,8 @@
 						color: @white;
 						font-weight: normal;
 						font-size: 10px;
-						margin-top: 1em;
+						margin-top: @baseLineHeight/4;
+						.border-radius(4px);
 						}
 					}
 				}
@@ -81,9 +90,8 @@
 				}
 			
 			> .progress {
-				margin: 1px 0 0;
-				height: 28px;
-				width: 160px;
+				margin-top: 1px;
+				width: 160px;				
 				.center-block;
 				
 				+ p {
@@ -96,19 +104,9 @@
 						vertical-align: -2px;
 						}
 					
-			/*
-.size {
-					position: relative;
-					top: -23px;
-					text-shadow: 0 1px 0 rgba(255, 255, 255, 1.0);
-					
-				&.complete {
-					color: #fff;
-					top: -24px;
-					text-shadow: 0 -1px 0 rgba(0, 0, 0, .85);
-					} 
+			.size {
+					margin-top: @baseLineHeight/4;
 				}
-*/
 				
 			}
 			
