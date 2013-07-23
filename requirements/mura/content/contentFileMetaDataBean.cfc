@@ -16,6 +16,11 @@ component extends="mura.bean.beanORMVersioned"
 	property name="fileExt" type="string" default="" persistent=false;
 	property name="created" type="datetime" persistent=false;
 	property name="directImages" type="boolean" default=true persistent=false;
+	property name="remoteID" type="varchar" length=255 fieldtype="index";
+	property name="remoteURL" type="varchar" length=255;
+	property name="remotePubDate" type="datetime" ;
+	property name="remoteSource" type="varchar" length=255;
+	property name="remoteSourceURL" type="varchar" length=255;
 	
 	function loadBy(returnFormat="self"){
 		var result=super.loadBy(argumentCollection=arguments);
@@ -107,6 +112,11 @@ component extends="mura.bean.beanORMVersioned"
 			.setCaption(getValue('caption'))
 			.setAltText(getValue('alttext'))
 			.setCredits(getValue('credits'))
+			.setRemoteID(getValue('remoteID'))
+			.setRemoteURL(getValue('remoteURL'))
+			.setRemotePubDate(getValue('remotePubDate'))
+			.setRemoteSource(getValue('remoteSource'))
+			.setRemoteSourceURL(getValue('remoteSourceURL'))
 			.save(processFile=false);
 		}
 

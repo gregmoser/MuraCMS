@@ -969,9 +969,12 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 							customConfig: 'config.js.cfm'
 						}, htmlEditorOnComplete);
 
+					setTabs("#newFileMetaContainer.tabs",0);
+
 					$("#newFileMetaContainer").dialog("option", "position", getDialogPosition());
 
-					$('#file-caption').focus();
+
+					$('.filemeta:first').focus();
 
 				}).error(function(data){
 					$('#newFileMetaContainer').html(data.responseText);
