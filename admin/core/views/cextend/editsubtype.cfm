@@ -76,17 +76,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</div>
 		</div>
 	
-		<div class="span1 SubTypeIconSelect"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
+		<div class="span3 SubTypeIconSelect"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
 			<label class="control-label">Icon</label>
+			<div class="btn-toolbar">
               <div class="btn-group">
                 <button class="btn" type="button"><i id="iconcurrent" class="#subtype.getIconClass()# icon-large"></i></button>
                 <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 				    <ul class="dropdown-menu">
 				      <cfloop list="#subtype.getIconClasses()#" index="i">
-				      	  <li class="icon-selector"><i class="#i# <!--- icon-default --->"></i></li>
+				      	  <li class="icon-selector"><i class="#i#"></i></li>
 				      </cfloop>      
 				    </ul>
               </div>
+              <button class="btn"><i class="icon-undo"></i> Reset</button>
+			 </div>
               <input name="iconclass" type="hidden" value="#HTMLEditFormat(subtype.getIconClass())#" id="iconclass"/>
               <script>
               	$(function(){
@@ -98,10 +101,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
               </script>
 		</div>
 		
-		<div class="span1 SubTypeIconSelect"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
-			<label class="control-label">Default</label>
+		<!---
+<div class="span3 SubTypeIconSelect"<cfif subtype.getType() eq "Site"> style="display:none;"</cfif>>
+			<label class="control-label">&nbsp;</label>
 			<div class="controls">
-				<i class="icon-folder-close-alt icon-2x"></i><!--- Folder  --->
+			
+			<!--- 	<i class="icon-folder-close-alt icon-2x"></i>Folder  --->
 				<!---<i class="icon-file-alt"></i><!--- Page  --->
 				<i class="icon-file-text-alt"></i><!--- File  --->
 				<i class="icon-calendar"></i><!---  Calendar --->
@@ -110,6 +115,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				
 			</div>
 		</div>
+--->
 	
 	</div>
 	
