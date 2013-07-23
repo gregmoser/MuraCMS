@@ -6,6 +6,10 @@
 				font-size: 16px;	
 			}
 		}
+		
+	.fileupload-progress {
+		
+		}
 	
 	table {
 		
@@ -16,6 +20,10 @@
 			
 			&.file-preview {
 				//vertical-align: middle;
+				
+				canvas {
+					margin-bottom: @baseLineHeight/4;
+				}
 				
 				img, canvas {
 					.img-rounded;
@@ -54,9 +62,7 @@
 					margin-left: 130px;
 					text-align: left;
 					min-height: @baseLineHeight;
-					
-				
-					
+									
 				> div {
 					line-height: 1.2;
 					min-height: 32px;
@@ -75,27 +81,37 @@
 						p {
 							margin: 0;
 							line-height: 1.2;
-						}
-					
+						}			
 					}
 				}
 			
 			> .progress {
-				margin: 0;
-				height: 30px;
-				width:160px;
+				margin: 1px 0 0;
+				height: 28px;
+				width: 160px;
 				.center-block;
 				
 				+ p {
 					line-height: 2;
 					}
-				
 				}
 			
 			.btn-group > .btn > i {
 						font-size: 20px;
 						vertical-align: -2px;
-					}
+						}
+					
+			.size {
+					position: relative;
+					top: -23px;
+					text-shadow: 0 1px 0 rgba(255, 255, 255, 1.0);
+					
+				&.complete {
+					color: #fff;
+					top: -24px;
+					text-shadow: 0 -1px 0 rgba(0, 0, 0, .85);
+					} 
+				}
 				
 			}
 			

@@ -93,7 +93,7 @@ jQuery(document).ready(function(){
     <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="#application.configBean.getContext()#/admin/" method="POST" enctype="multipart/form-data">
     	<!-- Creating a visual target for files. Doesn't actually do anything. Pure eye candy. -->
-    	<div id="fileupload-target" class="alert alert-info"><p><i class="icon-plus-sign"></i>Drag and drop files to upload.</p></div>
+    	<div id="fileupload-target" class="alert alert-info"><p><i class="icon-plus-sign"></i>Drag and drop files to upload</p></div>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="fileupload-buttonbar">
             <div class="span7">
@@ -328,7 +328,7 @@ jQuery(document).ready(function(){
                 <span class="badge">{%=$(file.name.split(".")).get(-1).toUpperCase()%}</span>
             </span>
         </td>
-        <td class="var-width">
+        <td class="var-width form-horizontal">
             <div class="control-group">
                 <label class="control-label">File name</label>
                 <div class="controls">
@@ -364,8 +364,8 @@ jQuery(document).ready(function(){
                 </div>
             {% } %}
         </td>
-        <td><div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:100%;"></div></div>
-            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        <td><div class="progress progress-success complete" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:100%;"></div></div>
+            <span class="size complete">{%=o.formatFileSize(file.size)%}</span>
         </td>
         <td>
         <a class="btn" onclick="confirmDialog('Would you like to edit this file in the site manager?','{%=file.edit_url%}');"><i class="icon-pencil"></i> Edit in Site Manager</a>
