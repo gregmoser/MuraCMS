@@ -270,7 +270,8 @@ jQuery(document).ready(function(){
 	        <div class="control-group">
 	            <label class="control-label">Summary/Caption</label>
 				<div class="controls">
-					<div class="editable" data-attribute="summary" contenteditable="true"></div>
+					<div id="summaryinstance"
+                    class="editable" data-attribute="summary" contenteditable="true"></div>
 				</div>
 	        </div>
 	        <div class="control-group">
@@ -347,7 +348,7 @@ jQuery(document).ready(function(){
                 <div class="control-group">
                     <label class="control-label">Summary/Caption</label>
                     <div class="controls">
-                        <div data-attribute="summary">{%=file.summary%}</div>
+                        <div data-attribute="summary">{%file.summary%}</div>
                     </div>
                 </div>
                 <div class="control-group">
@@ -410,6 +411,9 @@ jQuery(document).ready(function(){
 
 <!-- The main application script -->
 <script>
+
+var fileIndex=0;
+
 $(function () {
     'use strict';
  
@@ -423,6 +427,22 @@ $(function () {
                     $(elm).append('<i class="icon-file-text-alt"></i><span class="badge">' + fileext + '</span>' );
                 }
             });
+        }
+
+    $.blueimp.fileupload.prototype._renderUpload= function (files) {
+            
+            var ret= this._renderTemplate(
+                this.options.uploadTemplate,
+                files
+            );
+
+            fileIndex++;
+
+            var id="uploadid" + fileIndex;
+
+            ret.find('div[data-attribute="summary"]').attr("id",id);
+
+            return ret;
         }
 
     $.blueimp.fileupload.prototype._renderDownload= function (files) {
@@ -461,7 +481,21 @@ $(function () {
         //return false;
        
     })
-    .bind('fileuploadadd',function(e,data){
+    .bind('fileuploadadded',function(e,data){
+
+        var id="uploadid" + fileIndex;
+
+        alert($('##'+ id).html())
+
+        CKEDITOR.inline( 
+                document.getElementById(id),
+                {
+                    toolbar: 'Default',
+                    width: "75%",
+                    customConfig: 'config.js.cfm'
+                }
+            );
+
         $(document).on('keypress', '.editable.nolinebreaks', function(e){
             
             if(e.which == 13){
