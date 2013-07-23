@@ -129,7 +129,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="approvalStatus" type="string" default=""/>
 <cfproperty name="approvalGroupID" type="string" default="" comparable="false"/>
 <cfproperty name="approvalChainOverride" type="boolean" default="false" required="true" comparable="false"/>
-<cfproperty name="relatedContentSetData" type="array"/>
+<cfproperty name="relatedContentSetData" type="any"/>
 
 <cffunction name="init" access="public" returntype="any" output="false">
 	
