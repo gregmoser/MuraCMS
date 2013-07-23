@@ -275,7 +275,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfloop>
 		
 	<cfelseif isStruct(arguments.content)>
-		<cfdump var="#arguments.content#">
 		<cfloop collection="#arguments.content#" item="prop">
 			<cfset setValue(prop,arguments.content[prop]) />
 		</cfloop>
