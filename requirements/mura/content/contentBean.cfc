@@ -909,23 +909,25 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="getRelatedContentQuery" returnType="query" output="false" access="public">
 	<cfargument name="liveOnly" type="boolean" required="yes" default="false" />
 	<cfargument name="today" type="date" required="yes" default="#now()#" />
-	<cfargument name="sortBy" type="string" default="created">
-	<cfargument name="sortDirection" type="string" default="desc">
+	<cfargument name="sortBy" type="string" default="orderno">
+	<cfargument name="sortDirection" type="string" default="asc">
 	<cfargument name="relatedContentSetID" type="string" default="">
 	<cfargument name="name" type="string" default="Default">
+	<cfargument name="reverse" type="boolean" default="false">
 	
-	<cfreturn variables.contentManager.getRelatedContent(variables.instance.siteID, getContentHistID(), arguments.liveOnly, arguments.today,arguments.sortBy,arguments.sortDirection,arguments.relatedContentSetID,arguments.name) />
+	<cfreturn variables.contentManager.getRelatedContent(variables.instance.siteID, getContentHistID(), arguments.liveOnly, arguments.today,arguments.sortBy,arguments.sortDirection,arguments.relatedContentSetID,arguments.name,arguments.reverse,getContentID()) />
 </cffunction>
 
 <cffunction name="getRelatedContentIterator" returnType="any" output="false" access="public">
 	<cfargument name="liveOnly" type="boolean" required="yes" default="false" />
 	<cfargument name="today" type="date" required="yes" default="#now()#" />
-	<cfargument name="sortBy" type="string" default="created" >
-	<cfargument name="sortDirection" type="string" default="desc">
+	<cfargument name="sortBy" type="string" default="orderno" >
+	<cfargument name="sortDirection" type="string" default="asc">
 	<cfargument name="relatedContentSetID" type="string" default="">
 	<cfargument name="name" type="string" default="Default">
+	<cfargument name="reverse" type="boolean" default="false">
 	
-	<cfset var q=getRelatedContentQuery(arguments.liveOnly, arguments.today,arguments.sortBy,arguments.sortDirection,arguments.relatedContentSetID,arguments.name) />
+	<cfset var q=getRelatedContentQuery(arguments.liveOnly, arguments.today,arguments.sortBy,arguments.sortDirection,arguments.relatedContentSetID,arguments.name,arguments.reverse) />
 	<cfset var it=getBean("contentIterator")>
 	<cfset it.setQuery(q)>
 	<cfreturn it>

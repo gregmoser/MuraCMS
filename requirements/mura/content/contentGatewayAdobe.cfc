@@ -1817,140 +1817,26 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn rsCategoriesByHistID />
 </cffunction>
 
-<!---
 <cffunction name="getRelatedContent" access="public" output="false" returntype="query">
 	<cfargument name="siteID" type="String">
 	<cfargument name="contentHistID" type="String">
 	<cfargument name="liveOnly" type="boolean" required="yes" default="false">
 	<cfargument name="today" type="date" required="yes" default="#now()#" />
-	<cfargument name="sortBy" type="string" default="created" >
-	<cfargument name="sortDirection" type="string" default="desc" >
-	<cfargument name="relatedContentSetID" type="string" default="">
-	<cfset var rs ="" />
-
-	<cfif not listFindNoCase('menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype,comments,rating',arguments.sortby)>
-		<cfset arguments.sortBy='created'>
-	</cfif>
-
-	<cfif not listFindNoCase('asc,desc',arguments.sortDirection)>
-		<cfset arguments.sortDirection='desc'>
-	</cfif>
-
-	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsRelatedContent')#">
-	SELECT tcontent.title, tcontent.releasedate, tcontent.menuTitle, tcontent.lastupdate, tcontent.lastupdatebyid, tcontent.summary, tcontent.filename, tcontent.type, tcontent.contentid,
-	tcontent.target,tcontent.targetParams, tcontent.restricted, tcontent.restrictgroups, tcontent.displaystart, tcontent.displaystop, tcontent.orderno,tcontent.sortBy,tcontent.sortDirection,
-	tcontent.fileid, tcontent.credits, tcontent.remoteSource, tcontent.remoteSourceURL, tcontent.remoteURL, tcontent.subtype, 
-	tfiles.fileSize,tfiles.fileExt,tcontent.path, tcontent.siteid, tcontent.contenthistid,
-	tcr.relatedContentSetID, tcr.orderNo
-
-	FROM  tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
-	
-	inner join tcontentrelated tcr on tcontent.contentID = tcr.relatedID and tcr.contentHistID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
-	
-	<cfif len(arguments.relatedContentSetID)>
-		<!--- pull in related content by relatedContentSetID --->
-		and tcr.relatedContentSetID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
-	<cfelse>
-		<!--- pull in "default" related content.  AKA, content that hasn't been assigned to a content set --->
-		and (tcr.relatedContentSetID = '00000000000000000000000000000000000' or tcr.relatedContentSetID is null) 
-	</cfif>
-	
-	WHERE
-	tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
-	and tcontent.active=1 
-	
-	<!---<cfif not len(arguments.relatedContentSetID)>
-		and
-		tcontent.contentID in (
-		select relatedID from tcontentrelated where contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
-		)
-	</cfif>--->
-	
-	<cfif arguments.liveOnly>
-	  AND (
-			  (
-			  	tcontent.Display = 2
-			  	AND (
-				  		(
-				  			tcontent.DisplayStart >= <cfqueryparam cfsqltype="cf_sql_timestamp" value="#arguments.today#">   
-							AND tcontent.parentID in (select contentID from tcontent 
-															where type='Calendar'
-															#renderActiveClause("tcontent",arguments.siteID)#
-															and siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#">
-														   ) 
-						 )	
-					   OR 
-					   	(
-					   		tcontent.DisplayStart <= <cfqueryparam cfsqltype="cf_sql_timestamp" value="#arguments.today#"> 
-							AND 
-							(
-								tcontent.DisplayStop >= <cfqueryparam cfsqltype="cf_sql_timestamp" value="#arguments.today#"> 
-								or tcontent.DisplayStop is null
-							)
-					   )
-				)
-		   )
-		   OR 
-		   	(
-		   		tcontent.Display = 1
-		   	)
-		)
-	</cfif>
-	
-	#renderMobileClause()#
-	
-	order by 
-	
-	<cfif len(arguments.relatedContentSetID)>
-		tcr.orderNo
-	<cfelse>
-		<cfswitch expression="#arguments.sortBy#">
-			<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,tcontent.credits,type,subtype">
-				<cfif variables.configBean.getDbType() neq "oracle" or  listFindNoCase("orderno,lastUpdate,releaseDate,created,displayStart,displayStop",arguments.sortBy)>
-					tcontent.#arguments.sortBy# #arguments.sortDirection#
-				<cfelse>
-					lower(tcontent.#arguments.sortBy#) #arguments.sortDirection#
-				</cfif>
-			</cfcase>
-			<cfcase value="rating">
-				tcontentstats.rating #arguments.sortDirection#, tcontentstats.totalVotes  #arguments.sortDirection#
-			</cfcase>
-			<cfcase value="comments">
-				tcontentstats.comments #arguments.sortDirection#
-			</cfcase>
-			<cfdefaultcase>
-				tcontent.created desc
-			</cfdefaultcase>
-		</cfswitch>
-	</cfif>
-	
-	</cfquery>
-	
-	<cfreturn rsRelatedContent />
-
-</cffunction>
-
---->
-
-<cffunction name="getRelatedContent" access="public" output="false" returntype="query">
-	<cfargument name="siteID" type="String">
-	<cfargument name="contentHistID" type="String">
-	<cfargument name="liveOnly" type="boolean" required="yes" default="false">
-	<cfargument name="today" type="date" required="yes" default="#now()#" />
-	<cfargument name="sortBy" type="string" default="created" >
-	<cfargument name="sortDirection" type="string" default="desc" >
+	<cfargument name="sortBy" type="string" default="orderno" >
+	<cfargument name="sortDirection" type="string" default="asc" >
 	<cfargument name="relatedContentSetID" type="string" default="">
 	<cfargument name="name" type="string" default="Default">
-	<cfset var rs ="" />
-
-	<cfif not listFindNoCase('menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype,comments,rating',arguments.sortby)>
-		<cfset arguments.sortBy='created'>
+	<cfargument name="reverse" type="boolean" default="false">
+	<cfset var rsRelatedContent ="" />
+	
+	<cfif not listFindNoCase('menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype,comments,rating,orderno',arguments.sortby)>
+		<cfset arguments.sortBy='orderno'>
 	</cfif>
 
 	<cfif not listFindNoCase('asc,desc',arguments.sortDirection)>
-		<cfset arguments.sortDirection='desc'>
+		<cfset arguments.sortDirection='asc'>
 	</cfif>
-
+	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsRelatedContent')#">
 	SELECT tcontent.title, tcontent.releasedate, tcontent.menuTitle, tcontent.lastupdate, tcontent.lastupdatebyid, tcontent.summary, tcontent.filename, tcontent.type, tcontent.contentid,
 	tcontent.target,tcontent.targetParams, tcontent.restricted, tcontent.restrictgroups, tcontent.displaystart, tcontent.displaystop, tcontent.orderno,tcontent.sortBy,tcontent.sortDirection,
@@ -1960,24 +1846,40 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	FROM  tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 
-	inner join tcontentrelated tcr on (tcontent.contentID = tcr.relatedID)
+	inner join tcontentrelated tcr on (tcontent.contenthistid = tcr.tcontenthistid)
 
-	<cfif not len(arguments.relatedContentSetID)>
-		left join tclassextendrcsets tcrs on (tcr.relatedContentSetID=tcrs.relatedContentSetID)
-	</cfif>
+	<cfif arguments.reverse>
+		<cfif len(arguments.name)>
+			left join tclassextendrcsets tcrs on (tcr.relatedContentSetID=tcrs.relatedContentSetID)
+		</cfif>
 
-	where tcr.contentHistID= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>
+		where tcr.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#"/>
 
-	<cfif not len(arguments.relatedContentSetID)>
 		and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.name#"/>
 			<cfif arguments.name eq 'Default'>
 				or tcrs.name is null
 			</cfif>
-			)
-	<cfelse>
-		and tcr.relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
-	</cfif>
+		)
 
+	<cfelse>
+		<cfif not len(arguments.relatedContentSetID)>
+			left join tclassextendrcsets tcrs on (tcr.relatedContentSetID=tcrs.relatedContentSetID)
+		</cfif>
+
+		where tcr.contenthistid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contenthistid#"/>
+
+
+		<cfif not len(arguments.relatedContentSetID)>
+			and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.name#"/>
+				<cfif arguments.name eq 'Default'>
+					or tcrs.name is null
+				</cfif>
+				)
+		<cfelse>
+			and tcr.relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
+		</cfif>
+	</cfif>
+	
 	and tcontent.siteid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>
 	and tcontent.active=1 
 
@@ -2021,7 +1923,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfelse>
 		<cfswitch expression="#arguments.sortBy#">
 			<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,tcontent.credits,type,subtype">
-				<cfif variables.configBean.getDbType() neq "oracle" or  listFindNoCase("orderno,lastUpdate,releaseDate,created,displayStart,displayStop",arguments.sortBy)>
+				<cfif variables.configBean.getDbType() neq "oracle" or  listFindNoCase("orderno,lastUpdate,releaseDate,created,displayStart,displayStop,orderno",arguments.sortBy)>
 					tcontent.#arguments.sortBy# #arguments.sortDirection#
 				<cfelse>
 					lower(tcontent.#arguments.sortBy#) #arguments.sortDirection#
@@ -2034,7 +1936,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				tcontentstats.comments #arguments.sortDirection#
 			</cfcase>
 			<cfdefaultcase>
-				tcontent.created desc
+				tcontent.orderno asc
 			</cfdefaultcase>
 		</cfswitch>
 	</cfif>

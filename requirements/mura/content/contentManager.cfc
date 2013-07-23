@@ -1841,10 +1841,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="contentHistID"  type="string" />
 		<cfargument name="liveOnly" type="boolean" required="yes" default="false" />
 		<cfargument name="today" type="date" required="yes" default="#now()#" />
-		<cfargument name="sortBy" type="string" default="created" >
-		<cfargument name="sortDirection" type="string" default="desc" >
+		<cfargument name="sortBy" type="string" default="orderno" >
+		<cfargument name="sortDirection" type="string" default="asc" >
 		<cfargument name="relatedContentSetID" type="string" default="">
 		<cfargument name="name" type="string" default="Default">
+		<cfargument name="reverse" type="boolean" default="false">
+		<cfargument name="contentid"  type="string" />
 	
 		<cfreturn variables.contentGateway.getRelatedContent(argumentCollection=arguments) />
 	</cffunction>
