@@ -1218,6 +1218,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						,caption
 						,credits
 						,alttext
+						,remoteid
+						,RemoteURL
+						,remotePubDate
+						,RemoteSource
+						,remoteSourceURL
 					</cfif>
 					)
 					values
@@ -1239,6 +1244,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.caption neq '',de('no'),de('yes'))#" value="#rstFiles.caption#">
 						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.credits neq '',de('no'),de('yes'))#" value="#rstFiles.credits#">
 						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.alttext neq '',de('no'),de('yes'))#" value="#rstFiles.alttext#">
+						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.remoteid neq '',de('no'),de('yes'))#" value="#rstFiles.remoteid#">
+						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.remoteurl neq '',de('no'),de('yes'))#" value="#rstFiles.remoteurl#">
+						,<cfqueryparam cfsqltype="cf_sql_TIMESTAMP" null="#iif(isDate(rstFiles.remotePubDate),de('no'),de('yes'))#" value="#rstFiles.remotePubDate#">
+						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.remotesource neq '',de('no'),de('yes'))#" value="#rstFiles.remotesource#">
+						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstFiles.remotesourceurl neq '',de('no'),de('yes'))#" value="#rstFiles.remotesourceurl#">
 					</cfif>
 					)
 				</cfquery>
