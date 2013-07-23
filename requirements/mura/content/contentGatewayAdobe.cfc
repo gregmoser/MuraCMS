@@ -1846,7 +1846,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	FROM  tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 
-	inner join tcontentrelated tcr on (tcontent.contenthistid = tcr.tcontenthistid)
+	inner join tcontentrelated tcr on (tcontent.contenthistid = tcr.contenthistid)
 
 	<cfif arguments.reverse>
 		<cfif len(arguments.name)>
