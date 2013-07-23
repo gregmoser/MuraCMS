@@ -1838,8 +1838,6 @@ buttons: {
 		return true;
 	},
 
-	testFunc:function(){alert('tst')},
-
 	initFeedConfigurator: function(data) {
 
 		/*
@@ -1866,7 +1864,6 @@ buttons: {
 					if(siteManager.configuratorMode=='frontEnd'){
 						$("#configuratorHeader").html(localIndexConfiguratorTitle);
 					} else {
-						alert('ff')
 						$("#configuratorContainer").dialog('option','title',localIndexConfiguratorTitle);
 					}		
 				}
