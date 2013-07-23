@@ -1131,8 +1131,14 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfset var rsRelatedContent = "">
 	<cfset var relatedID="">
 
-	<cfif isDefined('arguments.data.relatedContentSetData')>
-		<cfset rcsData = deserializeJSON(arguments.data.relatedContentSetData)>
+	<cfif isDefined('arguments.data.relatedContentSetData') and ((isArray(arguments.data.relatedContentSetData) and arrayLen(arguments.data.relatedContentSetData) gte 1) or isJSON(arguments.data.relatedContentSetData))>
+	
+		<cfif isJSON(arguments.data.relatedContentSetData)>
+			<cfset rcsData = deserializeJSON(arguments.data.relatedContentSetData)>
+		<cfelseif isArray(arguments.data.relatedContentSetData)>
+			<cfset rcsData = arguments.data.relatedContentSetData>
+		</cfif>
+
 		<cfloop from="1" to="#arrayLen(rcsData)#" index="i">
 			<cfset rcs = rcsData[i]>
 			<cfloop from="1" to="#arrayLen(rcs.items)#" index="j">
@@ -1154,7 +1160,6 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 			</cfloop>
 			
 		</cfloop>
-		--->
 	<cfelseif arguments.oldContentHistID neq ''>
 		<cfset rsRelatedContent = readRelatedItems(arguments.oldContentHistID, arguments.siteID)>
 		<cfloop query="rsRelatedContent">

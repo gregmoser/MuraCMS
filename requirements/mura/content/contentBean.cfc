@@ -129,6 +129,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="approvalStatus" type="string" default=""/>
 <cfproperty name="approvalGroupID" type="string" default="" comparable="false"/>
 <cfproperty name="approvalChainOverride" type="boolean" default="false" required="true" comparable="false"/>
+<cfproperty name="relatedContentSetData" type="array"/>
 
 <cffunction name="init" access="public" returntype="any" output="false">
 	
@@ -228,6 +229,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.approvalStatus = "" />
 	<cfset variables.instance.approvalGroupID = "" />
 	<cfset variables.instance.approvalChainOverride = false />
+	<cfset variables.instance.relatedContentSetData = arrayNew(1) />
 
 	<cfset variables.kids = arrayNew(1) />
 	<cfset variables.displayRegions = structNew()>
@@ -1249,6 +1251,35 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="getFileMetaData" output="false">
 	<cfargument name="property" default="fileid">
 	<cfreturn getBean('fileMetaData').loadBy(contentid=getValue('contentid'),contentHistID=getValue('contentHistID'),siteID=getValue('siteid'),fileid=getValue(arguments.property))>	
+</cffunction>
+
+<cffunction name="setRelatedContentID" output="false">
+	<cfargument name="contentIDs" required="yes" default="">
+	<cfargument name="relatedContentSetID" default="">
+	<cfargument name="name" default="">
+	<cfset var aAllRCSets = application.classExtensionManager.getSubTypeByName(variables.instance.type, variables.instance.subtype, variables.instance.siteid).getRelatedContentSets()>
+	<cfset var rcs = structNew()>
+	<cfset var i = "">
+	<cfset var j = "">
+		
+	<cfset rcs.items = arrayNew(1)>
+	<cfset rcs.relatedContentSetID = "00000000000000000000000000000000000">
+	
+	<cfloop list="#arguments.contentIDs#" index="i">
+		<cfset arrayAppend(rcs.items, i)>
+	</cfloop>
+	
+	<cfif len(arguments.relatedContentSetID)>
+		<cfset rcs.relatedContentSetID = arguments.relatedContentSetID>
+	<cfelseif len(arguments.name)>
+		<cfloop from="1" to="#arrayLen(aAllRCSets)#" index="j">
+			<cfif aAllRCSets[j].getName() eq trim(arguments.name)>
+				<cfset rcs.relatedContentSetID = aAllRCSets[j].getRelatedContentSetID()>
+			</cfif>
+		</cfloop>
+	</cfif>
+	
+	<cfset ArrayAppend(variables.instance.relatedContentSetData, rcs)>
 </cffunction>
 
 </cfcomponent>

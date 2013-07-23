@@ -856,7 +856,7 @@ to your own modified versions of Mura CMS.
         <div class="control-group">
         <label class="control-label">Email Site Registration Notifications to:</label>
         <div class="controls">
-            <input name="ExtranetPublicRegNotify" type="text" class="span12" value="#rc.siteBean.getExtranetPublicRegNotify()#" size="50" maxlength="50">
+            <input name="ExtranetPublicRegNotify" type="text" class="span12" value="#rc.siteBean.getExtranetPublicRegNotify()#" size="255" maxlength="255">
           </div>
       </div>
       

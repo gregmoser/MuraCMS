@@ -533,6 +533,7 @@ buttons: {
 		$('a.delete').click(function(){
 			$(this).parent().remove();
 			siteManager.updateBuckets();
+			siteManager.updateRCForm();
 		});
 	},
 		
