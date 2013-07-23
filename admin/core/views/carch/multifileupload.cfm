@@ -485,8 +485,6 @@ $(function () {
 
         var id="uploadid" + fileIndex;
 
-        alert($('##'+ id).html())
-
         CKEDITOR.inline( 
                 document.getElementById(id),
                 {
