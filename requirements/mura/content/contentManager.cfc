@@ -1166,7 +1166,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						
 				<cfif isDefined('arguments.data.newfile') and len(arguments.data.newfile)>
 						
-					<cfset local.fileBean=getBean('file').set(newBean.getAllValues()).save()>
+					<cfset local.fileBean=getBean('file')>
+					<cfset local.fileBean.setContentID(newBean.getContentID())>
+					<cfset local.fileBean.setContentHistID(newBean.getContentHistID())>
+					<cfset local.fileBean.setSiteID(newBean.getSiteID())>
+					<cfset local.fileBean.setModuleID(newBean.getModuleID())>
+					<cfset local.fileBean.setFileField('newFile')>
+					<cfset local.fileBean.setNewFile(newBean.getNewFile())>
+					<cfset local.fileBean.save()>
+
 					<cfset newBean.setfileID(local.fileBean.getFileID()) />
 						
 					<cfif not newBean.getIsNew()
