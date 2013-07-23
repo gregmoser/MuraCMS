@@ -129,7 +129,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="approvalStatus" type="string" default=""/>
 <cfproperty name="approvalGroupID" type="string" default="" comparable="false"/>
 <cfproperty name="approvalChainOverride" type="boolean" default="false" required="true" comparable="false"/>
-<cfproperty name="relatedContentSetData" type="array"/>
+<cfproperty name="relatedContentSetData" type="any"/>
 
 <cffunction name="init" access="public" returntype="any" output="false">
 	
@@ -229,7 +229,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.approvalStatus = "" />
 	<cfset variables.instance.approvalGroupID = "" />
 	<cfset variables.instance.approvalChainOverride = false />
-	<cfset variables.instance.relatedContentSetData = arrayNew(1) />
+	<cfset variables.instance.relatedContentSetData = "" />
 
 	<cfset variables.kids = arrayNew(1) />
 	<cfset variables.displayRegions = structNew()>
@@ -1261,7 +1261,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rcs = structNew()>
 	<cfset var i = "">
 	<cfset var j = "">
-		
+	
 	<cfset rcs.items = arrayNew(1)>
 	<cfset rcs.relatedContentSetID = "00000000000000000000000000000000000">
 	
@@ -1279,6 +1279,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfloop>
 	</cfif>
 	
+	<cfif not isArray(variables.instance.relatedContentSetData)>
+		<cfset variables.instance.relatedContentSetData = arrayNew(1)>
+	</cfif>
+
 	<cfset ArrayAppend(variables.instance.relatedContentSetData, rcs)>
 </cffunction>
 
