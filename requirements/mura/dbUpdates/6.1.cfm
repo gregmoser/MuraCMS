@@ -51,6 +51,8 @@
 	.addIndex('filename');
 	
 	dbUtility.setTable("tsettings")
-	.addColumn(column="enableLockdown",datatype="tinyint",default=0);
+	.addColumn(column="enableLockdown",datatype="tinyint",default=0)
+	.addColumn(column="ExtranetPublicRegNotify",datatype="varchar",length=255)
+	.addPrimaryKey('siteid');
 
 </cfscript>
