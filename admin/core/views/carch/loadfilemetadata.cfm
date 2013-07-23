@@ -82,7 +82,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.remotepublicationdate')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="remotepubdate" value="#HTMLEditFormat(fileMetaData.getRemotePubDate())#"  maxlength="255" class="filemeta span4">
+						<input type="text" data-property="remotepubdate" value="#LSDateFormat(fileMetaData.getRemotePubDate(),session.dateKeyFormat)#"  maxlength="255" class="filemeta span4 datepicker">
 					</div>
 				</div>
 				<div class="control-group">
@@ -90,7 +90,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.remotesource')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="remotepubdate" value="#HTMLEditFormat(fileMetaData.getRemoteSource())#"  maxlength="255" class="filemeta span4">
+						<input type="text" data-property="remotesource" value="#HTMLEditFormat(fileMetaData.getRemoteSource())#"  maxlength="255" class="filemeta span4">
 					</div>
 				</div>
 				<div class="control-group">
@@ -98,7 +98,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.remotesourceurl')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="remotepubdate" value="#HTMLEditFormat(fileMetaData.getRemoteSourceURL())#"  maxlength="255" class="filemeta span4">
+						<input type="text" data-property="remotesourceurl" value="#HTMLEditFormat(fileMetaData.getRemoteSourceURL())#"  maxlength="255" class="filemeta span4">
 					</div>
 				</div>
 			</div>

@@ -71,4 +71,9 @@ component extends="mura.bean.beanORM" table='tfiles' entityName="file" {
 		return this;
 
 	}
+
+	function setRemotePubDate(remotePubDate){
+		variables.remotepubdate=parseDateArg(arguments.remotePubDate);
+		return this;
+	}
 }

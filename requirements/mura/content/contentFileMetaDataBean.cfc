@@ -104,6 +104,11 @@ component extends="mura.bean.beanORMVersioned"
 		};
 	}
 
+	function setRemotePubDate(remotePubDate){
+		variables.remotepubdate=parseDateArg(arguments.remotePubDate);
+		return this;
+	}
+
 	function save(setAsDefault=false){
 		super.save();
 

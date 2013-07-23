@@ -965,11 +965,12 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 					}
 					
 					$('#file-caption').ckeditor({
-							toolbar: 'Basic',
+							toolbar: 'Default',
 							customConfig: 'config.js.cfm'
 						}, htmlEditorOnComplete);
 
 					setTabs("#newFileMetaContainer.tabs",0);
+					setDatePickers(".datepicker",dtLocale);
 
 					$("#newFileMetaContainer").dialog("option", "position", getDialogPosition());
 
