@@ -75,7 +75,7 @@
 		</cfif>
 			
 		<cfif not arguments.rc.ommitRelatedContentTab>
-			<cfparam name="arguments.rc.relatedcontentid" default=""/>
+			<cfparam name="arguments.rc.relatedContentSetData" default=""/>
 		</cfif>
 		
 		<cfparam name="arguments.rc.responseChart" default="0"/>

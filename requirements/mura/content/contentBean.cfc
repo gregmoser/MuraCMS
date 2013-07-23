@@ -1253,7 +1253,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn getBean('fileMetaData').loadBy(contentid=getValue('contentid'),contentHistID=getValue('contentHistID'),siteID=getValue('siteid'),fileid=getValue(arguments.property))>	
 </cffunction>
 
-<!---<cffunction name="setRelatedContentID" output="false">
+<cffunction name="setRelatedContentID" output="false">
 	<cfargument name="contentIDs" required="yes" default="">
 	<cfargument name="relatedContentSetID" default="">
 	<cfargument name="name" default="">
@@ -1279,11 +1279,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfloop>
 	</cfif>
 	
-	<cfif not isJSON(variables.instance.relatedContentSetData)>
+	<cfif not isArray(variables.instance.relatedContentSetData)>
 		<cfset variables.instance.relatedContentSetData = arrayNew(1)>
 	</cfif>
 
 	<cfset ArrayAppend(variables.instance.relatedContentSetData, rcs)>
-</cffunction>--->
+</cffunction>
 
 </cfcomponent>
