@@ -62,120 +62,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		});
 	</script>
 	
-	<style>
-		.rcSortable {
-			min-height: 27px;
-		}
-		.disabled {
-			opacity: 0.1;	
-		}
-		.mura .list-table {
-		border: 1px solid ##e6e6e6;
-		margin: 18px 0;
-		}
-	
-		.mura .list-table .list-table-content-set {
-		color: ##000;
-		font-weight: bold;
-		background: ##f0f0f0;
-		padding: 8px 5px;
-		}
-	
-		/* header of list */
-		.mura .list-table .list-table-header {
-		color: ##000;
-		background: ##eaf4fd;
-		background-image: linear-gradient(to bottom,##fffefe,##f5f5f5);
-		padding: 4px 5px;
-		line-height: 18px;
-		font-weight: bold;
-		}
-	
-		/* list holder - similar to tbody */
-		.mura .list-table .list-table-items {
-		position: relative;
-		list-style: none;
-		display: block;
-		padding: 0;
-		margin: 0;
-		}
-	
-		/* each 'row' of the pseudo table - similar to tr */
-		.mura .list-table .list-table-items li.item {
-		position: relative;
-		display: block;
-		background: ##fcfeff;
-		border-top: 1px solid ##e6e6e6;
-		padding: 4px 5px;
-		border-collapse: collapse;
-		overflow: hidden;
-		width: 686px;
-		}
-		
-		/* zero out bottom margin on empty list item */
-		.mura .list-table .list-table-items li.item.empty p {
-			margin: 0;
-			padding: 5px;
-		}
-	
-		.mura .list-table .list-table-items li.item:nth-child(even) {
-		background: ##eaf4fd;
-		}
-	
-		/* styles for the list item being sorted */
-		.mura .list-table .list-table-items li.item.ui-sortable-helper {}
-	
-		/* the nested list within each item */
-		.mura .list-table .list-table-items li.item ul {
-		list-style: none;
-		margin: 0;
-		padding: .2em;
-		}
-	
-		/* inline list of nested items */
-		.mura .list-table .list-table-items li.item ul li {
-		display: inline-block;
-		}
-	
-		.mura .list-table .list-table-items li.item ul li strong {
-		color: ##333232;
-		}
-		
-		.mura div[id^="rcGroup-"] .list-table-items li.item .delete:before {
-		content: "\f057";
-		font-family: "FontAwesome";
-		font-weight: normal;
-		font-style: normal;
-		}
-	
-		.mura div[id^="rcGroup-"] .list-table-items li.item .delete {
-		z-index: 1;
-		position: absolute;
-		text-align: center;
-		top: 0;
-		bottom: 0;
-		right: 0;
-		width: 30px;
-		font-size: 14px;
-		border-left: 1px solid ##e6e6e6;
-		line-height: 34px;
-		color: ##949494;
-		}
-		
-		.mura div[id^="rcGroup-"] .list-table-items li.item .delete:hover {
-		color: ##666;
-		text-decoration: none;
-		}
-		
-		.noShow {
-			display: none !important;
-		}
-		
-		.list-table .icons {
-			float: right;
-		}
-	</style>
-	
 	<div class="fieldset">
 		<div id="selectRelatedContent"><!--- target for ajax ---></div>
 		<div class="control-group">
@@ -185,7 +71,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset emptyClass = "item empty">
 				<cfoutput>
 					<div id="rcGroup-#rcsBean.getRelatedContentSetID()#" class="list-table">
-						<div class="list-table-content-set">#rcsBean.getName()# <span class="icons">Content Type<cfif listLen(rcsBean.getAvailableSubTypes()) gte 2>s</cfif>: <cfif len(rcsBean.getAvailableSubTypes()) gt 0>#replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#<cfelse>All</cfif></span></div>
+						<div class="list-table-content-set">#rcsBean.getName()# <span class="content-type">Accepted Content Types<cfif listLen(rcsBean.getAvailableSubTypes()) gte 2>s</cfif>: <strong><cfif len(rcsBean.getAvailableSubTypes()) gt 0><i class="#subtype.getIconClass()#"></i> #replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#<cfelse>All</cfif></strong></span></div>
 						<ul id="rcSortable-#rcsBean.getRelatedContentSetID()#" class="list-table-items rcSortable" data-accept="#rcsBean.getAvailableSubTypes()#" data-relatedcontentsetid="#rcsBean.getRelatedContentSetID()#"> 
 							<cfif rcsRS.recordCount>
 								<cfset emptyClass = emptyClass & " noShow">
