@@ -298,7 +298,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			var pname='';
 			var i='';
 			var prop={};
-			var md=getMetaData(this);
+			var md=duplicate(getMetaData(this));
 
 			param name="application.objectMappings.#variables.entityName#" default={};
 			application.objectMappings[variables.entityName].properties={};
