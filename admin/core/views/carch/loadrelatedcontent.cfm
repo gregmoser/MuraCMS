@@ -146,8 +146,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfscript>
 	<div class="control-group">
 		<cfif rc.rslist.recordcount>
-			<div id="draggableContainment" class="list-table">
-				<div class="list-table-content-set">Matching Results</label></div>
+			<div id="draggableContainment" class="list-table search-results">
+				<div class="list-table-content-set">Search Results</label></div>
 				<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
 					<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
 					<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
