@@ -71,7 +71,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset emptyClass = "item empty">
 				<cfoutput>
 					<div id="rcGroup-#rcsBean.getRelatedContentSetID()#" class="list-table">
-						<div class="list-table-content-set">#rcsBean.getName()# <span class="icons">Content Type<cfif listLen(rcsBean.getAvailableSubTypes()) gte 2>s</cfif>: <cfif len(rcsBean.getAvailableSubTypes()) gt 0><i class="#subtype.getIconClass()#"></i> #replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#<cfelse>All</cfif></span></div>
+						<div class="list-table-content-set">#rcsBean.getName()# <span class="content-type">Accepted Content Types<cfif listLen(rcsBean.getAvailableSubTypes()) gte 2>s</cfif>: <strong><cfif len(rcsBean.getAvailableSubTypes()) gt 0><i class="#subtype.getIconClass()#"></i> #replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#<cfelse>All</cfif></strong></span></div>
 						<ul id="rcSortable-#rcsBean.getRelatedContentSetID()#" class="list-table-items rcSortable" data-accept="#rcsBean.getAvailableSubTypes()#" data-relatedcontentsetid="#rcsBean.getRelatedContentSetID()#"> 
 							<cfif rcsRS.recordCount>
 								<cfset emptyClass = emptyClass & " noShow">
