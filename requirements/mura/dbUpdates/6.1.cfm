@@ -53,6 +53,7 @@
 	dbUtility.setTable("tsettings")
 	.addColumn(column="enableLockdown",datatype="tinyint",default=0)
 	.addColumn(column="ExtranetPublicRegNotify",datatype="varchar",length=255)
+	.addColumn(column="siteid",datatype="varchar",length=25,nullable=false,default='')
 	.addPrimaryKey('siteid');
 
 </cfscript>
