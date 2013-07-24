@@ -127,7 +127,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	<cfset icon=icon & " " & attributes.rsNest.subtype>
 </cfif>
-
+<cfset isFileIcon=attributes.rsnest.type eq 'File' and listFirst(icon,"-") neq "icon">
 <cfset request.rowNum=request.rowNum+1>
 </cfsilent>
 <!--- Start LI for content Item --->
@@ -155,7 +155,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfsilent>
 
 	<cfif not listFindNoCase('none,read',verdict)>
-		<a class="<cfif attributes.rsNest.type eq 'File'>file #lcase(icon)#<cfelse>#lcase(icon)#</cfif> title draftprompt" title="#atitle#" href="index.cfm?muraAction=cArch.edit&contenthistid=#attributes.rsNest.ContentHistID#&contentid=#attributes.rsNest.ContentID#&type=#attributes.rsNest.type#&parentid=#attributes.rsNest.parentID#&topid=#URLEncodedFormat(attributes.topid)#&siteid=#URLEncodedFormat(attributes.siteid)#&moduleid=#attributes.moduleid#&startrow=#attributes.startrow#"<cfif attributes.rsNest.type eq 'File'> data-filetype="#lcase(attributes.rsNest.fileExt)#"</cfif>  <cfif atooltip>rel="tooltip" data-html="true"</cfif>>
+		<a class="<cfif isFileIcon>file #lcase(icon)#<cfelse>#lcase(icon)#</cfif> title draftprompt" title="#atitle#" href="index.cfm?muraAction=cArch.edit&contenthistid=#attributes.rsNest.ContentHistID#&contentid=#attributes.rsNest.ContentID#&type=#attributes.rsNest.type#&parentid=#attributes.rsNest.parentID#&topid=#URLEncodedFormat(attributes.topid)#&siteid=#URLEncodedFormat(attributes.siteid)#&moduleid=#attributes.moduleid#&startrow=#attributes.startrow#"<cfif attributes.rsNest.type eq 'File'> data-filetype="#lcase(attributes.rsNest.fileExt)#"</cfif>  <cfif atooltip>rel="tooltip" data-html="true"</cfif>>
 	<cfelse>
 		<a class="<cfif attributes.rsNest.type eq 'File'>file #lcase(icon)#<cfelse>#lcase(icon)#</cfif> title"<cfif attributes.rsNest.type eq 'File'> data-filetype="#lcase(attributes.rsNest.fileExt)#"</cfif> <cfif atooltip>rel="tooltip" data-html="true" title="#atitle#"</cfif>>
 	</cfif>
