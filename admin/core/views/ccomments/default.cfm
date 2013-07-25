@@ -104,10 +104,10 @@
 							<a id="checkall" href="##" title="#rc.$.rbKey('comments.selectall')#"><i class="icon-check"></i></a>
 						</th>
 						<th>
-							<a href="#buildURL(action='#rc.muraAction#', querystring='sortby=entered&sortdirection=#rc.sortdirlink#&isapproved=#rc.isapproved#&nextn=#Val(rc.nextn)#')#" title="#rc.$.rbKey('comments.sortbydatetime')#"><i class="icon-calendar"></i> / <i class="icon-time"></i></a>
+							<a href="#buildURL(action='#rc.muraAction#', querystring='sortby=entered&sortdirection=#rc.sortdirlink#&isapproved=#rc.isapproved#&nextn=#Val(rc.nextn)#')#" title="#rc.$.rbKey('comments.sortbydatetime')#">Date / Time</a>
 						</th>
 						<th class="var-width">
-							<a href="#buildURL(action='#rc.muraAction#', querystring='sortby=name&sortdirection=#rc.sortdirlink#&isapproved=#rc.isapproved#&nextn=#Val(rc.nextn)#')#" title="#rc.$.rbKey('comments.sortbyname')#"><i class="icon-user"></i></a>
+							<a href="#buildURL(action='#rc.muraAction#', querystring='sortby=name&sortdirection=#rc.sortdirlink#&isapproved=#rc.isapproved#&nextn=#Val(rc.nextn)#')#" title="#rc.$.rbKey('comments.sortbyname')#">User</a>
 						</th>
 						<th>&nbsp;</th>
 					</tr>
@@ -129,7 +129,7 @@
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Close Comments"><i class="icon-comments"></i></button>
 		<p>
-			<strong>#HTMLEditFormat(local.item.getName())#</strong> <em>commented on:</em><br>
+			<strong>#HTMLEditFormat(local.item.getName())#</strong> <em>#rc.$.rbKey('comments.commentedon')#:</em><br>
 			<a href="#local.content.getURL(complete=1,queryString='##comment-#local.item.getCommentID()#')#" target="_blank"><i class="icon-external-link"></i> #HTMLEditFormat(local.content.getMenuTitle())#</a>
 		</p>
 	</div>
@@ -172,18 +172,16 @@
 								<a href="##comment-#local.item.getCommentID()#" data-toggle="modal">
 									#HTMLEditFormat(local.item.getName())#
 								</a>
-
-								<div class="pull-right">
-									<cfif IsValid('url', local.item.getURL())>
-										<a href="#HTMLEditFormat(local.item.getURL())#" title="#HTMLEditFormat(local.item.getURL())#" target="_blank"><i class="icon-link"></i></a> 
-									</cfif>
-									<a href="mailto:#HTMLEditFormat(local.item.getEmail())#" title="#HTMLEditFormat(local.item.getEmail())#"><i class="icon-envelope"></i></a>
-									<a href="##comment-#local.item.getCommentID()#" data-toggle="modal" title="Comments"><i class="icon-comments"></i></a>
-								</div>
 							</td>
 
 							<!--- ACTIONS --->
 							<td class="actions">
+								<cfif IsValid('url', local.item.getURL())>
+										<a href="#HTMLEditFormat(local.item.getURL())#" title="#HTMLEditFormat(local.item.getURL())#" target="_blank"><i class="icon-link"></i></a> 
+									</cfif>
+									<a href="mailto:#HTMLEditFormat(local.item.getEmail())#" title="#HTMLEditFormat(local.item.getEmail())#"><i class="icon-envelope"></i></a>
+									<a href="##comment-#local.item.getCommentID()#" data-toggle="modal" title="Comments"><i class="icon-comments"></i></a>
+								
 								<cfif rc.isapproved>
 									<a href="#buildURL(action='cComments.disapprove', querystring='commentid=#local.item.getCommentID()#&isapproved=#rc.isapproved#&nextn=#rc.nextn#')#" title="Disapprove" onclick="return confirmDialog('Disapprove Comment?',this.href);"><i class="icon-ban-circle" title="Disapprove"></i></a>
 								<cfelse>
@@ -205,17 +203,17 @@
 			<div class="span9">
 				<div class="commentform-actions">
 					<cfif rc.isapproved>
-						<button type="button" class="btn btn-warning" id="btnDisapproveComments">
+						<button type="button" class="btn" id="btnDisapproveComments">
 							<i class="icon-ban-circle"></i> 
 							#rc.$.rbKey('comments.disapproveselectedcomments')#
 						</button>
 					<cfelse>
-						<button type="button" class="btn btn-success" id="btnApproveComments">
+						<button type="button" class="btn" id="btnApproveComments">
 							<i class="icon-ok"></i> 
 							#rc.$.rbKey('comments.approveselectedcomments')#
 						</button>
 					</cfif>
-					<button type="button" class="btn btn-danger" id="btnDeleteComments">
+					<button type="button" class="btn" id="btnDeleteComments">
 						<i class="icon-trash"></i> 
 						#rc.$.rbKey('comments.deleteselectedcomments')#
 					</button>
