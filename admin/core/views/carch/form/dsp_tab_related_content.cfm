@@ -84,7 +84,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								</cfloop>
 							</cfif>
 							<li class="#emptyClass#">
-								<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#</p>
+								<p><!--- <i class="icon-plus"></i>  --->#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#</p>
 							</li>
 						</ul>
 					</div>
