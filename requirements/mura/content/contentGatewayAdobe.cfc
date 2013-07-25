@@ -1825,8 +1825,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="sortBy" type="string" default="orderno" >
 	<cfargument name="sortDirection" type="string" default="asc" >
 	<cfargument name="relatedContentSetID" type="string" default="">
-	<cfargument name="name" type="string" default="Default">
+	<cfargument name="name" type="string" default="">
 	<cfargument name="reverse" type="boolean" default="false">
+	<cfargument name="reverseContentID"  type="string" />
 	<cfset var rsRelatedContent ="" />
 	
 	<cfif not listFindNoCase('menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype,comments,rating,orderno',arguments.sortby)>
@@ -1853,35 +1854,34 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			left join tclassextendrcsets tcrs on (tcr.relatedContentSetID=tcrs.relatedContentSetID)
 		</cfif>
 		
-		where tcr.relatedID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#"/>
+		where tcr.relatedID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.reverseContentID#"/>
 		
-		<cfif not len(arguments.relatedContentSetID)>
+		<cfif len(arguments.name)>
 			and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.name#"/>
 				<cfif arguments.name eq 'Default'>
 					or tcrs.name is null
 				</cfif>
 				)
-		<cfelse>
+		<cfelseif len(arguments.relatedContentSetID)>
 			and tcr.relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
 		</cfif>
 
 	<cfelse>
 		inner join tcontentrelated tcr on (tcontent.contentID = tcr.relatedID)
 		
-		<cfif not len(arguments.relatedContentSetID)>
+		<cfif len(arguments.name)>
 			left join tclassextendrcsets tcrs on (tcr.relatedContentSetID=tcrs.relatedContentSetID)
 		</cfif>
 
 		where tcr.contenthistid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contenthistid#"/>
 
-
-		<cfif not len(arguments.relatedContentSetID)>
+		<cfif len(arguments.name)>
 			and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.name#"/>
 				<cfif arguments.name eq 'Default'>
 					or tcrs.name is null
 				</cfif>
 				)
-		<cfelse>
+		<cfelseif len(arguments.relatedContentSetID)>
 			and tcr.relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
 		</cfif>
 	</cfif>
