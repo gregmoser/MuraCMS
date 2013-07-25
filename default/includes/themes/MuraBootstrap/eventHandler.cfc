@@ -115,6 +115,9 @@ Mura CMS.
 
 			// form vars
 			renderer.formWrapperClass = 'well';
+
+			// for code syntax highlighting
+			arguments.$.loadPrettify();
 		</cfscript>
 	</cffunction>
 

@@ -231,6 +231,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 </cffunction>
 
+<cffunction name="loadPrettify" returntype="void" output="false">
+	<cfset loadJSLib() />	
+	<cfset addToHTMLHeadQueue("prettify.cfm")>
+</cffunction>
+
 <cffunction name="setLongDateFormat" returntype="void" output="false">
 <cfargument name="longDateFormat">
 	<cfset this.longDateFormat=arguments.longDateFormat />
