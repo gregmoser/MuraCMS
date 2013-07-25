@@ -1855,11 +1855,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		where tcr.relatedID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#"/>
 		
-		and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.name#"/>
-			<cfif arguments.name eq 'Default'>
-				or tcrs.name is null
-			</cfif>
-		)
+		<cfif not len(arguments.relatedContentSetID)>
+			and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.name#"/>
+				<cfif arguments.name eq 'Default'>
+					or tcrs.name is null
+				</cfif>
+				)
+		<cfelse>
+			and tcr.relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
+		</cfif>
 
 	<cfelse>
 		inner join tcontentrelated tcr on (tcontent.contentID = tcr.relatedID)
