@@ -71,7 +71,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset emptyClass = "item empty">
 				<cfoutput>
 					<div id="rcGroup-#rcsBean.getRelatedContentSetID()#" class="list-table">
-						<div class="list-table-content-set">#rcsBean.getName()# <span class="content-type">Accepted Content Types<cfif listLen(rcsBean.getAvailableSubTypes()) gte 2>s</cfif>: <strong><cfif len(rcsBean.getAvailableSubTypes()) gt 0><i class="#subtype.getIconClass()#"></i> #replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#<cfelse>All</cfif></strong></span></div>
+						<div class="list-table-content-set">#rcsBean.getName()# <cfif len(rcsBean.getAvailableSubTypes()) gt 0><span class="content-type">Items May Only Be of Type: <i class="#subtype.getIconClass()#"></i> <strong>#replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#</strong></span></cfif></div>
 						<ul id="rcSortable-#rcsBean.getRelatedContentSetID()#" class="list-table-items rcSortable" data-accept="#rcsBean.getAvailableSubTypes()#" data-relatedcontentsetid="#rcsBean.getRelatedContentSetID()#"> 
 							<cfif rcsRS.recordCount>
 								<cfset emptyClass = emptyClass & " noShow">
@@ -84,7 +84,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 								</cfloop>
 							</cfif>
 							<li class="#emptyClass#">
-								<p><!--- <i class="icon-plus"></i>  --->#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#</p>
+								<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#</p>
 							</li>
 						</ul>
 					</div>
