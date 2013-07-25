@@ -73,6 +73,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<div id="rcGroup-#rcsBean.getRelatedContentSetID()#" class="list-table">
 						<div class="list-table-content-set">#rcsBean.getName()# <cfif len(rcsBean.getAvailableSubTypes()) gt 0><span class="content-type">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.relatedcontent.restrictedmessage')# <i class="#subtype.getIconClass()#"></i> <strong>#replace(rcsBean.getAvailableSubTypes(), ",", ", ", "all")#</strong></span></cfif></div>
 						<ul id="rcSortable-#rcsBean.getRelatedContentSetID()#" class="list-table-items rcSortable" data-accept="#rcsBean.getAvailableSubTypes()#" data-relatedcontentsetid="#rcsBean.getRelatedContentSetID()#"> 
+							<li class="#emptyClass#">
+								<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#</p>
+							</li>
 							<cfif rcsRS.recordCount>
 								<cfset emptyClass = emptyClass & " noShow">
 								<cfloop query="rcsRs">	
@@ -83,9 +86,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 									</li>
 								</cfloop>
 							</cfif>
-							<li class="#emptyClass#">
-								<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.norelatedcontent')#</p>
-							</li>
 						</ul>
 					</div>
 				</cfoutput>
