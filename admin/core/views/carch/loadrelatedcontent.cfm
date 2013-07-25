@@ -90,8 +90,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<div class="span8">
 				<label class="control-label">Release Date Range</label>
 				<div class="controls">
-					<input type="text" name="rcStartDate" id="rcStartDate" class="datepicker span4 mura-relatedContent-datepicker" value="#rc.rcStartDate#" />
-					<input type="text" name="rcEndDate" id="rcEndDate" class="datepicker span4 mura-relatedContent-datepicker" value="#rc.rcEndDate#" />
+					<input type="text" name="rcStartDate" id="rcStartDate" class="datepicker span3 mura-relatedContent-datepicker" placeholder="Start Date" value="#rc.rcStartDate#" /> &ndash; <input type="text" name="rcEndDate" id="rcEndDate" class="datepicker span3 mura-relatedContent-datepicker" placeholder="End Date" value="#rc.rcEndDate#" />
 				</div>
 			</div>			
 		</div>

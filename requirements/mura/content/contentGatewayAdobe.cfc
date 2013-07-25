@@ -1846,22 +1846,28 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	FROM  tcontent Left Join tfiles ON (tcontent.fileID=tfiles.fileID)
 
-	inner join tcontentrelated tcr on (tcontent.contentID = tcr.relatedID)
-
 	<cfif arguments.reverse>
+		inner join tcontentrelated tcr on (tcontent.contentHistID = tcr.contentHistID)
+		
 		<cfif len(arguments.name)>
 			left join tclassextendrcsets tcrs on (tcr.relatedContentSetID=tcrs.relatedContentSetID)
 		</cfif>
-
-		where tcr.contentid= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#"/>
-
-		and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.name#"/>
-			<cfif arguments.name eq 'Default'>
-				or tcrs.name is null
-			</cfif>
-		)
+		
+		where tcr.relatedID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentid#"/>
+		
+		<cfif not len(arguments.relatedContentSetID)>
+			and (tcrs.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.name#"/>
+				<cfif arguments.name eq 'Default'>
+					or tcrs.name is null
+				</cfif>
+				)
+		<cfelse>
+			and tcr.relatedContentSetID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.relatedContentSetID#"/>
+		</cfif>
 
 	<cfelse>
+		inner join tcontentrelated tcr on (tcontent.contentID = tcr.relatedID)
+		
 		<cfif not len(arguments.relatedContentSetID)>
 			left join tclassextendrcsets tcrs on (tcr.relatedContentSetID=tcrs.relatedContentSetID)
 		</cfif>
