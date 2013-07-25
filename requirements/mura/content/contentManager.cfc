@@ -1338,7 +1338,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif isStruct(arguments.data.fileMetaDataAssign)>
 
 					<cfloop collection="#arguments.data.fileMetaDataAssign#" item="local.i">	
-						<cfset local.fileMeta=newBean.getFileMetaData(arguments.data.fileMetaDataAssign[local.i].property)>			
+						<cfset local.fileMeta=newBean.getFileMetaData(local.i)>			
 						<cfset local.fileMeta.set(arguments.data.fileMetaDataAssign[local.i])>	
 						<cfparam name="arguments.data.fileMetaDataAssign.#local.i#.setAsDefault" default="false">	
 						<cfset local.fileMeta.save(setAsDefault=arguments.data.fileMetaDataAssign[local.i].setAsDefault)>

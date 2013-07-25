@@ -212,7 +212,7 @@ component extends="mura.bean.bean" versioned=false {
 			var pname='';
 			var i='';
 			var prop={};
-			var md=getMetaData(this);
+			var md=duplicate(getMetaData(this));
 			var loadKey="";
 			var dottedPath=md.fullname;
 			var synthArgs={};
@@ -270,26 +270,22 @@ component extends="mura.bean.bean" versioned=false {
 			       	 	prop=application.objectMappings[variables.entityName].properties[pName];
 			       	 	prop.table=application.objectMappings[variables.entityName].table;
 
-			       	 	if(!structKeyExists(prop,"fieldtype")){
-			       	 		prop.fieldType="";
-			       	 	} 
+			       	 	param name="prop.comparable" default=true;
+			       	 	param name="prop.required" default=false;
+			       	 	param name="prop.nullable" default=true;
+			       	 	param name="prop.fieldtype" default="";
+
+			       	 	if(prop.required){
+			       	 		prop.nullable=false;
+			       	 	}
+
+			       	 	if(prop.nullable){
+			       	 		prop.required=false;
+			       	 	}
 
 			       	 	if(prop.fieldtype eq 'id'){
 			       	 		application.objectMappings[variables.entityName].primaryKey=prop.name;
 			       	 		setPropAsIDColumn(prop);
-			       	 	}
-
-			       	 	if(!structKeyExists(prop,'comparable')){
-			       	 		prop.comparable=true;
-			       	 	}
-
-
-			       	 	if(structKeyExists(prop,'required') and prop.required){
-			       	 		prop.nullable=false;
-			       	 	}
-
-			       	 	if(structKeyExists(prop,'nullable') and prop.nullable){
-			       	 		prop.required=false;
 			       	 	}
 
 			       	 	if(!structKeyExists(prop,"dataType")){
@@ -314,9 +310,7 @@ component extends="mura.bean.bean" versioned=false {
 			       	 			//writeDump(var=prop,abort=true);
 			       	 		}
 
-			       	 		if(!structKeyExists(prop,'fkcolumn')){
-			       	 			prop.fkcolumn="primaryKey";
-			       	 		}
+			       	 		param name="prop.fkcolumn" default="primaryKey";
 
 			       	 		prop.column=prop.fkcolumn;
 
@@ -387,17 +381,13 @@ component extends="mura.bean.bean" versioned=false {
 			       	 			
 			       	 		}
 
-			       	 		if(not structKeyExists(prop,'cascade')){
-			       	 			prop.cascade='none';
-			       	 		}
+			       	 		param name="prop.cascade" default="none";
 
 			       	 	} else if(!structKeyExists(prop,"persistent") ){
 			       	 		prop.persistent=true;
 			       	 	} 
 
-			       	 	if(!structKeyExists(prop,'column')){
-			       	 		prop.column=prop.name;
-			       	 	}
+			       	 	param name="prop.column" default=prop.name;
 
 			       	 	structAppend(prop,getDbUtility().getDefaultColumnMetatData(),false);
 
@@ -422,13 +412,8 @@ component extends="mura.bean.bean" versioned=false {
 		arguments.prop.type="string";
 	
 		if(arguments.isPrimaryKey){
-			if(!structKeyExists(arguments.prop, "required")){
-				arguments.prop.required=true;
-			}
-				
-			if(!structKeyExists(arguments.prop, "nullable")){
-				arguments.prop.nullable=false;
-			}
+			arguments.prop.required=true;
+			arguments.prop.nullable=false;
 		}
 
 		arguments.prop.default="";

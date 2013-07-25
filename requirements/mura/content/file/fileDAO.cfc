@@ -96,6 +96,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="credits" type="string" required="yes" default=""/>
 		<cfargument name="caption" type="string" required="yes" default=""/>
 		<cfargument name="alttext" type="string" required="yes" default=""/>
+		<cfargument name="remoteid" type="string" required="yes" default=""/>
+		<cfargument name="remoteURL" type="string" required="yes" default=""/>
+		<cfargument name="remotePubDate" type="string" required="yes" default=""/>
+		<cfargument name="remoteSource" default=""/>
+		<cfargument name="remoteSourceURL" type="string" required="yes" default=""/>
 		
 		<cfset var ct=arguments.contentType & "/" & arguments.contentSubType />
 		<cfset var pluginEvent = createObject("component","mura.event").init(arguments) />

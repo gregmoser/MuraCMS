@@ -55,7 +55,7 @@
 						<input type="checkbox" id="filemeta-setasdefault"> #application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.setasdefault')#
 					</div>
 				</div>
-				<input type="hidden" data-property="property" value="#HTMLEditFormat(rc.property)#" class="filemeta">
+				<!---<input type="hidden" data-property="property" value="#HTMLEditFormat(rc.property)#" class="filemeta">--->
 			</div>
 		</div>
 		<div id="tabFileMetaAdvanced" class="tab-pane">

@@ -101,7 +101,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	<cfset icon=icon & " " & rc.rsTop.subtype>
 </cfif>
-
+<cfset isFileIcon= rc.rsTop.type eq 'File' and listFirst(icon,"-") neq "icon">
 <cfset session.flatViewArgs["#rc.siteID#"].tab=0>
 <cfset variables.pluginEvent=createObject("component","mura.event").init(event.getAllValues())/>	
 </cfsilent>
@@ -215,7 +215,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
     </cfsilent>
 		
         <cfif not listFindNoCase('none,read',perm)>
-          <a class="<cfif rc.rstop.type eq 'File'>file #lcase(icon)#<cfelse>#lcase(icon)#</cfif> title draftprompt" title="#atitle#" href="index.cfm?muraAction=cArch.edit&contenthistid=#rc.rstop.ContentHistID#&siteid=#URLEncodedFormat(rc.siteid)#&contentid=#rc.topid#&topid=#URLEncodedFormat(rc.topid)#&type=#rc.rstop.type#&parentid=#rc.rstop.parentid#&moduleid=#rc.moduleid#"<cfif rc.rsTop.type eq 'File'> data-filetype="#lcase(rc.rsTop.fileExt)#"</cfif> <cfif atooltip>rel="tooltip" data-html="true"</cfif>>
+          <a class="<cfif isFileIcon>file #lcase(icon)#<cfelse>#lcase(icon)#</cfif> title draftprompt" title="#atitle#" href="index.cfm?muraAction=cArch.edit&contenthistid=#rc.rstop.ContentHistID#&siteid=#URLEncodedFormat(rc.siteid)#&contentid=#rc.topid#&topid=#URLEncodedFormat(rc.topid)#&type=#rc.rstop.type#&parentid=#rc.rstop.parentid#&moduleid=#rc.moduleid#"<cfif rc.rsTop.type eq 'File'> data-filetype="#lcase(rc.rsTop.fileExt)#"</cfif> <cfif atooltip>rel="tooltip" data-html="true"</cfif>>
         <cfelse>
 		      <a class="#icon# title" <cfif atooltip>rel="tooltip" data-html="true" title="#atitle#"</cfif>>
 		    </cfif>

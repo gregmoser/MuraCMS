@@ -146,17 +146,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<div class="control-group">
 		<cfif rc.rslist.recordcount>
 			<div id="draggableContainment" class="list-table search-results">
-				<div class="list-table-content-set">Search Results</div>
-				<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
-					<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
-					<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
-						<ul id="rcDraggable" class="list-table-items">
+				<div class="list-table-content-set">Search Results</label></div>
+				<ul id="rcDraggable" class="list-table-items">
+					<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
+						<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
+						<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
 							<li class="item" data-content-type="#rc.rslist.type#/#rc.rslist.subtype#" data-contentid="#rc.rslist.contentID#">
 								#$.dspZoomNoLinks(crumbdata)#
 							</li>
-						</ul>
-					</cfif>
-				</cfoutput>
+						</cfif>
+					</cfoutput>
+				</ul>
 			</div>
 		<cfelse>
 			<cfoutput>  
