@@ -5,7 +5,6 @@
 <cfparam name="attributes.deleteKey" default="deleteFile">
 
 <cfset fileMetaData=attributes.bean.getFileMetaData(attributes.property)>
-
 <cfoutput>
 <cfif not fileMetaData.getIsNew() and ((attributes.bean.getType() eq 'File' and attributes.property eq 'fileid') 
 	or (not fileMetaData.hasImageFileExt() and attributes.property neq 'fileid'))>
@@ -31,6 +30,9 @@
 </cfif>
 
 <cfif not fileMetaData.getIsNew()>
+	<cfif not fileMetaData.hasImageFileExt()>
+		 <p><a href="#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getFileID()#&method=attachment" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',this.href);">#HTMLEditFormat(fileMetaData.getFilename())#</a></p>
+	</cfif>
 	<label class="checkbox inline" for="deleteFileBox">
 		<input type="checkbox" name="#attributes.deleteKey#" value="1" class="deleteFileBox"/> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removeattachedfile')#
 	</label>
