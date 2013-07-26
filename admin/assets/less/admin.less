@@ -93,6 +93,7 @@ a[rel="tooltip"] {
 div.tooltip {
 	text-shadow: none;
 	font-weight: normal;
+	display: block !important;
 
 	&.in {
 		.opacity(100) !important;
@@ -102,6 +103,13 @@ div.tooltip {
 		padding: 10px;
 		text-align: left;
 		line-height: 1.2;
+		
+		img {
+			float: none;
+			margin: 0;
+			padding: 0;
+		}
+		
 		}
 	
 	.tooltip-arrow {
