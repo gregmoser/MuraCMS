@@ -81,6 +81,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="data" type="any" required="true">
 
 		<cfset var prop=""/>
+		<cfset var tempFunc="">
 		
 		<cfif isquery(arguments.data)>
 			<cfset setSiteID(arguments.data.siteID) />
@@ -96,9 +97,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 			<cfloop collection="#arguments.data#" item="prop">
 				<cfif structKeyExists(this,"set#prop#")>
-					<cfinvoke component="#this#" method="set#prop#">
-						<cfinvokeargument name="#prop#" value="#arguments.data['#prop#']#"> 
-					</cfinvoke>
+					<cfset tempFunc=this["set#prop#"]>
+          			<cfset tempFunc(arguments.data['#prop#'])>
 				</cfif>
 			</cfloop>
 			

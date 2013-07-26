@@ -218,9 +218,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	
 	<cfif structKeyExists(this,"set#arguments.property#")>
-		<cfinvoke component="#this#" method="set#arguments.property#">
-			<cfinvokeargument name="#arguments.property#" value="#arguments.propertyValue#"> 
-		</cfinvoke>
+		<cfset var tempFunc=this["set#arguments.property#"]>
+		<cfset tempFunc(arguments.propertyValue)>
 	<cfelse>
 		<cfset variables.instance["#arguments.property#"]=arguments.propertyValue />
 	</cfif>
@@ -232,8 +231,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfargument name="defaultValue">
 	
 	<cfif structKeyExists(this,"get#arguments.property#")>
-		<cfinvoke component="#this#" method="get#arguments.property#" returnvariable="local.return">
-		<cfreturn local.return>
+		<cfset var tempFunc=this["get#arguments.property#"]>
+		<cfreturn tempFunc()>
 	<cfelseif structKeyExists(variables.instance,"#arguments.property#")>
 		<cfreturn variables.instance["#arguments.property#"] />
 	<cfelseif structKeyExists(arguments,"defaultValue")>

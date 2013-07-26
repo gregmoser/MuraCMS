@@ -176,6 +176,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="set" returntype="any" output="true" access="public">
 	<cfargument name="config" type="struct"> 	
 	<cfset var prop="">
+	<cfset var tempFunc="">
+	
 	<cfset setWebRoot(arguments.config.webroot)/>
 	<cfset setContext(arguments.config.context)/>
 	<cfset setAssetPath(arguments.config.assetPath)/>
@@ -188,9 +190,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfloop collection="#arguments.config#" item="prop">
 		<cfif not listFindNoCase("webroot,filedir,plugindir,locale,port,assetpath,context",prop)>
 			<cfif structKeyExists(this,"set#prop#")>
-				<cfinvoke component="#this#" method="set#prop#">
-					<cfinvokeargument name="#prop#" value="#arguments.config['#prop#']#"> 
-				</cfinvoke>
+				<cfset tempFunc=this["set#prop#"]>
+				<cfset tempFunc(arguments.config['#prop#'])>
 			<cfelse>
 				<cfset setValue(prop,arguments.config[prop])>
 			</cfif>

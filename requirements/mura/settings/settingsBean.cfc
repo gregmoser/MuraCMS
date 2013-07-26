@@ -523,7 +523,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="setMailServerPOPPort" access="public" output="false">
-	<cfargument name="mailServerPort" type="String" />
+	<cfargument name="MailServerPOPPort" type="String" />
 	<cfif isNumeric(arguments.MailServerPOPPort)>
 	<cfset variables.instance.mailServerPOPPort = arguments.MailServerPOPPort />
 	</cfif>
