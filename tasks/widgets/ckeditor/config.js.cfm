@@ -18,6 +18,7 @@ CKEDITOR.editorConfig = function( config )
 	</cfoutput>
 	
 	config.skin = 'mura';
+	config.allowedContent=true;
 	
 	<cfoutput>
 	<cfif renderer.headline eq "h1">
