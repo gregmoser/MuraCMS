@@ -78,10 +78,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="handle" output="false">
 <cfargument name="context">
 	<cfset var contexts=splitContexts(arguments.context)>
-	<cfset var tracePoint=0>	
+	<cfset var tracePoint=0>
+	<cfset var handler="">	
 	<cfif structKeyExists(variables.eventHandler,variables.eventName)>
 		<cfset tracePoint=initTracePoint("#variables.objectName#.#variables.eventName#")>
-		<cfset evaluate("variables.eventHandler.#variables.eventName#(event=contexts.event, mura=contexts.muraScope, $=contexts.muraScope)")>
+		<cfset handler=variables.eventHandler[variables.eventName]>
+		<cfset handler(event=contexts.event, mura=contexts.muraScope, $=contexts.muraScope)>
 	<cfelse>
 		<cfset tracePoint=initTracePoint("#variables.objectName#.handle")>
 		<cfset variables.eventHandler.handle(event=contexts.event, mura=contexts.muraScope, $=contexts.muraScope)>

@@ -188,7 +188,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfloop collection="#arguments.config#" item="prop">
 		<cfif not listFindNoCase("webroot,filedir,plugindir,locale,port,assetpath,context",prop)>
 			<cfif structKeyExists(this,"set#prop#")>
-				<cfset evaluate("set#prop#(arguments.config.#prop#)")>
+				<cfinvoke component="#this#" method="set#prop#">
+					<cfinvokeargument name="#prop#" value="#arguments.config['#prop#']#"> 
+				</cfinvoke>
 			<cfelse>
 				<cfset setValue(prop,arguments.config[prop])>
 			</cfif>

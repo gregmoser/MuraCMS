@@ -103,7 +103,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<!--- <cfdump var="#arguments.data#"><cfabort> --->
 			<cfloop collection="#arguments.data#" item="prop">
 				<cfif isdefined("variables.instance.#prop#")>
-					<cfset evaluate("set#prop#(arguments.data[prop])") />
+					<cfinvoke component="#this#" method="set#prop#">
+						<cfinvokeargument name="#prop#" value="#arguments.data['#prop#']#"> 
+					</cfinvoke>
 				</cfif>
 			</cfloop>
 			

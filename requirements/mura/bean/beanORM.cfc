@@ -116,13 +116,13 @@ component extends="mura.bean.bean" versioned=false {
 
 	function set(data){
 		if(isdefined('preLoad')){
-			evaluate('preLoad()');
+			preLoad();
 		}
 
 		super.set(argumentCollection=arguments);
 
 		if(isdefined('postLoad')){
-			evaluate('postLoad()');
+			postLoad();
 		}
 
 		return this;
@@ -514,7 +514,7 @@ component extends="mura.bean.bean" versioned=false {
 			if(qs.execute(sql='select #getPrimaryKey()# from #getTable()# where #getPrimaryKey()# = :primarykey').getResult().recordcount){
 				
 				if(isdefined('preUpdate')){
-					evaluate('preUpdate()');
+					preUpdate();
 				}
 
 				pluginManager.announceEvent('onBefore#variables.entityName#Update',event);
@@ -555,7 +555,7 @@ component extends="mura.bean.bean" versioned=false {
 					qs.execute(sql=sql);
 
 					if(isdefined('postUpdate')){
-						evaluate('postUpdate()');
+						postUpdate();
 					}
 
 					pluginManager.announceEvent('onAfter#variables.entityName#Update',event);
@@ -564,11 +564,11 @@ component extends="mura.bean.bean" versioned=false {
 			} else{
 
 				if(isdefined('preCreate')){
-					evaluate('preCreate()');
+					preCreate();
 				}
 
 				if(isdefined('preInsert')){
-					evaluate('preInsert()');
+					preInsert();
 				}
 
 				pluginManager.announceEvent('onBefore#variables.entityName#Create',event);
@@ -619,12 +619,12 @@ component extends="mura.bean.bean" versioned=false {
 					variables.instance.isnew=0;
 
 					if(isdefined('postCreate')){
-						evaluate('postCreate()');
+						postCreate();
 					}
 
 
 					if(isdefined('postInsert')){
-						evaluate('postInsert()');
+						postInsert();
 					}
 
 					pluginManager.announceEvent('onAfter#variables.entityName#Create',event);
@@ -691,7 +691,7 @@ component extends="mura.bean.bean" versioned=false {
 		var event=new mura.event({siteID=variables.instance.siteid,bean=this});
 		var subitem="";
 		if(isdefined('preDelete')){
-			evaluate('preDelete()');
+			preDelete();
 		}
 
 		pluginManager.announceEvent('onBefore#variables.entityName#Delete',event);
@@ -718,7 +718,7 @@ component extends="mura.bean.bean" versioned=false {
 		qs.execute(sql='delete from #getTable()# where #getPrimaryKey()# = :primarykey');
 
 		if(isdefined('postDelete')){
-			evaluate('postDelete()');
+			postDelete();
 		}
 
 		pluginManager.announceEvent('onAfter#variables.entityName#Delete',event);

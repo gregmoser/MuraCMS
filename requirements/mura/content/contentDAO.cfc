@@ -864,7 +864,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfloop from="1" to="#variables.settingsManager.getSite(arguments.contentBean.getsiteid()).getcolumnCount()#" index="r">
 		<cfset objectOrder = 0>
 		<cfif isdefined("arguments.data.objectlist#r#")>
-			<cfset objectList =#evaluate("arguments.data.objectlist#r#")# />
+			<cfset objectList =arguments.data["objectlist#r#"] />
 			<cfloop list="#objectlist#" index="i" delimiters="^">
 				<cfset objectOrder=objectOrder+1>
 				<cfquery>

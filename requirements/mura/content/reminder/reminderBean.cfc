@@ -80,7 +80,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 			<cfloop collection="#arguments.reminder#" item="prop">
 				<cfif isdefined("variables.instance.#prop#")>
-					<cfset evaluate("set#prop#(arguments.reminder[prop])") />
+					<cfinvoke component="#this#" method="set#prop#">
+            <cfinvokeargument name="#prop#" value="#arguments.reminder['#prop#']#"> 
+          </cfinvoke>>
 				</cfif>
 			</cfloop>
 			
