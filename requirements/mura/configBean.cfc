@@ -1083,9 +1083,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="setMailServerSMTPPort" access="public" output="false">
-	<cfargument name="mailServerPort" type="String" />
-	<cfif isNumeric(arguments.mailServerPort)>
-	<cfset variables.instance.mailServerSMTPPort = arguments.mailServerPort />
+	<cfargument name="mailServerSMTPPort" type="String" />
+	<cfif isNumeric(arguments.mailServerSMTPPort)>
+	<cfset variables.instance.mailServerSMTPPort = arguments.mailServerSMTPPort />
 	</cfif>
 	<cfreturn this>
 </cffunction>
@@ -1095,9 +1095,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="setMailServerPOPPort" access="public" output="false">
-	<cfargument name="mailServerPort" type="String" />
-	<cfif isNumeric(arguments.mailServerPort)>
-	<cfset variables.instance.mailServerPOPPort = arguments.mailServerPort />
+	<cfargument name="MailServerPOPPort" type="String" />
+	<cfif isNumeric(arguments.MailServerPOPPort)>
+	<cfset variables.instance.mailServerPOPPort = arguments.MailServerPOPPort />
 	</cfif>
 	<cfreturn this>
 </cffunction>
