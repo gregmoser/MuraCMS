@@ -52,7 +52,8 @@
 	<cfargument name="property">	
 	<cfset var theValue="">
 	<cfif isDefined('get#arguments.property#')>
-		<cfreturn evaluate('get#arguments.property#()')>
+		<cfset var tempFunc=this["get#arguments.property#"]>
+        <cfreturn tempFunc()>
 	<cfelseif not structKeyExists(session.mura,arguments.property)>
 		<cfset theValue=getUserBean().getValue(arguments.property)>
 		<cfif isSimpleValue(theValue)>

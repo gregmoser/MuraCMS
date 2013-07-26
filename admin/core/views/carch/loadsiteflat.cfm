@@ -255,7 +255,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif iterator.pageCount() gt 1>
 		<div class="pagination">
 			<ul class="moreResults">
-				<cfif iterator.hasPrevious()><li class="navPrev"><a href="" data-page="#evaluate($.event('page')-1)#">&laquo;</a></li></cfif>
+				<cfif $.event('page') gt 1><li class="navPrev"><a href="" data-page="#evaluate($.event('page')-1)#">&laquo;</a></li></cfif>
 				<cfloop from="#max($.event('page')-5,1)#" to="#min($.event('page')+5,iterator.pageCount())#" index="p">
 				<li<cfif $.event('page') eq p> class="active"</cfif>><a href="" data-page="#p#"<cfif $.event('page') eq p> class="active"</cfif>>#p#</a></li>
 				</cfloop>

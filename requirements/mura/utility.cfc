@@ -121,7 +121,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<CFLOOP collection="#str#" item="a" >
 	<cftry>
 		<cfif str[a] neq "">
-			<CFSET "str.#a#"  = replaceNoCase(evaluate("str.#a#"), arguments.badwords,  "****" ,  "ALL")/>
+			<CFSET "str.#a#"  = replaceNoCase(str[a], arguments.badwords,  "****" ,  "ALL")/>
 		</cfif>
 	<cfcatch></cfcatch></cftry>
 	</CFLOOP>
@@ -527,6 +527,7 @@ Blog:http://www.modernsignal.com/coldfusionhttponlycookie--->
 	<cfset var trace="">
 	<cfset var i=0>
 	<cfset var tracePoint="">
+	<cfset var total=0>
 	<cfsavecontent variable="trace">
 		<cfoutput>
 			<div id="mura-stacktrace">
@@ -537,7 +538,8 @@ Blog:http://www.modernsignal.com/coldfusionhttponlycookie--->
 					<li>#HTMLEditFormat(tracePoint.detail)# <span class="duration">(<cfif isDefined("tracePoint.duration")>#tracePoint.duration#<cfelse>ERROR</cfif> | <cfif isDefined("tracePoint.total")>#tracePoint.total#<cfelse>ERROR</cfif>)</span></li>
 				</cfloop>
 			</ol>
-			<p>Total: <strong>#evaluate((getTickCount()-request.muraRequestStart))# milliseconds</strong></p>
+			<cfset total=getTickCount()-request.muraRequestStart>
+			<p>Total: <strong>#total# milliseconds</strong></p>
 			</div>
 		</cfoutput>
 	</cfsavecontent>

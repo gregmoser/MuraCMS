@@ -212,13 +212,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="setValue" returntype="any" access="public" output="false">
 <cfargument name="property"  type="string" required="true">
 <cfargument name="propertyValue" default="" >
-	
+
 	<cfif isSimpleValue(arguments.propertyValue)>
 		<cfset arguments.propertyValue=trim(arguments.propertyValue)>
 	</cfif>
 	
 	<cfif structKeyExists(this,"set#arguments.property#")>
-		<cfset evaluate("set#arguments.property#(arguments.propertyValue)") />
+		<cfset var tempFunc=this["set#arguments.property#"]>
+		<cfset tempFunc(arguments.propertyValue)>
 	<cfelse>
 		<cfset variables.instance["#arguments.property#"]=arguments.propertyValue />
 	</cfif>
@@ -230,7 +231,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfargument name="defaultValue">
 	
 	<cfif structKeyExists(this,"get#arguments.property#")>
-		<cfreturn evaluate("get#arguments.property#()") />
+		<cfset var tempFunc=this["get#arguments.property#"]>
+		<cfreturn tempFunc()>
 	<cfelseif structKeyExists(variables.instance,"#arguments.property#")>
 		<cfreturn variables.instance["#arguments.property#"] />
 	<cfelseif structKeyExists(arguments,"defaultValue")>
