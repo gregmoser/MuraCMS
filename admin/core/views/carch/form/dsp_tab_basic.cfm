@@ -70,8 +70,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		    </div>
 		<div class="control-group" id="editAdditionalTitles" style="display:none;">		
 			<div class="controls" >
-				<p class="alert help-block">#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.fields.AdditionalTitlesnote")#</p>
-				<button id="resetTitles" name="resetTitles" class="btn btn-warning">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearseotitles')#</button>
+				<div class="alert help-block">
+					<p>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.fields.AdditionalTitlesnote")#</p><br />
+					<button id="resetTitles" name="resetTitles" class="btn">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.clearseotitles')#</button>
+				</div>
+				
 				<script>
 					jQuery(document).ready(function(){
 						$('##resetTitles').click(function(e){
