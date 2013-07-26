@@ -476,11 +476,6 @@ select[multiple] {
 
 // File Selector 
 .mura-file-selector {
-
-	> .well {
-		background-color: @grayLighter;
-		margin-bottom: 0;
-		}
 		
 	.btn-group {
 		margin-bottom: @baseLineHeight/2;
@@ -488,24 +483,10 @@ select[multiple] {
 		button[value="Upload"] {
 			.border-left-radius(4px);
 			}
-	
-		.btn {
-			.buttonBackground(darken(@btnBackground,5%), darken(@btnBackgroundHighlight,5%), darken(@grayDark,5%), 0 1px 1px rgba(255,255,255,.75));
-			
-			&.active	{
-				.buttonBackground(darken(@btnBackground,12%), darken(@btnBackgroundHighlight,12%), darken(@grayDark,12%), 0 1px 1px rgba(255,255,255,.75));
-				}
-		}
 	}
-
 		
 	form {
 		margin-bottom: 0;
-		
-		.btn {
-			.btn-primary;
-  			.border-radius(20px);
-  			}
 		
 		input[type=text] {
 			margin-bottom: 0;
@@ -514,6 +495,27 @@ select[multiple] {
 		}
 	
 	}
+
+.control-group .mura-file-selector {
+		
+		// Darkening buttons for contrast when in a fieldset
+		.btn {
+			.buttonBackground(darken(@btnBackground,5%), darken(@btnBackgroundHighlight,5%), darken(@grayDark,5%), 0 1px 1px rgba(255,255,255,.75));
+			
+			&.active	{
+				.buttonBackground(darken(@btnBackground,12%), darken(@btnBackgroundHighlight,12%), darken(@grayDark,12%), 0 1px 1px rgba(255,255,255,.75));
+				}
+		}
+	}
+	
+#tabPlugins .mura-file-selector {
+
+	margin-bottom: @baseLineHeight;
+	padding-bottom: @baseLineHeight;
+	border-bottom: 1px solid @gray;
+
+	//.btn-group { margin-bottom: @baseLineHeight; }
+}
 	
 // Subtype Icon Selector
 #iconcurrent {
