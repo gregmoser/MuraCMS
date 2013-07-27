@@ -93,7 +93,7 @@ jQuery(document).ready(function(){
     <!-- The file upload form used as target for the file upload widget -->
     <form id="fileupload" action="#application.configBean.getContext()#/admin/" method="POST" enctype="multipart/form-data">
     	<!-- Creating a visual target for files. Doesn't actually do anything. Pure eye candy. -->
-    	<div id="fileupload-target" class="alert alert-info"><p><i class="icon-plus-sign"></i>Drag and drop files to upload.</p></div>
+    	<div id="fileupload-target" class="alert alert-info"><p><i class="icon-plus-sign"></i>Drag and drop files to upload</p></div>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="fileupload-buttonbar">
             <div class="span7">
@@ -134,7 +134,7 @@ jQuery(document).ready(function(){
 
         <br> -->
         <!-- The table listing the files available for upload/download -->
-        <table role="presentation">
+        <table role="presentation" class="mura-table-grid">
         <tbody class="files" data-toggle="modal-gallery" data-target="##modal-gallery"></tbody></table>
       <input type="hidden" name="muraAction" value="cArch.update"/>
       <input type="hidden" name="action" value="multiFileUpload"/>
@@ -252,8 +252,6 @@ jQuery(document).ready(function(){
     <tr class="template-upload fade">
         <td class="file-preview">
             <span class="preview">
-            	<i class="icon-file-text-alt"></i>
-				<span class="badge">XXXX</span>
 			</span>
         </td>
         <td class="var-width form-horizontal">
@@ -266,25 +264,26 @@ jQuery(document).ready(function(){
 	        <div class="control-group">
 	           	<label class="control-label">Title</label>
 	           	<div class="controls">
-	           		<div class="editable" data-attribute="title" contenteditable="true">{%=file.name%}</div>
+	           		<div class="editable nolinebreaks" data-attribute="title" contenteditable="true">{%=file.name%}</div>
 			   	</div>
 	        </div>
 	        <div class="control-group">
 	            <label class="control-label">Summary/Caption</label>
 				<div class="controls">
-					<div class="editable" data-attribute="summary" contenteditable="true"></div>
+					<div id="summaryinstance"
+                    class="editable" data-attribute="summary" contenteditable="true"></div>
 				</div>
 	        </div>
 	        <div class="control-group">
 	        	<label class="control-label">Credits</label>
 	        	<div class="controls">
-	        		<div class="editable" data-attribute="credits" contenteditable="true"></div>
+	        		<div class="editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
 	        	</div>
 	        </div>
 	        <div class="control-group">
 	        	<label class="control-label">Alt Text</label>
 	        	<div class="controls">
-	        		<div class="editable" data-attribute="alttext" contenteditable="true"></div>
+	        		<div class="editable nolinebreaks" data-attribute="alttext" contenteditable="true"></div>
 				</div>
 			</div>
             {% if (file.error) { %}
@@ -324,22 +323,53 @@ jQuery(document).ready(function(){
             <span class="preview">
                 {% if (file.thumbnail_url) { %}
                     <a href="{%=file.url%}" title="{%=file.name%}" class="gallery" download="{%=file.name%}"><img src="{%=file.thumbnail_url%}"></a>
+                {% } else { %}
+                    <i class="icon-file-text-alt"></i>
                 {% } %}
+                <span class="badge">{%=$(file.name.split(".")).get(-1).toUpperCase()%}</span>
             </span>
         </td>
-        <td>
-            <p class="name">
-                <a href="{%=file.url%}" title="{%=file.name%}" class="{%=file.thumbnail_url?'gallery':''%}" download="{%=file.name%}">{%=file.name%}</a>
-            </p>
+        <td class="var-width form-horizontal">
+            <div class="control-group">
+                <label class="control-label">File name</label>
+                <div class="controls">
+                    <div class="name">{%=file.name%}</div>
+                </div>
+            </div>
             {% if (file.error) { %}
                 <div><span class="label label-important">Error</span> {%=file.error%}</div>
+            {% }  else { %}
+                <div class="control-group">
+                    <label class="control-label">Title</label>
+                    <div class="controls">
+                        <div data-attribute="title">{%=file.name%}</div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Summary/Caption</label>
+                    <div class="controls">
+                        <div data-attribute="summary">{%file.summary%}</div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Credits</label>
+                    <div class="controls">
+                        <div data-attribute="credits">{%=file.credits%}</div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Alt Text</label>
+                    <div class="controls">
+                        <div data-attribute="alttext">{%=file.alttext%}</div>
+                    </div>
+                </div>
             {% } %}
         </td>
-        <td>
-            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        <td><div class="progress progress-success complete" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:100%;"></div></div>
+            <span class="size complete">{%=o.formatFileSize(file.size)%}</span>
         </td>
         <td>
-        <a class="btn"><i class="icon-pencil"></i> Edit in Site Manager</a>
+        <a class="btn" onclick="confirmDialog('Would you like to edit this file in the site manager?','{%=file.edit_url%}');"><i class="icon-pencil"></i> Edit in Site Manager</a>
         <!---
             <button class="btn btn-danger delete" data-type="{%=file.delete_type%}" data-url="{%=file.delete_url%}"{% if (file.delete_with_credentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                 <i class="icon-trash icon-white"></i>
@@ -381,15 +411,38 @@ jQuery(document).ready(function(){
 
 <!-- The main application script -->
 <script>
+
+var fileIndex=0;
+
 $(function () {
     'use strict';
  
     $.blueimp.fileupload.prototype._renderPreviews= function (data) {
             data.context.find('.preview').each(function (index, elm) {
-                var fileext=$(data.files[index].name.split(".")).get(-1).toLowerCase();
-                //alert(fileext);
-                $(elm).append(data.files[index].preview);
+                var fileext=$(data.files[index].name.split(".")).get(-1).toUpperCase();
+                if(fileext=='JPEG' || fileext=='JPG' || fileext=='GIF' || fileext=='PNG'){
+                    $(elm).append(data.files[index].preview);
+                    $(elm).append('<span class="badge">' + fileext + '</span>' )
+                } else {
+                    $(elm).append('<i class="icon-file-text-alt"></i><span class="badge">' + fileext + '</span>' );
+                }
             });
+        }
+
+    $.blueimp.fileupload.prototype._renderUpload= function (files) {
+            
+            var ret= this._renderTemplate(
+                this.options.uploadTemplate,
+                files
+            );
+
+            fileIndex++;
+
+            var id="uploadid" + fileIndex;
+
+            ret.find('div[data-attribute="summary"]').attr("id",id);
+
+            return ret;
         }
 
     $.blueimp.fileupload.prototype._renderDownload= function (files) {
@@ -428,7 +481,19 @@ $(function () {
         //return false;
        
     })
-    .bind('fileuploadadd',function(e,data){
+    .bind('fileuploadadded',function(e,data){
+
+        var id="uploadid" + fileIndex;
+
+        CKEDITOR.inline( 
+                document.getElementById(id),
+                {
+                    toolbar: 'Default',
+                    width: "75%",
+                    customConfig: 'config.js.cfm'
+                }
+            );
+
         $(document).on('keypress', '.editable.nolinebreaks', function(e){
             
             if(e.which == 13){

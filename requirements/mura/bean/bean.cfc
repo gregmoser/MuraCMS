@@ -212,13 +212,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="setValue" returntype="any" access="public" output="false">
 <cfargument name="property"  type="string" required="true">
 <cfargument name="propertyValue" default="" >
-	
+
 	<cfif isSimpleValue(arguments.propertyValue)>
 		<cfset arguments.propertyValue=trim(arguments.propertyValue)>
 	</cfif>
 	
 	<cfif structKeyExists(this,"set#arguments.property#")>
-		<cfset evaluate("set#property#(arguments.propertyValue)") />
+		<cfset var tempFunc=this["set#arguments.property#"]>
+		<cfset tempFunc(arguments.propertyValue)>
 	<cfelse>
 		<cfset variables.instance["#arguments.property#"]=arguments.propertyValue />
 	</cfif>
@@ -230,7 +231,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfargument name="defaultValue">
 	
 	<cfif structKeyExists(this,"get#arguments.property#")>
-		<cfreturn evaluate("get#arguments.property#()") />
+		<cfset var tempFunc=this["get#arguments.property#"]>
+		<cfreturn tempFunc()>
 	<cfelseif structKeyExists(variables.instance,"#arguments.property#")>
 		<cfreturn variables.instance["#arguments.property#"] />
 	<cfelseif structKeyExists(arguments,"defaultValue")>
@@ -298,7 +300,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			var pname='';
 			var i='';
 			var prop={};
-			var md=getMetaData(this);
+			var md=duplicate(getMetaData(this));
 
 			param name="application.objectMappings.#variables.entityName#" default={};
 			application.objectMappings[variables.entityName].properties={};
@@ -413,34 +415,51 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				var props=getProperties();
 				var rules=[];
 				var rule={};
+				var ruleKey='';
+
 
 				for(var prop in props){
 
 					rules=[];
 
-					if(structKeyExists(props[prop], "message")){
-						rule={message=props[prop].message};
+					if(structKeyExists(props[prop], "fkcolumn")){
+						ruleKey=props[prop].fkcolumn;
 					} else {
-						rule={};
+						ruleKey=prop;
 					}
 
 					if(structKeyExists(props[prop], "datatype") && props[prop].datatype != 'any'){
+						if(structKeyExists(props[prop], "message")){
+							rule={message=props[prop].message};
+						} else {
+							rule={};
+						}
 						structAppend(rule,{datatype=props[prop].datatype});
 						arrayAppend(rules, rule);
 					}
 
 					if(structKeyExists(props[prop], "regex")){
+						if(structKeyExists(props[prop], "message")){
+							rule={message=props[prop].message};
+						} else {
+							rule={};
+						}
 						structAppend(rule,{regex=props[prop].regex});
 						arrayAppend(rules, rule);
 					}
 
-					if(structKeyExists(props[prop], "required")){
+					if(structKeyExists(props[prop], "required") && props[prop].required){
+						if(structKeyExists(props[prop], "message")){
+							rule={message=props[prop].message};
+						} else {
+							rule={};
+						}
 						structAppend(rule,{required=props[prop].required});
 						arrayAppend(rules,rule);
 					}
 					
 					if(arrayLen(rules)){
-						application.objectMappings[variables.entityName].validations.properties[prop]=rules;
+						application.objectMappings[variables.entityName].validations.properties[ruleKey]=rules;
 					}
 				}
 

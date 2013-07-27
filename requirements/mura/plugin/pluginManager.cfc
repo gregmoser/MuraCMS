@@ -1343,7 +1343,8 @@ select * from tplugins order by #arguments.orderby#
 			
 			<cfif not isGlobalEvent and len(arguments.siteID)>
 				<cfif isDefined("variables.siteListeners.#siteIDadjusted#.#arguments.runat#")>
-					<cfset listenerArray=evaluate("variables.siteListeners.#siteIDadjusted#.#arguments.runat#")>
+					<cfset listenerArray=variables.siteListeners[siteIDadjusted]>
+					<cfset listenerArray=listenerArray[arguments.runat]>
 					<cfif arrayLen(listenerArray)>
 						<cfloop from="1" to="#arrayLen(listenerArray)#" index="i">
 							<cfset eventHandlerIndex=listenerArray[i].index>
@@ -1384,7 +1385,7 @@ select * from tplugins order by #arguments.orderby#
 				</cfif>
 			<cfelseif isGlobalEvent>
 				<cfif isDefined("variables.globalListeners.#arguments.runat#")>
-					<cfset listenerArray=evaluate("variables.globalListeners.#arguments.runat#")>
+					<cfset listenerArray=variables.globalListeners[arguments.runat]>
 					<cfif arrayLen(listenerArray)>
 						<cfloop from="1" to="#arrayLen(listenerArray)#" index="i">
 							<cfset eventHandlerIndex=listenerArray[i].index>
@@ -1558,7 +1559,8 @@ select * from tplugins order by #arguments.orderby#
 			
 			<cfif not isGlobalEvent and len(arguments.siteID)>
 				<cfif isDefined("variables.siteListeners.#siteIDadjusted#.#arguments.runat#")>
-					<cfset listenerArray=evaluate("variables.siteListeners.#siteIDadjusted#.#arguments.runat#")>
+					<cfset listenerArray=variables.siteListeners[siteIDadjusted]>
+					<cfset listenerArray=listenerArray[arguments.runat]>
 					<cfif arrayLen(listenerArray)>
 						<cfloop from="1" to="#arrayLen(listenerArray)#" index="i">
 							<cfset eventHandler=variables.eventHandlers[listenerArray[i].index]>
@@ -1617,7 +1619,7 @@ select * from tplugins order by #arguments.orderby#
 				</cfif>
 			<cfelseif isGlobalEvent>
 				<cfif isDefined("variables.globalListeners.#arguments.runat#")>
-					<cfset listenerArray=evaluate("variables.globalListeners.#arguments.runat#")>
+					<cfset listenerArray=variables.globalListeners[arguments.runat]>
 					<cfif arrayLen(listenerArray)>
 						<cfloop from="1" to="#arrayLen(listenerArray)#" index="i">
 							<cfset eventHandler=variables.eventHandlers[listenerArray[i].index]>

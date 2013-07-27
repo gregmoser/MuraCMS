@@ -83,6 +83,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="credits" type="string" required="yes" default=""/>
 		<cfargument name="caption" type="string" required="yes" default=""/>
 		<cfargument name="alttext" type="string" required="yes" default=""/>
+		<cfargument name="remoteID" type="string" required="yes" default=""/>
+		<cfargument name="remoteURL" type="string" required="yes" default=""/>
+		<cfargument name="remotePubDate" type="string" required="yes" default=""/>
+		<cfargument name="remoteSource" default=""/>
+		<cfargument name="remoteSourceURL" type="string" required="yes" default=""/>
 	
 		<cfreturn variables.fileDAO.create(argumentCollection=arguments) />
 	

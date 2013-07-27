@@ -554,6 +554,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="standardMobileValidator" output="false" returnType="any">
 	<cfargument name="event" required="true">
+	<cfif not isBoolean(request.muraMobileRequest)>
+		<cfset request.muraMobileRequest=false>
+	</cfif>
 	<cfif request.muraMobileRequest and not len(arguments.event.getValue('altTheme'))>
 		<cfset arguments.event.getHandler("standardMobile").handle(arguments.event)>
 	</cfif>

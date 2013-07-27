@@ -486,16 +486,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfquery>
 	
 	<cfloop query="rsGroups">
-<cfif isdefined('arguments.data.p#replacelist(rsGroups.userid,"-","")#') and (evaluate("form.p#replacelist(rsGroups.userid,"-","")#") eq 'Editor'
- or evaluate("arguments.data.p#replacelist(rsGroups.userid,"-","")#") eq 'Author'
- or evaluate("arguments.data.p#replacelist(rsGroups.userid,"-","")#") eq 'Read'  
- or evaluate("arguments.data.p#replacelist(rsGroups.userid,"-","")#") eq 'Deny')>
+<cfif isdefined('arguments.data.p#replacelist(rsGroups.userid,"-","")#') 
+and (form['p#replacelist(rsGroups.userid,"-","")#'] eq 'Editor'
+ or arguments.data['p#replacelist(rsGroups.userid,"-","")#'] eq 'Author'
+ or arguments.data['p#replacelist(rsGroups.userid,"-","")#'] eq 'Read'  
+ or arguments.data['p#replacelist(rsGroups.userid,"-","")#'] eq 'Deny')>
 	<cfquery>
 	Insert Into tpermissions  (ContentID,GroupID,Type,siteid)
 	values(
 	<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.data.ContentID#"/>,
 	<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsGroups.UserID#"/>,
-	<cfqueryparam cfsqltype="cf_sql_varchar" value="#evaluate("arguments.data.p#replacelist(rsGroups.userid,"-","")#")#"/>,
+	<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.data['p#replacelist(rsGroups.userid,"-","")#']#"/>,
 	<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.data.siteid#"/>
 	)</cfquery>
 	
@@ -521,16 +522,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfloop query="rsContentlist">
 		<cfif isdefined('arguments.data.p#replacelist(rsContentlist.contentid,"-","")#')
 		 and 
-		 (evaluate("arguments.data.p#replacelist(rsContentlist.contentid,"-","")#") eq 'Editor' 
-		 	or evaluate("arguments.data.p#replacelist(rsContentlist.contentid,"-","")#") eq 'Author'  
-			or evaluate("arguments.data.p#replacelist(rsContentlist.contentid,"-","")#") eq 'Module')>
+		 (arguments.data['p#replacelist(rsContentlist.contentid,"-","")#'] eq 'Editor' 
+		 	or arguments.data['p#replacelist(rsContentlist.contentid,"-","")#'] eq 'Author'  
+			or arguments.data['p#replacelist(rsContentlist.contentid,"-","")#'] eq 'Module')>
 		
 			<cfquery>
 			Insert Into tpermissions  (ContentID,GroupID,Type,siteid)
 			values(
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#rsContentlist.ContentID#"/>,
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.data.groupid#"/>,
-			<cfqueryparam cfsqltype="cf_sql_varchar" value="#evaluate("form.p#replacelist(rsContentlist.contentid,"-","")#")#"/>,
+			<cfqueryparam cfsqltype="cf_sql_varchar" value="#form['p#replacelist(rsContentlist.contentid,"-","")#']#"/>,
 			<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.data.siteid#"/>
 			)</cfquery>
 		

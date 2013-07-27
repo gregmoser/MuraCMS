@@ -65,7 +65,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var rsCategories ="" />
 
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsCategories')#">
-	select tcontentcategories.siteID,tcontentcategories.categoryID,tcontentcategories.name,tcontentcategories.parentID,tcontentcategories.isActive,tcontentcategories.isInterestGroup,tcontentcategories.isOpen, count(tcontentcategories2.parentid) as hasKids 
+	select tcontentcategories.siteID,tcontentcategories.categoryID,tcontentcategories.name,tcontentcategories.filename,tcontentcategories.urltitle,tcontentcategories.parentID,tcontentcategories.isActive,tcontentcategories.isInterestGroup,tcontentcategories.isOpen, count(tcontentcategories2.parentid) as hasKids 
 	,tcontentcategories.restrictGroups,tcontentcategories.isfeatureable from 
 	tcontentcategories left join tcontentcategories tcontentcategories2 ON
 	(tcontentcategories.categoryID = tcontentcategories2.parentID)
@@ -74,7 +74,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif arguments.keywords neq ''>and tcontentcategories.name like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.keywords#%" /></cfif> 
 	<cfif arguments.activeOnly>and tcontentcategories.isActive=1</cfif>
 	<cfif arguments.InterestsOnly>and tcontentcategories.isInterestGroup=1</cfif>
-	group by tcontentcategories.siteID,tcontentcategories.categoryID,tcontentcategories.name,tcontentcategories.parentID,tcontentcategories.isActive,tcontentcategories.isInterestGroup,tcontentcategories.isOpen,tcontentcategories.restrictGroups, tcontentcategories.isfeatureable
+	group by tcontentcategories.siteID,tcontentcategories.categoryID,tcontentcategories.name,tcontentcategories.filename,tcontentcategories.urltitle,tcontentcategories.parentID,tcontentcategories.isActive,tcontentcategories.isInterestGroup,tcontentcategories.isOpen,tcontentcategories.restrictGroups, tcontentcategories.isfeatureable
 	order by tcontentcategories.name
 	</cfquery>
 	
@@ -239,7 +239,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="parentid" type="string" default="" />
 	<cfset var rs = "" />
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPrivateInterestGroups')#">
-	SELECT tsettings.Site, tcontentcategories.categoryID, tcontentcategories.name,tcontentcategories.isOpen,
+	SELECT tsettings.Site, tcontentcategories.categoryID, tcontentcategories.name,tcontentcategories.filename,tcontentcategories.urltitle,tcontentcategories.isOpen,
 	count(tcontentcategories2.parentid) as hasKids
 	FROM tsettings INNER JOIN tcontentcategories ON tsettings.SiteID = tcontentcategories.SiteID
 	left join tcontentcategories tcontentcategories2 ON(
@@ -247,7 +247,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	WHERE tcontentcategories.isInterestGroup=1
 	and tcontentcategories.parentID <cfif arguments.parentID neq ''> = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.parentID#" /><cfelse> is null </cfif>
 	and tsettings.PrivateUserPoolID = '#variables.settingsManager.getSite(arguments.siteid).getPrivateUserPoolID()#'
-	group by  tsettings.Site, tcontentcategories.categoryID, tcontentcategories.name,tcontentcategories.isOpen
+	group by  tsettings.Site, tcontentcategories.categoryID, tcontentcategories.name,tcontentcategories.filename,tcontentcategories.urltitle,tcontentcategories.isOpen
 	ORDER BY tsettings.Site, tcontentcategories.name
 	</cfquery>
 	<cfreturn rsPrivateInterestGroups />
@@ -258,7 +258,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="parentid" type="string" default="" />
 	<cfset var rsPublicInterestGroups = "" />
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsPublicInterestGroups')#">
-	SELECT tsettings.Site, tcontentcategories.categoryID, tcontentcategories.name,tcontentcategories.isOpen,
+	SELECT tsettings.Site, tcontentcategories.categoryID, tcontentcategories.name,tcontentcategories.filename,tcontentcategories.urltitle,tcontentcategories.isOpen,
 	count(tcontentcategories2.parentid) as hasKids
 	FROM tsettings INNER JOIN tcontentcategories ON tsettings.SiteID = tcontentcategories.SiteID
 	left join tcontentcategories tcontentcategories2 ON(
@@ -266,7 +266,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	WHERE tcontentcategories.isInterestGroup =1 
 	and tcontentcategories.parentID <cfif arguments.parentID neq ''> = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.parentID#" /><cfelse> is null </cfif>
 	and tsettings.PublicUserPoolID = '#variables.settingsManager.getSite(arguments.siteid).getPublicUserPoolID()#'
-	group by  tsettings.Site, tcontentcategories.categoryID, tcontentcategories.name,tcontentcategories.isOpen
+	group by  tsettings.Site, tcontentcategories.categoryID, tcontentcategories.name,tcontentcategories.filename,tcontentcategories.urltitle,tcontentcategories.isOpen
 	ORDER BY tsettings.Site, tcontentcategories.name
 	</cfquery>
 	<cfreturn rsPublicInterestGroups />

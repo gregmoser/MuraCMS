@@ -53,76 +53,74 @@ component extends="mura.bean.bean" versioned=false {
 		variables.entityName="";
 		variables.addObjects=[];
 		variables.removeObjects=[];
-		
+
 		var props=getProperties();
 
 		for(var prop in props){
-			prop=props[prop];
+			if(!structKeyExists(variables.instance,prop)){
+				prop=props[prop];
 
-			if(structKeyExists(prop,"type") and listFindNoCase("struct,array",prop.type)){
-				if(prop.type eq "struct"){
-					variables.instance[prop.name]={};
-				} else if(prop.type eq "array"){
-					variables.instance[prop.name]=[];
-				}
-			} else if(prop.persistent){
-
-				if(structKeyExists(prop,"fieldType") and prop.fieldType eq "id"){
-					variables.instance[prop.column]=createUUID();
-				}else if (listFindNoCase("date,datetime,timestamp",prop.datatype)){
-					variables.instance[prop.column]=now();
-				} else if(structKeyExists(prop,"default")){
-					if(prop.default neq 'null'){
-						variables.instance[prop.column]=prop.default;
-					} else {
-						variables.instance[prop.column]='';
+				if(structKeyExists(prop,"type") and listFindNoCase("struct,array",prop.type)){
+					if(prop.type eq "struct"){
+						variables.instance[prop.name]={};
+					} else if(prop.type eq "array"){
+						variables.instance[prop.name]=[];
 					}
+				} else if(prop.persistent){
+
+					if(structKeyExists(prop,"fieldType") and prop.fieldType eq "id"){
+						variables.instance[prop.column]=createUUID();
+					}else if (listFindNoCase("date,datetime,timestamp",prop.datatype)){
+						variables.instance[prop.column]=now();
+					} else if(structKeyExists(prop,"default")){
+						if(prop.default neq 'null'){
+							variables.instance[prop.column]=prop.default;
+						} else {
+							variables.instance[prop.column]='';
+						}
+					} 
+
+					if (prop.name eq 'lastupdateby'){
+						if(isDefined("session.mura") and session.mura.isLoggedIn){
+							variables.instance.LastUpdateBy = left(session.mura.fname & " " & session.mura.lname,50);
+						} else {
+							variables.instance.LastUpdateBy='';
+						}
+					} else if (prop.name eq 'lastupdatebyid'){
+						if(isDefined("session.mura") and session.mura.isLoggedIn){
+							variables.instance.LastUpdateById = session.mura.userID;
+						} else {
+							variables.instance.LastUpdateById='';
+						}
+					}
+
 				} 
-
-				if (prop.name eq 'lastupdateby'){
-					if(isDefined("session.mura") and session.mura.isLoggedIn){
-						variables.instance.LastUpdateBy = left(session.mura.fname & " " & session.mura.lname,50);
-					} else {
-						variables.instance.LastUpdateBy='';
-					}
-				} else if (prop.name eq 'lastupdatebyid'){
-					if(isDefined("session.mura") and session.mura.isLoggedIn){
-						variables.instance.LastUpdateById = session.mura.userID;
-					} else {
-						variables.instance.LastUpdateById='';
-					}
+				else {
+					if(listFindNoCase("date,datetime,timestamp",prop.datatype)){
+						variables.instance[prop.column]=now();
+					} else if(structKeyExists(prop,"default")){
+						if(prop.default neq 'null'){
+							variables.instance[prop.column]=prop.default;
+						} else {
+							variables.instance[prop.column]='';
+						}
+					} 
 				}
-
-			} 
-			else {
-				if(listFindNoCase("date,datetime,timestamp",prop.datatype)){
-					variables.instance[prop.column]=now();
-				} else if(structKeyExists(prop,"default")){
-					if(prop.default neq 'null'){
-						variables.instance[prop.column]=prop.default;
-					} else {
-						variables.instance[prop.column]='';
-					}
-				} 
 			}
 		}
 
-		//writeDump(var=variables.instance);
 		//writeDump(var=variables.properties,abort=true);
 
 		return this;
 	}
 
 	function set(data){
-		if(isdefined('preLoad')){
-			evaluate('preLoad()');
-		}
+	
+		preLoad();
 
 		super.set(argumentCollection=arguments);
 
-		if(isdefined('postLoad')){
-			evaluate('postLoad()');
-		}
+		postLoad();
 
 		return this;
 	}
@@ -211,7 +209,7 @@ component extends="mura.bean.bean" versioned=false {
 			var pname='';
 			var i='';
 			var prop={};
-			var md=getMetaData(this);
+			var md=duplicate(getMetaData(this));
 			var loadKey="";
 			var dottedPath=md.fullname;
 			var synthArgs={};
@@ -269,25 +267,22 @@ component extends="mura.bean.bean" versioned=false {
 			       	 	prop=application.objectMappings[variables.entityName].properties[pName];
 			       	 	prop.table=application.objectMappings[variables.entityName].table;
 
-			       	 	if(!structKeyExists(prop,"fieldtype")){
-			       	 		prop.fieldType="";
-			       	 	} 
+			       	 	param name="prop.comparable" default=true;
+			       	 	param name="prop.required" default=false;
+			       	 	param name="prop.nullable" default=true;
+			       	 	param name="prop.fieldtype" default="";
+
+			       	 	if(prop.required){
+			       	 		prop.nullable=false;
+			       	 	}
+
+			       	 	if(prop.nullable){
+			       	 		prop.required=false;
+			       	 	}
 
 			       	 	if(prop.fieldtype eq 'id'){
 			       	 		application.objectMappings[variables.entityName].primaryKey=prop.name;
 			       	 		setPropAsIDColumn(prop);
-			       	 	}
-
-			       	 	if(!structKeyExists(prop,'comparable')){
-			       	 		prop.comparable=true;
-			       	 	}
-
-			       	 	if(structKeyExists(prop,'required') and prop.required){
-			       	 		prop.nullable=false;
-			       	 	}
-
-			       	 	if(structKeyExists(prop,'nullable') and prop.nullable){
-			       	 		prop.required=false;
 			       	 	}
 
 			       	 	if(!structKeyExists(prop,"dataType")){
@@ -308,13 +303,11 @@ component extends="mura.bean.bean" versioned=false {
 			       	 			prop.persistent=false;
 			       	 		} else {
 			       	 			prop.persistent=true;
-			       	 			setPropAsIDColumn(prop);
+			       	 			setPropAsIDColumn(prop,false);
 			       	 			//writeDump(var=prop,abort=true);
 			       	 		}
 
-			       	 		if(!structKeyExists(prop,'fkcolumn')){
-			       	 			prop.fkcolumn="primaryKey";
-			       	 		}
+			       	 		param name="prop.fkcolumn" default="primaryKey";
 
 			       	 		prop.column=prop.fkcolumn;
 
@@ -385,17 +378,13 @@ component extends="mura.bean.bean" versioned=false {
 			       	 			
 			       	 		}
 
-			       	 		if(not structKeyExists(prop,'cascade')){
-			       	 			prop.cascade='none';
-			       	 		}
+			       	 		param name="prop.cascade" default="none";
 
 			       	 	} else if(!structKeyExists(prop,"persistent") ){
 			       	 		prop.persistent=true;
 			       	 	} 
 
-			       	 	if(!structKeyExists(prop,'column')){
-			       	 		prop.column=prop.name;
-			       	 	}
+			       	 	param name="prop.column" default=prop.name;
 
 			       	 	structAppend(prop,getDbUtility().getDefaultColumnMetatData(),false);
 
@@ -416,14 +405,11 @@ component extends="mura.bean.bean" versioned=false {
 		return application.objectMappings[variables.entityName].properties;
 	}
 
-	private function setPropAsIDColumn(prop){
+	private function setPropAsIDColumn(prop,isPrimaryKey=true){
 		arguments.prop.type="string";
 	
-		if(!structKeyExists(arguments.prop, "required")){
+		if(arguments.isPrimaryKey){
 			arguments.prop.required=true;
-		}
-			
-		if(!structKeyExists(arguments.prop, "nullable")){
 			arguments.prop.nullable=false;
 		}
 
@@ -479,14 +465,19 @@ component extends="mura.bean.bean" versioned=false {
 			}
 
 			arguments.qs.addParam(argumentCollection=paramArgs);
+
+			return true;
+		} else {
+			return false;
 		}
 
 	}
 
 	function validate(){
 		super.validate();
+		var props=getProperties();
 
-		if( !len(getPrimaryKey()) || !len(variables.instance[getPrimaryKey()]) || getPrimaryKey() == 'primarykey'){
+		if(!len(getPrimaryKey()) || !props[getPrimaryKey()].persistent || !len(variables.instance[getPrimaryKey()]) || getPrimaryKey() == 'primarykey'){
 			variables.instance.errors.primarykey="The primary key '#getPrimaryKey()#' is required.";
 		}
 
@@ -500,7 +491,7 @@ component extends="mura.bean.bean" versioned=false {
 		validate();
 
 		pluginManager.announceEvent('onBefore#variables.entityName#Save',event);
-		
+
 		if(!hasErrors()){
 			var props=getProperties();
 			var columns=getColumns();
@@ -519,10 +510,8 @@ component extends="mura.bean.bean" versioned=false {
 
 			if(qs.execute(sql='select #getPrimaryKey()# from #getTable()# where #getPrimaryKey()# = :primarykey').getResult().recordcount){
 				
-				if(isdefined('preUpdate')){
-					evaluate('preUpdate()');
-				}
-
+				preUpdate();
+			
 				pluginManager.announceEvent('onBefore#variables.entityName#Update',event);
 
 				if(!hasErrors()){
@@ -560,22 +549,16 @@ component extends="mura.bean.bean" versioned=false {
 						
 					qs.execute(sql=sql);
 
-					if(isdefined('postUpdate')){
-						evaluate('postUpdate()');
-					}
+					postUpdate();
 
 					pluginManager.announceEvent('onAfter#variables.entityName#Update',event);
 				}
 				
 			} else{
 
-				if(isdefined('preCreate')){
-					evaluate('preCreate()');
-				}
-
-				if(isdefined('preInsert')){
-					evaluate('preInsert()');
-				}
+				preCreate();
+				preInsert();
+				
 
 				pluginManager.announceEvent('onBefore#variables.entityName#Create',event);
 
@@ -624,14 +607,8 @@ component extends="mura.bean.bean" versioned=false {
 			
 					variables.instance.isnew=0;
 
-					if(isdefined('postCreate')){
-						evaluate('postCreate()');
-					}
-
-
-					if(isdefined('postInsert')){
-						evaluate('postInsert()');
-					}
+					postCreate();
+					postInsert();
 
 					pluginManager.announceEvent('onAfter#variables.entityName#Create',event);
 				}
@@ -696,9 +673,8 @@ component extends="mura.bean.bean" versioned=false {
 		var pluginManager=getBean('pluginManager');
 		var event=new mura.event({siteID=variables.instance.siteid,bean=this});
 		var subitem="";
-		if(isdefined('preDelete')){
-			evaluate('preDelete()');
-		}
+		
+		preDelete();
 
 		pluginManager.announceEvent('onBefore#variables.entityName#Delete',event);
 
@@ -723,9 +699,7 @@ component extends="mura.bean.bean" versioned=false {
 		qs.addParam(name='primarykey',value=variables.instance[getPrimaryKey()],cfsqltype='cf_sql_varchar');
 		qs.execute(sql='delete from #getTable()# where #getPrimaryKey()# = :primarykey');
 
-		if(isdefined('postDelete')){
-			evaluate('postDelete()');
-		}
+		postDelete();
 
 		pluginManager.announceEvent('onAfter#variables.entityName#Delete',event);
 
@@ -864,4 +838,20 @@ component extends="mura.bean.bean" versioned=false {
 
 		}
 	}
+
+
+
+	//ORM EVENTHANDLING
+
+	private function preLoad(){};
+	private function postLoad(){};
+	private function preUpdate(){};
+	private function postUpdate(){};
+	private function preCreate(){};
+	private function preInsert(){};
+	private function postCreate(){};
+	private function postInsert(){};
+	private function preDelete(){};
+	private function postDelete(){};
+
 }

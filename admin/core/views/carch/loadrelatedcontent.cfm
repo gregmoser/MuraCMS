@@ -90,8 +90,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<div class="span8">
 				<label class="control-label">Release Date Range</label>
 				<div class="controls">
-					<input type="text" name="rcStartDate" id="rcStartDate" class="datepicker span4 mura-relatedContent-datepicker" value="#rc.rcStartDate#" />
-					<input type="text" name="rcEndDate" id="rcEndDate" class="datepicker span4 mura-relatedContent-datepicker" value="#rc.rcEndDate#" />
+					<input type="text" name="rcStartDate" id="rcStartDate" class="datepicker span3 mura-relatedContent-datepicker" placeholder="Start Date" value="#rc.rcStartDate#" /> &ndash; <input type="text" name="rcEndDate" id="rcEndDate" class="datepicker span3 mura-relatedContent-datepicker" placeholder="End Date" value="#rc.rcEndDate#" />
 				</div>
 			</div>			
 		</div>
@@ -146,18 +145,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfscript>
 	<div class="control-group">
 		<cfif rc.rslist.recordcount>
-			<div id="draggableContainment" class="list-table">
-				<label>Matching Results</label>
-				<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
-					<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
-					<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
-						<ul id="rcDraggable" class="list-table-items">
+			<div id="draggableContainment" class="list-table search-results">
+				<div class="list-table-content-set">Search Results</label></div>
+				<ul id="rcDraggable" class="list-table-items">
+					<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
+						<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
+						<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
 							<li class="item" data-content-type="#rc.rslist.type#/#rc.rslist.subtype#" data-contentid="#rc.rslist.contentID#">
 								#$.dspZoomNoLinks(crumbdata)#
 							</li>
-						</ul>
-					</cfif>
-				</cfoutput>
+						</cfif>
+					</cfoutput>
+				</ul>
 			</div>
 		<cfelse>
 			<cfoutput>  

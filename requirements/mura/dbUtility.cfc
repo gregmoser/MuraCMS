@@ -481,60 +481,64 @@
 				</cfquery>
 			</cfcase>
 			<cfcase value="nuodb">
-				<cfset tempName="F" & left(hash(arguments.column),15)>
-				<cfif columnExists(table=arguments.table,column=tempName)>
-					<cfset dropColumn(table=arguments.table,column=tempName)>
-				</cfif>
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TABLE #arguments.table# ADD COLUMN #tempName# #transformDataType(arguments.datatype,arguments.length)# <cfif arguments.autoincrement>integer generated always as identity (seq_#arguments.table#)<cfelse><cfif not arguments.nullable> not null </cfif> default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
-				</cfquery>
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					UPDATE #arguments.table# set #tempName#=#arguments.column# 
-				</cfquery>
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TABLE #arguments.table# DROP COLUMN #arguments.column# 
-				</cfquery>
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TABLE #arguments.table# ADD COLUMN #arguments.column# #transformDataType(arguments.datatype,arguments.length)# <cfif arguments.autoincrement>integer generated always as identity (seq_#arguments.table#)<cfelse><cfif not arguments.nullable> not null </cfif> default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
-				</cfquery>
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					UPDATE #arguments.table# set #arguments.column#=#tempName#
-				</cfquery>
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TABLE #arguments.table# DROP COLUMN #tempName#
-				</cfquery>
+				<cftransaction>
+					<cfset tempName="F" & left(hash(arguments.column),15)>
+					<cfif columnExists(table=arguments.table,column=tempName)>
+						<cfset dropColumn(table=arguments.table,column=tempName)>
+					</cfif>
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						ALTER TABLE #arguments.table# ADD COLUMN #tempName# #transformDataType(arguments.datatype,arguments.length)# <cfif arguments.autoincrement>integer generated always as identity (seq_#arguments.table#)<cfelse><cfif not arguments.nullable> not null </cfif> default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
+					</cfquery>
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						UPDATE #arguments.table# set #tempName#=#arguments.column# 
+					</cfquery>
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						ALTER TABLE #arguments.table# DROP COLUMN #arguments.column# 
+					</cfquery>
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						ALTER TABLE #arguments.table# ADD COLUMN #arguments.column# #transformDataType(arguments.datatype,arguments.length)# <cfif arguments.autoincrement>integer generated always as identity (seq_#arguments.table#)<cfelse><cfif not arguments.nullable> not null </cfif> default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif></cfif>
+					</cfquery>
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						UPDATE #arguments.table# set #arguments.column#=#tempName#
+					</cfquery>
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						ALTER TABLE #arguments.table# DROP COLUMN #tempName#
+					</cfquery>
+				</cftransaction>
 			</cfcase>
 			<cfcase value="oracle">
-				<cfset tempName="F" & left(hash(arguments.column),15)>
-				<cfif columnExists(table=arguments.table,column=tempName)>
-					<cfset dropColumn(table=arguments.table,column=tempName)>
-				</cfif>
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TABLE #arguments.table# RENAME COLUMN #arguments.column# to #tempName#
-				</cfquery>
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TABLE #arguments.table# ADD #arguments.column# #transformDataType(arguments.datatype,arguments.length)# default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif>
-				</cfquery>
-
-				<cftry>
-					<cfif not arguments.nullable> 
-						<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-							ALTER TABLE #arguments.table# MODIFY (#arguments.column# NOT NULL ENABLE)
-						</cfquery>
-					<cfelse>
-						<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-							ALTER TABLE #arguments.table# MODIFY (#arguments.column# NOT NULL DISABLE)
-						</cfquery>
+				<cftransaction>
+					<cfset tempName="F" & left(hash(arguments.column),15)>
+					<cfif columnExists(table=arguments.table,column=tempName)>
+						<cfset dropColumn(table=arguments.table,column=tempName)>
 					</cfif>
-					<cfcatch></cfcatch>
-				</cftry>
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						ALTER TABLE #arguments.table# RENAME COLUMN #arguments.column# to #tempName#
+					</cfquery>
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						ALTER TABLE #arguments.table# ADD #arguments.column# #transformDataType(arguments.datatype,arguments.length)# default <cfif arguments.default eq 'null' or listFindNoCase('int,tinyint',arguments.datatype)>#arguments.default#<cfelse>'#arguments.default#'</cfif>
+					</cfquery>
 
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					UPDATE #arguments.table# SET #arguments.column#=#tempName#
-				</cfquery>
-				<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-					ALTER TABLE #arguments.table# DROP COLUMN #tempName#
-				</cfquery>
+					<cftry>
+						<cfif not arguments.nullable> 
+							<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+								ALTER TABLE #arguments.table# MODIFY (#arguments.column# NOT NULL ENABLE)
+							</cfquery>
+						<cfelse>
+							<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+								ALTER TABLE #arguments.table# MODIFY (#arguments.column# NOT NULL DISABLE)
+							</cfquery>
+						</cfif>
+						<cfcatch></cfcatch>
+					</cftry>
+
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						UPDATE #arguments.table# SET #arguments.column#=#tempName#
+					</cfquery>
+					<cfquery datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
+						ALTER TABLE #arguments.table# DROP COLUMN #tempName#
+					</cfquery>
+				</cftransaction>
 			</cfcase>
 		</cfswitch>
 

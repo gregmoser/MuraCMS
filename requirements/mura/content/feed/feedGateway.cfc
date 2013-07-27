@@ -110,7 +110,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var categoryLen =listLen(arguments.feedBean.getCategoryID()) />
 	<cfset var rsParams=arguments.feedBean.getAdvancedParams() />
 	<cfset var started =false />
-	<cfset var param ="" />
+	<cfset var param =createObject("component","mura.queryParam")/>
 	<cfset var doKids =false />
 	<cfset var doTags =false />
 	<cfset var openGrouping =false />
@@ -166,7 +166,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset jointables=listAppend(jointables,jointable)>
 			</cfif>
 		<cfelse>
-			<cfset hasextendedparams=true>
+			<cfset param.init(rsParams.relationship,
+						rsParams.field,
+						rsParams.dataType,
+						rsParams.condition,
+						rsParams.criteria
+					) />
+			<cfif param.getIsValid()>
+				<cfset hasextendedparams=true>
+			</cfif>
 		</cfif>
 	</cfloop>
 
@@ -180,7 +188,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif rsParams.recordcount>
 			<cfset started = false />
 			<cfloop query="rsParams">
-				<cfset param=createObject("component","mura.queryParam").init(rsParams.relationship,
+				<cfset param.init(rsParams.relationship,
 						rsParams.field,
 						rsParams.dataType,
 						rsParams.condition,
@@ -514,7 +522,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif rsParams.recordcount>
 		<cfset started=false>
 		<cfloop query="rsParams">
-			<cfset param=createObject("component","mura.queryParam").init(rsParams.relationship,
+			<cfset param.init(rsParams.relationship,
 					rsParams.field,
 					rsParams.dataType,
 					rsParams.condition,

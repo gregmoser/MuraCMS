@@ -163,11 +163,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfloop from="1" to="#listLen(arguments.params.param)#" index="i">
 				
 				<cfset addParam(
-						listFirst(evaluate('arguments.params.paramField#i#'),'^'),
-						evaluate('arguments.params.paramRelationship#i#'),
-						evaluate('arguments.params.paramCriteria#i#'),
-						evaluate('arguments.params.paramCondition#i#'),
-						listLast(evaluate('arguments.params.paramField#i#'),'^')
+						listFirst(arguments.params['paramField#i#'],'^'),
+						arguments.params['paramRelationship#i#'],
+						arguments.params['paramCriteria#i#'],
+						arguments.params['paramCondition#i#'],
+						listLast(arguments.params['params.paramField#i#'],'^')
 						) />
 	
 			</cfloop>
@@ -213,11 +213,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset queryAddRow(variables.instance.params,1)/>
 		<cfset rows = variables.instance.params.recordcount />
 		<cfset querysetcell(variables.instance.params,"param",rows,rows)/>
-		<cfif structKeyExists(arguments,"column")>
-			<cfset querysetcell(variables.instance.params,"field",formatField(arguments.column),rows)/>
-		<cfelse>
-			<cfset querysetcell(variables.instance.params,"field",formatField(arguments.field),rows)/>
-		</cfif>
+		<cfset querysetcell(variables.instance.params,"field",formatField(arguments.field),rows)/>
 		<cfset querysetcell(variables.instance.params,"relationship",arguments.relationship,rows)/>
 		<cfset querysetcell(variables.instance.params,"criteria",arguments.criteria,rows)/>
 		<cfset querysetcell(variables.instance.params,"condition",arguments.condition,rows)/>

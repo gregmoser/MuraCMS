@@ -213,11 +213,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	// ================================== VALIDATION CONSTRAINT LOGIC ===========================================
 	
 	public boolean function validate_required(required any object, required string propertyIdentifier, boolean constraintValue=true) {
-		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
-		if(!isNull(propertyValue) && (isObject(propertyValue) || (isArray(propertyValue) && arrayLen(propertyValue)) || (isStruct(propertyValue) && structCount(propertyValue)) || (isSimpleValue(propertyValue) && len(propertyValue)))) {
-			return true;
+
+		if(constraintValue){
+			var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
+			if(!isNull(propertyValue) && (isObject(propertyValue) || (isArray(propertyValue) && arrayLen(propertyValue)) || (isStruct(propertyValue) && structCount(propertyValue)) || (isSimpleValue(propertyValue) && len(propertyValue)))) {
+				return true;
+			}
+		
+			return false;
 		}
-		return false;
+
+		return true;
 	}
 	
 	public boolean function validate_dataType(required any object, required string propertyIdentifier, required any constraintValue) {

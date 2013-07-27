@@ -15,6 +15,11 @@ component extends="mura.bean.beanORM" table='tfiles' entityName="file" {
 	property name="credits" datatype="varchar" length=255;
 	property name="alttext" datatype="varchar" length=255;
 	property name="fileField" default="newfile" persistent=false;
+	property name="remoteID" type="varchar" length=255 fieldtype="index";
+	property name="remoteURL" type="varchar" length=255;
+	property name="remotePubDate" type="datetime" ;
+	property name="remoteSource" type="varchar" length=255;
+	property name="remoteSourceURL" type="varchar" length=255;
 
 	function setSummary(summary){
 		setValue('caption',arguments.summary);
@@ -65,5 +70,10 @@ component extends="mura.bean.beanORM" table='tfiles' entityName="file" {
 		}
 		return this;
 
+	}
+
+	function setRemotePubDate(remotePubDate){
+		variables.remotepubdate=parseDateArg(arguments.remotePubDate);
+		return this;
 	}
 }

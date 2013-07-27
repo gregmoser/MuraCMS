@@ -948,6 +948,11 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 				var url = 'index.cfm';
 				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&property=' + property  + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
 				$.get(url + "?" + pars).done(function(data) {
+
+					if(data.indexOf('mura-primary-login-token') != -1) {
+						location.href = './';
+					}
+					
 					$('#newFileMetaContainer').html(data);
 					
 					if(property in fileMetaDataAssign){
@@ -960,13 +965,17 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 					}
 					
 					$('#file-caption').ckeditor({
-							toolbar: 'Basic',
+							toolbar: 'Default',
 							customConfig: 'config.js.cfm'
 						}, htmlEditorOnComplete);
 
+					setTabs("#newFileMetaContainer.tabs",0);
+					setDatePickers(".datepicker",dtLocale);
+
 					$("#newFileMetaContainer").dialog("option", "position", getDialogPosition());
 
-					$('#file-caption').focus();
+
+					$('.filemeta:first').focus();
 
 				}).error(function(data){
 					$('#newFileMetaContainer').html(data.responseText);

@@ -1166,7 +1166,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						
 				<cfif isDefined('arguments.data.newfile') and len(arguments.data.newfile)>
 						
-					<cfset local.fileBean=getBean('file').set(newBean.getAllValues()).save()>
+					<cfset local.fileBean=getBean('file')>
+					<cfset local.fileBean.setContentID(newBean.getContentID())>
+					<cfset local.fileBean.setContentHistID(newBean.getContentHistID())>
+					<cfset local.fileBean.setSiteID(newBean.getSiteID())>
+					<cfset local.fileBean.setModuleID(newBean.getModuleID())>
+					<cfset local.fileBean.setFileField('newFile')>
+					<cfset local.fileBean.setNewFile(newBean.getNewFile())>
+					<cfset local.fileBean.save()>
+
 					<cfset newBean.setfileID(local.fileBean.getFileID()) />
 						
 					<cfif not newBean.getIsNew()
@@ -1330,7 +1338,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif isStruct(arguments.data.fileMetaDataAssign)>
 
 					<cfloop collection="#arguments.data.fileMetaDataAssign#" item="local.i">	
-						<cfset local.fileMeta=newBean.getFileMetaData(arguments.data.fileMetaDataAssign[local.i].property)>			
+						<cfset local.fileMeta=newBean.getFileMetaData(local.i)>			
 						<cfset local.fileMeta.set(arguments.data.fileMetaDataAssign[local.i])>	
 						<cfparam name="arguments.data.fileMetaDataAssign.#local.i#.setAsDefault" default="false">	
 						<cfset local.fileMeta.save(setAsDefault=arguments.data.fileMetaDataAssign[local.i].setAsDefault)>
@@ -1841,10 +1849,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="contentHistID"  type="string" />
 		<cfargument name="liveOnly" type="boolean" required="yes" default="false" />
 		<cfargument name="today" type="date" required="yes" default="#now()#" />
-		<cfargument name="sortBy" type="string" default="created" >
-		<cfargument name="sortDirection" type="string" default="desc" >
+		<cfargument name="sortBy" type="string" default="orderno" >
+		<cfargument name="sortDirection" type="string" default="asc" >
 		<cfargument name="relatedContentSetID" type="string" default="">
-		<cfargument name="type" type="string" default="Default">
+		<cfargument name="name" type="string" default="">
+		<cfargument name="reverse" type="boolean" default="false">
+		<cfargument name="reverseContentID"  type="string" />
 	
 		<cfreturn variables.contentGateway.getRelatedContent(argumentCollection=arguments) />
 	</cffunction>
@@ -1854,10 +1864,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="contentHistID"  type="string" />
 		<cfargument name="liveOnly" type="boolean" required="yes" default="false" />
 		<cfargument name="today" type="date" required="yes" default="#now()#" />
+		<cfargument name="sortBy" type="string" default="orderno" >
+		<cfargument name="sortDirection" type="string" default="asc" >
 		<cfargument name="relatedContentSetID" type="string" default="">
-		<cfargument name="type" type="string" default="Default">
+		<cfargument name="name" type="string" default="">
+		<cfargument name="reverse" type="boolean" default="false">
+		<cfargument name="reverseContentID"  type="string" />
 	
-		<cfset var rs=getRelatedContent(arguments.siteID,arguments.contentHistID,arguments.liveOnly,arguments.today,arguments.relatedContentSetID,arguments.type) />
+		<cfset var rs=getRelatedContent(argumentCollection=arguments) />
 		<cfset var it = getBean("contentIterator")>
 		<cfset it.setQuery(rs)>
 		<cfreturn it/>

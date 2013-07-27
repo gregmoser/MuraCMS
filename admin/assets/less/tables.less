@@ -1,4 +1,4 @@
-table {
+table.mura-table-grid {
 	
 	.table;
 	.table-bordered;
@@ -26,19 +26,29 @@ table {
 	td {
 		vertical-align: middle;
 		}
+		
+	tr { // Duplicated from bootstrap since they explicitly use .table class, may have to add that to our markup to account for other things
+		  &.success > td {
+		    background-color: @successBackground !important;
+		  }
+		  &.error > td {
+		    background-color: @errorBackground !important;
+		  }
+		  &.warning > td {
+		    background-color: @warningBackground !important;
+		  }
+		  &.info > td {
+		    background-color: @infoBackground !important;
+		  }
+	}
 	
 	a {
 		color: @grayDarker;
 		}
-
-}
-
-table { //Exceptions
 	
 	.time {
 		white-space: nowrap;
 	}
-	
 }
 
 .tab-pane th, .tab-pane td {

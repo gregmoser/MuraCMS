@@ -48,14 +48,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset subType = application.classExtensionManager.getSubTypeByID(rc.subTypeID)>
 <cfset rcsBean = $.getBean('relatedContentSet').loadBy(relatedContentSetID=rc.relatedContentSetID)>
 
-<!---getBean('approvalAction').loadBy(requestID=getValue('requestID'), groupID=getValue('groupID'))
-		    	.setComments(arguments.comments)
-		    	.setActionType('Approval')
-		    	.setUserID(getCurrentUser().getUserID())
-		    	.setChainID(getValue('chainID'))
-		    	.save();--->
-
-
 <h1><cfif len(rc.relatedContentSetID)>Edit<cfelse>Add</cfif> Attribute Set</h1>
 <cfoutput>
 
@@ -64,9 +56,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <a class="btn" href="index.cfm?muraAction=cExtend.listSets&subTypeID=#rc.subTypeID#&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-circle-arrow-left"></i> Back to Attribute Sets</a>
 </div>
 
-<ul class="metadata">
-<li><strong>Class Extension:</strong> #application.classExtensionManager.getTypeAsString(subType.getType())# / #subType.getSubType()#</li>
-</ul>
+<h2><i class="#subtype.getIconClass()# icon-large"></i> #application.classExtensionManager.getTypeAsString(subType.getType())# / #subType.getSubType()#</h2>
+
 
 <form class="fieldset-wrap" novalidate="novalidate" name="form1" method="post" action="index.cfm" onsubit="return validateForm(this);">
 

@@ -176,6 +176,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="set" returntype="any" output="true" access="public">
 	<cfargument name="config" type="struct"> 	
 	<cfset var prop="">
+	<cfset var tempFunc="">
+	
 	<cfset setWebRoot(arguments.config.webroot)/>
 	<cfset setContext(arguments.config.context)/>
 	<cfset setAssetPath(arguments.config.assetPath)/>
@@ -188,7 +190,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfloop collection="#arguments.config#" item="prop">
 		<cfif not listFindNoCase("webroot,filedir,plugindir,locale,port,assetpath,context",prop)>
 			<cfif structKeyExists(this,"set#prop#")>
-				<cfset evaluate("set#prop#(arguments.config.#prop#)")>
+				<cfset tempFunc=this["set#prop#"]>
+				<cfset tempFunc(arguments.config['#prop#'])>
 			<cfelse>
 				<cfset setValue(prop,arguments.config[prop])>
 			</cfif>
@@ -1081,9 +1084,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="setMailServerSMTPPort" access="public" output="false">
-	<cfargument name="mailServerPort" type="String" />
-	<cfif isNumeric(arguments.mailServerPort)>
-	<cfset variables.instance.mailServerSMTPPort = arguments.mailServerPort />
+	<cfargument name="mailServerSMTPPort" type="String" />
+	<cfif isNumeric(arguments.mailServerSMTPPort)>
+	<cfset variables.instance.mailServerSMTPPort = arguments.mailServerSMTPPort />
 	</cfif>
 	<cfreturn this>
 </cffunction>
@@ -1093,9 +1096,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="setMailServerPOPPort" access="public" output="false">
-	<cfargument name="mailServerPort" type="String" />
-	<cfif isNumeric(arguments.mailServerPort)>
-	<cfset variables.instance.mailServerPOPPort = arguments.mailServerPort />
+	<cfargument name="MailServerPOPPort" type="String" />
+	<cfif isNumeric(arguments.MailServerPOPPort)>
+	<cfset variables.instance.mailServerPOPPort = arguments.MailServerPOPPort />
 	</cfif>
 	<cfreturn this>
 </cffunction>

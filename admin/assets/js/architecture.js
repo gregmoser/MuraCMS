@@ -533,6 +533,7 @@ buttons: {
 		$('a.delete').click(function(){
 			$(this).parent().remove();
 			siteManager.updateBuckets();
+			siteManager.updateRCForm();
 		});
 	},
 		
@@ -1855,13 +1856,17 @@ buttons: {
 			init: function(data, config) {
 				//alert(JSON.stringify(data));
 				if(data.type.toLowerCase() == 'remote') {
-					$("#configuratorContainer").dialog('option','title',remoteFeedConfiguratorTitle);
-					//$("#ui-dialog-title-configuratorContainer").html(remoteFeedConfiguratorTitle);
-					$("#configuratorHeader").html(remoteFeedConfiguratorTitle);
+					if(siteManager.configuratorMode=='frontEnd'){
+						$("#configuratorHeader").html(remoteFeedConfiguratorTitle);
+					} else {
+						$("#configuratorContainer").dialog('option','title',remoteFeedConfiguratorTitle);
+					}
 				} else {
-					$("#configuratorContainer").dialog('option','title',localIndexConfiguratorTitle);
-					//$("#ui-dialog-title-configuratorContainer").html(localIndexConfiguratorTitle);
-					$("#configuratorHeader").html(localIndexConfiguratorTitle);
+					if(siteManager.configuratorMode=='frontEnd'){
+						$("#configuratorHeader").html(localIndexConfiguratorTitle);
+					} else {
+						$("#configuratorContainer").dialog('option','title',localIndexConfiguratorTitle);
+					}		
 				}
 
 				if($("#availableListSort").length) {
@@ -2087,6 +2092,7 @@ buttons: {
 	configuratorMode: 'backEnd',
 
 	initConfigurator: function(data, config) {
+
 		this.resetAvailableObject();
 
 		if(typeof(config.validate) != 'undefined') {
@@ -2161,8 +2167,12 @@ buttons: {
 			}
 			
 			//$("#configuratorContainer").parent().find("span.ui-dialog-title").html(test);
-			$("#configuratorContainer").dialog('option','title',config.title);
-			$("#configuratorHeader").html(config.title);
+
+			if(siteManager.configuratorMode=='frontEnd'){
+				$("#configuratorHeader").html(config.title);
+			} else {
+				$("#configuratorContainer").dialog('option','title',config.title);
+			}
 
 			if(siteManager.availableObjectTemplate == "") {
 				var availableObjectContainer = $("#availableObjectParams");
