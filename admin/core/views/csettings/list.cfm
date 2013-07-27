@@ -233,7 +233,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<label class="control-label">Select File to Upload</label>
 						<div class="controls"><input name="newPlugin" type="file" data-required="true" message="Please select a plugin file."></div>
 					</div>
-						<button type="submit" value="Deploy" class="btn" /><i class="icon-ok"></i> Deploy</button>
+						<button type="submit" value="Deploy" class="btn" /><i class="icon-bolt"></i> Deploy</button>
 				</form>
 			</div>
 			<div id="appurl" class="fileTypeOption" style="display:none;">
@@ -245,7 +245,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					message="Please enter the url for your plugin file"
 					value=""></div>
 					</div>
-					<button type="submit" class="btn" /><i class="icon-ok"></i> Deploy</button>
+					<button type="submit" class="btn" /><i class="icon-bolt"></i> Deploy</button>
 				</form>
 				</div>
 		</div>

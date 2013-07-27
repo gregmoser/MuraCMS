@@ -26,19 +26,29 @@ table {
 	td {
 		vertical-align: middle;
 		}
+		
+	tr {
+		  &.success > td {
+		    background-color: @successBackground !important;
+		  }
+		  &.error > td {
+		    background-color: @errorBackground !important;
+		  }
+		  &.warning > td {
+		    background-color: @warningBackground !important;
+		  }
+		  &.info > td {
+		    background-color: @infoBackground !important;
+		  }
+	}
 	
 	a {
 		color: @grayDarker;
 		}
-
-}
-
-table { //Exceptions
 	
 	.time {
 		white-space: nowrap;
 	}
-	
 }
 
 .tab-pane th, .tab-pane td {

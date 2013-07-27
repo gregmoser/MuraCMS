@@ -1,26 +1,15 @@
 .rcSortable {
 	min-height: 27px;
 }
-.disabled {
-	opacity: 0.1;	
-}
-
-.ui-draggable .navZoom {
-			max-width: 95%;
-			.text-overflow;
-			}
-
-.drop-target {
-		border: 1px dotted yellow;
-		padding: .5em;
-	}
 	
 .list-table {
 
 	border: 1px solid #e6e6e6;
 	margin: 18px 0;
 	
-	
+	&.disabled {
+	opacity: 0.1;	
+	}	
 	
 	.list-table-content-set {
 		color: #000;
@@ -46,6 +35,11 @@
 		display: block;
 		padding: 0;
 		margin: 0;
+
+		.ui-draggable .navZoom {
+			max-width: 95%;
+			.text-overflow;
+			}
 	
 		/* each 'row' of the pseudo table - similar to tr */
 		li.item {
