@@ -382,7 +382,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 	<cfset var rows=0/>
 	<cfset var I = 0 />
-		
+
+
 	<cfif isquery(arguments.params)>
 		<cfset variables.instance.params=arguments.params />
 			
@@ -390,12 +391,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 		<cfset clearParams() />
 		<cfloop from="1" to="#listLen(arguments.params.param)#" index="i">
-			
+
 			<cfset addParam(
 					listFirst(arguments.params['paramField#i#'],'^'),
 					arguments.params['paramRelationship#i#'],
-					arguments.params['params.paramCriteria#i#'],
-					arguments.params['params.paramCondition#i#'],
+					arguments.params['paramCriteria#i#'],
+					arguments.params['paramCondition#i#'],
 					listLast(arguments.params['paramField#i#'],'^')
 					) />
 		</cfloop>
