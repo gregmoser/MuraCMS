@@ -2754,7 +2754,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfreturn "icon-upload-alt">
 	</cfcase>
 	<cfcase value="File">
-		<cfreturn "icon-file-alt">
+		<cfreturn "icon-file-text-alt">
 	</cfcase>
 	<cfdefaultcase>
 		<cfreturn "icon-file">

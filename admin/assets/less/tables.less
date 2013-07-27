@@ -1,4 +1,4 @@
-table {
+table.mura-table-grid {
 	
 	.table;
 	.table-bordered;
@@ -27,7 +27,7 @@ table {
 		vertical-align: middle;
 		}
 		
-	tr {
+	tr { // Duplicated from bootstrap since they explicitly use .table class, may have to add that to our markup to account for other things
 		  &.success > td {
 		    background-color: @successBackground !important;
 		  }
