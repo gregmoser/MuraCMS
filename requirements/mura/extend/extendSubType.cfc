@@ -374,7 +374,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfif arguments.includeInheritedSets>
 						<cfif getSubType() neq "Default">
 							<!--- get type/default --->
-							and subTypeID in (select subTypeID from tclassextend where (type = <cfqueryparam CFSQLType="cf_sql_varchar" value="#getType()#"> and subType = 'Default'))
+							and subTypeID in (select subTypeID from tclassextend where (type = <cfqueryparam CFSQLType="cf_sql_varchar" value="#getType()#"> and subType = 'Default' and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#">))
 						<cfelse>
 							and 1=0
 						</cfif>
@@ -386,7 +386,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfif arguments.includeInheritedSets>
 						<cfif not listFindNoCase("1,2,User,Group,Address,Site,Component,Form", getType())>
 							<!--- get base/default --->
-							and subTypeID in (select subTypeID from tclassextend where (type = 'Base' and subType = 'Default'))
+							and subTypeID in (select subTypeID from tclassextend where (type = 'Base' and subType = 'Default' and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> ))
 						<cfelse>
 							and 1=0	
 						</cfif>
