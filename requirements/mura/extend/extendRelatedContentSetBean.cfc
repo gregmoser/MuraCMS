@@ -9,12 +9,7 @@ component extends="mura.bean.beanORM" table="tclassextendrcsets" entityname="rel
 	
 	function getRelatedContentQuery(contentHistID){
         var rcSetID = getValue('relatedContentSetID');
-		var rs = "";
-		if (getValue('relatedContentSetID') == '00000000000000000000000000000000000') {
-			rcSetID = '';
-		}
-		
-		rs = getBean('contentManager').getRelatedContent(siteID=getValue('siteID'), contentHistID=arguments.contenthistID, relatedContentSetID=rcSetID);
+		var rs = getBean('contentManager').getRelatedContent(siteID=getValue('siteID'), contentHistID=arguments.contenthistID, relatedContentSetID=rcSetID);
 
         return rs;
     }
