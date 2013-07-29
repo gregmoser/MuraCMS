@@ -361,44 +361,47 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var s=0/>
 	<cfset var inheritanceList="ID,TYPE,BASE"/>
 	<cfset var i=""/>
+	<cfset var process="">
 	
 	<cfloop list="#inheritanceList#" index="i">
-		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
-			select * from tclassextendrcsets where 
-			siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> 
-			<cfswitch expression="#i#">
-				<cfcase value="ID">
+		<cfset process = false>
+		<cfswitch expression="#i#">
+			<cfcase value="ID">
+				<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
+					select * from tclassextendrcsets where 
+					siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> 
 					and subTypeID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubTypeID()#"> 
-				</cfcase>
-				<cfcase value="TYPE">
-					<cfif arguments.includeInheritedSets>
-						<cfif getSubType() neq "Default">
-							<!--- get type/default --->
-							and subTypeID in (select subTypeID from tclassextend where (type = <cfqueryparam CFSQLType="cf_sql_varchar" value="#getType()#"> and subType = 'Default' and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#">))
-						<cfelse>
-							and 1=0
-						</cfif>
-					<cfelse>
-						and 1=0
-					</cfif>
-				</cfcase>
-				<cfcase value="BASE">
-					<cfif arguments.includeInheritedSets>
-						<cfif not listFindNoCase("1,2,User,Group,Address,Site,Component,Form", getType())>
-							<!--- get base/default --->
-							and subTypeID in (select subTypeID from tclassextend where (type = 'Base' and subType = 'Default' and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> ))
-						<cfelse>
-							and 1=0	
-						</cfif>
-					<cfelse>
-						and 1=0
-					</cfif>
-				</cfcase>
-			</cfswitch>
-			order by orderNo
-		</cfquery>
-		
-		<cfif rsSets.recordcount>
+					order by orderNo
+				</cfquery>
+				<cfset process = true>
+			</cfcase>
+			<cfcase value="TYPE">
+				<cfif arguments.includeInheritedSets and getSubType() neq "Default">
+					<!--- get type/default --->
+					<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
+						select * from tclassextendrcsets where 
+						siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> 
+						and subTypeID in (select subTypeID from tclassextend where (type = <cfqueryparam CFSQLType="cf_sql_varchar" value="#getType()#"> and subType = 'Default' and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#">))
+						order by orderNo
+					</cfquery>
+					<cfset process = true>
+				</cfif>
+			</cfcase>
+			<cfcase value="BASE">
+				<cfif arguments.includeInheritedSets and not listFindNoCase("1,2,User,Group,Address,Site,Component,Form", getType())>
+					<!--- get base/default --->
+					<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
+						select * from tclassextendrcsets where 
+						siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> 
+						and subTypeID in (select subTypeID from tclassextend where (type = 'Base' and subType = 'Default' and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> ))
+						order by orderNo
+					</cfquery>
+					<cfset process = true>
+				</cfif>
+			</cfcase>
+		</cfswitch>
+			
+		<cfif process and rsSets.recordcount>
 			<cfset tempArray=createObject("component","mura.queryTool").init(rsSets).toArray() />
 			
 			<cfloop from="1" to="#rsSets.recordcount#" index="s">
