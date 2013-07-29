@@ -353,33 +353,67 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="getRelatedContentSets" access="public" returntype="array">
-	<cfargument name="includeDefaultSet" required="true" default="true"/>
+	<cfargument name="includeInheritedSets" required="true" default="true"/>
 	<cfset var tempArray=""/>
 	<cfset var relatedContentSetArray=arrayNew(1) />
 	<cfset var rsSets=""/>
 	<cfset var relatedContentSetBean=""/>
 	<cfset var s=0/>
+	<cfset var inheritanceList="ID,TYPE,BASE"/>
+	<cfset var i=""/>
 	
-	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
-		select * from tclassextendrcsets where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> and subTypeID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubTypeID()#"> order by orderNo
-	</cfquery>
-	
-	<cfif rsSets.recordcount>
-		<cfset tempArray=createObject("component","mura.queryTool").init(rsSets).toArray() />
+	<cfloop list="#inheritanceList#" index="i">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
+			select * from tclassextendrcsets where 
+			siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> 
+			<cfswitch expression="#i#">
+				<cfcase value="ID">
+					and subTypeID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubTypeID()#"> 
+				</cfcase>
+				<cfcase value="TYPE">
+					<cfif arguments.includeInheritedSets>
+						<cfif getSubType() neq "Default">
+							<!--- get type/default --->
+							and subTypeID in (select subTypeID from tclassextend where (type = <cfqueryparam CFSQLType="cf_sql_varchar" value="#getType()#"> and subType = 'Default'))
+						<cfelse>
+							and 1=0
+						</cfif>
+					<cfelse>
+						and 1=0
+					</cfif>
+				</cfcase>
+				<cfcase value="BASE">
+					<cfif arguments.includeInheritedSets>
+						<cfif not listFindNoCase("1,2,User,Group,Address,Site,Component,Form", getType())>
+							<!--- get base/default --->
+							and subTypeID in (select subTypeID from tclassextend where (type = 'Base' and subType = 'Default'))
+						<cfelse>
+							and 1=0	
+						</cfif>
+					<cfelse>
+						and 1=0
+					</cfif>
+				</cfcase>
+			</cfswitch>
+			order by orderNo
+		</cfquery>
 		
-		<cfloop from="1" to="#rsSets.recordcount#" index="s">
+		<cfif rsSets.recordcount>
+			<cfset tempArray=createObject("component","mura.queryTool").init(rsSets).toArray() />
 			
-			<cfset relatedContentSetBean=getRelatedContentSetBean() />
-			<cfset relatedContentSetBean.set(tempArray[s]) />
-			<cfset arrayAppend(relatedContentSetArray,relatedContentSetBean)/>
-		</cfloop>
+			<cfloop from="1" to="#rsSets.recordcount#" index="s">
+				
+				<cfset relatedContentSetBean=getRelatedContentSetBean() />
+				<cfset relatedContentSetBean.set(tempArray[s]) />
+				<cfset arrayAppend(relatedContentSetArray,relatedContentSetBean)/>
+			</cfloop>
+		</cfif>
 		
-	</cfif>
-	
-	<cfif arguments.includeDefaultSet>
-		<!--- include default set --->
-		<cfset arrayAppend(relatedContentSetArray, getBean('relatedContentSet').setRelatedContentSetID('00000000000000000000000000000000000'))>
-	</cfif>
+		<cfif arguments.includeInheritedSets and i eq "ID">
+			<!--- include default set --->
+			<cfset arrayAppend(relatedContentSetArray, getBean('relatedContentSet').setRelatedContentSetID('00000000000000000000000000000000000').setName('Default'))>
+		</cfif>
+	</cfloop>
 	
 	<cfreturn relatedContentSetArray />
 </cffunction>
