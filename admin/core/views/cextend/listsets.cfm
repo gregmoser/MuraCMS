@@ -48,7 +48,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset rslist=application.classExtensionManager.getSubTypes(siteID=rc.siteID,activeOnly=false) />
 <cfset subType=application.classExtensionManager.getSubTypeByID(rc.subTypeID)>
 <cfset extendSets=subType.getExtendSets()/>
-<cfset relatedContentsets = subType.getRelatedContentSets()>
+<cfset relatedContentsets = subType.getRelatedContentSets(includeDefaultSet=false)>
 
 <h1>Class Extension Attribute Sets</h1>
 <cfoutput>

@@ -1263,7 +1263,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var q = "">
 	
 	<cfset variables.instance.relatedContentSetData = arrayNew(1)>
-	<cfset arrayAppend(relatedContentSets, getBean('relatedContentSet').setRelatedContentSetID('00000000000000000000000000000000000'))>
 		
 	<cfloop from="1" to="#arrayLen(relatedContentSets)#" index="i">
 		<cfset rcs = structNew()>
