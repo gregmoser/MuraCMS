@@ -507,10 +507,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="event" required="true">
 	<cfset var valid = false>
 	
-	<cfif application.settingsManager.getSite(request.siteID).getEnableLockdown() and not getCurrentUser().getIsLoggedIn()>	
+	<cfif application.settingsManager.getSite(request.siteID).getEnableLockdown() and not getCurrentUser().getPassedLockdown()>	
 
 		<cfif event.getValue('locks') eq "true">
-			<cfset valid = getBean('userUtility').login(event.getValue('locku'), event.getValue('lockp'), request.siteID)>
+			<cfset valid = getBean('userUtility').login(event.getValue('locku'), event.getValue('lockp'), '', true)>
 		</cfif>
 				
 		<cfif not valid>
