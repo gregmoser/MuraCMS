@@ -100,7 +100,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	<cfif dbType eq "oracle" and arguments.limit>select * from (</cfif>
-	select  <cfif dbType eq "mssql" and arguments.limit>Top #arguments.limit#</cfif> count(tsessiontracking.contentid) Hits, tsessiontracking.contentid,
+	select  <cfif dbType eq "mssql" and arguments.limit>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif> count(tsessiontracking.contentid) Hits, tsessiontracking.contentid,
 	tcontent.type,tcontent.moduleID,tcontent.ContentHistID,tcontent.siteID,tcontent.filename,
 	tcontent.menuTitle,tcontent.LastUpdate, tcontent.parentID,tcontent.targetParams ,tfiles.fileEXT  
     from tsessiontracking #variables.tableModifier#
@@ -151,8 +151,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	tcontent.menuTitle,tcontent.LastUpdate,tcontent.parentID ,tcontent.targetParams,tfiles.fileEXT  
 	order by hits desc
 	
-	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
-	<cfif dbType eq "oracle" and arguments.limit>)  where ROWNUM <=#arguments.limit#</cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
+	<cfif dbType eq "nuodb" and arguments.limit>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
+	<cfif dbType eq "oracle" and arguments.limit>)  where ROWNUM <=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
 	</cfquery>
 	
 	<cfreturn rs />
@@ -297,7 +298,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	<cfif dbType eq "oracle" and arguments.limit>select * from (</cfif>
-	select  <cfif dbType eq "mssql" and arguments.limit>Top #arguments.limit#</cfif> count(tsessiontracking.keywords) keywordCount, tsessiontracking.keywords from tsessiontracking #variables.tableModifier#
+	select  <cfif dbType eq "mssql" and arguments.limit>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif> count(tsessiontracking.keywords) keywordCount, tsessiontracking.keywords from tsessiontracking #variables.tableModifier#
 	where tsessiontracking.siteid=<cfqueryparam  cfsqltype="cf_sql_varchar" value="#arguments.siteid#" />
 	
 	<cfif lsIsDate(arguments.startDate)>
@@ -338,8 +339,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	Group By tsessiontracking.keywords
 	order by keywordCount desc
 	
-	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
-	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=#arguments.limit#</cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
+	<cfif dbType eq "nuodb" and arguments.limit>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
+	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
 	</cfquery>
 	
 	<cfreturn rs />
@@ -394,7 +396,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	<cfif dbType eq "oracle" and arguments.limit>select * from (</cfif>
-	select  <cfif dbType eq "mssql" and arguments.limit>Top #arguments.limit#</cfif> count(tsessiontracking.referer) referals, tsessiontracking.referer from tsessiontracking #variables.tableModifier#
+	select  <cfif dbType eq "mssql" and arguments.limit>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif> count(tsessiontracking.referer) referals, tsessiontracking.referer from tsessiontracking #variables.tableModifier#
 	inner join tcontent on (tsessiontracking.contentid=tcontent.contentid and tsessiontracking.siteid=tcontent.siteid)
 	where tsessiontracking.siteid=<cfqueryparam  cfsqltype="cf_sql_varchar" value="#arguments.siteid#" />
 	and tcontent.active=1
@@ -426,8 +428,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	Group By tsessiontracking.referer
 	order by referals desc
 	
-	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit #arguments.limit#</cfif>
-	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=#arguments.limit#</cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.limit>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
+	<cfif dbType eq "nuodb" and arguments.limit>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
+	<cfif dbType eq "oracle" and arguments.limit>) where ROWNUM <=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
 	</cfquery>
 	
 	<cfreturn rs />

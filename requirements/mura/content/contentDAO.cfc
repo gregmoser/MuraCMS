@@ -1294,7 +1294,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfquery name="rsRecentComments">
 	<cfif dbType eq "oracle" and arguments.size>select * from (</cfif>
 	select 
-	<cfif dbType eq "mssql" and arguments.size>Top #arguments.size#</cfif> 
+	<cfif dbType eq "mssql" and arguments.size>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.size#" /></cfif> 
 	c.contentid, c.commentid, c.parentid, c.name, c.email, c.url, c.comments, c.entered, c.siteid, c.isApproved, c.subscribe, c.userID, c.path,
 	f.fileid, f.fileExt
 	from tcontentcomments c 
@@ -1305,9 +1305,9 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	and approved=1
 	</cfif>
 	order by entered desc
-	<cfif dbType eq "nuodb" and arguments.size>fetch #arguments.size#</cfif>
-	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.size>limit #arguments.size#</cfif>
-	<cfif dbType eq "oracle" and arguments.size>) where ROWNUM <=#arguments.size# </cfif>
+	<cfif dbType eq "nuodb" and arguments.size>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.size#" /></cfif>
+	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.size>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.size#" /></cfif>
+	<cfif dbType eq "oracle" and arguments.size>) where ROWNUM <=<cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.size#" /> </cfif>
 	</cfquery>
 	
 	<cfreturn rsRecentComments />
