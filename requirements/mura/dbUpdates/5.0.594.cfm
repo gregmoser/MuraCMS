@@ -213,10 +213,9 @@ ALTER TABLE [dbo].[tpluginsettings] WITH NOCHECK ADD
 </cfcase>
 
 <cfcase value="nuodb">
-		
-	
 	<cftransaction>
 	<cfif not dbUtility.tableExists('tplugins')>
+
 	<cfquery datasource="#getDatasource()#" username="#getDBUsername()#" password="#getDbPassword()#">
 	CREATE TABLE tplugins (
 	  pluginID integer generated always as identity (seq_tplugins),
