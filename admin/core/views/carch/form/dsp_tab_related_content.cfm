@@ -49,7 +49,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cfset subtype = application.classExtensionManager.getSubTypeByName(rc.contentBean.getType(), rc.contentBean.getSubType(), rc.contentBean.getSiteID())>
 <cfset relatedContentSets = subtype.getRelatedContentSets()>
-<cfset arrayAppend(relatedContentSets, $.getBean('relatedContentSet').setRelatedContentSetID('00000000000000000000000000000000000'))>
 
 <cfoutput>
 <div id="tabRelatedcontent" class="tab-pane">

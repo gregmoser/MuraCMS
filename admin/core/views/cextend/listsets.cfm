@@ -48,7 +48,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset rslist=application.classExtensionManager.getSubTypes(siteID=rc.siteID,activeOnly=false) />
 <cfset subType=application.classExtensionManager.getSubTypeByID(rc.subTypeID)>
 <cfset extendSets=subType.getExtendSets()/>
-<cfset relatedContentsets = subType.getRelatedContentSets()>
+<cfset relatedContentsets = subType.getRelatedContentSets(includeInheritedSets=false)>
 
 <h1>Class Extension Attribute Sets</h1>
 <cfoutput>
@@ -56,12 +56,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<a class="btn" href="index.cfm?muraAction=cExtend.listSubTypes&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-circle-arrow-left"></i> Back to Class Extensions</a>
 		<a class="btn" href="index.cfm?muraAction=cExtend.editSubType&subTypeID=#rc.subTypeID#&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-pencil"></i> Edit Class Extension</a>
 		<a class="btn" href="index.cfm?muraAction=cExtend.editSet&subTypeID=#rc.subTypeID#&siteid=#URLEncodedFormat(rc.siteid)#&extendSetID="><i class="icon-plus-sign"></i> Add Attribute Set</a>
-		<a class="btn" href="index.cfm?muraAction=cExtend.editRelatedContentSet&subTypeID=#rc.subTypeID#&siteid=#URLEncodedFormat(rc.siteid)#&relatedContentSetID="><i class="icon-plus-sign"></i> Add Related Content Set</a>
+		<cfif not listFindNoCase("1,2,User,Group,Address,Site,Component,Form", subType.getType())>
+			<a class="btn" href="index.cfm?muraAction=cExtend.editRelatedContentSet&subTypeID=#rc.subTypeID#&siteid=#URLEncodedFormat(rc.siteid)#&relatedContentSetID="><i class="icon-plus-sign"></i> Add Related Content Set</a>
+		</cfif>
 	</div>
 	<h2><i class="#application.settingsManager.getSite(rc.siteID).getContentRenderer().iconClassByContentType(type=subType.getType(),subtype=subType.getSubType())#"></i> #application.classExtensionManager.getTypeAsString(subType.getType())#/#subType.getSubType()#</h2>
 </cfoutput>
 
-<h3>Extended Atrtibute Sets</h3>
+<h3>Extended Attribute Sets</h3>
 <cfif arrayLen(extendSets)>
 	<ul class="nav nav-pills">
 		<li><a href="javascript:;" style="display:none;" id="saveSort" onclick="extendManager.saveExtendSetSort('attr-set');return false;"><i class="icon-check"></i> Save Order</a></li>

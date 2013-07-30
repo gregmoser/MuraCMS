@@ -167,6 +167,14 @@
 	</cfif>
 </cffunction>
 
+<cffunction name="isPassedLockdown" access="public" returntype="boolean" output="false">	
+	<cfif hasSession()>
+		<cfreturn session.mura.isPassedLockdown>
+	<cfelse>
+		<cfreturn false>
+	</cfif>
+</cffunction>
+
 <cffunction name="hasSession" output="false" returntype="boolean">
 	<cfreturn isDefined("session.mura")>
 </cffunction>

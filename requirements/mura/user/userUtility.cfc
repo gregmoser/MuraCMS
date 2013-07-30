@@ -80,6 +80,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="username" type="string" required="true" default="">
 		<cfargument name="password" type="string" required="true" default="">
 		<cfargument name="siteid" type="string" required="false" default="">
+		<cfargument name="lockdownCheck" type="string" required="false" default="false">
 		<cfset var rolelist = "" />
 		<cfset var rsUser = "" />
 		<cfset var user = "" />
@@ -149,7 +150,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					
 				<cfset session.blockLoginUntil=""/>
 				
-				<cfset loginByQuery(rsUser)/>
+				<cfif not arguments.lockdownCheck>
+					<cfset loginByQuery(rsUser)/>
+				<cfelse>
+					<cfset session.mura.isPassedLockdown = true>
+				</cfif>
+				
 				<cfset strikes.clear()>
 
 				<cfif arguments.password eq "admin" and arguments.username eq "admin">
@@ -693,7 +699,7 @@ Thanks for using #contactName#</cfoutput>
 	<cfelse>
 		<cfset session.mura.membershipids=arguments.membershipids>
 	</cfif>
-	
+	<cfset session.mura.isPassedLockdown=true>
 <cfelse>
 	<cfset session.mura.isLoggedIn=false>			
 	<cfset session.mura.userID="">
@@ -711,6 +717,7 @@ Thanks for using #contactName#</cfoutput>
 	<cfset session.mura.memberships="">
 	<cfset session.mura.membershipids="">
 	<cfset session.mura.showTrace=false>
+	<cfset session.mura.isPassedLockdown=false>
 </cfif>
 </cffunction>
 

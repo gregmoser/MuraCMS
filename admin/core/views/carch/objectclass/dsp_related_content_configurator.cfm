@@ -51,7 +51,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset rc.contentBean = $.getBean('content').loadBy(contentID=rc.contentID, siteID=rc.siteID)>
 <cfset subtype = application.classExtensionManager.getSubTypeByName(rc.contentBean.getType(), rc.contentBean.getSubType(), rc.contentBean.getSiteID())>
 <cfset relatedContentSets = subtype.getRelatedContentSets()>
-<cfset arrayAppend(relatedContentSets, $.getBean('relatedContentSet').setRelatedContentSetID('00000000000000000000000000000000000'))>
 
 <cfif isDefined("form.params") and isJSON(form.params)>
 	<cfset feed.set(deserializeJSON(form.params))>

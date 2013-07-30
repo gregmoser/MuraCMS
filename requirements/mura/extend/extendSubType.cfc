@@ -353,34 +353,72 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="getRelatedContentSets" access="public" returntype="array">
-<cfargument name="Inherit" required="true" default="false"/>
-<cfargument name="doFilter" required="true" default="false"/>
-<cfargument name="filter" required="true" default=""/>
-<cfargument name="container" required="true" default=""/>
-<cfargument name="activeOnly" required="true" default="false"/>
-<cfset var tempArray=""/>
-<cfset var extendArray=arrayNew(1) />
-<cfset var rsSets=""/>
-<cfset var extendSetBean=""/>
-<cfset var s=0/>
-
-	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
-		select * from tclassextendrcsets where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> and subTypeID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubTypeID()#"> order by orderNo
-	</cfquery>
+	<cfargument name="includeInheritedSets" required="true" default="true"/>
+	<cfset var tempArray=""/>
+	<cfset var relatedContentSetArray=arrayNew(1) />
+	<cfset var rsSets=""/>
+	<cfset var relatedContentSetBean=""/>
+	<cfset var s=0/>
+	<cfset var inheritanceList="ID,TYPE,BASE"/>
+	<cfset var i=""/>
+	<cfset var process="">
 	
-	<cfif rsSets.recordcount>
-		<cfset tempArray=createObject("component","mura.queryTool").init(rsSets).toArray() />
-		
-		<cfloop from="1" to="#rsSets.recordcount#" index="s">
+	<cfloop list="#inheritanceList#" index="i">
+		<cfset process = false>
+		<cfswitch expression="#i#">
+			<cfcase value="ID">
+				<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
+					select * from tclassextendrcsets where 
+					siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> 
+					and subTypeID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubTypeID()#"> 
+					order by orderNo
+				</cfquery>
+				<cfset process = true>
+			</cfcase>
+			<cfcase value="TYPE">
+				<cfif arguments.includeInheritedSets and getSubType() neq "Default">
+					<!--- get type/default --->
+					<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
+						select * from tclassextendrcsets where 
+						siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> 
+						and subTypeID in (select subTypeID from tclassextend where (type = <cfqueryparam CFSQLType="cf_sql_varchar" value="#getType()#"> and subType = 'Default' and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#">))
+						order by orderNo
+					</cfquery>
+					<cfset process = true>
+				</cfif>
+			</cfcase>
+			<cfcase value="BASE">
+				<cfif arguments.includeInheritedSets and not listFindNoCase("1,2,User,Group,Address,Site,Component,Form", getType())>
+					<!--- get base/default --->
+					<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsSets')#">
+						select * from tclassextendrcsets where 
+						siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> 
+						and subTypeID in (select subTypeID from tclassextend where (type = 'Base' and subType = 'Default' and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#"> ))
+						order by orderNo
+					</cfquery>
+					<cfset process = true>
+				</cfif>
+			</cfcase>
+		</cfswitch>
 			
-			<cfset extendSetBean=getRelatedContentSetBean() />
-			<cfset extendSetBean.set(tempArray[s]) />
-			<cfset arrayAppend(extendArray,extendSetBean)/>
-		</cfloop>
+		<cfif process and rsSets.recordcount>
+			<cfset tempArray=createObject("component","mura.queryTool").init(rsSets).toArray() />
+			
+			<cfloop from="1" to="#rsSets.recordcount#" index="s">
+				
+				<cfset relatedContentSetBean=getRelatedContentSetBean() />
+				<cfset relatedContentSetBean.set(tempArray[s]) />
+				<cfset arrayAppend(relatedContentSetArray,relatedContentSetBean)/>
+			</cfloop>
+		</cfif>
 		
-	</cfif>
+		<cfif arguments.includeInheritedSets and i eq "ID">
+			<!--- include default set --->
+			<cfset arrayAppend(relatedContentSetArray, getBean('relatedContentSet').setRelatedContentSetID('00000000000000000000000000000000000').setName('Default'))>
+		</cfif>
+	</cfloop>
 	
-	<cfreturn extendArray />
+	<cfreturn relatedContentSetArray />
 </cffunction>
 
 <cffunction name="save"  access="public" output="false">

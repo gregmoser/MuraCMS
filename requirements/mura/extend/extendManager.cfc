@@ -64,7 +64,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="subtype">
 	<cfargument name="siteid">
 
-	<cfif isdefined('variables.iconlookup.#arguments.siteid#.#arguments.type##arguments.subtype#')>
+	<cfif StructKeyExists(variables.iconlookup, arguments.siteid) and StructKeyExists(variables.iconlookup[arguments.siteid], arguments.type & arguments.subtype)>
 		<cfreturn variables.iconlookup['#arguments.siteid#']['#arguments.type##arguments.subtype#']>
 	</cfif>
 
