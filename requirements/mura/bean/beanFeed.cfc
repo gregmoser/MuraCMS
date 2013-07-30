@@ -301,7 +301,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfquery name="rs" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
 		<cfif dbType eq "oracle" and variables.instance.maxItems>select * from (</cfif>
-		select <cfif dbtype eq "mssql" and variables.instance.maxItems>top <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /></cfif>
+		select <cfif dbtype eq "mssql" and variables.instance.maxItems>top #val(variables.instance.maxItems)#</cfif>
 		#getTableFieldList()# from #variables.instance.table#
 		
 		<cfloop list="#jointables#" index="jointable">
