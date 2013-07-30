@@ -181,64 +181,75 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif hasextendedparams>
 		<!--- Generate a list of baseIDs that match the criteria from tclassextenddata --->
 		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsFeed',maxrows=2100)#">
+
 			select distinct baseid
 			from tclassextenddata
 			where siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.feedBean.getSiteID()#">
 			
 			<cfif rsParams.recordcount>
-			<cfset started = false />
-			<cfloop query="rsParams">
-				<cfset param.init(rsParams.relationship,
-						rsParams.field,
-						rsParams.dataType,
-						rsParams.condition,
-						rsParams.criteria
-					) />
-									 
-				<cfif param.getIsValid() and listLen(param.getField(),".") eq 1>	
-					<cfif not started >
-						and (
-					</cfif>
-					<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
-						(
-						<cfset openGrouping=true />
-					<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
-						<cfif started>or</cfif> (
-						<cfset openGrouping=true />
-					<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
-						<cfif started>and</cfif> (
-						<cfset openGrouping=true />
-					<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
-						)
-					<cfelse>
-						<cfif not openGrouping and started>
-							#param.getRelationship()#
-						<cfelse>
-							<cfset openGrouping=false />
-						</cfif>
-					</cfif>
-					
-					<cfset started = true />
-					
-					baseid IN (
-						select tclassextenddata.baseID from tclassextenddatauseractivity
-						<cfif isNumeric(param.getField())>
-						where tclassextenddata.attributeID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
-						<cfelse>
-						inner join tclassextendattributes on (tclassextenddata.attributeID = tclassextendattributes.attributeID)
-						where tclassextendattributes.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#params.getSiteID()#">
-						and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
-						</cfif>
-						and #variables.classExtensionManager.getCastString(param.getField(),params.getSiteID())# #param.getCondition()# <cfif isListParam>(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#"><cfif isListParam>)</cfif>)
-					
-				</cfif>						
-			</cfloop>
-			<cfif started>)</cfif>
-		</cfif> 
+				<cfset started = false />
+				<cfloop query="rsParams">
 
-		<cfif not started>
-			and 0=1
-		</cfif>
+					<cfset param.init(rsParams.relationship,
+							rsParams.field,
+							rsParams.dataType,
+							rsParams.condition,
+							rsParams.criteria
+						) />
+										 
+					<cfif param.getIsValid() and listLen(param.getField(),".") eq 1>	
+						<cfif not started >
+							and (
+						</cfif>
+						<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
+							(
+							<cfset openGrouping=true />
+						<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
+							<cfif started>or</cfif> (
+							<cfset openGrouping=true />
+						<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
+							<cfif started>and</cfif> (
+							<cfset openGrouping=true />
+						<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
+							)
+						<cfelse>
+							<cfif not openGrouping and started>
+								#param.getRelationship()#
+							<cfelse>
+								<cfset openGrouping=false />
+							</cfif>
+						</cfif>
+						
+						<cfset started = true />
+
+						baseid IN (
+							select tclassextenddata.baseID
+							from tclassextenddata
+							<cfif isNumeric(param.getField())>
+								where tclassextenddata.attributeID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
+							<cfelse>
+								inner join tclassextendattributes
+									on (
+										tclassextenddata.attributeID = 
+										tclassextendattributes.attributeID
+									)
+								where tclassextendattributes.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.feedBean.getSiteID()#">
+									and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
+							</cfif>
+							and #variables.classExtensionManager.getCastString(param.getField(),arguments.feedBean.getSiteID())# #param.getCondition()# 
+							<cfif isListParam>(</cfif>
+								<cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#">
+							<cfif isListParam>)</cfif>
+						)
+					</cfif>						
+				</cfloop>
+				<cfif started>)</cfif>
+			</cfif> 
+
+			<cfif not started>
+				and 0=1
+			</cfif>
+
 		</cfquery>
 
 		<!--- Convert base query to list --->
