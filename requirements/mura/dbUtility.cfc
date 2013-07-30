@@ -274,10 +274,12 @@
 			<cftry>
 			<cfset alterColumn(argumentCollection=arguments)>
 			<cfcatch>
+			<!---
 			<cfdump var="#existing#">
 			<cfdump var="#arguments#">
 			<cfdump var="#cfcatch#">
 			<cfabort>
+			--->
 			</cfcatch>
 			</cftry>
 

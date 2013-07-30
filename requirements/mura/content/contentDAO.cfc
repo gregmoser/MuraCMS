@@ -1294,7 +1294,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfquery name="rsRecentComments">
 	<cfif dbType eq "oracle" and arguments.size>select * from (</cfif>
 	select 
-	<cfif dbType eq "mssql" and arguments.size>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.size#" /></cfif> 
+	<cfif dbType eq "mssql" and arguments.size>Top #val(arguments.size)#</cfif> 
 	c.contentid, c.commentid, c.parentid, c.name, c.email, c.url, c.comments, c.entered, c.siteid, c.isApproved, c.subscribe, c.userID, c.path,
 	f.fileid, f.fileExt
 	from tcontentcomments c 

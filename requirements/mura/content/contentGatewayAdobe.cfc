@@ -380,7 +380,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 				<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsKids')#">
 				<cfif dbType eq "oracle" and arguments.size>select * from (</cfif>
-				SELECT <cfif dbType eq "mssql" and arguments.size>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.size#" /></cfif> 
+				SELECT <cfif dbType eq "mssql" and arguments.size>Top #val(arguments.size)#</cfif> 
 				title, releasedate, menuTitle, tcontent.lastupdate,summary, tags,tcontent.filename, type,subType, tcontent.siteid,
 				tcontent.contentid, tcontent.contentHistID, target, targetParams, 
 				restricted, restrictgroups, displaystart, displaystop, orderno,sortBy,sortDirection,
@@ -2011,7 +2011,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsRecentUpdate')#">
 	<cfif dbType eq "oracle" and arguments.limit>select * from (</cfif>
-	select <cfif dbType eq "mssql"  and arguments.limit>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
+	select <cfif dbType eq "mssql"  and arguments.limit>Top #val(arguments.limit)#</cfif>
 	contentID,contentHistID,approved,menutitle,parentID,moduleID,siteid,lastupdate,lastUpdatebyID,lastUpdateBy,type from tcontent
 	where active=1 and type not in ('Module','Plugin')
 	<cfif arguments.siteID neq ''>
@@ -2040,7 +2040,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsFormActivity')#">
 	<cfif dbType eq "oracle" and arguments.limit>select * from (</cfif>
-	select <cfif dbType eq "mssql"  and arguments.limit>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif>
+	select <cfif dbType eq "mssql"  and arguments.limit>Top #val(arguments.limit)#</cfif>
 	contentID,contentHistID,approved,menutitle,parentID,moduleID,tcontent.siteid,
 	lastupdate,lastUpdatebyID,lastUpdateBy,type, count(formID) as Submissions,max(entered) as lastEntered
 	from tcontent

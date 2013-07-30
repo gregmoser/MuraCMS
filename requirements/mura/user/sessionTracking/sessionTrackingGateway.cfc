@@ -100,7 +100,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	<cfif dbType eq "oracle" and arguments.limit>select * from (</cfif>
-	select  <cfif dbType eq "mssql" and arguments.limit>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif> count(tsessiontracking.contentid) Hits, tsessiontracking.contentid,
+	select  <cfif dbType eq "mssql" and arguments.limit>Top #val(arguments.limit)#</cfif> count(tsessiontracking.contentid) Hits, tsessiontracking.contentid,
 	tcontent.type,tcontent.moduleID,tcontent.ContentHistID,tcontent.siteID,tcontent.filename,
 	tcontent.menuTitle,tcontent.LastUpdate, tcontent.parentID,tcontent.targetParams ,tfiles.fileEXT  
     from tsessiontracking #variables.tableModifier#
@@ -298,7 +298,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	<cfif dbType eq "oracle" and arguments.limit>select * from (</cfif>
-	select  <cfif dbType eq "mssql" and arguments.limit>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif> count(tsessiontracking.keywords) keywordCount, tsessiontracking.keywords from tsessiontracking #variables.tableModifier#
+	select  <cfif dbType eq "mssql" and arguments.limit>Top #val(arguments.limit)#</cfif> count(tsessiontracking.keywords) keywordCount, tsessiontracking.keywords from tsessiontracking #variables.tableModifier#
 	where tsessiontracking.siteid=<cfqueryparam  cfsqltype="cf_sql_varchar" value="#arguments.siteid#" />
 	
 	<cfif lsIsDate(arguments.startDate)>
@@ -396,7 +396,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
 	<cfif dbType eq "oracle" and arguments.limit>select * from (</cfif>
-	select  <cfif dbType eq "mssql" and arguments.limit>Top <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.limit#" /></cfif> count(tsessiontracking.referer) referals, tsessiontracking.referer from tsessiontracking #variables.tableModifier#
+	select  <cfif dbType eq "mssql" and arguments.limit>Top #val(arguments.limit)#</cfif> count(tsessiontracking.referer) referals, tsessiontracking.referer from tsessiontracking #variables.tableModifier#
 	inner join tcontent on (tsessiontracking.contentid=tcontent.contentid and tsessiontracking.siteid=tcontent.siteid)
 	where tsessiontracking.siteid=<cfqueryparam  cfsqltype="cf_sql_varchar" value="#arguments.siteid#" />
 	and tcontent.active=1
