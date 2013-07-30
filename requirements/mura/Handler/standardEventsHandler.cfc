@@ -510,7 +510,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif application.settingsManager.getSite(request.siteID).getEnableLockdown() and not getCurrentUser().isPassedLockdown()>	
 
 		<cfif event.getValue('locks') eq "true">
-			<cfset valid = getBean('userUtility').login(event.getValue('locku'), event.getValue('lockp'), '', true)>
+			<cfset valid = getBean('userUtility').login(event.getValue('locku'), event.getValue('lockp'), request.siteID, true)>
 		</cfif>
 				
 		<cfif not valid>
