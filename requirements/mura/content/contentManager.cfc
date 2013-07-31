@@ -2152,7 +2152,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfset fileItem.title=local.fileBean.getFilename()>
 				</cfif>
 
-				<cfset fileItem.summary=variables.utility.textPreview(local.fileBean.getCaption(),255)>
+				<cfset fileItem.credits=variables.utility.textPreview(local.fileBean.getCredits(),255)>
 
 				<cfset fileBean=add(structCopy(fileItem)) />
 
@@ -2215,7 +2215,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfset fileItem.title=local.fileBean.getFilename()>
 				</cfif>
 
-				<cfset fileItem.summary=variables.utility.textPreview(local.fileBean.getCaption(),255)>
+				<cfset fileItem.credits=variables.utility.textPreview(local.fileBean.getCredits(),255)>
 
 				<cfset fileBean=add(structCopy(fileItem)) />
 				<cfquery>
