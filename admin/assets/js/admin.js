@@ -929,7 +929,7 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 					fileData.setasdefault=$('#filemeta-setasdefault').is(':checked');
 
-					fileMetaDataAssign[fileData.property]=fileData;
+					fileMetaDataAssign[property]=fileData;
 					$('#filemetadataassign').val(JSON.stringify(fileMetaDataAssign));
 					//alert($('#filemetadataassign').val());
 					$(this).dialog( "close" );
@@ -947,6 +947,7 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 				$("#newFileMetaContainer").html('<div class="ui-dialog-content ui-widget-content"><div class="load-inline"></div></div>');
 				var url = 'index.cfm';
 				var pars = 'muraAction=cArch.loadfilemetadata&fileid=' + fileid + '&property=' + property  + '&contenthistid=' + contenthistid + '&siteid=' + siteid + '&cacheid=' + Math.random();
+				
 				$.get(url + "?" + pars).done(function(data) {
 
 					if(data.indexOf('mura-primary-login-token') != -1) {
@@ -964,10 +965,16 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 						$('#filemeta-setasdefault').prop('checked',fileData.setasdefault);
 					}
 					
-					$('#file-caption').ckeditor({
+					$('#newFileMetaContainer .htmlEditor').ckeditor({
 							toolbar: 'Default',
 							customConfig: 'config.js.cfm'
 						}, htmlEditorOnComplete);
+
+					/*
+					$('#file-credits').ckeditor({
+							toolbar: 'Default',
+							customConfig: 'config.js.cfm'
+						}, htmlEditorOnComplete);*/
 
 					setTabs("#newFileMetaContainer.tabs",0);
 					setDatePickers(".datepicker",dtLocale);

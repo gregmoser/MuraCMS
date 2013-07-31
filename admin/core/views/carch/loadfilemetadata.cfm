@@ -33,18 +33,18 @@
 				</div>
 				<div class="control-group">
 					<label class="control-label">
-						#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.alttext')#
+						#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.credits')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="alttext" value="#HTMLEditFormat(fileMetaData.getAltText())#"  maxlength="255" class="filemeta span4">
+						<textarea id="file-credits" data-property="credits" class="filemeta span4 htmlEditor">#fileMetaData.getCredits()#</textarea>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">
-						#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.credits')#
+						#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.alttext')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="credits" value="#HTMLEditFormat(fileMetaData.getCredits())#"  maxlength="255" class="filemeta span4">
+						<input type="text" data-property="alttext" value="#HTMLEditFormat(fileMetaData.getAltText())#"  maxlength="255" class="filemeta span4">
 					</div>
 				</div>
 				<div class="control-group">
