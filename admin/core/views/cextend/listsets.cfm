@@ -48,7 +48,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset rslist=application.classExtensionManager.getSubTypes(siteID=rc.siteID,activeOnly=false) />
 <cfset subType=application.classExtensionManager.getSubTypeByID(rc.subTypeID)>
 <cfset extendSets=subType.getExtendSets()/>
-<cfset relatedContentsets = subType.getRelatedContentSets(includeInheritedSets=false)>
+
+<cfset showRelatedContentSets = not listFindNoCase("1,2,User,Group,Address,Site,Component,Form", subType.getType())>
+
+<cfif showRelatedContentSets>
+	<cfset relatedContentsets = subType.getRelatedContentSets(includeInheritedSets=false)>
+</cfif>
 
 <h1>Class Extension Attribute Sets</h1>
 <cfoutput>
@@ -56,7 +61,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<a class="btn" href="index.cfm?muraAction=cExtend.listSubTypes&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-circle-arrow-left"></i> Back to Class Extensions</a>
 		<a class="btn" href="index.cfm?muraAction=cExtend.editSubType&subTypeID=#rc.subTypeID#&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-pencil"></i> Edit Class Extension</a>
 		<a class="btn" href="index.cfm?muraAction=cExtend.editSet&subTypeID=#rc.subTypeID#&siteid=#URLEncodedFormat(rc.siteid)#&extendSetID="><i class="icon-plus-sign"></i> Add Attribute Set</a>
-		<cfif not listFindNoCase("1,2,User,Group,Address,Site,Component,Form", subType.getType())>
+		<cfif showRelatedContentSets>
 			<a class="btn" href="index.cfm?muraAction=cExtend.editRelatedContentSet&subTypeID=#rc.subTypeID#&siteid=#URLEncodedFormat(rc.siteid)#&relatedContentSetID="><i class="icon-plus-sign"></i> Add Related Content Set</a>
 		</cfif>
 	</div>
@@ -89,30 +94,32 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<p class="alert">There are currently no available attribute sets.</p>
 </cfif>
 
-<cfif arrayLen(relatedContentsets)>
-	<hr />
-	<h3>Related Content Sets</h3>
-	<ul class="nav nav-pills">
-		<li><a href="javascript:;" style="display:none;" id="saveRelatedSort" onclick="extendManager.saveRelatedSetSort('related-set');return false;"><i class="icon-check"></i> Save Order</a></li>
-		<li><a href="javascript:;"  id="showRelatedSort" onclick="extendManager.showRelatedSaveSort('related-set');return false;"><i class="icon-move"></i> Reorder</a></li>
-	</ul>
-	
-	<ul id="related-set" class="attr-list">
-		<cfloop from="1" to="#arrayLen(relatedContentsets)#" index="s">	
-			<cfset rcsBean=relatedContentsets[s]/>
-			<cfoutput>
-				<li relatedContentSetID="#rcsBean.getRelatedContentSetID()#">
-					<span id="handleRelated#s#" class="handleRelated" style="display:none;"><i class="icon-move"></i></span>
-					<p>#rcsBean.getName()#</p>
-					<div class="btns">
-						<a title="Edit" href="index.cfm?muraAction=cExtend.editRelatedContentSet&subTypeID=#rc.subTypeID#&relatedContentSetID=#rcsBean.getRelatedContentSetID()#&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-pencil"></i></a>
-						<a title="Delete" href="index.cfm?muraAction=cExtend.updateRelatedContentSet&action=delete&subTypeID=#rc.subTypeID#&relatedContentSetID=#rcsBean.getRelatedContentSetID()#&siteid=#URLEncodedFormat(rc.siteid)#" onclick="return confirmDialog('Delete  #jsStringFormat("'#rcsBean.getname()#'")#?',this.href)"><i class="icon-remove-sign"></i></a>
-					</div>
-				</li>
-			</cfoutput>
-		</cfloop>
-	</ul>
-<cfelse>
-	<p class="alert">There are currently no available related sets.</p>
+<cfif showRelatedContentSets>
+	<cfif arrayLen(relatedContentsets)>
+		<hr />
+		<h3>Related Content Sets</h3>
+		<ul class="nav nav-pills">
+			<li><a href="javascript:;" style="display:none;" id="saveRelatedSort" onclick="extendManager.saveRelatedSetSort('related-set');return false;"><i class="icon-check"></i> Save Order</a></li>
+			<li><a href="javascript:;"  id="showRelatedSort" onclick="extendManager.showRelatedSaveSort('related-set');return false;"><i class="icon-move"></i> Reorder</a></li>
+		</ul>
+		
+		<ul id="related-set" class="attr-list">
+			<cfloop from="1" to="#arrayLen(relatedContentsets)#" index="s">	
+				<cfset rcsBean=relatedContentsets[s]/>
+				<cfoutput>
+					<li relatedContentSetID="#rcsBean.getRelatedContentSetID()#">
+						<span id="handleRelated#s#" class="handleRelated" style="display:none;"><i class="icon-move"></i></span>
+						<p>#rcsBean.getName()#</p>
+						<div class="btns">
+							<a title="Edit" href="index.cfm?muraAction=cExtend.editRelatedContentSet&subTypeID=#rc.subTypeID#&relatedContentSetID=#rcsBean.getRelatedContentSetID()#&siteid=#URLEncodedFormat(rc.siteid)#"><i class="icon-pencil"></i></a>
+							<a title="Delete" href="index.cfm?muraAction=cExtend.updateRelatedContentSet&action=delete&subTypeID=#rc.subTypeID#&relatedContentSetID=#rcsBean.getRelatedContentSetID()#&siteid=#URLEncodedFormat(rc.siteid)#" onclick="return confirmDialog('Delete  #jsStringFormat("'#rcsBean.getname()#'")#?',this.href)"><i class="icon-remove-sign"></i></a>
+						</div>
+					</li>
+				</cfoutput>
+			</cfloop>
+		</ul>
+	<cfelse>
+		<p class="alert">There are currently no available related sets.</p>
+	</cfif>
 </cfif>
 
