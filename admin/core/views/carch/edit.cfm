@@ -207,7 +207,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			select * from rsSubTypes
 			where 
 				<cfif not len(subtypefilter)>
-					type in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#pageLevelList#"/>)
+					type in (<cfqueryparam cfsqltype="cf_sql_varchar" list="true" value="#extendedList#"/>)
 					or type='Base'
 				<cfelse>
 					1=1 AND
