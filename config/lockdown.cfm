@@ -52,6 +52,24 @@ form input.text:focus {
 	border: 1px solid #959595;
 }
 
+form select {
+	font-size: 12px;
+	margin: 5px 0 25px;
+	padding: 6px;
+	border: 1px solid #ccc;
+	-moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px;
+	transition: border 100ms linear;
+	-moz-transition: border 100ms linear; /* Firefox 4 */
+	-webkit-transition: border 100ms linear; /* Safari and Chrome */
+	-o-transition: border 100ms linear; /* Opera */
+	
+}
+
+form select {
+	outline: 0;
+	border: 1px solid #959595;
+}
+
 form input.submit {
 	background: #005AA7;
 	color: #fff;
@@ -100,6 +118,15 @@ form p#error {
 				
 				<label for="lockp">Password:</label>
 				<input type="password" name="lockp" id="lockp" class="text" />
+				
+				<label for="expires">Log me in for:</label>
+				<select name="expires">
+					<option value="session">Session</option>
+					<option value="1">One Day</option>
+					<option value="7">One Week</option>
+					<option value="30">One Month</option>
+					<option value="10950">Forever</option>
+				</select>
 				
 				<input type="hidden" name="locks" value="true" />
 				<cfif len(event.getValue('locks'))>

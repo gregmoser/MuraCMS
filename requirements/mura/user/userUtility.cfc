@@ -81,6 +81,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfargument name="password" type="string" required="true" default="">
 		<cfargument name="siteid" type="string" required="false" default="">
 		<cfargument name="lockdownCheck" type="string" required="false" default="false">
+		<cfargument name="lockdownExpries" type="string" required="false" default="">
 		<cfset var rolelist = "" />
 		<cfset var rsUser = "" />
 		<cfset var user = "" />
@@ -153,7 +154,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif not arguments.lockdownCheck>
 					<cfset loginByQuery(rsUser)/>
 				<cfelse>
-					<cfcookie name="passedLockdown" value="true" expires="never">
+					<cfswitch expression="#arguments.lockdownExpries#">
+						<cfcase value="1,7,30,10950">
+							<cfcookie name="passedLockdown" value="true" expires="#arguments.lockdownExpries#">
+						</cfcase>
+						<cfcase value="session">
+							<cfcookie name="passedLockdown" value="true">
+						</cfcase>
+					</cfswitch>
 				</cfif>
 				
 				<cfset strikes.clear()>
