@@ -2058,6 +2058,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var fileBean="" />
 	<cfset var tempFile="">
 	<cfset var requestData = GetHttpRequestData()>
+	<cfset var filemetadata= "">
 	
 	<cfset fileItem.siteID=arguments.data.siteID/>
 	<cfset fileItem.parentID=arguments.data.parentID/>
@@ -2151,7 +2152,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfset fileItem.title=local.fileBean.getFilename()>
 				</cfif>
 
+				<cfset fileItem.summary=variables.utility.textPreview(local.fileBean.getCaption(),255)>
+
 				<cfset fileBean=add(structCopy(fileItem)) />
+
 				<cfquery>
 					 update tfiles set contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getContentID()#"> 
 					 where fileid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getFileID()#">
@@ -2210,6 +2214,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif not structKeyExists(fileItem,'title')>
 					<cfset fileItem.title=local.fileBean.getFilename()>
 				</cfif>
+
+				<cfset fileItem.summary=variables.utility.textPreview(local.fileBean.getCaption(),255)>
 
 				<cfset fileBean=add(structCopy(fileItem)) />
 				<cfquery>

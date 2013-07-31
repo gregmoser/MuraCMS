@@ -571,4 +571,42 @@ Blog:http://www.modernsignal.com/coldfusionhttponlycookie--->
 	<cfreturn arguments.rs>
 </cffunction>
 
+ <cffunction name="textPreview" access="public" returntype="string" output="false">
+		<cfargument name="str" type="string" required="true">
+		<cfargument name="maxlen" type="numeric" required="false" default="100" hint="Maximum length">
+		<cfargument name="finishlist" type="string" required="false" default=".|?|!" hint="List of finish symbols">
+		<cfargument name="finishdelim" type="string" required="false" default="|" hint="Deliemiter for List of finish symbols">
+ 
+		<cfset var sOutText = "">
+ 		<cfset var sLastSym = "">
+ 		<cfset var iFinish="">
+ 		<cfset var idx="">
+ 		<cfset var iTemp="">
+
+		<cfset sOutText = ReReplace(arguments.str, "<[^>]*>","","all") />
+ 
+		<CFIF Find('[break]', sOutText)>
+			<CFSET sOutText = Left(sOutText, Find('[break]', sOutText)-1)>
+		<CFELSE>
+			<CFSET sLastSym = Mid(sOutText, Arguments.maxlen-1, 1)>
+			<CFIF ListFind(Arguments.finishlist, sLastSym, Arguments.finishdelim)>
+				<CFSET sOutText = Left(sOutText, Arguments.maxlen)>
+			<CFELSE>
+				<CFSET iFinish = Len(sOutText)>
+				<CFLOOP index="idx" list="#Arguments.finishlist#" delimiters="#Arguments.finishdelim#">
+					<CFSET iTemp = ReFind('\#idx#[\s\<]', sOutText, Arguments.maxlen)>
+					<CFIF iTemp AND iTemp LT iFinish>
+						<CFSET iFinish = iTemp>
+					</CFIF>
+				</CFLOOP>
+				<CFTRY>
+					<CFSET sOutText = Left(sOutText, iFinish)>
+					<CFCATCH TYPE="ANY"><CFRETURN sOutText></CFCATCH>
+				</CFTRY>
+			</CFIF>
+		</CFIF>
+ 
+		<CFRETURN sOutText>
+	</cffunction>
+
 </cfcomponent>

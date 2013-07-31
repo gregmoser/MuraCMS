@@ -277,7 +277,8 @@ jQuery(document).ready(function(){
 	        <div class="control-group">
 	        	<label class="control-label">Credits</label>
 	        	<div class="controls">
-	        		<div class="editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
+	        		<div id="creditsinstance"
+                    class="editable" data-attribute="credits" contenteditable="true"></div>
 	        	</div>
 	        </div>
 	        <div class="control-group">
@@ -354,7 +355,7 @@ jQuery(document).ready(function(){
                 <div class="control-group">
                     <label class="control-label">Credits</label>
                     <div class="controls">
-                        <div data-attribute="credits">{%=file.credits%}</div>
+                        <div data-attribute="credits">{%file.credits%}</div>
                     </div>
                 </div>
                 <div class="control-group">
@@ -438,9 +439,13 @@ $(function () {
 
             fileIndex++;
 
-            var id="uploadid" + fileIndex;
+            var id="summaryid" + fileIndex;
 
             ret.find('div[data-attribute="summary"]').attr("id",id);
+
+            id="creditsid" + fileIndex;
+
+            ret.find('div[data-attribute="credits"]').attr("id",id);
 
             return ret;
         }
@@ -483,7 +488,18 @@ $(function () {
     })
     .bind('fileuploadadded',function(e,data){
 
-        var id="uploadid" + fileIndex;
+        var id="summaryid" + fileIndex;
+
+        CKEDITOR.inline( 
+                document.getElementById(id),
+                {
+                    toolbar: 'Default',
+                    width: "75%",
+                    customConfig: 'config.js.cfm'
+                }
+            );
+
+        id="creditsid" + fileIndex;
 
         CKEDITOR.inline( 
                 document.getElementById(id),
