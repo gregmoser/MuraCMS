@@ -348,7 +348,7 @@ googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPP
 	 	 EnforceChangesets=#arguments.bean.getEnforceChangesets()#,
 	 	 contentApprovalScript=<cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.bean.getContentApprovalScript() neq '',de('no'),de('yes'))#" value="#arguments.bean.getContentApprovalScript()#" />,
 	 	 contentRejectionScript=<cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.bean.getContentRejectionScript() neq '',de('no'),de('yes'))#" value="#arguments.bean.getContentRejectionScript()#" />,
-		 enableLockdown=#arguments.bean.getEnableLockdown()#
+		 enableLockdown=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getEnableLockdown()#" />
 		 
 		where siteid='#arguments.bean.getsiteid()#'
    </cfquery>
@@ -447,7 +447,7 @@ googleAPIKey,useDefaultSMTPServer,siteLocale, mailServerSMTPPort, mailServerPOPP
 	 	 #arguments.bean.getEnforceChangesets()#,
 	 	 <cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.bean.getContentApprovalScript() neq '',de('no'),de('yes'))#" value="#arguments.bean.getContentApprovalScript()#" />,
 	 	 <cfqueryparam cfsqltype="cf_sql_longvarchar" null="#iif(arguments.bean.getContentRejectionScript() neq '',de('no'),de('yes'))#" value="#arguments.bean.getContentRejectionScript()#" />,
-		 #arguments.bean.getEnableLockdown()#
+		 <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.bean.getEnableLockdown()#" />
 		)
    </cfquery>
   

@@ -506,11 +506,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="standardEnableLockdownValidator" output="false" returnType="any">
 	<cfargument name="event" required="true">
 	<cfset var valid = false>
-	
-	<cfif application.settingsManager.getSite(request.siteID).getEnableLockdown() and not getCurrentUser().isPassedLockdown()>	
-
+		
+	<cfif len(application.settingsManager.getSite(request.siteID).getEnableLockdown()) and not(getCurrentUser().isPassedLockdown() or getCurrentUser().isLoggedIn())>	
 		<cfif event.getValue('locks') eq "true">
-			<cfset valid = getBean('userUtility').login(event.getValue('locku'), event.getValue('lockp'), request.siteID, true)>
+			<cfif application.settingsManager.getSite(request.siteID).getEnableLockdown() eq "development">
+				<!--- all member types, set 'passedLockdown' cookie --->
+				<cfset valid = getBean('userUtility').login(event.getValue('locku'), event.getValue('lockp'), request.siteID, true)>				
+			<cfelseif application.settingsManager.getSite(request.siteID).getEnableLockdown() eq "maintenance">
+				<!--- only admin users, log user in --->
+				<cfset valid = getBean('userUtility').login(event.getValue('locku'), event.getValue('lockp'), '', false)>
+			</cfif>
 		</cfif>
 				
 		<cfif not valid>

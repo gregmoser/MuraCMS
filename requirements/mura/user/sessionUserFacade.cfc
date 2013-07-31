@@ -168,11 +168,10 @@
 </cffunction>
 
 <cffunction name="isPassedLockdown" access="public" returntype="boolean" output="false">	
-	<cfif hasSession()>
-		<cfreturn session.mura.isPassedLockdown>
-	<cfelse>
-		<cfreturn false>
+	<cfif not structKeyExists(cookie, "passedLockdown")>
+		<cfcookie name="passedLockdown" value="false" expires="never">
 	</cfif>
+	<cfreturn cookie.passedLockdown>
 </cffunction>
 
 <cffunction name="hasSession" output="false" returntype="boolean">

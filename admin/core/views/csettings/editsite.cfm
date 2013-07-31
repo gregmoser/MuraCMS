@@ -268,14 +268,13 @@ to your own modified versions of Mura CMS.
           </div>
         </div>
 		<div class="control-group">
-            <label class="control-label">Enable Site Lockdown</label>
+            <label class="control-label">Site Mode</label>
             <div class="controls">
-            <label class="radio inline">
-                <input type="radio" name="enableLockdown" value="1" <cfif rc.siteBean.getEnableLockdown()  eq 1> CHECKED</CFIF>>
-                Yes</label>
-                <label class="radio inline">
-                <input type="radio" name="enableLockdown" value="0" <cfif rc.siteBean.getEnableLockdown() neq 1> CHECKED</CFIF>>
-                No</label>
+            	<select name="enableLockdown">
+                	<option value=""<cfif rc.siteBean.getEnableLockdown() eq ""> selected</cfif>>Live</option>
+                	<option value="development"<cfif rc.siteBean.getEnableLockdown() eq "development"> selected</cfif>>Development</option>
+                	<option value="maintenance"<cfif rc.siteBean.getEnableLockdown() eq "maintenance"> selected</cfif>>Maintenance</option>
+                </select>
             </div>
         </div>  
       </div>
