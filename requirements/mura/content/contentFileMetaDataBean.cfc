@@ -8,7 +8,7 @@ component extends="mura.bean.beanORMVersioned"
 	property name="file" fieldType="many-to-one" cfc="file" fkcolumn="fileid";
 	property name="altText" dataType="varchar" length="255";
 	property name="caption" datatype="text";
-	property name="credits" datatype="varchar" length=255;
+	property name="credits" datatype="text";
 	property name="filename" type="string" default="" persistent=false;
 	property name="filesize" type="integer" default="0" persistent=false;
 	property name="contentType" type="string" default="" persistent=false;
