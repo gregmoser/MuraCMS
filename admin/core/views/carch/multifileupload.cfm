@@ -248,7 +248,10 @@ jQuery(document).ready(function(){
 --->
 
 <script id="template-upload" type="text/x-tmpl">
-{% for (var i=0, file; file=o.files[i]; i++) { %}
+{% for (var i=0, file; file=o.files[i]; i++) { 
+     var fileext=$(file.name.split(".")).get(-1).toUpperCase();
+     var isImageFile=fileext=='JPEG' || fileext=='JPG' || fileext=='GIF' || fileext=='PNG';
+    %}
     <tr class="template-upload fade">
         <td class="file-preview">
             <span class="preview">
@@ -277,15 +280,23 @@ jQuery(document).ready(function(){
 	        <div class="control-group">
 	        	<label class="control-label">Credits</label>
 	        	<div class="controls">
-	        		<div class="editable nolinebreaks" data-attribute="credits" contenteditable="true"></div>
+                    {% if(isImageFile){  %}
+	        		 <div id="creditsinstance"
+                        class="editable htmlEditor" data-attribute="credits" contenteditable="true"></div>
+                     {% } else { %}
+                     <div id="creditsinstance"
+                        class="editable" data-attribute="credits" contenteditable="true"></div>
+                    {% } %}
 	        	</div>
 	        </div>
+            {% if(isImageFile){  %}
 	        <div class="control-group">
 	        	<label class="control-label">Alt Text</label>
 	        	<div class="controls">
 	        		<div class="editable nolinebreaks" data-attribute="alttext" contenteditable="true"></div>
 				</div>
 			</div>
+            {% } %}
             {% if (file.error) { %}
                 <div><span class="label label-important">Error</span> {%=file.error%}</div>
             {% } %}
@@ -357,12 +368,14 @@ jQuery(document).ready(function(){
                         <div data-attribute="credits">{%=file.credits%}</div>
                     </div>
                 </div>
+                {% if (file.thumbnail_url) { %}
                 <div class="control-group">
                     <label class="control-label">Alt Text</label>
                     <div class="controls">
                         <div data-attribute="alttext">{%=file.alttext%}</div>
                     </div>
                 </div>
+                 {% } %}
             {% } %}
         </td>
         <td><div class="progress progress-success complete" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="bar" style="width:100%;"></div></div>
@@ -438,9 +451,13 @@ $(function () {
 
             fileIndex++;
 
-            var id="uploadid" + fileIndex;
+            var id="summaryid" + fileIndex;
 
             ret.find('div[data-attribute="summary"]').attr("id",id);
+
+            id="creditsid" + fileIndex;
+
+            ret.find('div[data-attribute="credits"]').attr("id",id);
 
             return ret;
         }
@@ -483,7 +500,7 @@ $(function () {
     })
     .bind('fileuploadadded',function(e,data){
 
-        var id="uploadid" + fileIndex;
+        var id="summaryid" + fileIndex;
 
         CKEDITOR.inline( 
                 document.getElementById(id),
@@ -493,6 +510,19 @@ $(function () {
                     customConfig: 'config.js.cfm'
                 }
             );
+
+        id="creditsid" + fileIndex;
+
+        if($("##" + id).hasClass('htmlEditor')){
+            CKEDITOR.inline( 
+                    document.getElementById(id),
+                    {
+                        toolbar: 'Default',
+                        width: "75%",
+                        customConfig: 'config.js.cfm'
+                    }
+                );
+        }
 
         $(document).on('keypress', '.editable.nolinebreaks', function(e){
             

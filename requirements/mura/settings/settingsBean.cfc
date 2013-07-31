@@ -117,7 +117,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="enforceChangesets" type="numeric" default="0" required="true" />
 <cfproperty name="contentApprovalScript" type="string" default=""/>
 <cfproperty name="contentRejectionScript" type="string" default=""/>
-<cfproperty name="enableLockdown" type="int" default="0" required="true" />
+<cfproperty name="enableLockdown" type="string" default="" />
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	
@@ -205,7 +205,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.enforceChangesets=0/>
 	<cfset variables.instance.contentApprovalScript=""/>
 	<cfset variables.instance.contentRejectionScript=""/>
-	<cfset variables.instance.enableLockdown=0/>
+	<cfset variables.instance.enableLockdown=""/>
 	
 	<cfset variables.primaryKey = 'siteid'>
 	<cfset variables.entityName = 'site'>
@@ -322,14 +322,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfelse>
 		<cfreturn variables.instance.Domain />
 	</cfif>
-</cffunction>
-
-<cffunction name="setEnableLockdown" access="public" output="false">
-	<cfargument name="enableLockdown" />
-	<cfif isNumeric(arguments.enableLockdown)>
-	<cfset variables.instance.enableLockdown = arguments.enableLockdown />
-	</cfif>
-	<cfreturn this>
 </cffunction>
 
 <cffunction name="setEnforcePrimaryDomain" access="public" output="false">

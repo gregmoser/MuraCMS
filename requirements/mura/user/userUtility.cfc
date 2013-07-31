@@ -153,7 +153,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif not arguments.lockdownCheck>
 					<cfset loginByQuery(rsUser)/>
 				<cfelse>
-					<cfset session.mura.isPassedLockdown = true>
+					<cfcookie name="passedLockdown" value="true" expires="never">
 				</cfif>
 				
 				<cfset strikes.clear()>
@@ -699,7 +699,6 @@ Thanks for using #contactName#</cfoutput>
 	<cfelse>
 		<cfset session.mura.membershipids=arguments.membershipids>
 	</cfif>
-	<cfset session.mura.isPassedLockdown=true>
 <cfelse>
 	<cfset session.mura.isLoggedIn=false>			
 	<cfset session.mura.userID="">
@@ -717,7 +716,6 @@ Thanks for using #contactName#</cfoutput>
 	<cfset session.mura.memberships="">
 	<cfset session.mura.membershipids="">
 	<cfset session.mura.showTrace=false>
-	<cfset session.mura.isPassedLockdown=false>
 </cfif>
 </cffunction>
 

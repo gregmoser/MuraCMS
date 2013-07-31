@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Login</title>
+<title><cfoutput>#REReplace(application.settingsManager.getSite(request.siteID).getEnableLockdown(), "([a-z]{1})", "\U\1", "ONE" )# Mode</cfoutput></title>
 
 <style type="text/css">
 
@@ -13,13 +13,18 @@ body {
 	margin: 0; padding: 0;
 }
 
-form {
+#wrapper {
 	width: 300px;
 	margin: 100px auto;
 	background: #FCFCFC;
 	padding: 25px;
 	border: 1px solid #ccc;
 	-moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px;
+}
+
+.alert {
+	font-weight: bold;
+    text-align: center;
 }
 
 form label {
@@ -83,23 +88,27 @@ form p#error {
 }
 
 </style>
-
 </head>
 <body>
-<form method="post" action="">
-	<label for="locku">Username:</label>
-	<input type="text" name="locku" id="locku" class="text" />
-	
-	<label for="lockp">Password:</label>
-	<input type="password" name="lockp" id="lockp" class="text" />
-	
-	<input type="hidden" name="locks" value="true" />
-	<cfif len(event.getValue('locks'))>
-		<p id="error">Login failed!</p>
-	</cfif>
-	<p id="submitWrap"><input type="submit" name="submit" value="Login" class="submit" /></p>
-
-</form>
+	<div id="wrapper">
+		<cfif application.settingsManager.getSite(request.siteID).getEnableLockdown() eq "maintenance">
+			<div class="alert"><cfoutput>#application.settingsManager.getSite(request.siteID).getSite()#</cfoutput> is currently undergoing maintenance.</div>
+		<cfelseif application.settingsManager.getSite(request.siteID).getEnableLockdown() eq "development">
+			<form method="post" action="">
+				<label for="locku">Username:</label>
+				<input type="text" name="locku" id="locku" class="text" />
+				
+				<label for="lockp">Password:</label>
+				<input type="password" name="lockp" id="lockp" class="text" />
+				
+				<input type="hidden" name="locks" value="true" />
+				<cfif len(event.getValue('locks'))>
+					<p id="error">Login failed!</p>
+				</cfif>
+				<p id="submitWrap"><input type="submit" name="submit" value="Login" class="submit" /></p>
+			</form>
+		</cfif>
+	</div>
 </body>
 </html>
 <cfabort>
