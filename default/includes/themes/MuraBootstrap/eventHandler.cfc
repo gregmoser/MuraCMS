@@ -117,7 +117,11 @@ Mura CMS.
 			renderer.formWrapperClass = 'well';
 
 			// for code syntax highlighting
-			arguments.$.loadPrettify();
+			try {
+				arguments.$.loadPrettify();
+			} catch(any e) {
+				// Mura CMS version is probably older than 6.1
+			}
 		</cfscript>
 	</cffunction>
 
