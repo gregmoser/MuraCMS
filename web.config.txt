@@ -45,7 +45,7 @@
                     - reload Mura CMS
         -->
         <rule name="Mura CMS Rewrite Option 2" enabled="false">
-            <match url="^([a-zA-Z0-9-]{1,})/([a-zA-Z0-9/].+)$" ignoreCase="true" />
+            <match url="^([a-zA-Z0-9]{1,})/([a-zA-Z0-9/].+)$" ignoreCase="true" />
             <conditions>
                 <add input="{REQUEST_FILENAME}" matchType="IsFile" ignoreCase="false" negate="true" />
                 <add input="{REQUEST_FILENAME}" matchType="IsDirectory" ignoreCase="false" negate="true" />
