@@ -81,6 +81,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<div id="configurator" class="fieldset-wrap row-fluid">
 	<div class="fieldset">
+		<cfif rc.classid eq "related_content">
+			<div class="control-group">
+				<label class="control-label">
+					Related Content Set
+				</label>
+				<div class="controls">
+					<select name="relatedContentSetName" class="objectParam">
+						<option value=""<cfif feed.getRelatedContentSetName() eq ""> selected</cfif>>All</option>
+						<cfloop from="1" to="#arrayLen(relatedContentSets)#" index="s">
+							<cfset rcsBean = relatedContentSets[s]/>
+							<option value="#rcsBean.getName()#"<cfif feed.getRelatedContentSetName() eq rcsBean.getName()> selected</cfif>>#rcsBean.getName()#</option>
+						</cfloop>
+					</select>
+				</div>
+			</div>
+		</cfif>
+		
 		<div class="control-group">
 		<div class="span4">
 	      	<label class="control-label">#application.rbFactory.getKeyValue(session.rb,'collections.imagesize')#</label>
@@ -118,22 +135,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</div>	
 	</div>
 	
-	<cfif rc.classid eq "related_content">
+	<cfif rc.classid neq "related_content">	
 		<div class="control-group">
-			<label class="control-label">
-				Related Content Set
-			</label>
-			<div class="controls">
-				<select name="relatedContentSetID" class="objectParam">
-					<cfloop from="1" to="#arrayLen(relatedContentSets)#" index="s">
-						<cfset rcsBean = relatedContentSets[s]/>
-						<option value="#rcsBean.getRelatedContentSetID()#"<cfif feed.getRelatedContentSetID() eq rcsBean.getRelatedContentSetID()> selected</cfif>>#rcsBean.getName()#</option>
-					</cfloop>
-				</select>
-			</div>
-		</div>
-	<cfelse>		
-	<div class="control-group">
 			<div class="span6">
 				<label class="control-label">
 					#application.rbFactory.getKeyValue(session.rb,'collections.sortby')#
@@ -161,7 +164,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</div>
 			</div>
 					
-
 			<div class="span6">
 				<label class="control-label">
 					#application.rbFactory.getKeyValue(session.rb,'collections.sortdirection')#
@@ -172,9 +174,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<option value="desc" <cfif feed.getsortDirection() eq 'desc'>selected</cfif>>#application.rbFactory.getKeyValue(session.rb,'collections.descending')#</option>
 					</select>
 				</div>
-				</div>
 			</div>
-		</cfif>
+		</div>
+	</cfif>
 			
 			<div class="control-group" id="availableFields">
 				<label class="control-label">
