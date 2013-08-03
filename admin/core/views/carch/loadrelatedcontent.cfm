@@ -62,7 +62,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<input type="text" name="keywords" value="#rc.keywords#" id="rcSearch" placeholder="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforcontent')#"/>
 				<button type="button" name="btnSearch" id="rcBtnSearch" class="btn"><i class="icon-search"></i></button>
 			</div>
-			<a href="##" class="btn" id="aAdvancedSearch">Advanced Search</a>
+			<a href="##" class="btn" id="aAdvancedSearch" data-toggle="button">Advanced Search</a>
 		</div>	
 	</div>
 	

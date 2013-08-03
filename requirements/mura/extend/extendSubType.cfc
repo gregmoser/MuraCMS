@@ -290,7 +290,33 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="getIconClass" returntype="String" access="public" output="false">
-	<cfreturn variables.instance.iconclass />
+	<cfargument name="includeDefault" default="false">
+	<cfset var returnVar = variables.instance.iconclass>
+	
+	<cfif not len(returnVar) and includeDefault>
+		<cfswitch expression="#getType()#">
+			<cfcase value="page">
+				<cfset returnVar = "icon-file">
+			</cfcase>
+			<cfcase value="folder">
+				<cfset returnVar = "icon-folder-open-alt">
+			</cfcase>
+			<cfcase value="file">
+				<cfset returnVar = "icon-file-text-alt">
+			</cfcase>
+			<cfcase value="link">
+				<cfset returnVar = "icon-link">
+			</cfcase>
+			<cfcase value="calendar">
+				<cfset returnVar = "icon-calendar">
+			</cfcase>
+			<cfcase value="gallery">
+				<cfset returnVar = "icon-th">
+			</cfcase>
+		</cfswitch> 
+	</cfif>
+	
+	<cfreturn returnVar>
 </cffunction>
 
 <cffunction name="setIconClass" access="public" output="false">
