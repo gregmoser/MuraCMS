@@ -151,7 +151,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			if(not (structKeyExists(application.settingsManager,'validate') and application.settingsManager.validate() and isStruct(application.configBean.getAllValues()))){
 				application.appInitialized=false;
 			}
-		} catch(e any){
+		} catch(any e){
 			application.appInitialized=false;
 			request.muraAppreloaded=false;
 		} 
@@ -211,12 +211,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 														useWordFilter=true,
 														fixValues=false);
 						}
-					} catch(e any){}
+					} catch(any e){}
 						
 				}
 				
 			}
-		} catch(e any){}
+		} catch(any e){}
 
 		super.onRequestStart(argumentCollection=arguments);
 	}
@@ -245,7 +245,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			try{
 				qrystr="#qrystr#&#item#=#url[item]#";	
 			}
-			catch(e any){}
+			catch(any e){}
 		}
 
 		if(len(qrystr)){
