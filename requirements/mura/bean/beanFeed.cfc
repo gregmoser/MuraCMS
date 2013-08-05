@@ -309,7 +309,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif not arguments.countOnly>
 			#getTableFieldList()# 
 		<cfelse>
-			count(#variables.instance.table#.*) as count
+			count(*) as count
 		</cfif>
 		
 		from #variables.instance.table#

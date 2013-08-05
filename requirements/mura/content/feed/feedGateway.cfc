@@ -262,7 +262,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsFeed',blockFactor=blockFactor)#">
 	<cfif not arguments.countOnly and dbType eq "oracle" and arguments.feedBean.getMaxItems()>select * from (</cfif>
 	select <cfif not arguments.countOnly and dbtype eq "mssql" and arguments.feedBean.getMaxItems()>top #arguments.feedBean.getMaxItems()#</cfif> 
-	
+
 	<cfif not arguments.countOnly>
 		tcontent.siteid, tcontent.title, tcontent.menutitle, tcontent.restricted, tcontent.restrictgroups, 
 		tcontent.type, tcontent.subType, tcontent.filename, tcontent.displaystart, tcontent.displaystop,
@@ -276,7 +276,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		tcontent.path, tcontent.created, tcontent.nextn, tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,
 		tfiles.filename as AssocFilename,tcontent.displayInterval,tcontent.display,tcontentfilemetadata.altText as fileAltText
 	<cfelse>
-		count(tcontent.*) as count
+		count(*) as count
 	</cfif>
 
 	from tcontent

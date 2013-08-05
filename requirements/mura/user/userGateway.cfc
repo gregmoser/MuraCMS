@@ -272,7 +272,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfif not arguments.countOnly>
 		#variables.fieldList# <cfif len(params.getAdditionalColumns())>,#params.getAdditionalColumns()#</cfif> 
 	<cfelse>
-		count(tusers.*) as count
+		count(*) as count
 	</cfif>
 
 	from tusers 

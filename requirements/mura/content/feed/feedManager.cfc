@@ -85,8 +85,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="tag"  required="true" default="" />
 	<cfargument name="aggregation"  required="true" default="false" />
 	<cfargument name="applyPermFilter" required="true" default="false">
+	<cfargument name="countOnly" default="false">
 
-	<cfreturn variables.feedgateway.getFeed(arguments.feedBean,arguments.tag,arguments.aggregation,arguments.applyPermFilter) />
+	<cfreturn variables.feedgateway.getFeed(arguments.feedBean,arguments.tag,arguments.aggregation,arguments.applyPermFilter,arguments.countOnly) />
 </cffunction>
 
 <cffunction name="getFeedIterator" returntype="any" access="public" output="false">
