@@ -145,10 +145,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="getQuery" returntype="query" output="false">
+	<cfargument name="countOnly" default="false">
 	<cfif not len(variables.instance.siteID)>
 		<cfthrow message="The 'SITEID' value must be set in order to search users.">
 	</cfif>
-	<cfreturn getBean('userManager').getAdvancedSearchQuery(this)>
+	<cfreturn getBean('userManager').getAdvancedSearchQuery(data=this,countOnly=arguments.countOnly)>
 </cffunction>
 
 <cffunction name="getIterator" returntype="any" output="false">
@@ -214,6 +215,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	    </cfloop> 
 	</cfif>
 	<cfreturn this>
+</cffunction>
+
+<cffunction name="getAvailableCount" output="false">
+	<cfreturn getQuery(countOnly=true).count>
 </cffunction>
  
 </cfcomponent>

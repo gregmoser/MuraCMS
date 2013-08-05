@@ -126,7 +126,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="data" type="any" default="" hint="This can be a struct or an instance of userFeedBean."/>
 	<cfargument name="siteid" type="any" hint="deprecated, use userFeedBean.setSiteID()" default=""/>
 	<cfargument name="isPublic" type="any" hint="deprecated, use userFeedBean.setIsPublic()" default=""/>
-	
+	<cfargument name="countOnly" default="false">
+
 	<cfset var i = 1 />
 	<cfset var params=""  />
 	<cfset var param=createObject("component","mura.queryParam") />
@@ -265,8 +266,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<!--- Generate a sorted (if specified) list of baseIDs with additional fields --->
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsAdvancedUserSearch')#">
-	select <cfif params.getMaxItems()>top #params.getMaxItems()# </cfif>
-	#variables.fieldList# <cfif len(params.getAdditionalColumns())>,#params.getAdditionalColumns()#</cfif> from tusers 
+	<cfif not arguments.countOnly and dbType eq "oracle" and params.getMaxItems()>select * from (</cfif>
+	select <cfif not arguments.countOnly and params.getMaxItems()>top #params.getMaxItems()# </cfif>
+
+	<cfif not arguments.countOnly>
+		#variables.fieldList# <cfif len(params.getAdditionalColumns())>,#params.getAdditionalColumns()#</cfif> 
+	<cfelse>
+		count(tusers.*) as count
+	</cfif>
+
+	from tusers 
 	left join tfiles on tusers.photofileID=tfiles.fileID
 	<cfloop list="#jointables#" index="jointable">
 	inner join #jointable# on (tusers.userid=#jointable#.userid)
@@ -276,7 +285,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		#join.joinType# join #join.table# on #preserveSingleQuotes(join.clause)#
 	</cfloop>
 	
-	<cfif isExtendedSort>
+	<cfif not arguments.countOnly and isExtendedSort>
 	left Join (select 
 			#variables.classExtensionManager.getCastString(data.getSortBy(),data.getSiteID())# extendedSort
 			 ,tclassextenddatauseractivity.baseID 
@@ -386,19 +395,26 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	order by
 	
-	<cfif len(params.getOrderBy())>
-		#params.getOrderBy()#
-	<cfelseif len(params.getSortTable())>
-		#params.getSortTable()#.#params.getSortBy()# #params.getSortDirection()#
-	<cfelseif isExtendedSort>
-		qExtendedSort.extendedSort #params.getSortDirection()#
-	<cfelse>	
-		<cfif variables.configBean.getDbType() neq "oracle" or listFindNoCase("lastUpdate,created,isPublic",params.getSortBy())>
-			tusers.#params.getSortBy()# #params.getSortDirection()#
-		<cfelse>
-			lower(tusers.#params.getSortBy()#) #params.getSortDirection()#
+	<cfif not arguments.countOnly>
+		<cfif len(params.getOrderBy())>
+			#params.getOrderBy()#
+		<cfelseif len(params.getSortTable())>
+			#params.getSortTable()#.#params.getSortBy()# #params.getSortDirection()#
+		<cfelseif isExtendedSort>
+			qExtendedSort.extendedSort #params.getSortDirection()#
+		<cfelse>	
+			<cfif variables.configBean.getDbType() neq "oracle" or listFindNoCase("lastUpdate,created,isPublic",params.getSortBy())>
+				tusers.#params.getSortBy()# #params.getSortDirection()#
+			<cfelse>
+				lower(tusers.#params.getSortBy()#) #params.getSortDirection()#
+			</cfif>
 		</cfif>
+
+		<cfif dbType eq "nuodb" and params.getMaxItems()>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#params.getMaxItems()#" /> </cfif>
+		<cfif listFindNoCase("mysql,postgresql", dbType) and params.getMaxItems()>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#params.getMaxItems()#" /> </cfif>
+		<cfif dbType eq "oracle" and params.getMaxItems()>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#params.getMaxItems()#" /> </cfif>
 	</cfif>
+
 	</cfquery>
 	
 	<cfreturn rsAdvancedUserSearch />

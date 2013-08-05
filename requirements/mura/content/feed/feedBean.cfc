@@ -422,7 +422,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cffunction name="getQuery" returnType="query" output="false" access="public">
 	<cfargument name="aggregation" required="true" default="false">
 	<cfargument name="applyPermFilter" required="true" default="false">
-	<cfreturn variables.feedManager.getFeed(feedBean=this,tag="",aggregation=arguments.aggregation,applyPermFilter=arguments.applyPermFilter) />
+	<cfargument name="countOnly" default="false">
+	<cfreturn variables.feedManager.getFeed(feedBean=this,tag="",aggregation=arguments.aggregation,applyPermFilter=arguments.applyPermFilter, countOnly=arguments.countOnly) />
 </cffunction>
 
 <cffunction name="getIterator" returnType="any" output="false" access="public">
@@ -529,6 +530,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 <cffunction name="getPrimaryKey" output="false">
 	<cfreturn "feedID">
+</cffunction>
+
+<cffunction name="getAvailableCount" output="false">
+	<cfreturn getQuery(countOnly=true).count>
 </cffunction>
 	
 </cfcomponent>

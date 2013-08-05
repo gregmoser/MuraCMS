@@ -73,6 +73,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.additionalColumns=""/>
 	<cfset variables.instance.sortTable=""/>
 	<cfset variables.instance.orderby=""/>
+	<cfset variables.instance.orderby=""/>
 
 	
 	<cfset variables.instance.params=queryNew("param,relationship,field,condition,criteria,dataType","integer,varchar,varchar,varchar,varchar,varchar" )  />
@@ -281,6 +282,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cffunction>
 
 <cffunction name="getQuery" returntype="query" output="false">
+	<cfargument name="countOnly" default="false">
+
 	<cfset var rs="">
 	<cfset var isListParam=false>
 	<cfset var param="">
@@ -300,9 +303,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfloop>
 
 	<cfquery name="rs" datasource="#variables.configBean.getDatasource()#" username="#variables.configBean.getDbUsername()#" password="#variables.configBean.getDbPassword()#">
-		<cfif dbType eq "oracle" and variables.instance.maxItems>select * from (</cfif>
-		select <cfif dbtype eq "mssql" and variables.instance.maxItems>top #val(variables.instance.maxItems)#</cfif>
-		#getTableFieldList()# from #variables.instance.table#
+		<cfif not arguments.countOnly and dbType eq "oracle" and variables.instance.maxItems>select * from (</cfif>
+		select <cfif not arguments.countOnly and dbtype eq "mssql" and variables.instance.maxItems>top #val(variables.instance.maxItems)#</cfif>
+		
+		<cfif not arguments.countOnly>
+			#getTableFieldList()# 
+		<cfelse>
+			count(#variables.instance.table#.*) as count
+		</cfif>
+		
+		from #variables.instance.table#
 		
 		<cfloop list="#jointables#" index="jointable">
 			inner join #jointable# on (#variables.instance.table#.#variables.instance.keyField#=#jointable#.#variables.instance.keyField#)
@@ -358,15 +368,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfif started>)</cfif>
 	</cfif> 
 
-	<cfif len(variables.instance.orderby)>
-		order by #variables.instance.orderby#
-	<cfelseif len(variables.instance.sortBy)>
-		order by #variables.instance.table#.#variables.instance.sortBy# #variables.instance.sortDirection#
+	<cfif not arguments.countOnly>
+		<cfif len(variables.instance.orderby)>
+			order by #variables.instance.orderby#
+		<cfelseif len(variables.instance.sortBy)>
+			order by #variables.instance.table#.#variables.instance.sortBy# #variables.instance.sortDirection#
+		</cfif>
+		
+		<cfif listFindNoCase("mysql,postgresql", dbType) and variables.instance.maxItems>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /> </cfif>
+		<cfif dbType eq "nuodb" and variables.instance.maxItems>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /></cfif>
+		<cfif dbType eq "oracle" and variables.instance.maxItems>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /> </cfif>
 	</cfif>
-	
-	<cfif listFindNoCase("mysql,postgresql", dbType) and variables.instance.maxItems>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /> </cfif>
-	<cfif dbType eq "nuodb" and variables.instance.maxItems>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /></cfif>
-	<cfif dbType eq "oracle" and variables.instance.maxItems>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#variables.instance.maxItems#" /> </cfif>
 
 	</cfquery>
 
@@ -395,6 +407,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.sortDirection = arguments.sortDirection />
 	</cfif>
 	<cfreturn this>
+</cffunction>
+
+<cffunction name="getAvailableCount" output="false">
+	<cfreturn getQuery(countOnly=true).count>
 </cffunction>
 
 </cfcomponent>

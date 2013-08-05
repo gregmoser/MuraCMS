@@ -103,6 +103,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="tag" required="true" default="" />
 	<cfargument name="aggregation" required="true" type="boolean" default="false" />
 	<cfargument name="applyPermFilter" required="true" type="boolean" default="false" />
+	<cfargument name="countOnly" required="true" type="boolean" default="false" />
 	
 	<cfset var c ="" />
 	<cfset var rsFeed ="" />
@@ -259,19 +260,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsFeed',blockFactor=blockFactor)#">
-	<cfif dbType eq "oracle" and arguments.feedBean.getMaxItems()>select * from (</cfif>
-	select <cfif dbtype eq "mssql" and arguments.feedBean.getMaxItems()>top #arguments.feedBean.getMaxItems()#</cfif> 
-	tcontent.siteid, tcontent.title, tcontent.menutitle, tcontent.restricted, tcontent.restrictgroups, 
-	tcontent.type, tcontent.subType, tcontent.filename, tcontent.displaystart, tcontent.displaystop,
-	tcontent.remotesource, tcontent.remoteURL,tcontent.remotesourceURL, tcontent.keypoints,
-	tcontent.contentID, tcontent.parentID, tcontent.approved, tcontent.isLocked, tcontent.contentHistID,tcontent.target, tcontent.targetParams,
-	tcontent.releaseDate, tcontent.lastupdate,tcontent.summary, 
-	tfiles.fileSize,tfiles.fileExt,tcontent.fileid,
-	tcontent.tags,tcontent.credits,tcontent.audience, tcontent.orderNo,
-	tcontentstats.rating,tcontentstats.totalVotes,tcontentstats.downVotes,tcontentstats.upVotes,
-	tcontentstats.comments, tparent.type parentType, <cfif doKids> qKids.kids<cfelse> null as kids</cfif>,
-	tcontent.path, tcontent.created, tcontent.nextn, tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,
-	tfiles.filename as AssocFilename,tcontent.displayInterval,tcontent.display,tcontentfilemetadata.altText as fileAltText
+	<cfif not arguments.countOnly and dbType eq "oracle" and arguments.feedBean.getMaxItems()>select * from (</cfif>
+	select <cfif not arguments.countOnly and dbtype eq "mssql" and arguments.feedBean.getMaxItems()>top #arguments.feedBean.getMaxItems()#</cfif> 
+	
+	<cfif not arguments.countOnly>
+		tcontent.siteid, tcontent.title, tcontent.menutitle, tcontent.restricted, tcontent.restrictgroups, 
+		tcontent.type, tcontent.subType, tcontent.filename, tcontent.displaystart, tcontent.displaystop,
+		tcontent.remotesource, tcontent.remoteURL,tcontent.remotesourceURL, tcontent.keypoints,
+		tcontent.contentID, tcontent.parentID, tcontent.approved, tcontent.isLocked, tcontent.contentHistID,tcontent.target, tcontent.targetParams,
+		tcontent.releaseDate, tcontent.lastupdate,tcontent.summary, 
+		tfiles.fileSize,tfiles.fileExt,tcontent.fileid,
+		tcontent.tags,tcontent.credits,tcontent.audience, tcontent.orderNo,
+		tcontentstats.rating,tcontentstats.totalVotes,tcontentstats.downVotes,tcontentstats.upVotes,
+		tcontentstats.comments, tparent.type parentType, <cfif doKids> qKids.kids<cfelse> null as kids</cfif>,
+		tcontent.path, tcontent.created, tcontent.nextn, tcontent.majorVersion, tcontent.minorVersion, tcontentstats.lockID, tcontent.expires,
+		tfiles.filename as AssocFilename,tcontent.displayInterval,tcontent.display,tcontentfilemetadata.altText as fileAltText
+	<cfelse>
+		count(tcontent.*) as count
+	</cfif>
 
 	from tcontent
 	
@@ -292,7 +298,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	Left Join tcontentfilemetadata on (tcontent.fileid=tcontentfilemetadata.fileid
 									and tcontent.contenthistid=tcontentfilemetadata.contenthistid)
 	
-	<cfif isExtendedSort>
+	<cfif not arguments.countOnly and isExtendedSort>
 	left Join (select 
 			
 			#variables.classExtensionManager.getCastString(arguments.feedBean.getSortBy(),arguments.feedBean.getSiteID())# extendedSort
@@ -307,7 +313,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	
 	<!---  begin qKids --->
-				<cfif doKids>
+				<cfif not arguments.countOnly and doKids>
 				Left Join (select
 						   tcontent.contentID, 
 						   Count(TKids.contentID) as kids					   
@@ -677,56 +683,64 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfif>
 	)
 	</cfif>
-						
-	order by
+
+	<cfif not arguments.countOnly>	
+		order by
+		
+		<cfif len(arguments.feedBean.getOrderBy())>
+			#arguments.feedBean.getOrderBy()#
+		<cfelse>	
+			<cfswitch expression="#arguments.feedBean.getSortBy()#">
+			<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype">
+				<cfif dbType neq "oracle" or listFindNoCase("orderno,releaseDate,lastUpdate,created,displayStart,displayStop",arguments.feedBean.getSortBy())>
+					tcontent.#arguments.feedBean.getSortBy()# #arguments.feedBean.getSortDirection()#
+				<cfelse>
+					lower(tcontent.#arguments.feedBean.getSortBy()#) #arguments.feedBean.getSortDirection()#
+				</cfif>
+			</cfcase>
+			<cfcase value="rating">
+			 tcontentstats.rating #arguments.feedBean.getSortDirection()#, tcontentstats.totalVotes #arguments.feedBean.getSortDirection()#
+			</cfcase>
+			<cfcase value="comments">
+			 tcontentstats.comments #arguments.feedBean.getSortDirection()#
+			</cfcase>
+			<cfcase value="random">
+				<cfif dbType eq "mysql">
+			          rand()
+				<cfelseif dbType eq "postgresql">
+			          random()
+			    <cfelseif dbType eq "mssql">
+			          newID()
+			    <cfelseif dbType eq "oracle">
+			          dbms_random.value
+			    </cfif>
+			</cfcase>
+			<cfdefaultcase>
+				<cfif isExtendedSort>
+					qExtendedSort.extendedSort #arguments.feedBean.getSortDirection()#
+				<cfelse>
+					tcontent.releaseDate desc,tcontent.lastUpdate desc,tcontent.menutitle
+				</cfif>
+			</cfdefaultcase>
+			</cfswitch>
+		</cfif>
 	
-	<cfif len(arguments.feedBean.getOrderBy())>
-		#arguments.feedBean.getOrderBy()#
-	<cfelse>	
-		<cfswitch expression="#arguments.feedBean.getSortBy()#">
-		<cfcase value="menutitle,title,lastupdate,releasedate,orderno,displaystart,displaystop,created,credits,type,subtype">
-			<cfif dbType neq "oracle" or listFindNoCase("orderno,releaseDate,lastUpdate,created,displayStart,displayStop",arguments.feedBean.getSortBy())>
-				tcontent.#arguments.feedBean.getSortBy()# #arguments.feedBean.getSortDirection()#
-			<cfelse>
-				lower(tcontent.#arguments.feedBean.getSortBy()#) #arguments.feedBean.getSortDirection()#
-			</cfif>
-		</cfcase>
-		<cfcase value="rating">
-		 tcontentstats.rating #arguments.feedBean.getSortDirection()#, tcontentstats.totalVotes #arguments.feedBean.getSortDirection()#
-		</cfcase>
-		<cfcase value="comments">
-		 tcontentstats.comments #arguments.feedBean.getSortDirection()#
-		</cfcase>
-		<cfcase value="random">
-			<cfif dbType eq "mysql">
-		          rand()
-			<cfelseif dbType eq "postgresql">
-		          random()
-		    <cfelseif dbType eq "mssql">
-		          newID()
-		    <cfelseif dbType eq "oracle">
-		          dbms_random.value
-		    </cfif>
-		</cfcase>
-		<cfdefaultcase>
-			<cfif isExtendedSort>
-				qExtendedSort.extendedSort #arguments.feedBean.getSortDirection()#
-			<cfelse>
-				tcontent.releaseDate desc,tcontent.lastUpdate desc,tcontent.menutitle
-			</cfif>
-		</cfdefaultcase>
-		</cfswitch>
+		<cfif dbType eq "nuodb" and arguments.feedBean.getMaxItems()>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.feedBean.getMaxItems()#" /> </cfif>
+		<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.feedBean.getMaxItems()>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.feedBean.getMaxItems()#" /> </cfif>
+		<cfif dbType eq "oracle" and arguments.feedBean.getMaxItems()>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.feedBean.getMaxItems()#" /> </cfif>
 	</cfif>
-	<cfif dbType eq "nuodb" and arguments.feedBean.getMaxItems()>fetch <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.feedBean.getMaxItems()#" /> </cfif>
-	<cfif listFindNoCase("mysql,postgresql", dbType) and arguments.feedBean.getMaxItems()>limit <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.feedBean.getMaxItems()#" /> </cfif>
-	<cfif dbType eq "oracle" and arguments.feedBean.getMaxItems()>) where ROWNUM <= <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.feedBean.getMaxItems()#" /> </cfif>
 	</cfquery>
 	
-	<cfif arguments.applyPermFilter>
+	<cfif not arguments.countOnly and arguments.applyPermFilter>
 		<cfset rsFeed=variables.permUtility.queryPermFilter(rawQuery=rsFeed,siteID=arguments.feedBean.getSiteID())>
 	</cfif>
 
-	<cfreturn variables.contentIntervalManager.applyByMenuTypeAndDate(query=rsFeed,menuType="default",menuDate=nowAdjusted) />
+	<cfif not arguments.countOnly>
+		<cfreturn variables.contentIntervalManager.applyByMenuTypeAndDate(query=rsFeed,menuType="default",menuDate=nowAdjusted) />
+	<cfelse>
+		<cfreturn rsFeed>
+	</cfif>
+	
 </cffunction>
 
 <cffunction name="getcontentItems" access="public" output="false" returntype="query">
