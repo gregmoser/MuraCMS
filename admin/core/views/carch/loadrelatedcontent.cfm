@@ -82,12 +82,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			 	.attr('data-title',$('##mura-related-title').val())
 			 	.attr('data-content-type','Link/Default')
 			 	.attr('class','item')
-			 	.html(
+			 	.append(
 			 		$('<ul class="navZoom"/>')
 			 		.append(
 			 			$('<li class="link"/>'))
-			 			.html('<strong></strong>')
-			 				.html(' ' + $('##mura-related-title').val())
+			 			.append('<strong></strong>')
+			 				.append(' ' + $('##mura-related-title').val())
 			 	)
 			 ); 
 
