@@ -665,7 +665,7 @@ buttons: {
 			var aItems = new Array();
 			var bucket = new Object;
 			$(this).find('li.item:not(.empty)').each(function(){
-				if($(this).attr('data-url') == ''){
+				if(typeof($(this).attr('data-url')) == 'undefined' ){
 					aItems.push($(this).attr('data-contentid'));
 				} else{
 					aItems.push(
@@ -682,6 +682,7 @@ buttons: {
 			aBuckets.push(bucket);
 		});
 		$("#relatedContentSetData").val(JSON.stringify(aBuckets));
+		console.log(aBuckets);
 	},
 		
 	

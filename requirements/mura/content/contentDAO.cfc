@@ -1123,6 +1123,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfargument name="data" type="struct" required="yes" default="#structNew()#" />
 	<cfargument name="siteID" type="string" required="yes" default="" />
 	<cfargument name="oldContentHistID" type="string" required="yes" default="" />
+	<cfargument name="bean" />
 	<cfset var I = "">
 	<cfset var j = "">
 	<cfset var rcs = "">
@@ -1142,7 +1143,38 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfloop from="1" to="#arrayLen(rcsData)#" index="i">
 			<cfset rcs = rcsData[i]>
 			<cfloop from="1" to="#arrayLen(rcs.items)#" index="j">
-				<cfset relatedID = rcs.items[j]>
+				<cfif isStruct(rcs.items[j])>
+					<cfif not isdefined('local.parentBean')>
+						<cfset local.parentBean=getBean('content').loadBy(filename=arguments.bean.getFilename() & "/related-content",siteid=bean.getSiteID())>
+							
+						<cfif local.parentBean.getIsNew()>
+							<cfset local.parentBean.setTitle('Related Content')
+								.setSiteID(arguments.bean.getSiteID())
+								.setParentID(arguments.bean.getContentID())
+								.setType('Folder')
+								.setIsNav(0)
+								.setSearchExclude(1)
+								.setApproved(1)
+								.save()>
+						</cfif>
+					</cfif>
+
+					<cfset relatedID = getBean('content')
+						.setBody(rcs.items[j].url)
+						.setTitle(rcs.items[j].title)
+						.setType('Link')
+						.setIsNav(0)
+						.setParentID(local.parentBean.getContentID())
+						.setSearchExclude(1)
+						.setSiteID(arguments.bean.getSiteID())
+						.setApproved(1)
+						.save()
+						.getContentID()>
+						
+				<cfelse>
+					<cfset relatedID = rcs.items[j]>
+				</cfif>
+				
 				<cftry>
 					<cfquery>
 						insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,orderNo)

@@ -998,16 +998,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfif not newBean.getIsNew() and newBean.getParentID() neq currentBean.getParentID()>
 						<cfset updateMaterializedPath(newBean.getPath(),currentBean.getPath(),newBean.getSiteID()) />
 					</cfif>
-					
-					<!--- Related content persistence --->
-					<cfif not newBean.getIsNew()>
-						<cfset variables.contentDAO.createRelatedItems(newBean.getcontentID(),
-						newBean.getcontentHistID(),arguments.data,newBean.getSiteID(),currentBean.getcontentHistID()) />
-					
-					<cfelse>
-						<cfset variables.contentDAO.createRelatedItems(newBean.getcontentID(),
-						newBean.getcontentHistID(),arguments.data,newBean.getSiteID(),'') />
-					</cfif> 	
+						
 					
 					<!--- Content expiration assignments --->
 					<cfif isDefined("arguments.data.expiresnotify") and len(arguments.data.expiresnotify)>
@@ -1311,12 +1302,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 					
 				<cfset variables.contentDAO.createTags(newBean) />
-					
+				
+				<cfset var isNewBean=newBean.getIsNew()>
+
 				<cfset variables.utility.logEvent("ContentID:#newBean.getcontentID()# ContentHistID:#newBean.getcontentHistID()# MenuTitle:#newBean.getMenuTitle()# Type:#newBean.getType()# was created","mura-content","Information",true) />
 				<cfset variables.contentDAO.create(newBean) />
 
 				<cfset request.muratransaction=false>
 				</cftransaction>
+
+				<!--- Related content persistence --->
+				<cfif not isNewBean>
+					<cfset variables.contentDAO.createRelatedItems(newBean.getcontentID(),
+						newBean.getcontentHistID(),arguments.data,newBean.getSiteID(),currentBean.getcontentHistID(),newBean) />
+					
+				<cfelse>
+					<cfset variables.contentDAO.createRelatedItems(newBean.getcontentID(),
+						newBean.getcontentHistID(),arguments.data,newBean.getSiteID(),'',newBean) />
+				</cfif> 
 
 				<cfset getBean('contentSourceMap')
 						.setContentHistID(newBean.getContentHistID())

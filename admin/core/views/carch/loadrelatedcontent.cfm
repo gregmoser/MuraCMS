@@ -68,6 +68,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		}
 
 		function createExternalLink(){
+
+			if($('##mura-related-title').val()=='' || $('##mura-related-url').val()==''){
+
+				alertDialog("The 'Title' and 'URL' fields are both required.");
+
+				return false;
+			}
 			$("##draggableContainmentExternal ul").append(
 			 	$('<li/>').attr('data-contentid',Math.random())
 			 	.attr('data-url',$('##mura-related-url').val())
@@ -83,7 +90,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			 	)
 			 ); 
 
-			$("##draggableContainmentExternal p").hide();
+			$("##draggableContainmentExternal p").fadeOut();
 
 			$("##draggableContainmentExternal .rcDraggable li.item").draggable({
 				connectToSortable: '.rcSortable',
@@ -103,8 +110,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<div class="control-group">
 		<label class="control-label">Where is the content</label>
 		<div class="form-inline">
-			<input type="radio" onclick="toggleRelatedType(this)" name="contentlocation" value="internal" checked="true"/> Internal 
-			<input type="radio" onclick="toggleRelatedType(this)" name="contentlocation" value="external"/> External
+			<input type="radio" onclick="toggleRelatedType(this)" id="contentlocation1" name="contentlocation" value="internal" checked="true"/> <label for="contentlocation1">Internal</label>
+			<input type="radio" onclick="toggleRelatedType(this)" id="contentlocation2" name="contentlocation" value="external"/> <label for="contentlocation2">External</label>
 		</div>
 	</div>
 	<div class="control-group mura-related-internal">
