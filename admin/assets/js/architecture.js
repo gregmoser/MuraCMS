@@ -538,7 +538,7 @@ buttons: {
 	},
 		
 	bindMouse: function () {
-		$(".rcSortable li.item:not(.empty), #rcDraggable li.item").mouseup(function(event){
+		$(".rcSortable li.item:not(.empty), .rcDraggableI li.item").mouseup(function(event){
 			// left mouse button only
 			if (event.which == 1) {
 				siteManager.enableBuckets();
@@ -594,7 +594,7 @@ buttons: {
 		d.html('<div class="load-inline"></div>');
 		$.get(url + "?" + pars, function(data) {
 			$('#selectRelatedContent').html(data);
-			$("#rcDraggable li.item").draggable({
+			$(".rcDraggable li.item").draggable({
 				connectToSortable: '.rcSortable',
 				helper: 'clone',
 				revert: 'invalid',
@@ -665,7 +665,17 @@ buttons: {
 			var aItems = new Array();
 			var bucket = new Object;
 			$(this).find('li.item:not(.empty)').each(function(){
-				aItems.push($(this).attr('data-contentid'));
+				if($(this).attr('data-url') == ''){
+					aItems.push($(this).attr('data-contentid'));
+				} else{
+					aItems.push(
+						{
+							title:$(this).attr('data-title'),
+							url:$(this).attr('data-url'),
+							contentid:$(this).attr('data-contentid')
+						}
+					);
+				}
 			});
 			bucket.relatedcontentsetid = $(this).attr('data-relatedcontentsetid')
 			bucket.items = aItems;

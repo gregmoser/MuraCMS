@@ -55,7 +55,59 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset rsSubTypes = application.classExtensionManager.getSubTypes(siteID=rc.siteID, activeOnly=true) />
 
 <cfoutput>
+	<script>
+		function toggleRelatedType(clicked){
+		
+			if($(clicked).val()=='internal'){
+				$(".mura-related-internal").show();
+				$(".mura-related-external").hide();
+			} else {	
+				$(".mura-related-internal").hide();
+				$(".mura-related-external").show();
+			}
+		}
+
+		function createExternalLink(){
+			$("##draggableContainmentExternal ul").append(
+			 	$('<li/>').attr('data-contentid',Math.random())
+			 	.attr('data-url',$('##mura-related-url').val())
+			 	.attr('data-title',$('##mura-related-title').val())
+			 	.attr('data-content-type','Link/Default')
+			 	.attr('class','item')
+			 	.append(
+			 		$('<ul class="navZoom"/>')
+			 		.append(
+			 			$('<li class="link"/>'))
+			 			.append('<strong></strong>')
+			 				.append(' ' + $('##mura-related-title').val())
+			 	)
+			 ); 
+
+			$("##draggableContainmentExternal p").hide();
+
+			$("##draggableContainmentExternal .rcDraggable li.item").draggable({
+				connectToSortable: '.rcSortable',
+				helper: 'clone',
+				revert: 'invalid',
+				start: function(event, ui) {
+					// bind mouse events to clone
+					siteManager.bindMouse();
+				},
+				zIndex: 100
+			}).disableSelection();
+
+			siteManager.bindMouse();
+
+		}		
+	</script>
 	<div class="control-group">
+		<label class="control-label">Where is the content</label>
+		<div class="form-inline">
+			<input type="radio" onclick="toggleRelatedType(this)" name="contentlocation" value="internal" checked="true"/> Internal 
+			<input type="radio" onclick="toggleRelatedType(this)" name="contentlocation" value="external"/> External
+		</div>
+	</div>
+	<div class="control-group mura-related-internal">
 		<label class="control-label">Add Related Content</label>
 		<div id="internalContent" class="form-inline">
 			<div class="input-append">
@@ -66,40 +118,42 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</div>	
 	</div>
 	
-	<div id="rcAdvancedSearch" style="display:none;">
-		<div class="control-group">
-			<div class="span4">
-				<label class="control-label">Content Type</label>
+	<div class="mura-related-internal">
+		<div id="rcAdvancedSearch" style="display:none;">
+			<div class="control-group">
+				<div class="span4">
+					<label class="control-label">Content Type</label>
+					<div class="controls">
+						<select name="searchTypeSelector" id="searchTypeSelector">
+							<option value="">All</option>
+							<cfloop list="#baseTypeList#" index="t">
+								<cfsilent>
+									<cfquery name="rsst" dbtype="query">select * from rsSubTypes where type = <cfqueryparam cfsqltype="cf_sql_varchar"  value="#t#"> and subtype not in ('Default','default')</cfquery>
+								</cfsilent>
+								<option value="#t#^Default"<cfif rc.searchTypeSelector eq "#t#^Default"> selected="selected"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#lcase(t)#")#</option>
+								<cfif rsst.recordcount>
+									<cfloop query="rsst">
+										<option value="#t#^#rsst.subtype#"<cfif rc.searchTypeSelector eq "#t#^#rsst.subtype#"> selected="selected"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#lcase(t)#")#  / #rsst.subtype#</option>
+									</cfloop>
+								</cfif>
+							</cfloop>
+						</select>
+					</div>
+				</div>	
+				<div class="span8">
+					<label class="control-label">Release Date Range</label>
+					<div class="controls">
+						<input type="text" name="rcStartDate" id="rcStartDate" class="datepicker span3 mura-relatedContent-datepicker" placeholder="Start Date" value="#rc.rcStartDate#" /> &ndash; <input type="text" name="rcEndDate" id="rcEndDate" class="datepicker span3 mura-relatedContent-datepicker" placeholder="End Date" value="#rc.rcEndDate#" />
+					</div>
+				</div>			
+			</div>
+			<div class="control-group">
 				<div class="controls">
-					<select name="searchTypeSelector" id="searchTypeSelector">
-						<option value="">All</option>
-						<cfloop list="#baseTypeList#" index="t">
-							<cfsilent>
-								<cfquery name="rsst" dbtype="query">select * from rsSubTypes where type = <cfqueryparam cfsqltype="cf_sql_varchar"  value="#t#"> and subtype not in ('Default','default')</cfquery>
-							</cfsilent>
-							<option value="#t#^Default"<cfif rc.searchTypeSelector eq "#t#^Default"> selected="selected"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#lcase(t)#")#</option>
-							<cfif rsst.recordcount>
-								<cfloop query="rsst">
-									<option value="#t#^#rsst.subtype#"<cfif rc.searchTypeSelector eq "#t#^#rsst.subtype#"> selected="selected"</cfif>>#application.rbFactory.getKeyValue(session.rb,"sitemanager.content.type.#lcase(t)#")#  / #rsst.subtype#</option>
-								</cfloop>
-							</cfif>
-						</cfloop>
-					</select>
-				</div>
-			</div>	
-			<div class="span8">
-				<label class="control-label">Release Date Range</label>
-				<div class="controls">
-					<input type="text" name="rcStartDate" id="rcStartDate" class="datepicker span3 mura-relatedContent-datepicker" placeholder="Start Date" value="#rc.rcStartDate#" /> &ndash; <input type="text" name="rcEndDate" id="rcEndDate" class="datepicker span3 mura-relatedContent-datepicker" placeholder="End Date" value="#rc.rcEndDate#" />
-				</div>
-			</div>			
-		</div>
-		<div class="control-group">
-			<div class="controls">
-				<label class="control-label">Available Categories</label>
-		
-				<div id="mura-list-tree" class="controls">
-					<cf_dsp_categories_nest siteID="#rc.siteID#" parentID="" categoryID="#rc.rcCategoryID#" nestLevel="0" useID="0" elementName="rcCategoryID">
+					<label class="control-label">Available Categories</label>
+			
+					<div id="mura-list-tree" class="controls">
+						<cf_dsp_categories_nest siteID="#rc.siteID#" parentID="" categoryID="#rc.rcCategoryID#" nestLevel="0" useID="0" elementName="rcCategoryID">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -143,11 +197,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		rc.rslist=feed.getQuery();
 	</cfscript>
-	<div class="control-group">
+	<div class="control-group mura-related-internal">
 		<cfif rc.rslist.recordcount>
-			<div id="draggableContainment" class="list-table search-results">
+			<div id="draggableContainmentInternal" class="list-table search-results">
 				<div class="list-table-content-set">Search Results</label></div>
-				<ul id="rcDraggable" class="list-table-items">
+				<ul class="rcDraggable list-table-items">
 					<cfoutput query="rc.rslist" startrow="1" maxrows="100">	
 						<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
 						<cfif arrayLen(crumbdata) and structKeyExists(crumbdata[1],"parentArray") and not listFind(arraytolist(crumbdata[1].parentArray),rc.contentid)>
@@ -164,5 +218,36 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfoutput>
 		</cfif>
 	</div>
-</cfif>	
+</cfif>
+
+<div class="control-group mura-related-external" style="display:none;">
+	<label class="control-label">Title</label>
+	<div  class="form-inline">
+		<div class="input-append">
+			<input type="text" id="mura-related-title" value="">
+		</div>	
+	</div>
+	<label class="control-label">URL</label>
+	<div class="form-inline">
+		<div class="input-append">
+			<input type="text" id="mura-related-url" value="" placeholder="http://www.example.com"/>
+			<button type="button" name="btnCreateLink" id="rcBtnCreateLink" class="btn" onclick="createExternalLink();"><i class="icon-plus"></i></button>
+		</div>		
+	</div>		
+</div>	
+
+
+<div class="control-group mura-related-external" style="display:none;">
+	<div id="draggableContainmentExternal" class="list-table search-results">
+		<div class="list-table-content-set">Available URLs</label></div>
+		<ul class="rcDraggable list-table-items">
+		
+		</ul>
+		<cfoutput>  
+			<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noexternallinks')#</p>
+		</cfoutput>
+	</div>	
+</div>
+
+
 
