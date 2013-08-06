@@ -75,22 +75,25 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 				return false;
 			}
-			$("##draggableContainmentExternal ul").append(
+
+			$("##draggableContainmentExternal .list-table-items").append(
 			 	$('<li/>').attr('data-contentid',Math.random())
 			 	.attr('data-url',$('##mura-related-url').val())
 			 	.attr('data-title',$('##mura-related-title').val())
 			 	.attr('data-content-type','Link/Default')
 			 	.attr('class','item')
-			 	.append(
+			 	.html(
 			 		$('<ul class="navZoom"/>')
 			 		.append(
 			 			$('<li class="link"/>'))
-			 			.append('<strong></strong>')
-			 				.append(' ' + $('##mura-related-title').val())
+			 			.html('<strong></strong>')
+			 				.html(' ' + $('##mura-related-title').val())
 			 	)
 			 ); 
 
-			$("##draggableContainmentExternal p").fadeOut();
+			if(!$("##draggableContainmentExternal").is(":visible")){
+				$("##draggableContainmentExternal").fadeIn();
+			}
 
 			$("##draggableContainmentExternal .rcDraggable li.item").draggable({
 				connectToSortable: '.rcSortable',
@@ -109,9 +112,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</script>
 	<div class="control-group">
 		<label class="control-label">Where is the content</label>
-		<div class="form-inline">
-			<input type="radio" onclick="toggleRelatedType(this)" id="contentlocation1" name="contentlocation" value="internal" checked="true"/> <label for="contentlocation1">Internal</label>
-			<input type="radio" onclick="toggleRelatedType(this)" id="contentlocation2" name="contentlocation" value="external"/> <label for="contentlocation2">External</label>
+		<div class="controls">
+			<label class="radio inline"><input type="radio" onclick="toggleRelatedType(this)" id="contentlocation1" name="contentlocation" value="internal" checked="true"/> Internal</label>
+			<label class="radio inline"><input type="radio" onclick="toggleRelatedType(this)" id="contentlocation2" name="contentlocation" value="external"/>External</label>
 		</div>
 	</div>
 	<div class="control-group mura-related-internal">
@@ -243,17 +246,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</div>		
 </div>	
 
-
-<div class="control-group mura-related-external" style="display:none;">
-	<div id="draggableContainmentExternal" class="list-table search-results">
+<div class="mura-related-external" style="display:none;">
+<div id="draggableContainmentExternal" class="control-group" style="display:none;">
+	<div class="list-table search-results">
 		<div class="list-table-content-set">Available URLs</label></div>
 		<ul class="rcDraggable list-table-items">
-		
 		</ul>
-		<cfoutput>  
-			<p>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noexternallinks')#</p>
-		</cfoutput>
 	</div>	
+</div>
 </div>
 
 
