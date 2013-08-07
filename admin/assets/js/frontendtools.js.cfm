@@ -30,6 +30,8 @@
 				window.location=decodeURIComponent(parameters["location"]);
 			} else if(parameters["cmd"] == "setHeight"){
 				resizeFrontEndToolsModal(decodeURIComponent(parameters["height"]));
+			} else if(parameters["cmd"] == "checkPosition"){
+				checkPosition(messageEvent, parameters["y"]);
 			}
 		}			
 	}
@@ -47,6 +49,21 @@
 	var frontEndModalWidth=0;
 	var frontEndModalIE8=document.all && document.querySelector && !document.addEventListener;
 	
+	function checkPosition(messageEvent, y){
+		var st = $(window).scrollTop();
+	    var o = $('##frontEndToolsModalBody').offset().top;
+	    var t = $(window).scrollTop() + 80;
+	    var b = $(window).height() - 50 + $(window).scrollTop();
+	    var adjY = y + o;
+		if (adjY > b) {
+	        //Down
+	        $('html,body').scrollTop(st + 20);
+		} else if (adjY < t) {
+	        //Up
+	        $('html,body').scrollTop(st - 20);
+	    }
+	}
+
 	function openFrontEndToolsModal(a){
 		var src=a.href + "&frontEndProxyLoc=" + frontEndProxyLoc;
 		var isModal=jQuery(a).attr("data-configurator");
