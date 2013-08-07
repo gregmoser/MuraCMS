@@ -139,14 +139,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn event("contentRenderer")>
 </cffunction>
 
-<cffunction name="setContentRenderer" output="false" returntype="any">
-	<cfargument name="contentRenderer">
-	<cfif isObject(arguments.contentRenderer)>
-		<cfset event("contentRenderer",arguments.contentRenderer)>
-	</cfif>
-	<cfreturn this>
-</cffunction>
-
 <cffunction name="getThemeRenderer" output="false" returntype="any">
 	<cfif isObject(event("themeRenderer"))>
 		<cfreturn event("themeRenderer")>
@@ -155,14 +147,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfelse>
 		<cfreturn event("themeRenderer")>
 	</cfif>
-</cffunction>
-
-<cffunction name="setThemeRenderer" output="false" returntype="any">
-	<cfargument name="themeRenderer">
-	<cfif isObject(arguments.themeRenderer)>
-		<cfset event("themeRenderer",arguments.themeRenderer)>
-	</cfif>
-	<cfreturn this>
 </cffunction>
 
 <cffunction name="getContentBean" output="false" returntype="any">
