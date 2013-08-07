@@ -542,11 +542,19 @@ buttons: {
 			// left mouse button only
 			if (event.which == 1) {
 				siteManager.enableBuckets();
+
+				$(window).unbind('mousemove');
 			}
 		}).mousedown(function(event){
 			// left mouse button only
 			if (event.which == 1) {
 				siteManager.disableBuckets($(this));
+
+				if (typeof frontEndProxy != 'undefined') {
+					$(window).bind('mousemove', function (e) {
+						frontEndProxy.post({cmd:'checkPosition', y: e.pageY});
+					});
+				}
 			}
 		});
 	},
@@ -604,6 +612,8 @@ buttons: {
 				},
 				zIndex: 100
 			}).disableSelection();
+
+
 			
 			setDatePickers(".mura-relatedContent-datepicker", dtLocale, dtCh);
 			
@@ -622,7 +632,7 @@ buttons: {
 			$('#rcAdvancedSearch').find('ul.categories:not(.checkboxTrees)').css("margin-left", "10px");
 			
 			$('#rcBtnSearch').click(function(e){
-				console.log('clickme');
+				//console.log('clickme');
 				e.preventDefault();
 				var advSearching = $('#rcAdvancedSearch').is(':visible');
 				var valueSelector = '#internalContent input';
@@ -682,7 +692,7 @@ buttons: {
 			aBuckets.push(bucket);
 		});
 		$("#relatedContentSetData").val(JSON.stringify(aBuckets));
-		console.log(aBuckets);
+		//console.log(aBuckets);
 	},
 		
 	
