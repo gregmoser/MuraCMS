@@ -9,7 +9,7 @@
 	var adminProtocal=<cfif application.configBean.getAdminSSL() or application.utility.isHTTPS()>"https://";<cfelse>"http://"</cfif>;
 	var adminProxyLoc=adminProtocal + adminDomain + "#$.globalConfig('serverPort')##$.globalConfig('context')#/admin/assets/js/porthole/proxy.html";
 	var frontEndProxyLoc= location.protocol + "//" + location.hostname + "#$.globalConfig('serverPort')#";
-	
+
 	function onAdminMessage(messageEvent){
 
 		if (messageEvent.origin == 'http://' + adminDomain + "#$.globalConfig('serverPort')#"
@@ -30,14 +30,12 @@
 				window.location=decodeURIComponent(parameters["location"]);
 			} else if(parameters["cmd"] == "setHeight"){
 				resizeFrontEndToolsModal(decodeURIComponent(parameters["height"]));
-			} else if(parameters["cmd"] == "checkPosition"){
-				checkPosition(messageEvent, parameters["y"]);
+			} else if(parameters["cmd"] == "autoScroll"){
+				autoScroll(parameters["y"]);
 			}
 		}			
 	}
 
-	var adminProxy;
-	
 	function initAdminProxy(){
 			adminProxy = new Porthole.WindowProxy(adminProxyLoc, 'frontEndToolsModaliframe');
 			adminProxy.addEventListener(onAdminMessage);
@@ -49,19 +47,26 @@
 	var frontEndModalWidth=0;
 	var frontEndModalIE8=document.all && document.querySelector && !document.addEventListener;
 	
-	function checkPosition(messageEvent, y){
+	function autoScroll(y){
 		var st = $(window).scrollTop();
 	    var o = $('##frontEndToolsModalBody').offset().top;
 	    var t = $(window).scrollTop() + 80;
 	    var b = $(window).height() - 50 + $(window).scrollTop();
 	    var adjY = y + o;
+
 		if (adjY > b) {
 	        //Down
-	        $('html,body').scrollTop(st + 20);
+	        scrollTop(adjY, st + 35);
 		} else if (adjY < t) {
 	        //Up
-	        $('html,body').scrollTop(st - 20);
+	        scrollTop(adjY, st - 35);
 	    }
+	}
+
+	function scrollTop(y, top){
+		$('html, body').stop().animate({
+	        'scrollTop': top
+	    }, 50);
 	}
 
 	function openFrontEndToolsModal(a){
