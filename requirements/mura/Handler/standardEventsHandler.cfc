@@ -573,7 +573,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var requestedfilename=arguments.event.getValue('currentFilenameAdjusted')>
 	<cfset var contentFilename=arguments.event.getValue('contentBean').getFilename()>
 
-	<cfif contentFilename neq '404' and len(requestedfilename) and requestedfilename neq contentFilename>
+	<cfif arguments.event.getValue('muraForceFilename') and contentFilename neq '404' and len(requestedfilename) and requestedfilename neq contentFilename>
 		<cfset arguments.event.getHandler("standardWrongFilename").handle(arguments.event)>
 	</cfif>
 </cffunction>
