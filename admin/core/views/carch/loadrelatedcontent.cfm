@@ -111,10 +111,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		}		
 	</script>
 	<div class="control-group">
-		<label class="control-label">Where is the content</label>
+		<label class="control-label"><a href="##" rel="tooltip" title="You can add related content from either this site or another site entirely. Use the controls below to specify where the related content you'd like to add lives.">Where is the Related Content? <i class="icon-question-sign"></i></a></label>
 		<div class="controls">
-			<label class="radio inline"><input type="radio" onclick="toggleRelatedType(this)" id="contentlocation1" name="contentlocation" value="internal" checked="true"/> Internal</label>
-			<label class="radio inline"><input type="radio" onclick="toggleRelatedType(this)" id="contentlocation2" name="contentlocation" value="external"/>External</label>
+			<label class="radio inline"><input type="radio" onclick="toggleRelatedType(this)" id="contentlocation1" name="contentlocation" value="internal" checked="true"/>In this site</label>
+			<label class="radio inline"><input type="radio" onclick="toggleRelatedType(this)" id="contentlocation2" name="contentlocation" value="external"/>On another site</label>
 		</div>
 	</div>
 	<div class="control-group mura-related-internal">
@@ -231,19 +231,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfif>
 
 <div class="control-group mura-related-external" style="display:none;">
-	<label class="control-label">Title</label>
-	<div  class="form-inline">
-		<div class="input-append">
-			<input type="text" id="mura-related-title" value="">
-		</div>	
+	<div class="span6">
+		<label class="control-label">Title</label>
+		<div  class="controls">
+			<input type="text" id="mura-related-title" value="" class="span12">	
+		</div>
 	</div>
-	<label class="control-label">URL</label>
-	<div class="form-inline">
-		<div class="input-append">
-			<input type="text" id="mura-related-url" value="" placeholder="http://www.example.com"/>
-			<button type="button" name="btnCreateLink" id="rcBtnCreateLink" class="btn" onclick="createExternalLink();"><i class="icon-plus"></i></button>
-		</div>		
-	</div>		
+	<div class="span6">
+		<label class="control-label">URL</label>
+		<div class="controls input-append">
+				<input type="text" id="mura-related-url" value="" placeholder="http://www.example.com" class="span12">
+				<button type="button" name="btnCreateLink" id="rcBtnCreateLink" class="btn" onclick="createExternalLink();"><i class="icon-plus"></i></button>		
+		</div>
+	</div>
 </div>	
 
 <div class="mura-related-external" style="display:none;">
