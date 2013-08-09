@@ -14,7 +14,7 @@
 		<cfif not lockedBySomeElse>
 			<cfif  rc.type eq 'File'
 				and (rc.type eq 'File' and not rc.contentBean.getIsNew())>
-				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')#</p>
+				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')# <a id="mura-file-unlock" href=""<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
 			</cfif>
 
 			<cf_fileselector name="newfile" property="fileid" bean="#rc.contentBean#" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#" >
@@ -24,7 +24,9 @@
 			<cfelse>
 				<cfif rc.type eq 'File' and not rc.contentBean.getIsNew()>
 
-					<a id="mura-file-unlock" class="btn"  href=""<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
+					<!---
+<a id="mura-file-unlock" class="btn"  href=""<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
+--->
 				 	<a id="mura-file-offline-edit" class="btn"<cfif len(stats.getLockID())> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a>
 					
 					<script>
