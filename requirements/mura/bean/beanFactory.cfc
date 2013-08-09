@@ -544,10 +544,10 @@ component {
 					}
 				}
                 if ( !structKeyExists( accumulator.injection, beanName ) ) {
-                    if ( !structKeyExists( variables.settersInfo, beanName ) ) {
+                    if ( !structKeyExists( variables.settersInfo, beanName ) ) {   
                         variables.settersInfo[ beanName ] = findSetters( bean, info.metadata );
                     }
-				    var setterMeta = variables.settersInfo[ beanName ];
+				    var setterMeta = {setters=variables.settersInfo[ beanName ].setters};
 				    setterMeta.bean = bean;
 				    accumulator.injection[ beanName ] = setterMeta; 
 				    for ( var property in setterMeta.setters ) {
