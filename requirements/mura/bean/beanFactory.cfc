@@ -25,7 +25,6 @@ component {
         variables.settersInfo = { };
 		variables.autoExclude = [ '/WEB-INF', '/Application.cfc' ];
         variables.listeners = 0;
-        variables.instanceid = createUUID();
 		setupFrameworkDefaults();
 		return this;
 	}
@@ -545,13 +544,8 @@ component {
 					}
 				}
                 if ( !structKeyExists( accumulator.injection, beanName ) ) {
-                    if ( !structKeyExists( variables.settersInfo, beanName ) ) {
-                        lock name="#beanName##variables.instanceid#" timeout=5 {
-                        	//Since this tread may have waited for access to this logic double check that the setterInfo still does not exist
-                        	if ( !structKeyExists( variables.settersInfo, beanName ) ) {
-                        		variables.settersInfo[ beanName ] = findSetters( bean, info.metadata );
-                        	}
-                        }
+                    if ( !structKeyExists( variables.settersInfo, beanName ) ) {   
+                        variables.settersInfo[ beanName ] = findSetters( bean, info.metadata );
                     }
 				    var setterMeta = structCopy(variables.settersInfo[ beanName ]);
 				    setterMeta.bean = bean;
