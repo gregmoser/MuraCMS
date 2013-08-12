@@ -131,7 +131,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var maxrows=2100>
 
 	<cfif variables.configBean.getDbType() eq 'Oracle'>
-		<cfset maxrows==990>
+		<cfset maxrows=990>
 	</cfif>
 
 	 <cfif dbtype eq "MSSQL">
