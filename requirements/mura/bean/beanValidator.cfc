@@ -311,7 +311,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	public boolean function validate_lte(required any object, required string propertyIdentifier, required string constraintValue) {
 		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
-		if(!isNull(propertyValue) && !isNull(propertyValue) && propertyValue <= arguments.constraintValue) {
+		if(!isNull(propertyValue) && !isNull(arguments.constraintValue) && propertyValue <= arguments.constraintValue) {
 			return true;
 		}
 		return false;
@@ -319,7 +319,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	public boolean function validate_lt(required any object, required string propertyIdentifier, required string constraintValue) {
 		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
-		if(!isNull(propertyValue) && !isNull(propertyValue) && propertyValue < arguments.constraintValue) {
+		if(!isNull(propertyValue) && !isNull(arguments.constraintValue) && propertyValue < arguments.constraintValue) {
 			return true;
 		}
 		return false;
@@ -327,7 +327,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	public boolean function validate_gte(required any object, required string propertyIdentifier, required string constraintValue) {
 		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
-		if(!isNull(propertyValue) && !isNull(propertyValue) && propertyValue >= arguments.constraintValue) {
+		if(!isNull(propertyValue) && !isNull(arguments.constraintValue) && propertyValue >= arguments.constraintValue) {
 			return true;
 		}
 		return false;
@@ -335,16 +335,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	public boolean function validate_gt(required any object, required string propertyIdentifier, required string constraintValue) {
 		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
-		if(!isNull(propertyValue) && !isNull(propertyValue) && propertyValue > arguments.constraintValue) {
+		if(!isNull(propertyValue) && !isNull(arguments.constraintValue) && propertyValue > arguments.constraintValue) {
 			return true;
 		}
 		return false;
 	}
 	
 	public boolean function validate_eq(required any object, required string propertyIdentifier, required string constraintValue) {
-		var objectOnly = arguments.object.getLastObjectByPropertyIdentifier( arguments.propertyIdentifier );
 		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
-		if(!isNull(propertyValue) && !isNull(propertyValue) && propertyValue == arguments.constraintValue) {
+		if(!isNull(propertyValue) && !isNull(arguments.constraintValue) && propertyValue == arguments.constraintValue) {
 			return true;
 		}
 		return false;
@@ -352,12 +351,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	public boolean function validate_neq(required any object, required string propertyIdentifier, required string constraintValue) {
 		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
-		if(!isNull(propertyValue) && !isNull(propertyValue) && propertyValue != arguments.constraintValue) {
+		if(!isNull(propertyValue) && !isNull(arguments.constraintValue) && propertyValue != arguments.constraintValue) {
 			return true;
 		}
 		return false;
 	}
 	
+	/*
 	public boolean function validate_lteProperty(required any object, required string propertyIdentifier, required string constraintValue) {
 		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
 		var compairPropertyValue =  arguments.object.getLastObjectByPropertyIdentifier( arguments.constraintValue ).invokeMethod("get#listLast(arguments.constraintValue,'._')#");
@@ -412,6 +412,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		return false;
 	}
 	
+	*/
+
 	public boolean function validate_inList(required any object, required string propertyIdentifier, required string constraintValue) {
 		var propertyValue = arguments.object.invokeMethod("get#arguments.propertyIdentifier#");
 		if(!isNull(propertyValue) && listFindNoCase(arguments.constraintValue, propertyValue)) {
