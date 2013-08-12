@@ -50,10 +50,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfset counter=0 />
 <cfoutput>
 <div class="control-group control-group-nested">
-	<label class="control-label"><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'tooltip.searchforassocfile'))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforassoc#rc.filetype#')# <i class="icon-question-sign"></i></a></label>
+	<!--- <label class="control-label"><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'tooltip.searchforassocfile'))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforassoc#rc.filetype#')# <i class="icon-question-sign"></i></a></label> --->
 	<div class="controls">
 		<div class="input-append">
-			<input class="filesearch" value="#HTMLEditFormat(rc.keywords)#" type="text" maxlength="50"/><input type="button" class="btn" value="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.search')#" />
+			<input class="filesearch" value="#HTMLEditFormat(rc.keywords)#" type="text" maxlength="50" placeholder="Search for existing file(s)" /><button type="submit" class="btn"><i class="icon-search"></i></button>
 		</div>
 	</div>
 </div>
@@ -61,11 +61,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 </cfoutput>
 <cfif len(rc.keywords)>
-<div style="overflow: auto;" id="selectAssocImageResults">
+<div style="overflow-y: auto;" id="selectAssocImageResults">
 <cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords,'','',rc.type)/>
-<!---<cfoutput>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selectassocimage')#</cfoutput>--->
-<table>
-<tr>
+<ol>
 	<cfset filtered=structNew()>
     <cfif rc.rslist.recordcount>
      <cfoutput query="rc.rslist" startrow="1" maxrows="100">
@@ -77,17 +75,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif verdict neq 'none'>
 				<cfset filtered['#rc.rslist.fileid#']=true>
 				<cfset counter=counter+1/> 
-		        <td><img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rc.rslist.fileid#"><input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rc.rslist.fileid#"></td>
+		        <li><img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rc.rslist.fileid#"></br>
+		        	<input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rc.rslist.fileid#"></li>
 		 	</cfif>
 	 	</cfif>
       </cfoutput>
 	 </cfif>
 	 <cfif not counter>
 		<cfoutput>
-		<td>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</td>
+		<li>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
 		</cfoutput>
 	</cfif>
-</td>
-</table>
+</ol
 </div>
 </cfif>

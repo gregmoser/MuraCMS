@@ -78,8 +78,6 @@
 				</cfif>
 			 <cfif listFindNoCase(session.mura.memberships,"s2")><a id="mura-file-unlock" href="">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a></cfif>
 			<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getFileID())#" />
-		
-		
 		<cfif listFindNoCase(session.mura.memberships,"s2")>
 		<script>
 			jQuery("##mura-file-unlock").click(
@@ -106,5 +104,6 @@
 	</script>
 	<input type="hidden" id="unlockwithnew" name="unlockwithnew" value="false" />
 	</div>
+	<hr class="hr-dotted">
 	</div>
 </cfoutput>
