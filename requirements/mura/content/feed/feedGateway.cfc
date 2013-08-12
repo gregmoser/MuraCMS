@@ -128,6 +128,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var tableModifier="">
 	<cfset var hasextendedparams=false>
 	<cfset var baseIDList="">
+	<cfset var maxrows=2100>
+
+	<cfif variables.configBean.getDbType() eq 'Oracle'>
+		<cfset maxrows=990>
+	</cfif>
 
 	 <cfif dbtype eq "MSSQL">
 	 	<cfset tableModifier="with (nolock)">
@@ -181,7 +186,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfif hasextendedparams>
 		<!--- Generate a list of baseIDs that match the criteria from tclassextenddata --->
-		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsFeed',maxrows=2100)#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsFeed',maxrows=maxrows)#">
 
 			select distinct baseid
 			from tclassextenddata

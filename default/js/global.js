@@ -361,20 +361,17 @@ function validateForm(frm) {
 						});
 										
 					}
-					/*
+					
 					else if(validationType=='MATCH' 
 							&& hasValidationMatchField(theField) && theField.value != theForm[getValidationMatchField(theField)].value)
 					{	
-						if (!started) {
-						started=true;
-						startAt=f;
-						firstErrorNode="input";
-						}
-						
-						errors += getValidationMessage(theField, ' must match' + getValidationMatchField(theField) + '.' );
+						rules.push({
+							eq: theForm[getValidationMatchField(theField)].value,
+							message: getValidationMessage(theField, ' must match' + getValidationMatchField(theField) + '.' );
+						});
 									
 					}
-					*/
+					
 					else if(validationType=='DATE' && theField.value != '')
 					{
 						rules.push({
