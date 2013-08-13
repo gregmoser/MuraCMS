@@ -367,7 +367,7 @@ function validateForm(frm) {
 					{	
 						rules.push({
 							eq: theForm[getValidationMatchField(theField)].value,
-							message: getValidationMessage(theField, ' must match' + getValidationMatchField(theField) + '.' );
+							message: getValidationMessage(theField, ' must match' + getValidationMatchField(theField) + '.' )
 						});
 									
 					}
