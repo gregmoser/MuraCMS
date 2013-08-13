@@ -26,12 +26,10 @@
 			<button type="button" class="btn" value="Existing"><i class="icon-picture"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.selectexisting')#</button>
 		</div>
 
-		<!--- <div class="well"> --->
-
 			<div id="mura-file-upload-#attributes.name#" class="mura-file-option mura-file-upload fileTypeOption#attributes.name#">
 			
 				<div class="control-group control-group-nested">
-					<label class="control-label"> #application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.selectfiletoupload')#</label>
+					<!--- <label class="control-label"> #application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.selectfiletoupload')#</label> --->
 					<div class="controls">
 						<input name="#attributes.name#" type="file" class="mura-file-selector-#attributes.name#"
 							data-label="#HTMLEditFormat(attributes.label)#" data-label="#HTMLEditFormat(attributes.required)#" data-validation="#HTMLEditFormat(attributes.validation)#" data-regex="#HTMLEditFormat(attributes.regex)#" data-message="#HTMLEditFormat(attributes.message)#">
@@ -62,26 +60,27 @@
 			<div id="mura-file-url-#attributes.name#" class="mura-file-option mura-file-url fileTypeOption#attributes.name#">
 				
 				<div class="control-group control-group-nested">
-					<label class="control-label">#application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.selecturl')#</label>
+					<!--- <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.selecturl')#</label> --->
 					<div class="controls">		
-						<input type="text" name="#attributes.name#" class="mura-file-selector-#attributes.name# input-xxlarge" type="url" placeholder="http://www.domain.com/yourfile.zip"	value=""
+						<input type="text" name="#attributes.name#" class="mura-file-selector-#attributes.name# span6" type="url" placeholder="http://www.domain.com/yourfile.zip"	value=""
 						data-label="#HTMLEditFormat(attributes.label)#" data-label="#HTMLEditFormat(attributes.required)#" data-validate="#HTMLEditFormat(attributes.validation)#" data-regex="#HTMLEditFormat(attributes.regex)#" data-message="#HTMLEditFormat(attributes.message)#">
-						<a style="display:none;" class="btn" href="" onclick="return openFileMetaData('#attributes.bean.getContentHistID()#','','#attributes.bean.getSiteID()#','#attributes.property#');"><i class="icon-info-sign"></i></a>
+						<a style="display:none;" href="" onclick="return openFileMetaData('#attributes.bean.getContentHistID()#','','#attributes.bean.getSiteID()#','#attributes.property#');"><i class="icon-info-sign"></i></a>
+						
+						<a href="" id="btn-razuna" title="Select a File from Razuna" rel="tooltip">Razuna</a>
 					</div>
 				</div>
 		
 			</div>
-
 			<div id="mura-file-existing-#attributes.name#" class="mura-file-option mura-file-existing fileTypeOption#attributes.name#">
-				
-		
+
 			</div>
-		<!--- </div> --->
 
 		<cfif isObject(attributes.bean)>
-			<div class="controls">
+			<div class="controls rule-dotted-top">
 			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#" size="#attributes.size#" filetype="#filetype#">
 			</div>
 		</cfif>
 	</div>
+	
+	
 </cfoutput>
