@@ -10,6 +10,7 @@
 <cfparam name="attributes.compactDisplay" default="false">
 <cfparam name="attributes.property" default="#attributes.name#">
 <cfparam name="attributes.size" default="medium">
+<cfparam name="attributes.locked" default="false">
 
 <cfif attributes.bean.getType() neq 'File' and attributes.property eq 'fileid'>
 	<cfset filetype='Image'>
@@ -77,7 +78,7 @@
 
 		<cfif isObject(attributes.bean)>
 			<div class="controls rule-dotted-top">
-			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#" size="#attributes.size#" filetype="#filetype#">
+			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#" size="#attributes.size#" filetype="#filetype#" locked="#attributes.locked#">
 			</div>
 		</cfif>
 	</div>
