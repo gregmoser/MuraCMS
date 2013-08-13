@@ -55,7 +55,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfsilent>
 <cfoutput>
 #variables.$.siteConfig('JSDateKey')#	
-<script type="text/javascript" src="#variables.$.siteConfig('AssetPath')#/js/global.min.js"></script>
+<script type="text/javascript" src="#variables.$.siteConfig('AssetPath')#/js/global.js"></script>
 <script type="text/javascript">
 var loginURL="#variables.loginURL#";
 var siteid="#variables.$.event('siteID')#"; 
