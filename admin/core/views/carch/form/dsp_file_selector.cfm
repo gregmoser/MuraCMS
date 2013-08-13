@@ -17,73 +17,11 @@
 				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')# <a id="mura-file-unlock" href=""<cfif not lockedByYou> style="display:none;"</cfif>><i class="icon-unlock"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
 			</cfif>
 
-			<cf_fileselector name="newfile" property="fileid" bean="#rc.contentBean#" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#" >
+			<cf_fileselector name="newfile" property="fileid" bean="#rc.contentBean#" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#" locked="#len(stats.getLockID())#" >
 
-			<cfif rc.type neq 'File'>			
-							
-			<cfelse>
-				<cfif rc.type eq 'File' and not rc.contentBean.getIsNew()>
-
-					<!---
-					<a id="mura-file-unlock" class="btn"  href=""<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
-					--->
-				 	<cfif len(stats.getLockID())>
-					 	<a class="btn"><i class="icon-download"></i> Download</a>
-					<cfelse>
-						<div class="btn-group">
-						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
-						    <i class="icon-download"></i> Download
-						    <span class="caret"></span>
-						  </a>
-						  <ul class="dropdown-menu">
-						    <!-- dropdown menu links -->
-						    <li><a href="##">Download</a></li>
-						    <li><a id="mura-file-offline-edit" href="##">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a></li>
-						  </ul>
-						</div>
-				 	</cfif>
-				 	
-				 	
-				 	<!--- <a id="mura-file-offline-edit" class="btn"<cfif len(stats.getLockID())> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a> --->
-					
-					<script>
-						jQuery("##mura-file-unlock").click(
-							function(event){
-								event.preventDefault();
-								confirmDialog(
-									"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfileconfirm'))#",
-									function(){
-										jQuery("##msg-file-locked").fadeOut();
-										jQuery("##mura-file-unlock").hide();
-										jQuery("##mura-file-offline-edit").fadeIn();
-										siteManager.hasFileLock=false;
-										jQuery.post("./index.cfm",{muraAction:"carch.unlockfile",contentid:"#rc.contentBean.getContentID()#",siteid:"#rc.contentBean.getSiteID()#"})
-									}
-								);	
-								
-							}
-						);
-						jQuery("##mura-file-offline-edit").click(
-							function(event){
-								event.preventDefault();
-								var a=this;
-								confirmDialog(
-									"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineeditingconfirm'))#",
-									function(){
-										jQuery("##msg-file-locked").fadeIn();
-										jQuery("##mura-file-unlock").fadeIn();
-										jQuery(a).fadeOut();
-										siteManager.hasFileLock=true;
-										document.location="./index.cfm?muraAction=carch.lockfile&contentID=#rc.contentBean.getContentID()#&siteID=#rc.contentBean.getSiteID()#";
-									}
-								);	
-							}
-						);
-					</script>
-
-				</cfif>
-			<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getFileID())#" />
-		</cfif>
+			<cfif rc.type eq 'File'>										
+				<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getFileID())#" />
+			</cfif>
 	<cfelse>
 		<!--- Locked by someone else --->
 		

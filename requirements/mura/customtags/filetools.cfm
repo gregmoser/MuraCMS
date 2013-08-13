@@ -3,6 +3,7 @@
 <cfparam name="attributes.size" default="medium">
 <cfparam name="attributes.compactDisplay" default="false">
 <cfparam name="attributes.deleteKey" default="deleteFile">
+<cfparam name="attributes.locked" default="false">
 
 <cfset fileMetaData=attributes.bean.getFileMetaData(attributes.property)>
 <cfif not fileMetaData.getIsNew()>
@@ -16,6 +17,59 @@
 	     <p>
 	     <a class="mura-file #lcase(attributes.bean.getFileExt())#" href="##" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});">#HTMLEditFormat(fileMetaData.getFilename())#<cfif attributes.property eq 'fileid' and attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif></a>
 	     </p>
+	     
+			<cfif attributes.locked or attributes.property neq "fileid">
+		 	<a class="btn"><i class="icon-download"></i> Download</a>
+		<cfelse>
+			<div class="btn-group">
+			  <a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
+			    <i class="icon-download"></i> Download
+			    <span class="caret"></span>
+			  </a>
+			  <ul class="dropdown-menu">
+			    <!-- dropdown menu links -->
+			    <li><a href="##" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});">Download</a></li>
+			    <li><a id="mura-file-offline-edit" href="##">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a></li>
+			  </ul>
+			</div>
+			
+			<script>
+						jQuery("##mura-file-unlock").click(
+							function(event){
+								event.preventDefault();
+								confirmDialog(
+									"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfileconfirm'))#",
+									function(){
+										jQuery("##msg-file-locked").fadeOut();
+										jQuery("##mura-file-unlock").hide();
+										jQuery("##mura-file-offline-edit").fadeIn();
+										siteManager.hasFileLock=false;
+										jQuery.post("./index.cfm",{muraAction:"carch.unlockfile",contentid:"#attributes.bean.getContentID()#",siteid:"#attributes.bean.getSiteID()#"})
+									}
+								);	
+								
+							}
+						);
+						jQuery("##mura-file-offline-edit").click(
+							function(event){
+								event.preventDefault();
+								var a=this;
+								confirmDialog(
+									"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineeditingconfirm'))#",
+									function(){
+										jQuery("##msg-file-locked").fadeIn();
+										jQuery("##mura-file-unlock").fadeIn();
+										jQuery(a).fadeOut();
+										siteManager.hasFileLock=true;
+										document.location="./index.cfm?muraAction=carch.lockfile&contentID=#attributes.bean.getContentID()#&siteID=#attributes.bean.getSiteID()#";
+									}
+								);	
+							}
+						);
+					</script>
+
+			
+	 	</cfif>
 	</cfif>
 
 	<cfif fileMetaData.hasImageFileExt()>	
