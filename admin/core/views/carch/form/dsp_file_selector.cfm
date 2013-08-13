@@ -14,7 +14,7 @@
 		<cfif not lockedBySomeElse>
 			<cfif  rc.type eq 'File'
 				and (rc.type eq 'File' and not rc.contentBean.getIsNew())>
-				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')# <a id="mura-file-unlock" href=""<cfif not lockedByYou> style="display:none;"</cfif>><i class="icon-unlock"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
+				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')# <a id="mura-file-unlock" href="##"<cfif not lockedByYou> style="display:none;"</cfif>><i class="icon-unlock"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
 			</cfif>
 
 			<cf_fileselector name="newfile" property="fileid" bean="#rc.contentBean#" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#" locked="#len(stats.getLockID())#" >

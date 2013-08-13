@@ -14,12 +14,11 @@
 			or
 			 (not fileMetaData.hasImageFileExt() and attributes.property neq 'fileid')
 		)>
-	     <p>
-	     <a class="mura-file #lcase(attributes.bean.getFileExt())#" href="##" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});">#HTMLEditFormat(fileMetaData.getFilename())#<cfif attributes.property eq 'fileid' and attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif></a>
+	     <p class="mura-file #lcase(attributes.bean.getFileExt())#">#HTMLEditFormat(fileMetaData.getFilename())#<cfif attributes.property eq 'fileid' and attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif>
 	     </p>
 	     
 			<cfif attributes.locked or attributes.property neq "fileid">
-		 	<a class="btn"><i class="icon-download"></i> Download</a>
+		 	<a class="btn" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});"><i class="icon-download"></i> Download</a><br>
 		<cfelse>
 			<div class="btn-group">
 			  <a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
