@@ -71,15 +71,16 @@
 				</div>
 		
 			</div>
-
 			<div id="mura-file-existing-#attributes.name#" class="mura-file-option mura-file-existing fileTypeOption#attributes.name#">
 
 			</div>
 
 		<cfif isObject(attributes.bean)>
-			<div class="controls">
+			<div class="controls rule-dotted-top">
 			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#" size="#attributes.size#" filetype="#filetype#">
 			</div>
 		</cfif>
 	</div>
+	
+	
 </cfoutput>

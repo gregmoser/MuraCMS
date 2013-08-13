@@ -31,6 +31,11 @@ select, input[type="file"] {
 	.box-shadow(0 0 0) !important;
 }
 
+input[type="file"] {
+	height: auto;
+	margin: 0 0 @baseLineHeight/2 0;
+	}
+	
 input[type="checkbox"] {
 	.box-shadow(0 0 0);	
 }
@@ -297,6 +302,11 @@ label:last-child {
 	+ .control-label {
 	margin-top: @baseLineHeight;
 	}
+	
+	&.rule-dotted-top {
+		border-top: 1px dashed @gray;
+		padding-top: @baseLineHeight;
+	}
 }
 
 .btn {
@@ -396,19 +406,13 @@ label:last-child {
 #assocImage {
 	border: 8px solid @grayLight;
 	.border-radius(3px);
-	margin-bottom: @baseLineHeight;
+	margin-bottom: @baseLineHeight/2;
 	.box-sizing(border-box);
 	max-width: 100%;
 	clear: both !important;
 	float: none;
 	display: block;
 }
-
-/*
-#selectAssocImage {
-	margin-left: 3em;
-}
-*/
 
 #mura-file-unlock {
 	clear: both;
@@ -500,12 +504,24 @@ select[multiple] {
 .mura-file-selector {
 		
 	.btn-group {
-		margin-bottom: @baseLineHeight/2;
+		margin-bottom: @baseLineHeight;
 		
 		button[value="Upload"] {
 			.border-left-radius(4px);
 			}
 	}
+	
+	.controls .btn-group i {
+			font-size: 17px;
+			line-height: 19px;
+			top: 2px;
+		
+			&.icon-crop {
+				font-size: 15px;
+				top: 0;
+				}
+		
+		}
 		
 	form {
 		margin-bottom: 0;
@@ -519,6 +535,8 @@ select[multiple] {
 	}
 
 .control-group .mura-file-selector {
+
+		input[type="text"] { float: left; }
 		
 		// Darkening buttons for contrast when in a fieldset
 		.btn {

@@ -14,7 +14,7 @@
 		<cfif not lockedBySomeElse>
 			<cfif  rc.type eq 'File'
 				and (rc.type eq 'File' and not rc.contentBean.getIsNew())>
-				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')# <a id="mura-file-unlock" href=""<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
+				<p id="msg-file-locked" class="alert"<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.youvelockedfile')# <a id="mura-file-unlock" href=""<cfif not lockedByYou> style="display:none;"</cfif>><i class="icon-unlock"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
 			</cfif>
 
 			<cf_fileselector name="newfile" property="fileid" bean="#rc.contentBean#" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#" >
@@ -25,9 +25,26 @@
 				<cfif rc.type eq 'File' and not rc.contentBean.getIsNew()>
 
 					<!---
-<a id="mura-file-unlock" class="btn"  href=""<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
---->
-				 	<a id="mura-file-offline-edit" class="btn"<cfif len(stats.getLockID())> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a>
+					<a id="mura-file-unlock" class="btn"  href=""<cfif not lockedByYou> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
+					--->
+				 	<cfif len(stats.getLockID())>
+					 	<a class="btn"><i class="icon-download"></i> Download</a>
+					<cfelse>
+						<div class="btn-group">
+						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
+						    <i class="icon-download"></i> Download
+						    <span class="caret"></span>
+						  </a>
+						  <ul class="dropdown-menu">
+						    <!-- dropdown menu links -->
+						    <li><a href="##">Download</a></li>
+						    <li><a id="mura-file-offline-edit" href="##">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a></li>
+						  </ul>
+						</div>
+				 	</cfif>
+				 	
+				 	
+				 	<!--- <a id="mura-file-offline-edit" class="btn"<cfif len(stats.getLockID())> style="display:none;"</cfif>>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a> --->
 					
 					<script>
 						jQuery("##mura-file-unlock").click(
@@ -104,6 +121,5 @@
 	</script>
 	<input type="hidden" id="unlockwithnew" name="unlockwithnew" value="false" />
 	</div>
-	<hr class="hr-dotted">
 	</div>
 </cfoutput>
