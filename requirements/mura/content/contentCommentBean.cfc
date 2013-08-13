@@ -365,7 +365,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfset contactEmail=settingsManager.getSite(variables.instance.siteID).getContact()>
 	</cfif>
 	<cfif not len(arguments.script)>
-		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsContents')#">
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsContent')#">
 			select title from tcontent 
 			where contentID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#variables.instance.contentID#">
 			and siteID=<cfqueryparam cfsqltype="cf_sql_varchar" value="#variables.instance.siteID#">
