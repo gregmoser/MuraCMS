@@ -146,6 +146,7 @@ to your own modified versions of Mura CMS.
 				</cfif>
 		
 				<cfset variables.submittedData.isApproved=application.settingsManager.getSite(variables.$.event('siteID')).getCommentApprovalDefault() />
+				<cfset variables.submittedData.url = variables.$.getCurrentURL()>
 				
 				
 				
