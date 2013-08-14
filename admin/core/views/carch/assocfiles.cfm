@@ -63,7 +63,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfif len(rc.keywords)>
 <div style="overflow-y: auto;" id="selectAssocImageResults">
 <cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords,'','',rc.type)/>
-<ol>
+<ul>
 	<cfset filtered=structNew()>
     <cfif rc.rslist.recordcount>
      <cfoutput query="rc.rslist" startrow="1" maxrows="100">
@@ -71,13 +71,21 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfsilent>
 				<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
 	       		<cfset verdict=application.permUtility.getnodePerm(crumbdata)/>
+	       		<cfset hasImage=listFindNoCase("png,gif,jpg,jpeg",rc.rslist.fileExt)>
 			</cfsilent>
 			<cfif verdict neq 'none'>
 				<cfset filtered['#rc.rslist.fileid#']=true>
 				<cfset counter=counter+1/> 
-		        <li><img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rc.rslist.fileid#"></br>
-		        	<input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rc.rslist.fileid#"></li>
+		        <li>
+		        <cfif hasImage>
+		        <img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rc.rslist.fileid#">
+		        <cfelse>
+		        <i class="icon-file-text-alt icon-5x"></i><br>#rc.rslist.assocfilename#
+		        </cfif>
+		        <br><input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rc.rslist.fileid#"></li>
 		 	</cfif>
+		 	
+		 	
 	 	</cfif>
       </cfoutput>
 	 </cfif>
@@ -86,6 +94,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<li>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
 		</cfoutput>
 	</cfif>
-</ol
+</ul>
 </div>
 </cfif>
