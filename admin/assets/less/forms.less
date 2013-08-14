@@ -254,7 +254,7 @@ fieldset, .fieldset { // Using an actual fieldset causes ck editor to grow crazy
 		 .control-group-nested {
 			 border-top: 0;
 			 padding: 0;
-			 margin-bottom: @baseLineHeight;
+			 margin-bottom: @baseLineHeight/2;
 			 
 			 label {
 				 font-weight: normal;
@@ -305,7 +305,8 @@ label:last-child {
 	
 	&.rule-dotted-top {
 		border-top: 1px dashed @gray;
-		padding-top: @baseLineHeight;
+		margin-top: @baseLineHeight;
+		padding-top: @baseLineHeight/2;
 	}
 }
 
@@ -401,6 +402,24 @@ label:last-child {
 // Basic Tab
 .mura-file {
 	font-size: 15px;
+	line-height: 28px;
+	margin-bottom: 0;
+	
+	> i {
+		vertical-align: middle;
+		float: left;
+		margin-right: .25em;
+		//margin-top: -12px;
+		}
+	
+	& + .btn {
+
+		margin: @baseLineHeight/2 0;
+	
+		> i {
+			font-size: 16px;
+		}
+	}
 }
 
 #assocImage {

@@ -77,9 +77,7 @@
 			</div>
 
 		<cfif isObject(attributes.bean)>
-			<div class="controls rule-dotted-top">
 			<cf_filetools bean="#attributes.bean#" property="#attributes.property#" deleteKey="#attributes.deleteKey#" compactDisplay="#attributes.compactDisplay#" size="#attributes.size#" filetype="#filetype#" locked="#attributes.locked#">
-			</div>
 		</cfif>
 	</div>
 	
