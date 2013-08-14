@@ -78,11 +78,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset counter=counter+1/> 
 		        <li>
 		        <cfif hasImage>
-		        <img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rc.rslist.fileid#">
+		        <img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rc.rslist.fileid#"><br>
 		        <cfelse>
-		        <i class="icon-file-text-alt icon-5x"></i><br>#rc.rslist.assocfilename#
+		        <i class="icon-file-text-alt icon-5x"></i><br>#rc.rslist.assocfilename#<br>
 		        </cfif>
-		        <br><input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rc.rslist.fileid#"></li>
+		        	<input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rc.rslist.fileid#"></li>
 		 	</cfif>
 		 	
 		 	
