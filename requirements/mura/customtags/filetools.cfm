@@ -7,6 +7,7 @@
 
 <cfset fileMetaData=attributes.bean.getFileMetaData(attributes.property)>
 <cfif not fileMetaData.getIsNew()>
+<div class="controls rule-dotted-top">
 <cfoutput>
 	<cfif 
 		(
@@ -90,4 +91,5 @@
 		<input type="checkbox" name="#attributes.deleteKey#" value="1" class="deleteFileBox"/> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removeattachedfile')#
 	</label>
 </cfoutput>
+</div>
 </cfif>
