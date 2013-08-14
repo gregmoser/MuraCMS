@@ -100,9 +100,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				or yesNoFormat(currentConfig.plugin.createmapping.xmlText)>
 			<cfif not isNumeric(m) and not structKeyExists(this.mappings,m)>
 				<cfif canWriteMode>
-					<cffile action="append" file="#variables.baseDir#/plugins/mappings.cfm" output='<cfset this.mappings["/#m#"] = variables.BaseDir & "/plugins/#rsRequirements.name#">' mode="775">
+					<cffile action="append" file="#variables.baseDir#/plugins/mappings.cfm" output='<cfset this.mappings["/#m#"] = expandPath("/plugins/#rsRequirements.name#")>' mode="775">
 				<cfelseif canWriteMappings>
-					<cffile action="append" file="#variables.baseDir#/plugins/mappings.cfm" output='<cfset this.mappings["/#m#"] = variables.BaseDir & "/plugins/#rsRequirements.name#">'>		
+					<cffile action="append" file="#variables.baseDir#/plugins/mappings.cfm" output='<cfset this.mappings["/#m#"] = expandPath("/plugins/#rsRequirements.name#")>'>		
 				</cfif>
 				<cfset this.mappings["/#m#"] = rsRequirements.directory & "/" & rsRequirements.name>
 			</cfif>
@@ -126,9 +126,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfif len(p) and directoryExists(currentPath)>
 					<cfset pluginmapping=currentConfig.plugin.mappings.mapping[m].xmlAttributes.name>
 					<cfif canWriteMode>
-						<cffile action="append" file="#variables.baseDir#/plugins/mappings.cfm" output='<cfif not structKeyExists(this.mappings,"/#pluginmapping#")><cfset this.mappings["/#pluginmapping#"] = variables.baseDir & "/plugins/#rsRequirements.name#/#p#"></cfif>' mode="775">
+						<cffile action="append" file="#variables.baseDir#/plugins/mappings.cfm" output='<cfif not structKeyExists(this.mappings,"/#pluginmapping#")><cfset this.mappings["/#pluginmapping#"] = expandPath("/plugins/#rsRequirements.name#/#p#)"></cfif>' mode="775">
 					<cfelseif canWriteMappings>
-						<cffile action="append" file="#variables.baseDir#/plugins/mappings.cfm" output='<cfif not structKeyExists(this.mappings,"/#pluginmapping#")><cfset this.mappings["/#pluginmapping#"] = variables.baseDir & "/plugins/#rsRequirements.name#/#p#"></cfif>'>		
+						<cffile action="append" file="#variables.baseDir#/plugins/mappings.cfm" output='<cfif not structKeyExists(this.mappings,"/#pluginmapping#")><cfset this.mappings["/#pluginmapping#"] = expandPath("/plugins/#rsRequirements.name#/#p#")></cfif>'>		
 					</cfif>
 				</cfif>
 			</cfif>

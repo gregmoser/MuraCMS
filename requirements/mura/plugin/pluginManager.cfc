@@ -622,7 +622,7 @@ select * from tplugins order by #arguments.orderby#
 				<cfif not isDefined("currentConfig.plugin.createmapping.xmlText")
 					or yesNoFormat(currentConfig.plugin.createmapping.xmlText)>
 					<cfif not isNumeric(m) and not structKeyExists(done,mHash)>
-						<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfset this.mappings["/#m#"] = variables.BaseDir & "/plugins/#rsRequirements.name#">')>
+						<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfset this.mappings["/#m#"] = expandPath("/plugins/#rsRequirements.name#")>')>
 						<cfset done[mHash]=true>
 					</cfif>
 				</cfif>
@@ -646,7 +646,7 @@ select * from tplugins order by #arguments.orderby#
 							<cfset currentPath=currentDir & "/" & p>
 							<cfif len(p) and directoryExists(currentPath)>
 								<cfset pluginmapping=currentConfig.plugin.mappings.mapping[m].xmlAttributes.name>
-								<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfif not structKeyExists(this.mappings,"/#pluginmapping#")><cfset this.mappings["/#pluginmapping#"] = variables.BaseDir & "/plugins/#rsRequirements.name#/#p#"></cfif>')>
+								<cfset variables.fileWriter.appendFile(file="#baseDir#/mappings.cfm", output='<cfif not structKeyExists(this.mappings,"/#pluginmapping#")><cfset this.mappings["/#pluginmapping#"] = expandPath("/plugins/#rsRequirements.name#/#p#")></cfif>')>
 							</cfif>
 						</cfif>
 					</cfloop>
@@ -662,7 +662,7 @@ select * from tplugins order by #arguments.orderby#
 						</cfif>
 						<cfset currentPath=currentDir & "/" & p>
 						<cfif len(p) and directoryExists(currentPath)>
-							<cfset variables.fileWriter.appendFile(file="#baseDir#/cfapplication.cfm", output='<cfset this.customtagpaths = listAppend(this.customtagpaths,BaseDir & "/plugins/#rsRequirements.name#/#p#")>')>
+							<cfset variables.fileWriter.appendFile(file="#baseDir#/cfapplication.cfm", output='<cfset this.customtagpaths = listAppend(this.customtagpaths, expandPath("/plugins/#rsRequirements.name#/#p#") )>')>
 						</cfif>
 					</cfloop>
 				</cfif>
