@@ -2065,7 +2065,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		
 	</cffunction>
-	<!---
+	
 	<cffunction name="getToWorkAdvertising" returntype="void" output="false">
 		<cfargument name="fromSiteID" type="string" default="" required="true">
 		<cfargument name="toSiteID" type="string" default="" required="true">
@@ -2708,7 +2708,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfloop>
 		
 	</cffunction>
-	--->
+	
 	<cffunction name="getToWorkClassExtensions" returntype="void">
 		<cfargument name="fromSiteID" type="string" default="" required="true">
 		<cfargument name="toSiteID" type="string" default="" required="true">
