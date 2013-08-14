@@ -55,7 +55,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			
 			<cfset publishedVersion=$.getBean('content').loadBy(contenthistid=draftprompdata.publishedHistoryID)>
 			<cfif publishedVersion.getApproved() or not draftprompdata.hasdraft>		
-				<table>
+				<table class="mura-table-grid">
 					<thead>
 						<tr>
 							<th colspan="4">
@@ -79,7 +79,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif draftprompdata.hasdraft>
 
 				<cfset draftVersion=$.getBean('content').loadBy(contenthistid=draftprompdata.historyid)>
-				<table>
+				<table class="mura-table-grid">
 					<thead>
 						<tr>
 							<th colspan="4">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.latest'))#</th>
@@ -97,7 +97,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfif>
 
 			<cfif draftprompdata.pendingchangesets.recordcount>
-				<table>	
+				<table class="mura-table-grid">	
 					<thead>
 						<tr>
 							<th colspan="4">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.changesets'))#</th>
@@ -118,7 +118,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 			<cfif draftprompdata.yourapprovals.recordcount>
 				<cfset content=$.getBean('content').loadBy(contentid=rc.contentid)>
-				<table>	
+				<table class="mura-table-grid">	
 					<thead>
 						<tr>
 							<th colspan="4">#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.draftprompt.awaitingapproval'))#</th>
