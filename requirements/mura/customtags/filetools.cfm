@@ -15,7 +15,7 @@
 			or
 			 (not fileMetaData.hasImageFileExt() and attributes.property neq 'fileid')
 		)>
-	     <p class="mura-file #lcase(attributes.bean.getFileExt())#">#HTMLEditFormat(fileMetaData.getFilename())#<cfif attributes.property eq 'fileid' and attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif>
+	     <p class="mura-file #lcase(attributes.bean.getFileExt())#"><i class="icon-file-text-alt icon-2x"></i> #HTMLEditFormat(fileMetaData.getFilename())#<cfif attributes.property eq 'fileid' and attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif>
 	     </p>
 	     
 		<cfif attributes.locked or attributes.property neq "fileid">
@@ -84,7 +84,7 @@
 	</cfif>
 
 	<label class="checkbox inline" for="deleteFileBox">
-		<input type="checkbox" name="#attributes.deleteKey#" value="1" class="deleteFileBox"/> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removeattachedfile')#
+		<input type="checkbox" name="#attributes.deleteKey#" value="1" class="deleteFileBox"/><a href="##" rel="tooltip" title="To remove the file, check the box and publish or save a version of the page">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removeattachedfile')# <i class="icon-question-sign"></i></a>
 	</label>
 </cfoutput>
 </div>

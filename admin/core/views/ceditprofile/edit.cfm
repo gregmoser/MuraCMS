@@ -170,13 +170,6 @@ select * from rsSubTypes where subType <> 'Default'
 	        <div class="controls">
 	        	<a href="./index.cfm?muraAction=cArch.imagedetails&userid=#rc.userBean.getUserID()#&siteid=#rc.userBean.getSiteID()#&fileid=#rc.userBean.getPhotoFileID()#"><img id="assocImage" src="#application.configBean.getContext()#/tasks/render/medium/index.cfm?fileid=#rc.userBean.getPhotoFileID()#&cacheID=#createUUID()#" /></a>
 	        	
-	        	<!---
-<div class="btn-group">
-				  <a class="btn" href="#"><i class="icon-crop"></i></a>
-				  <a class="btn" href="#"><i class="icon-info-sign"></i></a>
-				</div>
---->
-	        	
 	        	<input type="checkbox" name="removePhotoFile" value="true"> #application.rbFactory.getKeyValue(session.rb,'user.delete')# 
 	        </div>
         </cfif>

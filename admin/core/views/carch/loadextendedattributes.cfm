@@ -86,6 +86,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfelse>
 				#attributeBean.getLabel()#
 				</cfif>
+				</label>
 				<div class="controls">
 					#attributeBean.renderAttribute(theValue=attributeValue,bean=contentBean,compactDisplay=rc.compactDisplay,size='medium')#
 				</div>
