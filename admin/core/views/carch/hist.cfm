@@ -83,9 +83,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfif hasChangesets><th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.changeset')#</th></cfif> 
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.status')#</th>
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.display')#</th>
+<!---
 <cfif rc.contentBean.getType() neq "file"><th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.objects')#</th></cfif> 
-<!---<th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.feature')#</th> --->
+<th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.feature')#</th>
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.nav')#</th> 
+ --->
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.update')#</th> 
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.time')#</th>
 <th>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.authoreditor')#</th> </cfoutput>
@@ -133,7 +135,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	</td>
 </cfif>
-<td class="notes"><cfif rc.item.getnotes() neq ''><a rel="tooltip" data-original-title="#$.setParagraphs(htmleditformat(rc.item.getnotes()))#">View&nbsp;Note</a></cfif></td>
+<td class="notes"><cfif rc.item.getnotes() neq ''><a rel="tooltip" data-original-title="#htmleditformat(rc.item.getnotes())#">View&nbsp;Note</a></cfif></td>
 <cfif hasChangesets>
 	<td class="changeset">
 		<cfif isDate(rc.item.getchangesetPublishDate())><a href="##" rel="tooltip" title="#HTMLEditFormat(LSDateFormat(rc.item.getchangesetPublishDate(),"short"))#"> <i class="icon-calendar"></i></a></cfif>
@@ -146,6 +148,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</td>
 </cfif> 
 <td class="status">#versionStatus#</td> 
+<!---
 <td class="display<cfif rc.item.getDisplay() eq 2> scheduled</cfif>"> 
 	<cfif rc.item.getDisplay() and (rc.item.getDisplay() eq 1 and rc.item.getapproved())>	
  		<i class="icon-ok" title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.yes')#"></i><span>#application.rbFactory.getKeyValue(session.rb,'sitemanager.yes')#</span>
@@ -154,6 +157,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
     <i class="icon-ban-circle" title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.no')#"></i><span>#application.rbFactory.getKeyValue(session.rb,'sitemanager.no')#</span>
   </cfif>
 </td>
+
 <cfif rc.contentBean.getType() neq "file">
 	<td class="objects">
 	<cfif rc.item.getinheritObjects() eq 'cascade'>
@@ -165,7 +169,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfif>
 			<span>#application.rbFactory.getKeyValue(session.rb,'sitemanager.#lcase(rc.item.getinheritobjects())#')#</span></td>
 </cfif>
-<!---
+
 <td class="feature<cfif rc.item.getisfeature() eq 2>> scheduled</cfif>"> 
 	<cfif rc.item.getisfeature() eq 1>
 			<i class="icon-ok" title="#application.rbFactory.getKeyValue(session.rb,"sitemanager.yes")#"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.yes")#
@@ -176,14 +180,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<span>#application.rbFactory.getKeyValue(session.rb,"sitemanager.no")#</span>
 		</cfif>
 </td>
---->
+
 <td class="nav-display">
 <cfif rc.item.getisnav()>
 <i class="icon-ok" title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.#yesnoformat(rc.item.getisnav())#')#"></i>
 <cfelse><i class="icon-ban-circle" title="#application.rbFactory.getKeyValue(session.rb,'sitemanager.#yesnoformat(rc.item.getisnav())#')#"></i>
 </cfif>
 <span>#application.rbFactory.getKeyValue(session.rb,'sitemanager.#yesnoformat(rc.item.getisnav())#')#</span>
-			 </td>
+ </td>
+ --->
 <td class="last-updated">#LSDateFormat(rc.item.getlastupdate(),session.dateKeyFormat)#</td> 
 <td class="time">#LSTimeFormat(rc.item.getlastupdate(),"short")#</td>
 <td class="user">#HTMLEditFormat(rc.item.getlastUpdateBy())#</td> 
