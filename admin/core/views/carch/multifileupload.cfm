@@ -505,7 +505,7 @@ $(function () {
         CKEDITOR.inline( 
                 document.getElementById(id),
                 {
-                    toolbar: 'Default',
+                    toolbar: 'Basic',
                     width: "75%",
                     customConfig: 'config.js.cfm'
                 }
@@ -517,7 +517,7 @@ $(function () {
             CKEDITOR.inline( 
                     document.getElementById(id),
                     {
-                        toolbar: 'Default',
+                        toolbar: 'Basic',
                         width: "75%",
                         customConfig: 'config.js.cfm'
                     }
