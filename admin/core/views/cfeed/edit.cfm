@@ -240,11 +240,24 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 		<cfif application.categoryManager.getCategoryCount(rc.siteid)>
 			<div class="control-group">
-		      <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'collections.categoryfilters')#</label>
-		      <div id="mura-list-tree" class="controls">
-			      <cf_dsp_categories_nest siteID="#rc.siteID#" parentID="" nestLevel="0" feedID="#rc.feedID#" feedBean="#rc.feedBean#">
-			  </div>
-		</div>
+			      <label class="control-label">#application.rbFactory.getKeyValue(session.rb,'collections.categoryfilters')#</label>
+			      <div id="mura-list-tree" class="controls">
+				      <cf_dsp_categories_nest siteID="#rc.siteID#" parentID="" nestLevel="0" feedID="#rc.feedID#" feedBean="#rc.feedBean#">
+				  </div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Category Intersection</label>
+				<div class="controls">
+				<label class="radio inline">
+					<input name="useCategoryIntersect" type="radio" value="1" class="radio" <cfif rc.feedBean.getUseCategoryIntersect()>checked</cfif>>#application.rbFactory.getKeyValue(session.rb,'collections.yes')# 
+				</label>
+				<label class="radio inline">
+					<input name="useCategoryIntersect" type="radio" value="0" class="radio" <cfif not rc.feedBean.getUseCategoryIntersect()>checked</cfif>>#application.rbFactory.getKeyValue(session.rb,'collections.no')# 
+				</label>
+				</div>
+			</div>
+
 		</cfif>
 	
 		<div class="control-group">

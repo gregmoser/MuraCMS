@@ -94,6 +94,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="autoimport" type="numeric" default="0" required="true" />
 <cfproperty name="isLocked" type="numeric" default="0" required="true" />
 <cfproperty name="cssClass" type="string" default="" />
+<cfproperty name="useCategoryIntersect" type="numeric" default="0" />
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	<cfset super.init(argumentCollection=arguments)>
@@ -150,6 +151,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.autoimport=0 />
 	<cfset variables.instance.isLocked=0 />
 	<cfset variables.instance.cssClass="" />
+	<cfset variables.instance.useCategoryIntersect=0 />
 
 	<cfset variables.primaryKey = 'feedid'>
 	<cfset variables.entityName = 'feed'>
@@ -307,6 +309,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="isLocked" type="any" />
 	<cfif isNumeric(arguments.isLocked)>
 	<cfset variables.instance.isLocked = arguments.isLocked />
+	</cfif>
+	<cfreturn this>
+</cffunction>
+
+<cffunction name="setUseCategoryIntersect" access="public" output="false">
+	<cfargument name="useCategoryIntersect" type="any" />
+	<cfif isNumeric(arguments.useCategoryIntersect)>
+	<cfset variables.instance.useCategoryIntersect = arguments.useCategoryIntersect />
 	</cfif>
 	<cfreturn this>
 </cffunction>

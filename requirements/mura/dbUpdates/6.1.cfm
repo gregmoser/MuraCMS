@@ -56,4 +56,7 @@
 	.addColumn(column="siteid",datatype="varchar",length=25,nullable=false,default='')
 	.addPrimaryKey('siteid');
 
+	dbUtility.setTable("tcontentfeeds")
+	.addColumn(column="useCategoryIntersect",dataType="int");
+
 </cfscript>
