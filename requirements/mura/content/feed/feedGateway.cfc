@@ -416,7 +416,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 									<cfloop from="2" to="#categoryLen#" index="c">
 										<cfset palias = listGetAt(alpha,c-1)>
 										<cfset talias = listGetAt(alpha,c)>
-										inner join tcontentcategoryassign #talias# on #palias#.contentHistID = #talias#.contentHistID and #talias#.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),c)#"/> 
+										inner join tcontentcategoryassign #talias# #tableModifier# on #palias#.contentHistID = #talias#.contentHistID and #talias#.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),c)#"/> 
 									</cfloop>
 									where a.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),1)#"/>
 								)
@@ -618,7 +618,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfloop from="2" to="#categoryLen#" index="c">
 					<cfset palias = listGetAt(alpha,c-1)>
 					<cfset talias = listGetAt(alpha,c)>
-					inner join tcontentcategoryassign #talias# on #palias#.contentHistID = #talias#.contentHistID and #talias#.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),c)#"/> 
+					inner join tcontentcategoryassign #talias# #tableModifier# on #palias#.contentHistID = #talias#.contentHistID and #talias#.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),c)#"/> 
 				</cfloop>
 				where a.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),1)#"/>
 			)
