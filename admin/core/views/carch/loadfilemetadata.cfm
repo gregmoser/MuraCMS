@@ -28,7 +28,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.caption')#
 					</label>
 					<div class="controls">
-						<textarea id="file-caption" data-property="caption" class="filemeta span4 htmlEditor">#fileMetaData.getCaption()#</textarea>
+						<textarea id="file-caption" data-property="caption" class="filemeta span12 htmlEditor">#fileMetaData.getCaption()#</textarea>
 					</div>
 				</div>
 				<div class="control-group">
@@ -36,7 +36,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.credits')#
 					</label>
 					<div class="controls">
-						<textarea id="file-credits" data-property="credits" class="filemeta span4 htmlEditor">#fileMetaData.getCredits()#</textarea>
+						<textarea id="file-credits" data-property="credits" class="filemeta span12 htmlEditor">#fileMetaData.getCredits()#</textarea>
 					</div>
 				</div>
 				<div class="control-group">
@@ -44,7 +44,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.filemetadata.alttext')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="alttext" value="#HTMLEditFormat(fileMetaData.getAltText())#"  maxlength="255" class="filemeta span4">
+						<input type="text" data-property="alttext" value="#HTMLEditFormat(fileMetaData.getAltText())#"  maxlength="255" class="filemeta span12">
 					</div>
 				</div>
 				<div class="control-group">
@@ -66,7 +66,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.remoteid')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="remoteid" value="#HTMLEditFormat(fileMetaData.getRemoteID())#"  maxlength="255" class="filemeta span4">
+						<input type="text" data-property="remoteid" value="#HTMLEditFormat(fileMetaData.getRemoteID())#"  maxlength="255" class="filemeta span12">
 					</div>
 				</div>
 				<div class="control-group">
@@ -74,7 +74,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.remoteurl')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="remoteurl" value="#HTMLEditFormat(fileMetaData.getRemoteURL())#"  maxlength="255" class="filemeta span4">
+						<input type="text" data-property="remoteurl" value="#HTMLEditFormat(fileMetaData.getRemoteURL())#"  maxlength="255" class="filemeta span12">
 					</div>
 				</div>
 				<div class="control-group">
@@ -82,7 +82,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.remotepublicationdate')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="remotepubdate" value="#LSDateFormat(fileMetaData.getRemotePubDate(),session.dateKeyFormat)#"  maxlength="255" class="filemeta span4 datepicker">
+						<input type="text" data-property="remotepubdate" value="#LSDateFormat(fileMetaData.getRemotePubDate(),session.dateKeyFormat)#"  maxlength="255" class="filemeta span12 datepicker">
 					</div>
 				</div>
 				<div class="control-group">
@@ -90,7 +90,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.remotesource')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="remotesource" value="#HTMLEditFormat(fileMetaData.getRemoteSource())#"  maxlength="255" class="filemeta span4">
+						<input type="text" data-property="remotesource" value="#HTMLEditFormat(fileMetaData.getRemoteSource())#"  maxlength="255" class="filemeta span12">
 					</div>
 				</div>
 				<div class="control-group">
@@ -98,7 +98,7 @@
 						#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.remotesourceurl')#
 					</label>
 					<div class="controls">
-						<input type="text" data-property="remotesourceurl" value="#HTMLEditFormat(fileMetaData.getRemoteSourceURL())#"  maxlength="255" class="filemeta span4">
+						<input type="text" data-property="remotesourceurl" value="#HTMLEditFormat(fileMetaData.getRemoteSourceURL())#"  maxlength="255" class="filemeta span12">
 					</div>
 				</div>
 			</div>
