@@ -129,6 +129,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var hasextendedparams=false>
 	<cfset var baseIDList="">
 	<cfset var maxrows=2100>
+	<cfset var alpha="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1,l1,m1,n1,o1,p1,q1,r1,s1,t1,u1,v1,w1,x1,y1,z1">
 
 	<cfif variables.configBean.getDbType() eq 'Oracle'>
 		<cfset maxrows=990>
@@ -409,16 +410,27 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</cfif>
 						
 						<cfif categoryLen>
-							AND tcontent.contentHistID in (
-							select distinct tcontentcategoryassign.contentHistID from tcontentcategoryassign #tableModifier#
-							inner join tcontentcategories #tableModifier#
-							ON (tcontentcategoryassign.categoryID=tcontentcategories.categoryID) 
-							where (<cfloop from="1" to="#categoryLen#" index="c">
-									tcontentcategories.path like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#listgetat(arguments.feedBean.getCategoryID(),c)#%"/> 
-									<cfif c lt categoryLen> or </cfif>
-									</cfloop>) 
-							)
-						
+							<cfif arguments.feedBean.getUseCategoryIntersect()>
+								AND tcontent.contentHistID in (
+									select a.contentHistID from tcontentcategoryassign a
+									<cfloop from="2" to="#categoryLen#" index="c">
+										<cfset palias = listGetAt(alpha,c-1)>
+										<cfset talias = listGetAt(alpha,c)>
+										inner join tcontentcategoryassign #talias# on #palias#.contentHistID = #talias#.contentHistID and #talias#.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),c)#"/> 
+									</cfloop>
+									where a.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),1)#"/>
+								)
+							<cfelse>
+								AND tcontent.contentHistID in (
+								select distinct tcontentcategoryassign.contentHistID from tcontentcategoryassign #tableModifier#
+								inner join tcontentcategories #tableModifier#
+								ON (tcontentcategoryassign.categoryID=tcontentcategories.categoryID) 
+								where (<cfloop from="1" to="#categoryLen#" index="c">
+										tcontentcategories.path like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#listgetat(arguments.feedBean.getCategoryID(),c)#%"/> 
+										<cfif c lt categoryLen> or </cfif>
+										</cfloop>) 
+								)
+							</cfif>
 						</cfif>
 										
 						<cfif arguments.feedBean.getIsFeaturesOnly()>AND (
@@ -600,16 +612,27 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</cfif>
 	
 	<cfif categoryLen>
-		AND tcontent.contenthistID in (
-			select distinct tcontentcategoryassign.contentHistID from tcontentcategoryassign #tableModifier#
-			inner join tcontentcategories #tableModifier#
-			ON (tcontentcategoryassign.categoryID=tcontentcategories.categoryID) 
-			where (<cfloop from="1" to="#categoryLen#" index="c">
-					tcontentcategories.path like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#listgetat(arguments.feedBean.getCategoryID(),c)#%"/> 
-					<cfif c lt categoryLen> or </cfif>
-					</cfloop>) 
-		)
-	
+		<cfif arguments.feedBean.getUseCategoryIntersect()>
+			AND tcontent.contentHistID in (
+				select a.contentHistID from tcontentcategoryassign a
+				<cfloop from="2" to="#categoryLen#" index="c">
+					<cfset palias = listGetAt(alpha,c-1)>
+					<cfset talias = listGetAt(alpha,c)>
+					inner join tcontentcategoryassign #talias# on #palias#.contentHistID = #talias#.contentHistID and #talias#.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),c)#"/> 
+				</cfloop>
+				where a.categoryID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#listgetat(arguments.feedBean.getCategoryID(),1)#"/>
+			)
+		<cfelse>
+			AND tcontent.contenthistID in (
+				select distinct tcontentcategoryassign.contentHistID from tcontentcategoryassign #tableModifier#
+				inner join tcontentcategories #tableModifier#
+				ON (tcontentcategoryassign.categoryID=tcontentcategories.categoryID) 
+				where (<cfloop from="1" to="#categoryLen#" index="c">
+						tcontentcategories.path like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#listgetat(arguments.feedBean.getCategoryID(),c)#%"/> 
+						<cfif c lt categoryLen> or </cfif>
+						</cfloop>) 
+			)
+		</cfif>
 	</cfif>
 					
 	<cfif arguments.feedBean.getIsFeaturesOnly()>AND (
