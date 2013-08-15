@@ -134,7 +134,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 		<!--- BEGIN BUNDLEABLE CUSTOM OBJECTS --->
 		<cfif structKeyExists(arguments, "bundle")>
-			<cfset var bundleablebeans=application.objectMappings.bundleablebeans>	
+			<cfset var bundleablebeans=arguments.Bundle.getValue("bundleablebeans",'')>	
 			<cfif len(bundleablebeans)>
 				<cfset var bb="">
 
@@ -157,13 +157,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<cfset getBean("categoryUtility").updateGlobalMaterializedPath(siteid=arguments.toSiteID,datasource=arguments.toDSN) />
 		 	</cfif>
 		 	
+		 	<!---
 			<cfif arguments.contentMode eq "all" and arguments.keyMode eq "publish" and not StructKeyExists(arguments,"Bundle")>
 				<cfif not isDate(arguments.lastDeployment)>
 					<cfset getToWorkSyncMetaOLD(argumentCollection=arguments)>
 				</cfif>
 				<cfset getToWorkClassExtensionsOLD(argumentCollection=arguments)>
 			</cfif>
-			
+			--->
+
 			<cfif StructKeyExists(arguments,"Bundle")>
 				<cfset getToWorkSyncMeta(argumentCollection=arguments)>
 				<cfset getToWorkTrash(argumentCollection=arguments)>
@@ -206,12 +208,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 		<cfif len(arguments.toSiteID) and (arguments.usersMode neq "none" or arguments.contentMode neq "none")>
 			<cfset getToWorkFiles(argumentCollection=arguments)>
-		</cfif>
-		
-		<cfif len(arguments.toSiteID) and (arguments.usersMode neq "none" or arguments.contentMode neq "none")
-		and not (arguments.keyMode eq "publish" and not StructKeyExists(arguments,"Bundle"))>
 			<cfset getToWorkClassExtensions(argumentCollection=arguments)>
 		</cfif>
+		
+		<!---<cfif len(arguments.toSiteID) and (arguments.usersMode neq "none" or arguments.contentMode neq "none")
+		and not (arguments.keyMode eq "publish" and not StructKeyExists(arguments,"Bundle"))>
+			<cfset getToWorkClassExtensions(argumentCollection=arguments)>
+		</cfif>--->
 			
 		<cfif StructKeyExists(arguments,"Bundle")>
 			<cfset rssite=Bundle.getValue("rssite")>
@@ -2493,6 +2496,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		
 	</cffunction>
 	
+	<!---
 	<cffunction name="getToWorkSyncMetaOLD" returntype="void" output="false">
 		<cfargument name="fromSiteID" type="string" default="" required="true">
 		<cfargument name="toSiteID" type="string" default="" required="true">
@@ -2708,7 +2712,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfloop>
 		
 	</cffunction>
-	
+	--->
+
 	<cffunction name="getToWorkClassExtensions" returntype="void">
 		<cfargument name="fromSiteID" type="string" default="" required="true">
 		<cfargument name="toSiteID" type="string" default="" required="true">
