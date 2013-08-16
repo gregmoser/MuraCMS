@@ -1171,7 +1171,6 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 						and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#local.parentBean.getSiteID()#">
 						and active=1
 						and type= 'Link'
-						and title = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rcs.items[j].title#">
 						and body like <cfqueryparam cfsqltype="cf_sql_varchar" value="#rcs.items[j].url#">
 					</cfquery>
 
