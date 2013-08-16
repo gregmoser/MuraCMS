@@ -741,15 +741,31 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfelse>
 				<cfset rstcontentrelated = arguments.Bundle.getValue("rstcontentrelated")>
 			</cfif>
+
+			<!---
+			.addColumn(column="relatedContentSetID",dataType="varchar",length="35")
+	.addColumn(column="orderNo",dataType="int")
+	.addColumn(column="relatedContentID",autoincrement=true)
+	.addPrimaryKey('relatedContentSetID');
+	--->
 			<cfloop query="rstcontentrelated">
 				<cfquery datasource="#arguments.toDSN#">
-					insert into tcontentrelated (contentHistID,contentID,relatedID,siteID)
+					insert into tcontentrelated (contentHistID,contentID,relatedID,siteID
+					<cfif isdefined('rstcontentrelated.relatedContentSetID')>
+					,relatedContentSetID
+					,orderNo
+					</cfif>
+					)
 					values
 					(
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(rstcontentrelated.contentHistID)#">,
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(rstcontentrelated.contentID)#">,
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(rstcontentrelated.relatedID)#">,
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#arguments.tositeID#">
+					<cfif isdefined('rstcontentrelated.relatedContentSetID')>
+						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(rstcontentrelated.relatedContentSetID)#">
+						,<cfqueryparam cfsqltype="cf_sql_INTEGER" null="no" value="#iif(isNumeric(rstcontentrelated.orderno),de(rstcontentrelated.orderno),de(0))#">
+					</cfif>
 					)
 				</cfquery>
 			</cfloop>

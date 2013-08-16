@@ -966,7 +966,8 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 					}
 					
 					$('#newFileMetaContainer .htmlEditor').ckeditor({
-							toolbar: 'Default',
+							toolbar: 'Basic',
+							height: 100,
 							customConfig: 'config.js.cfm'
 						}, htmlEditorOnComplete);
 

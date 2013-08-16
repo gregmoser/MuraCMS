@@ -33,25 +33,6 @@
 				</cfif>
 			 <cfif listFindNoCase(session.mura.memberships,"s2")><a id="mura-file-unlock" href="">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a></cfif>
 			<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getFileID())#" />
-		<cfif listFindNoCase(session.mura.memberships,"s2")>
-		<script>
-			jQuery("##mura-file-unlock").click(
-						function(event){
-							event.preventDefault();
-							confirmDialog(
-								"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfileconfirm'))#",
-								function(){
-									jQuery.post(
-										"./index.cfm",{muraAction:"carch.unlockfile",contentid:"#rc.contentBean.getContentID()#",siteid:"#rc.contentBean.getSiteID()#"},
-										function(){location.reload();}
-									);
-								}
-							);	
-							
-						}
-					);
-		</script>
-		</cfif>
 	</cfif>
 	<script>
 		hasFileLock=<cfif stats.getLockID() eq session.mura.userID>true<cfelse>false</cfif>;
