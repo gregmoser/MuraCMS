@@ -20,31 +20,29 @@
 	     
 	</cfif>
 
-	<div class="btn-group">
-		<cfif fileMetaData.hasImageFileExt()>
+	<cfif fileMetaData.hasImageFileExt()>
+		<div class="btn-group">
 			<a class="btn" href="./index.cfm?muraAction=cArch.imagedetails&contenthistid=#attributes.bean.getContentHistID()#&siteid=#attributes.bean.getSiteID()#&fileid=#attributes.bean.getvalue(attributes.property)#&compactDisplay=#urlEncodedFormat(attributes.compactDisplay)#"><i class="icon-crop"></i>
 			</a>
 			<a class="btn" href="" onclick="return openFileMetaData('#fileMetaData.getContentHistID()#','#fileMetaData.getFileID()#','#attributes.bean.getSiteID()#','#attributes.property#');"><i class="icon-info-sign"></i></a>
-		</cfif>
-		<cfif attributes.property neq "fileid">
-			 <a class="btn" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});"><i class="icon-download"></i> Download </a>
-			 	
-		<cfelse>
-			<a id="mura-download-locked" <cfif not attributes.locked> style="display:none"</cfif> class="btn" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});"><i class="icon-download"></i> Download </a>
-			<div id="mura-download-unlocked" class="btn-group"<cfif attributes.locked> style="display:none"</cfif>>
-			  	<a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
-				   <i class="icon-download"></i> Download <span class="caret"></span>
-			  	</a>
-				<ul class="dropdown-menu">
-				    <!-- dropdown menu links -->
-				    <li><a href="##" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});">Download</a></li>
-				    <li><a id="mura-file-offline-edit" href="##">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a></li>
-				</ul>
-			</div>
-		 </cfif>
-	</div>
-
+	</cfif>
+	<cfif attributes.property neq "fileid" or (attributes.property eq "fileid"  and attributes.bean.getType() neq 'File') >
+		<a class="btn" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});"><i class="icon-download"></i> Download </a>		 	
+	<cfelse>
+		<a id="mura-download-locked" <cfif not attributes.locked> style="display:none"</cfif> class="btn" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});"><i class="icon-download"></i> Download </a>
+		<div id="mura-download-unlocked" class="btn-group"<cfif attributes.locked> style="display:none"</cfif>>
+			<a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
+				<i class="icon-download"></i> Download <span class="caret"></span>
+			 </a>
+			<ul class="dropdown-menu">
+				<!-- dropdown menu links -->
+				<li><a href="##" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});">Download</a></li>
+				<li><a id="mura-file-offline-edit" href="##">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineediting')#</a></li>
+			</ul>
+		</div>
+	</cfif>
 	<cfif fileMetaData.hasImageFileExt()>
+		</div>
 		<img id="assocImage" src="#request.context.$.getURLForImage(fileid=attributes.bean.getvalue(attributes.property),size=attributes.size)#?cacheID=#createUUID()#" />
 	</cfif>	
 
@@ -54,7 +52,7 @@
 		</label>
 	</div>
 
-	<cfif attributes.property eq 'fileid'>
+	<cfif attributes.property eq 'fileid' and attributes.bean.getType() eq 'File'>
 		
 		<script>
 			jQuery("##mura-file-unlock").click(
