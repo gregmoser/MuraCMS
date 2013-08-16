@@ -23,14 +23,17 @@
 
 						if(e.keyCode === $.ui.keyCode.ENTER){ //&& !$(this).data('autocomplete').menu.active){
 							e.preventDefault();
+							input.val($.trim(input.val()));
 							
-							var tag = $('<span class="tag"/>')
-								.text(input.val() + ' ')
-								.append('<a><i class="icon-remove-sign"></i></a>')
-								.append($('<input type="hidden"/>').attr('name', name).val(input.val()))
-								.insertBefore(input);
+							if(input.val() != ''){
+								var tag = $('<span class="tag"/>')
+									.text(input.val() + ' ')
+									.append('<a><i class="icon-remove-sign"></i></a>')
+									.append($('<input type="hidden"/>').attr('name', name).val(input.val()))
+									.insertBefore(input);
+							}
 
-								input.val('');
+							input.val('');
 						}
 					})
 
