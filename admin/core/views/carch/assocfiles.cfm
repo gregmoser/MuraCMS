@@ -44,10 +44,23 @@ For clarity, if you create a modified version of Mura CMS, you are not obligated
 modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
-<cfset request.layout=false>
-<cfparam name="rc.keywords" default="">
-<cfparam name="rc.isNew" default="1">
-<cfset counter=0 />
+<cfsilent>
+	<cfset request.layout=false>
+	<cfparam name="rc.keywords" default="">
+	<cfparam name="rc.isNew" default="1">
+
+	<cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords,'','',rc.type)/>
+	
+	<cfquery name="rsImages" dbtype="query">
+		select * from rc.rslist 
+		where lower(fileExt) in ('png','jpg','jpeg','gif')
+	</cfquery>
+	<cfquery name="rsFiles" dbtype="query">
+		select * from rc.rslist 
+		where lower(fileExt) not in ('png','jpg','jpeg','gif')
+	</cfquery>
+	<cfset filtered=structNew()>	
+</cfsilent>
 <cfoutput>
 <div class="control-group control-group-nested">
 	<!--- <label class="control-label"><a href="##" rel="tooltip" title="#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'tooltip.searchforassocfile'))#">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.searchforassoc#rc.filetype#')# <i class="icon-question-sign"></i></a></label> --->
@@ -58,42 +71,82 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</div>
 </div>
 
-
 </cfoutput>
 <cfif len(rc.keywords)>
-<div style="overflow-y: auto;" id="selectAssocImageResults">
-<cfset rc.rsList=application.contentManager.getPrivateSearch(rc.siteid,rc.keywords,'','',rc.type)/>
-<ul>
-	<cfset filtered=structNew()>
-    <cfif rc.rslist.recordcount>
-     <cfoutput query="rc.rslist" startrow="1" maxrows="100">
-		<cfif not structKeyExists(filtered,'#rc.rslist.fileid#')>
-			<cfsilent>
-				<cfset crumbdata=application.contentManager.getCrumbList(rc.rslist.contentid, rc.siteid)/>
-	       		<cfset verdict=application.permUtility.getnodePerm(crumbdata)/>
-	       		<cfset hasImage=listFindNoCase("png,gif,jpg,jpeg",rc.rslist.fileExt)>
-			</cfsilent>
-			<cfif verdict neq 'none'>
-				<cfset filtered['#rc.rslist.fileid#']=true>
-				<cfset counter=counter+1/> 
-		        <li>
-		        <cfif hasImage>
-		        <img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rc.rslist.fileid#"><br>
-		        <cfelse>
-		        <i class="icon-file-text-alt icon-5x"></i><br>#rc.rslist.assocfilename#<br>
-		        </cfif>
-		        	<input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rc.rslist.fileid#"></li>
-		 	</cfif>
-		 	
-		 	
-	 	</cfif>
-      </cfoutput>
-	 </cfif>
-	 <cfif not counter>
-		<cfoutput>
-		<li>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
-		</cfoutput>
-	</cfif>
-</ul>
-</div>
+	<div class="tabbable tabs-left"  id="selectAssocImageResults">
+		<ul class="nav nav-tabs tabs">
+			<li><a href="##mura-assoc-images" onclick="return false;"><span>Images</span></a></li>
+			<li><a href="##mura-assoc-files" onclick="return false;"><span>Other Files</span></a></li>
+		</ul>
+		<div class="tab-content">
+			<div id="mura-assoc-images" class="tab-pane fade">
+				<div style="overflow-y: auto;" >
+				<ul>
+				    <cfif rsimages.recordcount>
+				    <cfset counter=0 />
+				     <cfoutput query="rsimages" startrow="1" maxrows="100">
+						<cfif not structKeyExists(filtered,'#rsimages.fileid#')>
+							<cfsilent>
+								<cfset crumbdata=application.contentManager.getCrumbList(rsimages.contentid, rc.siteid)/>
+					       		<cfset verdict=application.permUtility.getnodePerm(crumbdata)/>
+					       		<cfset hasImage=listFindNoCase("png,gif,jpg,jpeg",rsimages.fileExt)>
+							</cfsilent>
+							<cfif verdict neq 'none'>
+								<cfset filtered['#rsimages.fileid#']=true>
+								<cfset counter=counter+1/> 
+						        <li>
+						        <cfif hasImage>
+						        <img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rsimages.fileid#"><br>
+						        <cfelse>
+						        <i class="icon-file-text-alt icon-5x"></i><br>#rsimages.assocfilename#<br>
+						        </cfif>
+						        <input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rsimages.fileid#"></li>
+						 	</cfif>	 	
+					 	</cfif>
+				      </cfoutput>
+					 </cfif>
+					 <cfif not counter>
+						<cfoutput>
+						<li>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
+						</cfoutput>
+					</cfif>
+				</ul>
+				</div>
+			</div>
+			<div id="mura-assoc-files" class="tab-pane fade">
+				<div style="overflow-y: auto;" >
+				<ul>
+					<cfif rsfiles.recordcount>
+					<cfset counter=0 />
+				     <cfoutput query="rsfiles" startrow="1" maxrows="100">
+						<cfif not structKeyExists(filtered,'#rsfiles.fileid#')>
+							<cfsilent>
+								<cfset crumbdata=application.contentManager.getCrumbList(rsfiles.contentid, rc.siteid)/>
+					       		<cfset verdict=application.permUtility.getnodePerm(crumbdata)/>
+					       		<cfset hasImage=listFindNoCase("png,gif,jpg,jpeg",rsfiles.fileExt)>
+							</cfsilent>
+							<cfif verdict neq 'none'>
+								<cfset filtered['#rsfiles.fileid#']=true>
+								<cfset counter=counter+1/> 
+						        <li>
+						        <cfif hasImage>
+						        <img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rsfiles.fileid#"><br>
+						        <cfelse>
+						        <i class="icon-file-text-alt icon-5x"></i><br>#rsfiles.assocfilename#<br>
+						        </cfif>
+						        <input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rsfiles.fileid#"></li>
+						 	</cfif>		 	
+					 	</cfif>
+				      </cfoutput>
+					 </cfif>
+					 <cfif not counter>
+						<cfoutput>
+						<li>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
+						</cfoutput>
+					</cfif>
+				</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </cfif>
