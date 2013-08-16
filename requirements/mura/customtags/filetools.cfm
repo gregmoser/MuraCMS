@@ -30,7 +30,7 @@
 			 <a class="btn" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});"><i class="icon-download"></i> Download </a>
 			 	
 		<cfelse>
-			<a id="mura-download-locked" <cfif not attributes.locked> style="display:none"</cfif> class="btn" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});"><i class="icon-download"></i> Download 2</a>
+			<a id="mura-download-locked" <cfif not attributes.locked> style="display:none"</cfif> class="btn" onclick="return confirmDialog('#application.rbFactory.getKeyValue(session.rb,'sitemanager.downloadconfirm')#',function(){location.href='#application.configBean.getContext()#/tasks/render/file/index.cfm?fileid=#attributes.bean.getvalue(attributes.property)#&method=attachment';});"><i class="icon-download"></i> Download </a>
 			<div id="mura-download-unlocked" class="btn-group"<cfif attributes.locked> style="display:none"</cfif>>
 			  	<a class="btn dropdown-toggle" data-toggle="dropdown" href="##">
 				   <i class="icon-download"></i> Download <span class="caret"></span>
