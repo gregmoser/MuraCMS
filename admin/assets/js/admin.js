@@ -1015,7 +1015,7 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 
 	    var loadAssocFiles=function(keywords) {
 			var url = 'index.cfm';
-			var pars = 'muraAction=cArch.assocfiles&compactDisplay=true&siteid=' + $elm.attr('data-siteid') + '&fileid=' + $elm.attr('data-fileid') + '&fileType=' + $elm.attr('data-filetype') + '&contentid=' + $elm.attr('data-contentid') +  '&property=' + $elm.attr('data-property') +'&keywords=' + keywords + '&cacheid=' + Math.random();
+			var pars = 'muraAction=cArch.assocfiles&compactDisplay=true&siteid=' + $elm.attr('data-siteid') + '&fileid=' + $elm.attr('data-fileid') + '&type=' + $elm.attr('data-filetype') + '&contentid=' + $elm.attr('data-contentid') +  '&property=' + $elm.attr('data-property') +'&keywords=' + keywords + '&cacheid=' + Math.random();
 			$elm.find(".mura-file-existing").html('<div class="load-inline"></div>');
 
 			$.ajax(url + "?" + pars)

@@ -43,6 +43,56 @@
 	For clarity, if you create a modified version of Mura CMS, you are not obligated to grant this special exception for your 
 	modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
 	version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS. */
+.badge {
+  padding-left: 7px;
+  padding-right: 7px;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+  border: 0 solid #ffffff;
+  background-color: #b3b3b3;
+  color: #ffffff;
+}
+.label-important,
+.badge-important {
+  background-color: #ff3a00;
+}
+.label-important[href],
+.badge-important[href] {
+  background-color: #cc2e00;
+}
+.label-warning,
+.badge-warning {
+  background-color: #ffc40d;
+}
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #d9a400;
+}
+.label-success,
+.badge-success {
+  background-color: #587231;
+}
+.label-success[href],
+.badge-success[href] {
+  background-color: #3c4f22;
+}
+.label-info,
+.badge-info {
+  background-color: #4e7696;
+}
+.label-info[href],
+.badge-info[href] {
+  background-color: #3d5c74;
+}
+.label-inverse,
+.badge-inverse {
+  background-color: #666666;
+}
+.label-inverse[href],
+.badge-inverse[href] {
+  background-color: #4d4d4d;
+}
 .clearfix {
   *zoom: 1;
 }
