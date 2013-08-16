@@ -508,7 +508,7 @@ select[multiple] {
 .mura-file-selector {
 		
 	.btn-group {
-		margin-bottom: @baseLineHeight;
+		margin-bottom: @baseLineHeight/2;
 		
 		button[value="Upload"] {
 			.border-left-radius(4px);
@@ -517,6 +517,11 @@ select[multiple] {
 	
 	#mura-download-locked, #mura-download-unlocked {
 		margin: @baseLineHeight/2 0;
+		}
+		
+	#mura-download-locked {
+		.border-right-radius(4px);
+		border-left: 0;
 		}
 	
 	.controls .btn-group i {
