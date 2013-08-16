@@ -15,7 +15,7 @@
 			or
 			 (not fileMetaData.hasImageFileExt() and attributes.property neq 'fileid')
 		)>
-	     <p class="mura-file #lcase(attributes.bean.getFileExt())#"><i class="icon-file-text-alt icon-2x"></i> #HTMLEditFormat(fileMetaData.getFilename())#<cfif attributes.property eq 'fileid' and attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif>
+	     <p class="mura-file #lcase(attributes.bean.getFileExt())#"><i class="<cfif fileMetaData.hasImageFileExt()>icon-picture<cfelse>icon-file-text-alt</cfif> icon-2x"></i> #HTMLEditFormat(fileMetaData.getFilename())#<cfif attributes.property eq 'fileid' and attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif>
 	     </p>
 	     
 	</cfif>
@@ -45,9 +45,7 @@
 	</div>
 
 	<cfif fileMetaData.hasImageFileExt()>
-		<a href="./index.cfm?muraAction=cArch.imagedetails&contenthistid=#attributes.bean.getContentHistID()#&siteid=#attributes.bean.getSiteID()#&fileid=#attributes.bean.getvalue(attributes.property)#&compactDisplay=#urlEncodedFormat(attributes.compactDisplay)#">
 		<img id="assocImage" src="#request.context.$.getURLForImage(fileid=attributes.bean.getvalue(attributes.property),size=attributes.size)#?cacheID=#createUUID()#" />
-	</a>
 	</cfif>	
 
 	<div>
