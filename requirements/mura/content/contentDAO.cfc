@@ -1131,6 +1131,9 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfset var rcsData = "">
 	<cfset var rsRelatedContent = "">
 	<cfset var relatedID="">
+	<cfset var rsCheck="">
+	<cfset var relatedBean="">
+	<cfset var relatedIDList="">
 
 	<cfif isDefined('arguments.data.relatedContentSetData') and ((isArray(arguments.data.relatedContentSetData) and arrayLen(arguments.data.relatedContentSetData) gte 1) or isJSON(arguments.data.relatedContentSetData))>
 	
@@ -1159,7 +1162,24 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 						</cfif>
 					</cfif>
 
-					<cfset relatedID = getBean('content')
+					<cfset relatedBean=getBean('content')>
+
+					<cfquery name="rsCheck">
+						select contenthistid,siteid from tcontent 
+						where 
+						parentid = <cfqueryparam cfsqltype="cf_sql_varchar" value="#local.parentBean.getContentID()#">
+						and siteID = <cfqueryparam cfsqltype="cf_sql_varchar" value="#local.parentBean.getSiteID()#">
+						and active=1
+						and type= 'Link'
+						and title = <cfqueryparam cfsqltype="cf_sql_varchar" value="#rcs.items[j].title#">
+						and body like <cfqueryparam cfsqltype="cf_sql_varchar" value="#rcs.items[j].url#">
+					</cfquery>
+
+					<cfif rsCheck.recordcount>
+						<cfset relatedBean.loadBy(contenthistid=rsCheck.contenthistid,siteid=rsCheck.siteid)>
+					</cfif>
+
+					<cfset relatedID = relatedBean
 						.setBody(rcs.items[j].url)
 						.setTitle(rcs.items[j].title)
 						.setType('Link')
@@ -1175,20 +1195,23 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 					<cfset relatedID = rcs.items[j]>
 				</cfif>
 				
-				<cftry>
-					<cfquery>
-						insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,orderNo)
-						values (
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#relatedID#"/>,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#rcs.relatedContentSetID#"/>,
-						<cfqueryparam cfsqltype="cf_sql_integer" value="#j#"/>
-						)
-					</cfquery>
-					<cfcatch></cfcatch>
-				</cftry>
+				<cfif not listFindNoCase(relatedIDList,relatedID)>
+					<cftry>
+						<cfquery>
+							insert into tcontentrelated (contentID,contentHistID,relatedID,siteid,relatedContentSetID,orderNo)
+							values (
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentID#"/>,
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentHistID#"/>,
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#relatedID#"/>,
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.siteID#"/>,
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#rcs.relatedContentSetID#"/>,
+							<cfqueryparam cfsqltype="cf_sql_integer" value="#j#"/>
+							)
+						</cfquery>
+						<cfcatch></cfcatch>
+					</cftry>
+					<cfset relatedIDList=listAppend(relatedIDList,relatedID)>
+				</cfif>
 			</cfloop>
 			
 		</cfloop>
