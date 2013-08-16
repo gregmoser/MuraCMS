@@ -523,12 +523,6 @@
 		/* @end */
 		
 	#tabFlat {
-			
-		.sidebar {
-			float: right;
-			width: 22%;
-			/* margin-top: 42px; */
-			}
 		
 		.mura-table-grid {
 			float: left;
@@ -555,6 +549,9 @@
 		
 		.sidebar {
 		
+			float: right;
+			width: 22%;
+		
 			.nav {
 				
 				.active {
@@ -569,9 +566,9 @@
 			}
 		
 			h2 {
-				font-size: 13px;
-				font-weight: bold;
-				margin-bottom: 0;
+				font-size: 16px;
+				//font-weight: normal;
+				margin-bottom: .25em;
 				}
 				
 			h3 {
@@ -609,6 +606,14 @@
 			background: #FBC2C4;
 			font-size: 11px;
 			display: inline-block;
+			.border-radius(4px);
+			
+			i {
+				font-size: 16px;
+				color: @black;
+				position: relative;
+				top: 2px;
+			}
 		}
 		
 		.item h2 {
@@ -785,17 +790,6 @@
 		display: block;
 		float: left;
 		padding-left: 12px;
-		
-		/*
-&:before {
-			.icon-font('FontAwesome');
-			content: '\f01a';
-			font-size: 18px;
-			margin-right: .25em;
-			position: relative;
-			top: 2px;
-		}
-*/
 	}
 	
 	#msg-file-locked.error a {
@@ -810,25 +804,7 @@
 			top: 2px;
 		}
 	}
-	
-	/*
-#mura-file-unlock {
-		text-decoration: none;
-		padding-left: 12px;
-		display: block;
-		float: left;
 		
-		&:before {
-			.icon-font('FontAwesome');
-			content: '\f09c';
-			font-size: 18px;
-			margin-right: .25em;
-			position: relative;
-			top: 2px;
-		}
-	}
-*/
-	
 	#content #mura-revision-type {
 		margin: 0;
 		line-height: 2.2 !important;

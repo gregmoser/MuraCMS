@@ -153,6 +153,11 @@
 	a {
 		color: @white;
 		cursor: pointer;
+		
+		i {
+			color: darken(@blue,30%);		
+			}
+		
 		}
 	
 	a:hover {
@@ -165,6 +170,22 @@
 		clear: both;
 		margin-top: @baseLineHeight / 2;
 		}
+}
+
+#mura-filter-tags .tagSelector {
+
+	> .tag {
+		margin: 0 .25em .25em 0;
+		}
+	
+	input[type="text"] {
+	float: none;
+	margin: .25em 0 0 0;
+	.border-box();
+	width: 100%;
+	height: 28px;
+	padding: 4px 6px;
+	}
 }
 
 .ui-widget {

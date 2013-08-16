@@ -310,26 +310,10 @@ label:last-child {
 	}
 }
 
-.btn {
-  color: @grayDark;
-  border-color: @btnBorder @btnBorder darken(@btnBorder, 10%);
-}
-
 .tab-content, .fieldset-wrap {
 
 	.form-actions {
-	
 		text-align: center;
-	
-		.btn {
-			.btn-primary;
-			
-			i {
-				color: darken(@btnInverseBackgroundHighlight,30%);
-				text-shadow: 0 1px 0 rgba(255,255,255,.25);
-				}
-			
-			}
 		}
 	}
 	
@@ -529,7 +513,11 @@ select[multiple] {
 		button[value="Upload"] {
 			.border-left-radius(4px);
 			}
-	}
+		}
+	
+	#mura-download-locked, #mura-download-unlocked {
+		margin: @baseLineHeight/2 0;
+		}
 	
 	.controls .btn-group i {
 			font-size: 17px;
@@ -540,8 +528,7 @@ select[multiple] {
 				font-size: 15px;
 				top: 0;
 				}
-		
-		}
+			}
 		
 	form {
 		margin-bottom: 0;

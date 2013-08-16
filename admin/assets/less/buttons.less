@@ -1,9 +1,15 @@
 .btn {
   color: @grayDark;
   border-color: @btnBorder @btnBorder darken(@btnBorder, 10%);
-  }
+  
+  i {
+	position: relative;
+	text-shadow: 0 1px 0 rgba(255,255,255,1);
+	}
+	
+}
 
-.btn-primary {
+.btn.btn-primary {
 		.border-radius(28px);
 		.box-shadow(inset 0 0 0);
 		.buttonBackground(@btnPrimaryBackground, @btnPrimaryBackgroundHighlight);
@@ -11,16 +17,18 @@
 		border-color: @btnPrimaryBorder @btnPrimaryBorder darken(@btnPrimaryBorder, 8%) @btnPrimaryBorder !important;
 		text-shadow: 0 -1px 1px rgba(0,0,0,.35);
 		margin: 0 .15em;
+		color: @white !important;
+		
+		i {
+			color: darken(@blue,30%);
+			text-shadow: 0 1px 0 rgba(255,255,255,.25);
+			}
+			
 		}
 
 .btn-icon-only {
 	padding-right: 3px;
 	padding-left: 3px;
-	}
-
-.btn i {
-	position: relative;
-	text-shadow: 0 1px 0 rgba(255,255,255,1);
 	}
 	
 .nav-pills .btn {
