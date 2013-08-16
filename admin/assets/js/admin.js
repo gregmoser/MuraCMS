@@ -1025,6 +1025,8 @@ function openFileMetaData(contenthistid,fileid,siteid,property) {
 					$elm.find(".mura-file-existing").find('.btn').click(function(){
 						loadAssocFiles($elm.find(".mura-file-existing").find(".filesearch").val());
 					});
+
+					setTabs('#selectAssocImageResults',0);
 				}
 			)
 			.error(
