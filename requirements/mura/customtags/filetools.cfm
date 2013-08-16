@@ -49,10 +49,10 @@
 	</cfif>	
 
 	<div>
-	<label class="checkbox inline" for="deleteFileBox">
-		<input type="checkbox" name="#attributes.deleteKey#" value="1" class="deleteFileBox"/><a href="##" rel="tooltip" title="To remove the file, check the box and publish or save a version of the page">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removeattachedfile')# <i class="icon-question-sign"></i></a>
-	</label>
-</div>
+		<label class="checkbox inline" for="deleteFileBox">
+			<input type="checkbox" name="#attributes.deleteKey#" value="1" class="deleteFileBox"/><a href="##" rel="tooltip" title="To remove the file, check the box and publish or save a version of the page">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removeattachedfile')# <i class="icon-question-sign"></i></a>
+		</label>
+	</div>
 
 	<cfif attributes.property eq 'fileid'>
 		
