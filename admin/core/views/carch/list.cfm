@@ -223,76 +223,48 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	     <input type="text" name="searchString" id="searchString" value="#HTMLEditFormat(rc.searchString)#" class="text" size="20">
 	  	</div>
 
-	  	<cfsilent>
-		<cfset tags=$.getBean('contentGateway').getTagCloud(siteid=$.event('siteID'),moduleID=rc.moduleID) />
-		<cfset tagValueArray = ListToArray(ValueList(tags.tagCount))>
-		<cfset max = ArrayMax(tagValueArray)>
-		<cfset min = ArrayMin(tagValueArray)>
-		<cfset diff = max - min>
-		<cfset distribution = diff>
-		<cfset rbFactory=$.siteConfig().getRBFactory()>
-		</cfsilent>	
-	
-		<cfif tags.recordcount>
-			<div class="module well" id="mura-filter-tags">
-				<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.tags")#</h3>
-				<div id="svTagCloud">
-					<ol>
-					<cfloop query="tags"><cfsilent>
-							<cfif tags.tagCount EQ min>
-							<cfset class="not-popular">
-						<cfelseif tags.tagCount EQ max>
-							<cfset class="ultra-popular">
-						<cfelseif tags.tagCount GT (min + (distribution/2))>
-							<cfset class="somewhat-popular">
-						<cfelseif tags.tagCount GT (min + distribution)>
-							<cfset class="mediumTag">
-						<cfelse>
-							<cfset class="not-very-popular">
-						</cfif>
-					
-						<cfset args = ArrayNew(1)>
-					    <cfset args[1] = tags.tagcount>
-					</cfsilent><li class="#class#"><span><cfif tags.tagcount gt 1> #rbFactory.getResourceBundle().messageFormat($.rbKey('tagcloud.itemsare'), args)#<cfelse>#rbFactory.getResourceBundle().messageFormat($.rbKey('tagcloud.itemis'), args)#</cfif> tagged with </span><a class="tag<cfif listFind($.event('tag'),tags.tag)> active</cfif>">#HTMLEditFormat(tags.tag)#</a></li>
-					</cfloop>
-					</ol>
-				</div>
-			</div>
+	  	<div class="module well" id="mura-filter-tags">
+			<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.tags")#</h3>
 
-		</cfif>
-	  	<cfif $.getBean("categoryManager").getCategoryCount($.event("siteID"))>
-		<div class="module well" id="mura-list-tree">
-		<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.categories")#</h3>
-		<cf_dsp_categories_nest siteID="#$.event('siteID')#" parentID="" nestLevel="0" categoryid="#$.event('categoryid')#">
+			<div id="tags" class="tagSelector">
+				<cfloop list="#$.event('tags')#" index="i">
+					<span class="tag">
+					#HTMLEditFormat(i)# <a><i class="icon-remove-sign"></i></a>
+					<input name="tags" type="hidden" value="#HTMLEditFormat(i)#">
+					</span>
+				</cfloop>
+				<input type="text" name="tags">
+			</div>
 		</div>
-	</cfif>
-		<input type="hidden" name="tag" id="tag" value="#HTMLEditFormat($.event('tag'))#" />
+
+	  	<cfif $.getBean("categoryManager").getCategoryCount($.event("siteID"))>
+			<div class="module well" id="mura-list-tree">
+				<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.categories")#</h3>
+				<cf_dsp_categories_nest siteID="#$.event('siteID')#" parentID="" nestLevel="0" categoryid="#$.event('categoryid')#">
+			</div>
+		</cfif>
+
 	  	<input type="submit" class="btn" name="filterList" value="#application.rbFactory.getKeyValue(session.rb,"sitemanager.filter")#"/>
-	  	<cfif len($.event('categoryID') & $.event('tag') & $.event('searchString'))>
+	  	<cfif len($.event('categoryID') & $.event('tags') & $.event('searchString'))>
 	  	<input type="button" class="btn" name="removeFilter" id="removeFilter" value="#application.rbFactory.getKeyValue(session.rb,"sitemanager.removefilter")#" onclick=""/>
 	  	</cfif>
   	 </form>
 
-  	 <script> 	
-	  	$('##filterByTitle').submit(
-	  		function(){
-		  	 	var tag=[];
+  	 <script>
 
-		  	 	$("##svTagCloud .active").each(
-					function(){
-						tag.push($(this).html());
-					}
-				);
-					
-				$('##tag').val(tag.toString());
-				
-				return true;
-	  	 	}
-	  	 );	
+  	 	$(function(){
+			$.get('?muraAction=carch.loadtagarray&siteid=' + siteid).done(
+				function(data){
+					var tagArray=eval('(' + data + ')'); 
+					$('##tags').tagSelector(tagArray, 'tags');
+				}
+			);
+		}); 	
 
 	  	$('##removeFilter').click(
 	  		function(){
-		  	 	$('##tag').val('');
+	  			$('span.tag').remove();
+		  	 	$("input[name='tags']").val('');
 				$('##searchString').val('');
 				$('input[name=categoryID]').attr('checked', false);
 				document.getElementById('filterByTitle').submit();
@@ -300,12 +272,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	  	 	}
 	  	 );	
 
-		$("##svTagCloud a").click(
-			function(event){
-				event.preventDefault();
-				jQuery(this).toggleClass('active');
-			}
-		);
 	</script>
 </div>
 </cfoutput>
@@ -336,7 +302,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfparam name="rc.lockid" default="" />
 <cfparam name="rc.assignments" default="false" />
 <cfparam name="rc.categoryid" default="" />
-<cfparam name="rc.tag" default="" />
+<cfparam name="rc.tags" default="" />
 <cfparam name="rc.type" default="" />
 <cfparam name="rc.page" default="1" />
 <cfparam name="rc.subtype" default="" />
@@ -387,8 +353,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		session.flatViewArgs["#session.siteid#"].categoryid=rc.categoryid;
 	}
 	
-	if(not structKeyExists(session.flatViewArgs["#session.siteid#"],"tag")){
-		session.flatViewArgs["#session.siteid#"].tag=rc.tag;
+	if(not structKeyExists(session.flatViewArgs["#session.siteid#"],"tags")){
+		session.flatViewArgs["#session.siteid#"].tags=rc.tags;
 	}
 	
 	if(not structKeyExists(session.flatViewArgs["#session.siteid#"],"page")){
@@ -539,10 +505,9 @@ function initFlatViewArgs(){
 			sortby:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].sortby)#', 
 			sortdirection:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].sortdirection)#', 
 			page:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].page)#',	
-			tag:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].tag)#',
+			tags:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].tags)#',
 			categoryid:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].categoryid)#',
 			lockid:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].lockid)#',
-			type:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].type)#',
 			type:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].type)#',
 			subType:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].subtype)#',
 			report:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].report)#',

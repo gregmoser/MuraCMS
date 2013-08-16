@@ -98,6 +98,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		<cfparam name="data.searchString" default="">
 		<cfparam name="data.categoryid" default="">
 		<cfparam name="data.tag" default="">
+		<cfparam name="data.tags" default="">
+
+
 		
 		<cfswitch expression="#data.moduleid#">
 			<cfcase value="00000000000000000000000000000000011,00000000000000000000000000000000012,00000000000000000000000000000000013" delimiters=",">
@@ -126,6 +129,9 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 				<cfif len(data.tag)>
 					<cfset feed.addParam(column="tcontenttags.tag",criteria=data.tag,condition="in")>
+				</cfif>
+				<cfif len(data.tags)>
+					<cfset feed.addParam(column="tcontenttags.tag",criteria=data.tags,condition="in")>
 				</cfif>
 				
 				<cfset rs=feed.getQuery()>

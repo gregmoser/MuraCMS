@@ -65,7 +65,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	session.flatViewArgs["#rc.siteID#"].lockid=$.event("lockid");
 	session.flatViewArgs["#rc.siteID#"].assignments=$.event("assignments");
 	session.flatViewArgs["#rc.siteID#"].categoryid=$.event("categoryid");
-	session.flatViewArgs["#rc.siteID#"].tag=$.event("tag");
+	session.flatViewArgs["#rc.siteID#"].tags=$.event("tags");
 	session.flatViewArgs["#rc.siteID#"].page=$.event("page");
 	session.flatViewArgs["#rc.siteID#"].type=$.event("type");
 	session.flatViewArgs["#rc.siteID#"].subtype=$.event("subtype");
@@ -81,8 +81,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	feed.setLiveOnly(0);
 	feed.setShowNavOnly(0);
 	
-	if(len($.event("tag"))){
-		feed.addParam(field="tcontenttags.tag",criteria=$.event("tag"),condition="in");
+	if(len($.event("tags"))){
+		feed.addParam(field="tcontenttags.tag",criteria=$.event("tags"),condition="in");
 	}
 	
 	if(len($.event("type"))){
@@ -543,43 +543,21 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</select>
 	</div>
 	</cfif>
-		
-	<cfsilent>
-		<cfset tags=$.getBean('contentGateway').getTagCloud($.event('siteID')) />
-		<cfset tagValueArray = ListToArray(ValueList(tags.tagCount))>
-		<cfset max = ArrayMax(tagValueArray)>
-		<cfset min = ArrayMin(tagValueArray)>
-		<cfset diff = max - min>
-		<cfset distribution = diff>
-		<cfset rbFactory=$.siteConfig().getRBFactory()>
-	</cfsilent>	
 	
-	<cfif tags.recordcount>
-		<div class="module well" id="mura-filter-tags">
-			<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.tags")#</h3>
-			<div id="svTagCloud">
-				<ol>
-				<cfloop query="tags"><cfsilent>
-						<cfif tags.tagCount EQ min>
-						<cfset class="not-popular">
-					<cfelseif tags.tagCount EQ max>
-						<cfset class="ultra-popular">
-					<cfelseif tags.tagCount GT (min + (distribution/2))>
-						<cfset class="somewhat-popular">
-					<cfelseif tags.tagCount GT (min + distribution)>
-						<cfset class="mediumTag">
-					<cfelse>
-						<cfset class="not-very-popular">
-					</cfif>
-				
-					<cfset args = ArrayNew(1)>
-				    <cfset args[1] = tags.tagcount>
-				</cfsilent><li class="#class#"><span><cfif tags.tagcount gt 1> #rbFactory.getResourceBundle().messageFormat($.rbKey('tagcloud.itemsare'), args)#<cfelse>#rbFactory.getResourceBundle().messageFormat($.rbKey('tagcloud.itemis'), args)#</cfif> tagged with </span><a class="tag<cfif listFind($.event('tag'),tags.tag)> active</cfif>">#HTMLEditFormat(tags.tag)#</a></li>
-				</cfloop>
-				</ol>
-			</div>
+
+	<div class="module well" id="mura-filter-tags">
+		<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.tags")#</h3>
+
+		<div id="tags" class="tagSelector">
+			<cfloop list="#$.event('tags')#" index="i">
+				<span class="tag">
+				#HTMLEditFormat(i)# <a><i class="icon-remove-sign"></i></a>
+				<input name="tags" type="hidden" value="#HTMLEditFormat(i)#">
+				</span>
+			</cfloop>
+			<input type="text" name="tags">
 		</div>
-	</cfif>
+	</div>
 	
 	<cfif $.getBean("categoryManager").getCategoryCount($.event("siteID"))>
 		<div class="module well" id="mura-list-tree">

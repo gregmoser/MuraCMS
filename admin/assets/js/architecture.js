@@ -1048,7 +1048,7 @@ buttons: {
 			flatViewArgs.subtype = '';
 		}
 		var categoryid = [];
-		var tag = [];
+		var tags = [];
 
 		$(".categories :checked").each(
 
@@ -1058,13 +1058,13 @@ buttons: {
 
 		flatViewArgs.categoryid = categoryid.toString();
 
-		$("#svTagCloud .active").each(
+		$("input[name='tags']").each(
+			function() {
+				tags.push($(this).val());
+			}
+		);
 
-		function() {
-			tag.push($(this).html());
-		});
-
-		flatViewArgs.tag = tag.toString();
+		flatViewArgs.tags =tags.toString();
 		flatViewArgs.keywords = $("#contentKeywords").val();
 		flatViewArgs.page = 1;
 		flatViewArgs.filtered = true;
@@ -1100,12 +1100,10 @@ buttons: {
 			stripe('stripe');
 			setCheckboxTrees();
 			setToolTips(".mura-table-grid");
-
-			$("#svTagCloud a").click(
-
-			function(event) {
-				event.preventDefault();
-				$(this).toggleClass('active');
+		
+			$.get('?muraAction=carch.loadtagarray&siteid=' + siteid).done(function(data){
+				var tagArray=eval('(' + data + ')'); 
+				$('#tags').tagSelector(tagArray, 'tags');
 			});
 
 			$(".navSort a").click(
