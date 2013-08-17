@@ -55,17 +55,18 @@
 	<cfif attributes.property eq 'fileid' and attributes.bean.getType() eq 'File'>
 		
 		<script>
-			jQuery("##mura-file-unlock").click(
+			jQuery(".mura-file-unlock").click(
 				function(event){
 					event.preventDefault();
 					confirmDialog(
 						"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfileconfirm'))#",
 						function(){
 							jQuery("##msg-file-locked").fadeOut();
-							jQuery("##mura-file-unlock").hide();
+							jQuery(".mura-file-unlock").hide();
 							jQuery("##mura-file-offline-edit").fadeIn();
 							jQuery("##mura-download-unlocked").show();
 							jQuery("##mura-download-locked").hide();
+							jQuery("##msg-file-locked-else").fadeOut();
 							siteManager.hasFileLock=false;
 							jQuery.post("./index.cfm",{muraAction:"carch.unlockfile",contentid:"#attributes.bean.getContentID()#",siteid:"#attributes.bean.getSiteID()#"})
 						}
@@ -81,9 +82,10 @@
 						"#JSStringFormat(application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.downloadforofflineeditingconfirm'))#",
 						function(){
 							jQuery("##msg-file-locked").fadeIn();
-							jQuery("##mura-file-unlock").fadeIn();
+							jQuery(".mura-file-unlock").fadeIn();
 							jQuery("##mura-download-unlocked").hide();
 							jQuery("##mura-download-locked").show();
+							jQuery("##msg-file-locked-else").hide();
 							jQuery(a).fadeOut();
 							siteManager.hasFileLock=true;
 							document.location="./index.cfm?muraAction=carch.lockfile&contentID=#attributes.bean.getContentID()#&siteID=#attributes.bean.getSiteID()#";
