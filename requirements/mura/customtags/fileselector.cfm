@@ -19,7 +19,7 @@
 </cfif>
 
 <cfoutput>
-	<div data-name="#attributes.name#" data-property="#attributes.property#" data-fileid="#attributes.bean.getValue(attributes.property)#" data-filetype="#filetype#" data-contentid="#attributes.bean.getcontentid()#" data-siteid="#attributes.bean.getSiteID()#"class="mura-file-selector #attributes.class#">
+	<div data-name="#attributes.name#" data-property="#attributes.property#" data-fileid="#attributes.bean.getValue(attributes.property)#" data-filetype="#filetype#" data-contentid="#attributes.bean.getcontentid()#" data-siteid="#attributes.bean.getSiteID()#" class="mura-file-selector #attributes.class#">
 		<div class="btn-group" data-toggle="buttons-radio">
 			<button type="button" style="display:none">HORRIBLE HACK</button>
 			<button type="button" class="btn active" value="Upload"><i class="icon-upload-alt"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.fileselector.viaupload')#</button>

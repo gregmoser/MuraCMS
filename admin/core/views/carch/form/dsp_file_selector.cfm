@@ -35,9 +35,9 @@
 				| <a class="mura-file-unlock" href=""><i class="icon-unlock"></i> #application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a>
 			</p>
 		</cfif>
-			
-		<cf_filetools name="newfile" property="fileid" bean="#rc.contentBean#" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#" locked="#len(stats.getLockID())#" lockedby="#lockedBy#">
-			
+		<div class="mura-file-selector">
+			<cf_filetools name="newfile" property="fileid" bean="#rc.contentBean#" deleteKey="deleteFile" compactDisplay="#rc.compactDisplay#" locked="#len(stats.getLockID())#" lockedby="#lockedBy#">
+		</div>
 		<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getFileID())#" />
 	</cfif>
 	<script>
