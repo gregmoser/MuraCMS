@@ -46,11 +46,13 @@
 		<img id="assocImage" src="#request.context.$.getURLForImage(fileid=attributes.bean.getvalue(attributes.property),size=attributes.size)#?cacheID=#createUUID()#" />
 	</cfif>	
 
+	<cfif attributes.bean.getType() neq 'File' and not attributes.locked>
 	<div>
 		<label class="checkbox inline" for="deleteFileBox">
 			<input type="checkbox" name="#attributes.deleteKey#" value="1" class="deleteFileBox"/><a href="##" rel="tooltip" title="To remove the file, check the box and publish or save a version of the page">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.removeattachedfile')# <i class="icon-question-sign"></i></a>
 		</label>
 	</div>
+	</cfif>
 
 	<cfif attributes.property eq 'fileid' and attributes.bean.getType() eq 'File'>
 		
