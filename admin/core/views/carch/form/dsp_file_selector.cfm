@@ -30,7 +30,7 @@
 		<cfif rc.contentBean.getcontentType() eq 'image'>
 			<img id="assocImage" src="#application.configBean.getContext()#/tasks/render/medium/index.cfm?fileid=#rc.contentBean.getFileID()#" />
 		</cfif>
-		 <cfif listFindNoCase(session.mura.memberships,"s2")><a id="mura-file-unlock" href="">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a></cfif>
+		 <cfif listFindNoCase(session.mura.memberships,"s2")><a id="mura-file-unlock" class="btn" href="">#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.unlockfile')#</a></cfif>
 		<input type="hidden" name="fileid" value="#htmlEditFormat(rc.contentBean.getFileID())#" />
 	</cfif>
 	<script>
