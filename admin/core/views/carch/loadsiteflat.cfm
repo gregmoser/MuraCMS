@@ -566,10 +566,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</div>
 	</cfif>
 
-	<button type="submit" class="btn btn-block btn-primary" name="filterList" onclick="siteManager.loadSiteFlatByFilter();"><i class="icon-filter"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.filter")#</button>
+	
 	<cfif session.flatViewArgs["#rc.siteID#"].filtered>
+		<button type="submit" class="btn" name="filterList" onclick="siteManager.loadSiteFlatByFilter();"><i class="icon-filter"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.filter")#</button>
 		<button type="submit" class="btn" name="filterList" onclick="flatViewArgs=jQuery.extend(initFlatViewArgs(),{report:'#JSStringFormat(session.flatViewArgs["#rc.siteID#"].report)#',sortby:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].sortby)#', 
 			sortdirection:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].sortdirection)#',tag:'',type:'',subtype:'',categoryid:'',keywords:'',filtered:false});siteManager.loadSiteFlat(flatViewArgs);"><i class="icon-filter"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.removefilter")#</button>
+	<cfelse>
+		<button type="submit" class="btn btn-block" name="filterList" onclick="siteManager.loadSiteFlatByFilter();"><i class="icon-filter"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.filter")#</button>
 	</cfif>
 </div>
 </div>
