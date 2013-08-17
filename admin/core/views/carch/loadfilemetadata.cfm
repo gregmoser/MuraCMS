@@ -3,7 +3,7 @@
 <cfoutput>
 <div class="tabbable">
 	<ul class="nav nav-tabs tabs initActiveTab">
-		<li>
+		<li class="active">
 			<a href="##tabFileMetaBasic" data-toggle="tab"><span>#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.tabs.basic')#</span></a>
 		</li>
 		<li>
