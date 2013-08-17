@@ -14,20 +14,57 @@
 	  font-weight: bold;
 	  }
 	// Active state, and it's :hover to override normal :hover
-	.nav-tabs > .active > a,
-	.nav-tabs > .active > a:hover {
-	  border-width: 2px;
-	}
 	
-.nav-tabs > .active > a,
-.nav-tabs > .active> a:hover,
-.nav-tabs > .active> a:focus {
-	color: @grayDark;
-	font-weight: bold;
+	.nav-tabs > .active > a,
+	.nav-tabs > .active > a:hover,
+	.nav-tabs > .active > a:focus {
+		  border-width: 2px;
+		color: @grayDark;
+		font-weight: bold;
+		}
+
+.tabbable { clear: both; } // Legacy naming convention no longer needed?
+
+.ui-dialog {
+	.nav-tabs {
+		  border-bottom-color: #f4f4f4;
+		  margin-bottom: -4px;
+		  border: 0;
+		}
+		// Make the list-items overlay the bottom border
+		.nav-tabs > li {
+		  margin-bottom: 0;
+		}
+		// Actual tabs (as links)
+		.nav-tabs > li > a {
+		  color: @grayDarker;
+		  font-weight: normal;
+		  //background: @gray;
+		  
+		  &:hover {
+			  background-color: @gray;
+			  border-color: @gray;
+			  }
+		  
+		  }
+		// Active state, and it's :hover to override normal :hover
+		
+		.nav-tabs > .active > a,
+		.nav-tabs > .active > a:hover,
+		.nav-tabs > .active > a:focus {
+			color: @grayDarker;
+			border: 2px solid #f4f4f4;
+			background-color: #f4f4f4;
+			font-weight: normal;
+			}
+			
+	.tab-pane > .fieldset {
+		margin: 0;
+		border: 0;
+		background-color: #f4f4f4;
+		.border-top-left-radius(0);
 	}
-
-.tabbable { clear: both; }
-
+}
 
 .tabs-left { // Content Editing, etc.
 		
