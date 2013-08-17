@@ -18,7 +18,6 @@ input[type="color"],
 .uneditable-input {
   height: @baseLineHeight;
   font-size: @baseFontSize;
-  /* padding: 4px; */
   line-height: @baseLineHeight;
   color: @grayDarker !important;
   margin-bottom: 0;
@@ -314,6 +313,11 @@ label:last-child {
 
 	.form-actions {
 		text-align: center;
+		
+		.btn {
+			.btn-primary;
+		}
+		
 		}
 	}
 	
@@ -405,6 +409,16 @@ label:last-child {
 			font-size: 16px;
 		}
 	}
+}
+
+.btn.download-file {
+	
+	i {
+		position: relative;
+		left: -2px;
+		top: 1px;
+	}
+	
 }
 
 #assocImage {
@@ -567,6 +581,12 @@ select[multiple] {
 	border-bottom: 1px solid @gray;
 
 	//.btn-group { margin-bottom: @baseLineHeight; }
+}
+
+.btn-group > .dropdown-menu > li > a {
+	margin-right: 0;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 	
 // Subtype Icon Selector
