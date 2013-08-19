@@ -1509,7 +1509,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfif len(eventOutput)>
 							<cfoutput>#eventOutput#</cfoutput>
 						<cfelse>
-							<cfoutput><p>The display action that you have requested is no valid.</p></cfoutput>
+							<cfoutput><p>The display action that you have requested is not valid.</p></cfoutput>
 						</cfif>
 					</cfdefaultcase>
 				</cfswitch>
