@@ -208,6 +208,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	iterator.setPage($.event('page'));
 
 */
+
+if(len($.siteConfig('customTagGroups'))){
+	taglabel=application.rbFactory.getKeyValue(session.rb,"sitemanager.defaulttags");
+} else {
+	taglabel=application.rbFactory.getKeyValue(session.rb,"sitemanager.tags");
+}
+
 </cfscript>
 
 
@@ -520,7 +527,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						</cfloop>
 						</strong>
 					</cfif></dd>
-					<cfif len(item.getTags())><li class="tags">#application.rbFactory.getKeyValue(session.rb,"sitemanager.tags")#: <strong>#item.getTags()#</strong></li></cfif>
+					<cfif len(item.getTags())><li class="tags">#taglabel#: <strong>#item.getTags()#</strong></li></cfif>
 					<li class="type">#application.rbFactory.getKeyValue(session.rb,"sitemanager.type")#: <strong>#item.getType()# (#item.getSubType()#)</strong></li>
 				</ul>
 			</tr>
@@ -582,7 +589,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 
 	<div class="module well" id="mura-filter-tags">
-		<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.tags")#</h3>
+		<cfif len($.siteConfig('customTagGroups'))>
+   		<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.defaulttags")#</h3>
+   		<cfelse>
+   		<h3>#application.rbFactory.getKeyValue(session.rb,"sitemanager.tags")#</h3>
+   		</cfif>
 
 		<div id="tags" class="tagSelector">
 			<cfloop list="#$.event('tags')#" index="i">
