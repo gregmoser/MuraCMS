@@ -1516,8 +1516,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 									<cfoutput>#dspBody(argumentCollection=arguments)#</cfoutput>
 								</cfcatch>
 							</cftry>
-
-							
 						</cfif>
 					</cfdefaultcase>
 				</cfswitch>
