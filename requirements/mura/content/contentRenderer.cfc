@@ -1509,8 +1509,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfif len(eventOutput)>
 							<cfoutput>#eventOutput#</cfoutput>
 						<cfelse>
-							<cfset variables.event.setValue('display', '')>
-							<cfoutput>#dspBody(argumentCollection=arguments)#</cfoutput>
+							<cfoutput><p>The display action that you have requested is no valid.</p></cfoutput>
 						</cfif>
 					</cfdefaultcase>
 				</cfswitch>
