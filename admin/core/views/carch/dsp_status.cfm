@@ -37,7 +37,7 @@ function viewStatusInfo(contenthistid,siteid){
 function applyApprovalAction(requestid,action,comment,siteid){
 	
 	if(action == 'Reject' && comment == ''){
-		alertDialog('#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"sitemanager.content.rejectioncommentrequired"))#');
+		alertDialog('#JSStringFormat(application.rbFactory.getKeyValue(session.rb,"approvalchains.rejectioncommentrequired"))#');
 	} else {
 		var pars={
 					muraAction:'carch.approvalaction',

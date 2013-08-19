@@ -82,10 +82,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfquery>
 				<cfloop query="rsItemTypes">
 					<cfif not len($availableSubTypes) or listFindNoCase($availableSubTypes,'#i#/#rsItemTypes.subType#')>
-						<li class="new#i#">
-							<cfif len(rsItemTypes.description)><a href="##" rel="tooltip" data-original-title="#HTMLEditFormat(rsItemTypes.description)#"><i class="icon-question-sign"></i></a></cfif>
-							<a href="index.cfm?muraAction=cArch.edit&contentid=&parentid=#URLEncodedFormat(rc.contentid)#&type=#i#&subType=#rsItemTypes.subType#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteID)#&moduleid=00000000000000000000000000000000000&ptype=#URLEncodedFormat(rc.ptype)#&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#" id="new#i#Link"><i class="#$.iconClassByContentType(type=i,subtype=rsItemTypes.subtype,siteid=rc.siteID)#"></i> <span> <!--- #application.rbFactory.getKeyValue(session.rb,"sitemanager.add#lcase(i)#")#/ --->#rsItemTypes.subType#</span></a>
-						</li>
+						<cfset output = $.renderEvent('on#i##rsItemTypes.subType#NewContentMenuRender')>
+						<cfif len(output)>
+							#output#
+						<cfelse>
+							<li class="new#i#">
+								<cfif len(rsItemTypes.description)><a href="##" rel="tooltip" data-original-title="#HTMLEditFormat(rsItemTypes.description)#"><i class="icon-question-sign"></i></a></cfif>
+								<a href="index.cfm?muraAction=cArch.edit&contentid=&parentid=#URLEncodedFormat(rc.contentid)#&type=#i#&subType=#rsItemTypes.subType#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteID)#&moduleid=00000000000000000000000000000000000&ptype=#URLEncodedFormat(rc.ptype)#&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#" id="new#i#Link"><i class="#$.iconClassByContentType(type=i,subtype=rsItemTypes.subtype,siteid=rc.siteID)#"></i> <span> <!--- #application.rbFactory.getKeyValue(session.rb,"sitemanager.add#lcase(i)#")#/ --->#rsItemTypes.subType#</span></a>
+							</li>
+						</cfif>
 					</cfif>
 				</cfloop>
 			</cfloop>
@@ -106,14 +111,19 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</li>
 			</cfif>
 			<cfloop query="rsItemTypes">
-			<cfif not len($availableSubTypes) or listFindNoCase($availableSubTypes,'File/#rsItemTypes.subType#')>
-				<li class="newFile">
-					<cfif len(rsItemTypes.description)>
-						<a href="##" rel="tooltip" data-original-title="#HTMLEditFormat(rsItemTypes.description)#"><i class="icon-question-sign"></i></a>
+				<cfif not len($availableSubTypes) or listFindNoCase($availableSubTypes,'File/#rsItemTypes.subType#')>
+					<cfset output = $.renderEvent('onFile#rsItemTypes.subType#NewContentMenuRender')>
+					<cfif len(output)>
+						#output#
+					<cfelse>
+						<li class="newFile">
+							<cfif len(rsItemTypes.description)>
+								<a href="##" rel="tooltip" data-original-title="#HTMLEditFormat(rsItemTypes.description)#"><i class="icon-question-sign"></i></a>
+							</cfif>
+							<a href="index.cfm?muraAction=cArch.edit&contentid=&parentid=#URLEncodedFormat(rc.contentid)#&type=File&subType=#rsItemTypes.subType#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteID)#&moduleid=00000000000000000000000000000000000&ptype=#URLEncodedFormat(rc.ptype)#&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#" id="newGalleryItem"><i class="i#$.iconClassByContentType(type='GalleryItem',subtype='default',siteid=rc.siteid)#"></i> <span><!--- #application.rbFactory.getKeyValue(session.rb,"sitemanager.addgalleryItem")#/ --->#rsItemTypes.subType#</span></a>
+						</li>
 					</cfif>
-					<a href="index.cfm?muraAction=cArch.edit&contentid=&parentid=#URLEncodedFormat(rc.contentid)#&type=File&subType=#rsItemTypes.subType#&topid=#URLEncodedFormat(rc.topid)#&siteid=#URLEncodedFormat(rc.siteID)#&moduleid=00000000000000000000000000000000000&ptype=#URLEncodedFormat(rc.ptype)#&compactDisplay=#URLEncodedFormat(rc.compactDisplay)#" id="newGalleryItem"><i class="i#$.iconClassByContentType(type='GalleryItem',subtype='default',siteid=rc.siteid)#"></i> <span><!--- #application.rbFactory.getKeyValue(session.rb,"sitemanager.addgalleryItem")#/ --->#rsItemTypes.subType#</span></a>
-				</li>
-			</cfif>
+				</cfif>
 			</cfloop>
 			<cfif not len($availableSubTypes) or listFindNoCase($availableSubTypes,'File/Default')>
 				<li class="newGalleryItemMulti">
@@ -122,13 +132,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</li>
 			</cfif>
 		</cfif> 
-		  </ul>
+		</ul>
 	</div>
-
-	#$.renderEvent('onNewContentMenuRender')#
 </div>
 
-
+#$.renderEvent('onNewContentMenuRender')#
 
 </cfoutput>
 
