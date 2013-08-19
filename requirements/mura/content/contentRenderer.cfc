@@ -1503,6 +1503,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfoutput>#dspObject_Include(thefile='dsp_login.cfm')#</cfoutput>
 						</cfif>
 					</cfcase>
+					<cfdefaultcase>
+						<cfset variables.event.setValue('noCache',1)>
+						<cfset eventOutput=application.pluginManager.renderEvent("onDisplayRender",variables.event)>
+						<cfif len(eventOutput)>
+							<cfoutput>#eventOutput#</cfoutput>
+						<cfelse>
+							<cfset variables.event.setValue('display', '')>
+							<cfoutput>#dspBody(argumentCollection=arguments)#</cfoutput>
+						</cfif>
+					</cfdefaultcase>
 				</cfswitch>
 			<cfelse>
 
