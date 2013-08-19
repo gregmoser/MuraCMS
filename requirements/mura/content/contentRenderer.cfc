@@ -1509,8 +1509,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						<cfif len(eventOutput)>
 							<cfoutput>#eventOutput#</cfoutput>
 						<cfelse>
-							<cfset variables.event.setValue('display', '')>
-							<cfoutput>#dspBody(argumentCollection=arguments)#</cfoutput>
+							<cftry>
+								<cfoutput>#dspObject_Include(thefile='dsp#variables.event.getValue('display')#.cfm')#</cfoutput>
+								<cfcatch>
+									<cfset variables.event.setValue('display', '')>
+									<cfoutput>#dspBody(argumentCollection=arguments)#</cfoutput>
+								</cfcatch>
+							</cftry>
+
+							
 						</cfif>
 					</cfdefaultcase>
 				</cfswitch>
