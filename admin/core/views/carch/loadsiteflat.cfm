@@ -74,6 +74,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	session.flatViewArgs["#rc.siteID#"].keywords=$.event("keywords");
 	session.flatViewArgs["#rc.siteID#"].filtered=yesNoFormat($.event("filtered"));
 	session.flatViewArgs["#rc.siteID#"].tab=1;
+
+	//writeDump(var=session.flatViewArgs["#rc.siteID#"],abort=true);
+
+	if(len($.siteConfig('customTagGroups'))){
+		taggrouparray=listToArray($.siteConfig('customTagGroups'));
+		for(var g=1;g <= arrayLen(taggrouparray);g++){
+			session.flatViewArgs["#rc.siteID#"]["#taggrouparray[g]#tags"]=$.event("#taggrouparray[g]#tags");
+		}
+	}
 	 
 	feed=$.getBean("feed");
 	feed.setMaxItems(500);
@@ -81,8 +90,34 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	feed.setLiveOnly(0);
 	feed.setShowNavOnly(0);
 	
+	tagStarted=false;
+
 	if(len($.event("tags"))){
+		tagStarted=true;
+		feed.addParam(relationship="and (");
 		feed.addParam(field="tcontenttags.tag",criteria=$.event("tags"),condition="in");
+	}
+
+	if(len($.siteConfig('customTagGroups'))){
+		tagGroupArray=listToArray($.siteConfig('customTagGroups'));
+ 		for(g=1;g <= arrayLen(tagGroupArray); g++ ){
+ 			if(len($.event("#tagGroupArray[g]#tags"))){
+	 			if(!tagStarted){
+	 				tagStarted=true;
+	 				feed.addParam(relationship="and (");
+	 				feed.addParam(relationship="(",field="tcontenttags.tag",criteria=$.event("#tagGroupArray[g]#tags"),condition="in");
+	 			} else {
+	 				feed.addParam(relationship="or (",field="tcontenttags.tag",criteria=$.event("#tagGroupArray[g]#tags"),condition="in");
+	 			}
+
+	 			feed.addParam(relationship="and",field="tcontenttags.taggroup",criteria=tagGroupArray[g]);
+	 			feed.addParam(relationship=")");
+ 			}
+ 		}
+	}
+
+	if(tagStarted){
+		feed.addParam(relationship=")");
 	}
 	
 	if(len($.event("type"))){
@@ -174,6 +209,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 */
 </cfscript>
+
 
 <cfif iterator.getRecordcount()>
 
@@ -558,6 +594,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<input type="text" name="tags">
 		</div>
 	</div>
+
+	<cfif len($.siteConfig('customTagGroups'))>
+		<cfloop list="#$.siteConfig('customTagGroups')#" index="g">
+			<div class="module well" id="mura-filter-tags">
+				<h3>#g# #application.rbFactory.getKeyValue(session.rb,"sitemanager.tags")#</h3>
+				<div id="#g#tags" class="tagSelector">
+				<cfloop list="#$.event('#g#tags')#" index="i">
+					<span class="tag">
+					#HTMLEditFormat(i)# <a><i class="icon-remove-sign"></i></a>
+					<input name="#g#tags" type="hidden" value="#HTMLEditFormat(i)#">
+					</span>
+				</cfloop>
+				<input type="text" name="#g#tags">
+			</div>
+		</div>
+		</cfloop>
+	</cfif>
 	
 	<cfif $.getBean("categoryManager").getCategoryCount($.event("siteID"))>
 		<div class="module well" id="mura-list-tree">
@@ -569,13 +622,39 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfif session.flatViewArgs["#rc.siteID#"].filtered>
 		<button type="submit" class="btn" name="filterList" onclick="siteManager.loadSiteFlatByFilter();"><i class="icon-filter"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.filter")#</button>
-		<button type="submit" class="btn" name="filterList" onclick="flatViewArgs=jQuery.extend(initFlatViewArgs(),{report:'#JSStringFormat(session.flatViewArgs["#rc.siteID#"].report)#',sortby:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].sortby)#', 
-			sortdirection:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].sortdirection)#',tag:'',type:'',subtype:'',categoryid:'',keywords:'',filtered:false});siteManager.loadSiteFlat(flatViewArgs);"><i class="icon-filter"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.removefilter")#</button>
+		<button type="submit" class="btn" name="filterList" onclick="clearFlatviewFilter()"><i class="icon-filter"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.removefilter")#</button>
 	<cfelse>
 		<button type="submit" class="btn btn-block" name="filterList" onclick="siteManager.loadSiteFlatByFilter();"><i class="icon-filter"></i> #application.rbFactory.getKeyValue(session.rb,"sitemanager.filter")#</button>
 	</cfif>
 </div>
 </div>
+
+<script>
+	function clearFlatviewFilter(){
+		flatViewArgs=$.extend(
+			initFlatViewArgs(),
+			{
+					report:'#JSStringFormat(session.flatViewArgs["#rc.siteID#"].report)#',
+					sortby:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].sortby)#', 
+					sortdirection:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].sortdirection)#',
+					tag:'',
+					type:'',
+					subtype:'',
+					categoryid:'',
+					keywords:''
+					,
+					filtered:false
+					<cfif len($.siteConfig('customTagGroups'))>
+					<cfloop list="#$.siteConfig('customTagGroups')#" index="g">
+					,#g#tags:''	
+					</cfloop>	
+					</cfif>
+
+					});
+
+		siteManager.loadSiteFlat(flatViewArgs);
+	}
+</script>
 
 <!---<cfdump var="#rc.test#">--->
 </cfoutput>

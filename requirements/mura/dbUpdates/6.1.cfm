@@ -53,8 +53,12 @@
 	dbUtility.setTable("tsettings")
 	.addColumn(column="enableLockdown",datatype="varchar",length=255)
 	.addColumn(column="ExtranetPublicRegNotify",datatype="varchar",length=255)
+	.addColumn(column="customTagGroups",datatype="varchar",length=255)
 	.addColumn(column="siteid",datatype="varchar",length=25,nullable=false,default='')
 	.addPrimaryKey('siteid');
+
+	dbUtility.setTable("tcontenttags")
+	.addColumn(column="taggroup",datatype="varchar",length=255);
 
 	dbUtility.setTable("tcontentfeeds")
 	.addColumn(column="useCategoryIntersect",dataType="int");

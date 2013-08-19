@@ -253,8 +253,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfreturn variables.isValid />
 </cffunction>
 
+<cffunction name="isGroupingParam" output="false">
+	<cfreturn listFindNoCase("(,and (,or (,),openGrouping,orOpenGrouping,andOpenGrouping,closeGrouping",getRelationship()) >
+</cffunction>
+
 <cffunction name="validate">
-	<cfif not listFindNoCase("(,and (,or (,),openGrouping,orOpenGrouping,andOpenGrouping,closeGrouping",getRelationship()) 
+	<cfif not isGroupingParam() 
 		and (variables.field eq '' or variables.field eq 'Select Field')>
 		<cfset variables.field=""/>
 		<cfset setIsValid(false) />

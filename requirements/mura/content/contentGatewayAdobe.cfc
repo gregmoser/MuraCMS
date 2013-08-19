@@ -2071,6 +2071,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="categoryID" type="string" required="true" default="">
 	<cfargument name="rsContent" type="any" required="true" default="">
 	<cfargument name="moduleID" type="string" required="true" default="00000000000000000000000000000000000">
+	<cfargument name="taggroup" default="">
+
 	<cfset var rsTagCloud= ''/>
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsTagCloud')#">
@@ -2099,6 +2101,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfif len(arguments.categoryID)>
 		and tcontentcategories.path like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.categoryID#%"/>
+	</cfif>
+
+	<cfif len(arguments.taggroup)>
+		and tcontenttags.taggroup=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.taggroup#"/>
+	<cfelse>
+		and tcontenttags.taggroup is null
 	</cfif>
 
 	  AND 

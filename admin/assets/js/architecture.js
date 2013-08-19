@@ -1048,7 +1048,7 @@ buttons: {
 			flatViewArgs.subtype = '';
 		}
 		var categoryid = [];
-		var tags = [];
+		
 
 		$(".categories :checked").each(
 
@@ -1058,13 +1058,31 @@ buttons: {
 
 		flatViewArgs.categoryid = categoryid.toString();
 
+		var tags = [];
+
 		$("input[name='tags']").each(
 			function() {
 				tags.push($(this).val());
 			}
 		);
 
-		flatViewArgs.tags =tags.toString();
+		flatViewArgs.tags=tags.toString();
+
+		if(customtaggroups.length){
+			for(var g=0;g < customtaggroups.length; g++){
+				tags = [];
+
+				$("input[name='" + customtaggroups[g] + "tags']").each(
+					function() {
+						tags.push($(this).val());
+					}
+				);
+
+				flatViewArgs[customtaggroups[g] + "tags"]=tags.toString();
+
+			}
+		}
+
 		flatViewArgs.keywords = $("#contentKeywords").val();
 		flatViewArgs.page = 1;
 		flatViewArgs.filtered = true;
@@ -1105,6 +1123,20 @@ buttons: {
 				var tagArray=eval('(' + data + ')'); 
 				$('#tags').tagSelector(tagArray, 'tags');
 			});
+
+			if(customtaggroups.length){
+				for(var g=0;g < customtaggroups.length; g++){
+				
+					$.ajax({url:'?muraAction=carch.loadtagarray&siteid=' + siteid + '&taggroup=' + customtaggroups[g],
+							context:{taggroup:customtaggroups[g]},
+							success:function(data){
+								var tagArray=eval('(' + data + ')'); 
+								$('#' + this.taggroup + 'tags').tagSelector(tagArray, this.taggroup + 'tags');
+							}
+						})
+					;
+				}
+			}
 
 			$(".navSort a").click(
 

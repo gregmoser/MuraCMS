@@ -267,6 +267,12 @@ to your own modified versions of Mura CMS.
             <input name="exportLocation" type="text" class="span12"  value="#rc.siteBean.getExportLocation()#" maxlength="100"/>
           </div>
         </div>
+         <div class="control-group">
+            <label class="control-label">Custom Tag Groups</label>
+            <div class="controls">
+              <input name="customTagGroups" type="text" class="span12"  value="#rc.siteBean.getCustomTagGroups()#" maxlength="255"/>
+            </div>
+        </div>
 		<div class="control-group">
             <label class="control-label">Site Mode</label>
             <div class="controls">

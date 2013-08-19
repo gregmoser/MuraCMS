@@ -306,10 +306,16 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfparam name="rc.type" default="" />
 <cfparam name="rc.page" default="1" />
 <cfparam name="rc.subtype" default="" />
+
+<cfif len($.siteConfig('customTagGroups'))>
+	<cfloop list="#$.siteConfig('customTagGroups')#" index="g">
+		<cfparam name="rc.#g#tags" default="" />
+	</cfloop>
+</cfif>
+
 <cfparam name="session.copyContentID" default="">
 <cfparam name="session.copySiteID" default="">
 <cfparam name="session.copyAll" default="false">
-
 <cfparam name="session.flatViewArgs" default="#structNew()#">
 <cfparam name="session.flatViewArgs" default="#structNew()#">
 
@@ -355,6 +361,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	if(not structKeyExists(session.flatViewArgs["#session.siteid#"],"tags")){
 		session.flatViewArgs["#session.siteid#"].tags=rc.tags;
+	}
+
+	if(len($.siteConfig('customTagGroups'))){
+		taggrouparray=listToArray($.siteConfig('customTagGroups'));
+		for(var g=1;g <= arrayLen(taggrouparray);g++){
+			if(not structKeyExists(session.flatViewArgs["#session.siteid#"],"#taggrouparray[g]#tags")){
+				session.flatViewArgs["#rc.siteID#"]["#taggrouparray[g]#tags"]=rc["#taggrouparray[g]#tags"];
+			}
+		}
 	}
 	
 	if(not structKeyExists(session.flatViewArgs["#session.siteid#"],"page")){
@@ -498,6 +513,7 @@ copyAll = 'false';
 var archViewLoaded=false;
 var flatViewLoaded=false;
 var tabsInited=false;
+var customtaggroups=#serializeJSON(listToArray($.siteConfig('customTagGroups')))#;
 
 function initFlatViewArgs(){
 	return {siteid:'#JSStringFormat(session.siteID)#', 
@@ -513,6 +529,11 @@ function initFlatViewArgs(){
 			report:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].report)#',
 			keywords:'#JSStringFormat(session.flatViewArgs["#session.siteID#"].keywords)#',
 			filtered: '#JSStringFormat(session.flatViewArgs["#session.siteID#"].filtered)#'
+			<cfif len($.siteConfig('customTagGroups'))>
+			<cfloop list="#$.siteConfig('customTagGroups')#" index="g">
+			,#g#tags:'#JSStringFormat(session.flatViewArgs["#session.siteID#"]["#g#tags"])#'	
+			</cfloop>	
+			</cfif>
 			};
 }
 
