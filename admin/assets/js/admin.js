@@ -1243,6 +1243,31 @@ function openPreviewDialog(previewURL) {
 		title: 'Preview',
 		resize: function(event,ui){
 			$('#preview-dialog').attr('width',ui.size.width-25);
+		},
+		open: function(){
+			$('.ui-dialog-titlebar-close').before('<div id="mura-preview-device-selector"><a class="btn mura-device-standard">Standard Browser</a><a class="btn mura-device-tablet">Tablet</a><a class="btn mura-device-phone">Phone</a></div>');
+			
+			$('.mura-device-standard').bind('click', function () {
+			    $( $dialog ).dialog( "option", "width", 1100 );
+			    $('#preview-dialog').attr('width',$('.ui-dialog').width()-25);
+			    $( $dialog ).dialog( "option", "position", "center" );
+
+			    return false;
+			});
+			$('.mura-device-tablet').bind('click', function () { 
+			    $( $dialog ).dialog( "option", "width", 700 );
+			    $('#preview-dialog').attr('width',$('.ui-dialog').width()-25);
+			    $( $dialog ).dialog( "option", "position", "center" );
+
+			    return false;
+			});
+			$('.mura-device-phone').bind('click', function () {
+			    $( $dialog ).dialog( "option", "width", 350 );
+			    $('#preview-dialog').attr('width',$('.ui-dialog').width()-25);
+			    $( $dialog ).dialog( "option", "position", "center" );
+			   
+			    return false;
+			});
 		}
 	});
 
