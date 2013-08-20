@@ -45,7 +45,13 @@ modified version; it is your choice whether to do so, or to make such modified v
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
 <cfsilent>
-<cfset variables.tags=variables.$.getBean('contentGateway').getTagCloud(variables.$.event('siteID'),arguments.parentID,arguments.categoryID,arguments.rsContent) />
+<cfif not structIsEmpty(objectparams)>
+	<cfset objectparams={}>
+</cfif>
+<cfif structKeyExists(objectparams,"taggroup")>
+	<cfset objectparams.taggroup="">
+</cfif>
+<cfset variables.tags=variables.$.getBean('contentGateway').getTagCloud(variables.$.event('siteID'),arguments.parentID,arguments.categoryID,arguments.rsContent,'00000000000000000000000000000000000',objectParams.taggroup) />
 <cfset variables.tagValueArray = ListToArray(ValueList(variables.tags.tagCount))>
 <cfset variables.max = ArrayMax(variables.tagValueArray)>
 <cfset variables.min = Arraymin(variables.tagValueArray)>
