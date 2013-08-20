@@ -447,7 +447,11 @@ component extends="mura.bean.bean" versioned=false {
 			
 			try{
 				paramArgs={name=arguments.prop.column,cfsqltype="cf_sql_" & columns[arguments.prop.column].datatype};
-			} catch(any e){writeDump(var=columns,abort=true);}
+			} catch(any e){
+				writeDump(var=columns);
+				writeDump(var=getProperties());
+				abort;
+			}
 						
 			if(structKeyExists(arguments,'value')){
 				paramArgs.null=arguments.prop.nullable and (not len(arguments.value) or arguments.value eq "null");
