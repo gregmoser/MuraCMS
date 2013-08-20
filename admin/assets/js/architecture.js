@@ -1782,6 +1782,15 @@ buttons: {
 				checkSelection = true;
 			}
 
+			if(tmpObject.object == 'tag_cloud') {
+				if(configure) {
+					tmpObject.regionid = regionid;
+					this.initTagCloudConfigurator(tmpObject)
+					return false;
+				}
+				checkSelection = true;
+			}
+
 			if(tmpObject.object == 'category_summary') {
 				if(configure) {
 					tmpObject.regionid = regionid;
@@ -1876,6 +1885,16 @@ buttons: {
 
 		return true
 
+	},
+
+	initTagCloudConfigurator: function(data) {
+		this.initConfigurator(data, {
+			url: 'index.cfm',
+			pars: 'muraAction=cArch.loadclassconfigurator&compactDisplay=true&siteid=' + siteid + '&classid=tag_cloud&contentid=' + contentid + '&parentid=' + parentid + '&contenthistid=' + contenthistid + '&regionid=' + data.regionid + '&objectid=' + data.objectid + '&cacheid=' + Math.random(),
+			title: tagCloudConfiguratorTitle
+		});
+
+		return true;
 	},
 
 	initCategorySummaryConfigurator: function(data) {
@@ -2087,6 +2106,8 @@ buttons: {
 				siteManager.initFeedConfigurator(data);
 			} else if(data.object == 'feed_slideshow') {
 				siteManager.initSlideShowConfigurator(data);
+			} else if(data.object == 'tag_cloud' && customtaggroups.length) {
+				siteManager.initTagCloudConfigurator(data);
 			} else if(data.object == 'category_summary') {
 				siteManager.initCategorySummaryConfigurator(data);
 			} else if(data.object == 'related_content' || data.object == 'related_section_content') {

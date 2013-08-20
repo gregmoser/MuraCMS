@@ -1225,6 +1225,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset var editableControl=structNew()>
 	<cfset var historyID="">
 	<cfset var tempObject="">
+	<cfset var args={}>
 	
 	<cfswitch expression="#arguments.object#">
 		<cfcase value="plugin">
@@ -1256,6 +1257,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					<cfset editableControl.editLink =  "#variables.$.globalConfig('context')#/admin/index.cfm?muraAction=cArch.frontEndConfigurator">
 					<cfset editableControl.isConfigurator=true>
 				</cfif>
+			</cfif>
+		</cfcase>
+		<cfcase value="tag_cloud">
+			<cfif session.mura.isLoggedIn and this.showEditableObjects and len($.siteConfig('customTagGroups'))>	
+				<cfset showEditable=this.showEditableObjects and listFindNoCase("editor,author",arguments.assignmentPerm)>		
+				<cfif showEditable>
+					<cfset editableControl.class="editableTagCloud">
+					<cfset editableControl.editLink =  "#variables.$.globalConfig('context')#/admin/index.cfm?muraAction=cArch.frontEndConfigurator">
+					<cfset editableControl.isConfigurator=true>
+				</cfif>
+			</cfif>
+
+			<cfif isJSON(arguments.params)>
+				<cfset args=deserializeJSON(arguments.params)>
 			</cfif>
 		</cfcase>
 		<cfcase value="related_content,related_section_content">
@@ -1380,7 +1395,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfcase>
 		<cfcase value="user_tools"><cfset theObject=theObject & dspObject_Render(arguments.siteid,arguments.object,arguments.objectid,"dsp_user_tools.cfm")></cfcase>
 		<cfcase value="tag_cloud">
-			<cfsavecontent variable="tempObject"><cf_CacheOMatic key="#arguments.siteid##arguments.object#" nocache="#variables.event.getValue('nocache')#"><cfoutput>#dspTagCloud()#</cfoutput></cf_CacheOMatic></cfsavecontent>
+			<cfsavecontent variable="tempObject"><cf_CacheOMatic key="#cacheKeyObjectId#" nocache="#variables.event.getValue('nocache')#"><cfoutput>#dspTagCloud(argumentCollection=args)#</cfoutput></cf_CacheOMatic></cfsavecontent>
 			<cfset theObject=theObject & tempObject> 
 		</cfcase>
 		<cfcase value="goToFirstChild"><cfset theObject=theObject & dspObject_Render(arguments.siteid,arguments.object,arguments.objectid,"act_goToFirstChild.cfm")></cfcase>
