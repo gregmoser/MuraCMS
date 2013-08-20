@@ -161,7 +161,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					recurse=true,
 					exclude=[],
 					strict=true,
-					transientPattern = "(Iterator|Bean|MuraScope|Event|dbUtility)$" 
+					transientPattern = "(Iterator|Bean|MuraScope|Event)$" 
 					});
 			
 			variables.serviceFactory.addBean("tempDir",application.configBean.getTempDir());
