@@ -1230,13 +1230,16 @@ function getDialogPosition() {
 }
 
 function openPreviewDialog(previewURL) {
-	if(previewURL.indexOf("?") == -1) {
-		previewURL = previewURL + '?muraadminpreview';
+
+	var $previewURL=previewURL;
+
+	if($previewURL.indexOf("?") == -1) {
+		$previewURL = previewURL + '?muraadminpreview';
 	} else {
-		previewURL = previewURL + '&muraadminpreview';
+		$previewURL = previewURL + '&muraadminpreview';
 	}
 
-	var $dialog = $('<div></div>').html('<iframe id="preview-dialog" style="border: 0; " src="' + previewURL + '" width="1075" height="600"></iframe>').dialog({
+	var $dialog = $('<div></div>').html('<iframe id="preview-dialog" style="border: 0; " src="' + $previewURL + '&mobileFormat=false" width="1075" height="600"></iframe>').dialog({
 		width: 1100,
 		height: 600,
 		modal: true,
@@ -1249,21 +1252,27 @@ function openPreviewDialog(previewURL) {
 			
 			$('.mura-device-standard').bind('click', function () {
 			    $( $dialog ).dialog( "option", "width", 1100 );
-			    $('#preview-dialog').attr('width',$('.ui-dialog').width()-25);
+			    $('#preview-dialog')
+			    	.attr('width',$('.ui-dialog').width()-25)
+			   	 .attr('src',$previewURL + '&mobileFormat=false');
 			    $( $dialog ).dialog( "option", "position", "center" );
 
 			    return false;
 			});
 			$('.mura-device-tablet').bind('click', function () { 
 			    $( $dialog ).dialog( "option", "width", 700 );
-			    $('#preview-dialog').attr('width',$('.ui-dialog').width()-25);
+			    $('#preview-dialog')
+			    	.attr('width',$('.ui-dialog').width()-25)
+			    	.attr('src',$previewURL + '&mobileFormat=false');
 			    $( $dialog ).dialog( "option", "position", "center" );
 
 			    return false;
 			});
 			$('.mura-device-phone').bind('click', function () {
 			    $( $dialog ).dialog( "option", "width", 350 );
-			    $('#preview-dialog').attr('width',$('.ui-dialog').width()-25);
+			    $('#preview-dialog')
+			    	.attr('width',$('.ui-dialog').width()-25)
+			    	.attr('src',$previewURL + '&mobileFormat=true');
 			    $( $dialog ).dialog( "option", "position", "center" );
 			   
 			    return false;
