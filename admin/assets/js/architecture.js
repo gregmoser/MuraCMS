@@ -1126,15 +1126,19 @@ buttons: {
 
 			if(customtaggroups.length){
 				for(var g=0;g < customtaggroups.length; g++){
-				
-					$.ajax({url:'?muraAction=carch.loadtagarray&siteid=' + siteid + '&taggroup=' + customtaggroups[g],
-							context:{taggroup:customtaggroups[g]},
-							success:function(data){
-								var tagArray=eval('(' + data + ')'); 
-								$('#' + this.taggroup + 'tags').tagSelector(tagArray, this.taggroup + 'tags');
-							}
-						})
-					;
+					
+					if(window[customtaggroups[g]]){
+						$('#' + customtaggroups[g] + 'tags').tagSelector(window[customtaggroups[g]], customtaggroups[g] + 'tags');
+					}else{
+						$.ajax({url:'?muraAction=carch.loadtagarray&siteid=' + siteid + '&taggroup=' + customtaggroups[g],
+								context:{taggroup:customtaggroups[g]},
+								success:function(data){
+									window[this.taggroup]=eval('(' + data + ')'); 
+									$('#' + this.taggroup + 'tags').tagSelector(window[this.taggroup], this.taggroup + 'tags');
+								}
+							});
+					}
+					
 				}
 			}
 
