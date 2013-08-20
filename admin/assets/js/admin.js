@@ -1247,6 +1247,9 @@ function openPreviewDialog(previewURL) {
 		resize: function(event,ui){
 			$('#preview-dialog').attr('width',ui.size.width-25);
 		},
+		close: function(){
+			$($dialog).dialog( "destroy" );
+		},
 		open: function(){
 			$('.ui-dialog-titlebar-close').before('<div id="mura-preview-device-selector" class="btn-group"><a class="btn mura-device-standard active">Standard Browser</a><a class="btn mura-device-tablet">Tablet</a><a class="btn mura-device-phone">Phone</a></div>');
 			
