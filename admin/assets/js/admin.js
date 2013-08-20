@@ -1248,7 +1248,7 @@ function openPreviewDialog(previewURL) {
 			$('#preview-dialog').attr('width',ui.size.width-25);
 		},
 		open: function(){
-			$('.ui-dialog-titlebar-close').before('<div id="mura-preview-device-selector"><a class="btn mura-device-standard">Standard Browser</a><a class="btn mura-device-tablet">Tablet</a><a class="btn mura-device-phone">Phone</a></div>');
+			$('.ui-dialog-titlebar-close').before('<div id="mura-preview-device-selector" class="btn-group"><a class="btn mura-device-standard active">Standard Browser</a><a class="btn mura-device-tablet">Tablet</a><a class="btn mura-device-phone">Phone</a></div>');
 			
 			$('.mura-device-standard').bind('click', function () {
 			    $( $dialog ).dialog( "option", "width", 1100 );
@@ -1256,6 +1256,8 @@ function openPreviewDialog(previewURL) {
 			    	.attr('width',$('.ui-dialog').width()-25)
 			   	 .attr('src',$previewURL + '&mobileFormat=false');
 			    $( $dialog ).dialog( "option", "position", "center" );
+			    $('#mura-preview-device-selector .btn').removeClass('active');
+			    $('.mura-device-standard').addClass('active');
 
 			    return false;
 			});
@@ -1265,6 +1267,8 @@ function openPreviewDialog(previewURL) {
 			    	.attr('width',$('.ui-dialog').width()-25)
 			    	.attr('src',$previewURL + '&mobileFormat=false');
 			    $( $dialog ).dialog( "option", "position", "center" );
+			    $('#mura-preview-device-selector .btn').removeClass('active');
+			    $('.mura-device-tablet').addClass('active');
 
 			    return false;
 			});
@@ -1274,7 +1278,9 @@ function openPreviewDialog(previewURL) {
 			    	.attr('width',$('.ui-dialog').width()-25)
 			    	.attr('src',$previewURL + '&mobileFormat=true');
 			    $( $dialog ).dialog( "option", "position", "center" );
-			   
+			    $('#mura-preview-device-selector .btn').removeClass('active');
+			    $('.mura-device-phone').addClass('active');
+
 			    return false;
 			});
 		}
