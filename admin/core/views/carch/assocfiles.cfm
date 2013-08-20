@@ -77,7 +77,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfoutput>
 
 <cfif len(rc.keywords)>
-	<div class="tabbable"  id="selectAssocImageResults">
+	<div class="tabbable" id="selectAssocImageResults">
 		<ul class="nav nav-tabs tabs">
 			<li><a href="##mura-assoc-images" onclick="return false;"><i class="icon-picture"></i> Images</a></li>
 			<cfif rc.type eq 'file'><li><a href="##mura-assoc-files" onclick="return false;"><i class="icon-file-text-alt"></i> Other Files</a></li></cfif>
@@ -110,7 +110,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						 </cfif>
 						 <cfif not counter>
 							<cfoutput>
-							<li>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
+							<li class="no-results">#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
 							</cfoutput>
 						</cfif>
 					</ul>
@@ -137,7 +137,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							 </cfif>
 							 <cfif not counter>
 								<cfoutput>
-								<li>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
+								<li class="no-results">#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
 								</cfoutput>
 							</cfif>
 						</ul>
