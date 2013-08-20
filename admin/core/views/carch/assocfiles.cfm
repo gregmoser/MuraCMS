@@ -86,8 +86,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<div id="mura-assoc-images" class="tab-pane fade">
 				<div style="overflow-y: auto;" >
 					<ul>
+						<cfset counter=0 />
 					    <cfif rsimages.recordcount>
-					    <cfset counter=0 />
 					     <cfoutput query="rsimages" startrow="1" maxrows="100">
 							<cfif not structKeyExists(filtered,'#rsimages.fileid#')>
 								<cfsilent>
@@ -121,8 +121,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				<div id="mura-assoc-files" class="tab-pane fade">
 					<div style="overflow-y: auto;" >
 						<ul>
-							<cfif rsfiles.recordcount>
 							<cfset counter=0 />
+							<cfif rsfiles.recordcount>
 						     <cfoutput query="rsfiles" startrow="1" maxrows="100">
 								<cfif not structKeyExists(filtered,'#rsfiles.fileid#')>
 									<cfsilent>
