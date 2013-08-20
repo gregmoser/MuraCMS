@@ -233,6 +233,15 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfif arguments.contentMode neq "none">
 				<cfset getBean("fileManager").cleanFileCache(arguments.toSiteID)>
 			</cfif>
+			<cfif arguments.contentMode neq 'none'>
+				<cfset rssite=Bundle.getValue("rssite")>
+				<cfif rssite.recordcount and isDefined('rssite.customtaggroups') and len(rssite.customtaggroups)>
+					<cfquery datasource="#arguments.toDSN#">
+						update tsettings set customtaggroups=<cfqueryparam cfsqltype="cf_sql_varhar" value="#rssite.customtaggroups#">
+						where siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.toSiteID#">
+					</cfquery>
+				</cfif>
+			</cfif>
 			<cfif listFindNoCase("All,Theme",arguments.renderingMode)>
 				<cfset rssite=Bundle.getValue("rssite")>
 				<cfif rssite.recordcount and directoryExists(expandPath("/muraWRM/#arguments.toSiteID#/includes/themes/#rssite.theme#"))>
@@ -618,13 +627,20 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</cfif>
 			<cfloop query="rstContentTags">
 				<cfquery datasource="#arguments.toDSN#">
-					insert into tcontenttags (ContentHistID,ContentID,siteID,tag)
+					insert into tcontenttags (ContentHistID,ContentID,siteID,tag
+					<cfif isdefined('rstContentTags.taggroup')>
+						,taggroup
+					</cfif>
+					)
 					values
 					(
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(rstContentTags.contentHistID)#">,
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#keys.get(rstContentTags.contentID)#">,
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" value="#arguments.tositeID#">,
 					<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstContentTags.tag neq '',de('no'),de('yes'))#" value="#rstContentTags.tag#">
+					<cfif isdefined('rstContentTags.taggroup')>
+						,<cfqueryparam cfsqltype="cf_sql_VARCHAR" null="#iif(rstContentTags.taggroup neq '',de('no'),de('yes'))#" value="#rstContentTags.taggroup#">
+					</cfif>
 					)
 				</cfquery>
 			</cfloop>

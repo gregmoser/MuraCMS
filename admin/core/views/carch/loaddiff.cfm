@@ -6,7 +6,7 @@ diff=bean1.compare(bean2);
 
 if(!structIsEmpty(diff)){
 	for(i in diff){
-		writeOutput("<h3>#i#</h3>");
+		writeOutput("<h3>#ucase(i)#</h3>");
 		writeOutput(diff[i].html);
 	}
 } else { 

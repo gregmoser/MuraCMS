@@ -68,6 +68,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 </cfsilent>
 
+<cfoutput>
+	<div id="svCalendar" class="svCalendar">
+		<table>
+			<tr>
+				<th id="previousMonth"><a href="?month=#previousmonth#&year=#previousyear#&categoryID=#URLEncodedFormat($.event('categoryID'))#&relatedID=#URLEncodedFormat(request.relatedID)#&keywords=#URLEncodedFormat($.event('keywords'))#&filterBy=releaseMonth">&laquo;</a></th>
+				<th>#dateLong#</th>
+				<th id="nextMonth"><a href="?month=#nextmonth#&year=#nextyear#&categoryID=#URLEncodedFormat($.event('categoryID'))#&relatedID=#URLEncodedFormat(request.relatedID)#&keywords=#URLEncodedFormat($.event('keywords'))#&filterBy=releaseMonth">&raquo;</a></th>
+			</tr>
+		</table>
+	</div>
+</cfoutput>
+
 <cfif variables.iterator.getRecordcount()>
 	<cfoutput>
 	<div id="svFolder" class="svIndex">
@@ -89,7 +101,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		</cfsilent>
 		#variables.$.dspObject_Include(thefile='dsp_content_list.cfm',
 			fields=variables.$.content("displayList"),
-			type="Portal", 
+			type="Calendar", 
 			iterator= variables.iterator,
 			imageSize=variables.$.content("ImageSize"),
 			imageHeight=variables.$.content("ImageHeight"),

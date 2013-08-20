@@ -131,6 +131,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfif rsContent.recordCount>
 			<cfset bean.set(rsContent) />
 			<cfset bean.setIsNew(0) />
+			<cfset setCustomTagGroups(bean)>
 			<cfset bean.setPreserveID(rsContent.contentHistID) />
 		<cfelseif arguments.use404>
 			<cfset bean.setType("Page") />
@@ -223,6 +224,7 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 		<cfif rsContent.recordCount>
 			<cfset bean.set(rsContent) />
 			<cfset bean.setIsNew(0) />
+			<cfset setCustomTagGroups(bean)>
 			<cfset bean.setPreserveID(rsContent.contentHistID) />
 		<cfelseif arguments.use404>
 			<cfset bean.setType("Page") />
@@ -286,11 +288,13 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfset bean=getBean("content").set(variables.utility.queryRowToStruct(rsContent,rsContent.currentrow))>
 				<cfset bean.setIsNew(0)>
 				<cfset bean.setPreserveID(rsContent.contentHistID)>
+				<cfset setCustomTagGroups(bean)>
 				<cfset arrayAppend(beanArray,bean)>				
 				</cfloop>
 		<cfelseif rsContent.recordCount eq 1>
 			<cfset bean.set(rsContent) />
 			<cfset bean.setIsNew(0) />
+			<cfset setCustomTagGroups(bean)>
 			<cfset bean.setPreserveID(rsContent.contentHistID) />
 		<cfelseif arguments.use404>
 			<cfset bean.setType("Page") />
@@ -354,12 +358,14 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfset bean=getBean("content").set(variables.utility.queryRowToStruct(rsContent,rsContent.currentrow))>
 				<cfset bean.setIsNew(0)>
 				<cfset bean.setPreserveID(rsContent.contentHistID)>
+				<cfset setCustomTagGroups(bean)>
 				<cfset arrayAppend(beanArray,bean)>				
 				</cfloop>
 		<cfelseif rsContent.recordCount eq 1>
 			<cfset bean.set(rsContent) />
 			<cfset bean.setIsNew(0) />
 			<cfset bean.setPreserveID(rsContent.contentHistID) />
+			<cfset setCustomTagGroups(bean)>
 		<cfelseif arguments.use404>
 			<cfset bean.setType("Page") />
 			<cfset bean.setSubType("Default") />
@@ -422,11 +428,13 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfset bean=getBean("content").set(variables.utility.queryRowToStruct(rsContent,rsContent.currentrow))>
 				<cfset bean.setIsNew(0)>
 				<cfset bean.setPreserveID(rsContent.contentHistID)>
+				<cfset setCustomTagGroups(bean)>
 				<cfset arrayAppend(beanArray,bean)>				
 				</cfloop>
 		<cfelseif rsContent.recordCount eq 1>
 			<cfset bean.set(rsContent) />
 			<cfset bean.setIsNew(0) />
+			<cfset setCustomTagGroups(bean)>
 			<cfset bean.setPreserveID(rsContent.contentHistID) />
 		<cfelseif arguments.use404>
 			<cfset bean.setType("Page") />
@@ -496,11 +504,13 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 				<cfset bean=getBean("content").set(variables.utility.queryRowToStruct(rsContent,rsContent.currentrow))>
 				<cfset bean.setIsNew(0)>
 				<cfset bean.setPreserveID(rsContent.contentHistID)>
+				<cfset setCustomTagGroups(bean)>
 				<cfset arrayAppend(beanArray,bean)>				
 				</cfloop>
 		<cfelseif rsContent.recordCount eq 1>
 			<cfset bean.set(rsContent) />
 			<cfset bean.setIsNew(0) />
+			<cfset setCustomTagGroups(bean)>
 			<cfset bean.setPreserveID(rsContent.contentHistID) />
 		<cfelseif arguments.use404>
 			<cfset bean.setType("Page") />
@@ -940,26 +950,80 @@ tcontent.imageSize,tcontent.imageHeight,tcontent.imageWidth,tcontent.childTempla
 	<cfreturn rs>
 </cffunction>
 
+<cffunction name="setCustomTagGroups" access="public" returntype="void" output="false">
+	<cfargument name="contentBean">
+	<cfset var tagGroupList=variables.settingsManager.getSite(arguments.contentBean.getSiteID()).getCustomTagGroups()>
+	<cfset var g="">
+	<cfset var rs="">
+	<cfset var rsgroup="">
+
+	<cfif not arguments.contentBean.getIsNew() and len(tagGroupList)>
+		<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rs')#">
+			select tag,taggroup from tcontenttags where 
+			contenthistid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getcontenthistid()#" />
+			and taggroup is not null
+		</cfquery>
+		
+		<cfloop list="#tagGroupList#" index="g">
+			<cfset g=trim(g)>
+			<cfquery name="rsgroup" dbtype="query">
+				select tag from rs where 
+				taggroup=<cfqueryparam cfsqltype="cf_sql_varchar" value="#g#" />
+			</cfquery>
+
+			<cfset arguments.contentBean.setValue('#g#tags',valueList(rsgroup.tag))>
+		</cfloop>
+	</cfif>
+
+</cffunction>
+
 <cffunction name="createTags" access="public" returntype="void" output="false">
 	<cfargument name="contentBean" type="any" />
 	<cfset var taglist  = "" />
 	<cfset var t = "" />
-		<cfif len(arguments.contentBean.getTags())>
-			<cfset taglist = arguments.contentBean.getTags() />
-			<cfloop list="#taglist#" index="t">
-				<cfif len(trim(t))>
-					<cfquery>
-					insert into tcontenttags (contentid,contenthistid,siteid,tag)
-					values(
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getcontentid()#" />,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getcontenthistid()#" />,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getsiteid()#" />,
-						<cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(t)#"/>
-						)
-					</cfquery>
-				</cfif>
-			</cfloop>
-		</cfif>
+	<cfset var tagGroupList=variables.settingsManager.getSite(arguments.contentBean.getSiteID()).getCustomTagGroups()>
+	<cfset var g="">
+
+	<cfif len(arguments.contentBean.getTags())>
+		<cfset taglist = arguments.contentBean.getTags() />
+		<cfloop list="#taglist#" index="t">
+			<cfif len(trim(t))>
+				<cfquery>
+				insert into tcontenttags (contentid,contenthistid,siteid,tag,taggroup)
+				values(
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getcontentid()#" />,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getcontenthistid()#" />,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getsiteid()#" />,
+					<cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(t)#"/>,
+					null
+					)
+				</cfquery>
+			</cfif>
+		</cfloop>
+	</cfif>
+
+	<cfif len(tagGroupList)>
+		<cfloop list="#tagGroupList#" index="g">
+			<cfset g=trim(g)>
+			<cfif len(arguments.contentBean.getValue('#g#tags'))>
+				<cfset taglist = arguments.contentBean.getValue('#g#tags') />
+				<cfloop list="#taglist#" index="t">
+					<cfif len(trim(t))>
+						<cfquery>
+						insert into tcontenttags (contentid,contenthistid,siteid,tag,taggroup)
+						values(
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getcontentid()#" />,
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getcontenthistid()#" />,
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.contentBean.getsiteid()#" />,
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(t)#"/>,
+							<cfqueryparam cfsqltype="cf_sql_varchar" value="#g#" />
+							)
+						</cfquery>
+					</cfif>
+				</cfloop>
+			</cfif>
+		</cfloop>
+	</cfif>
 </cffunction>
 
 <cffunction name="readRegionObjects" access="public" returntype="query" output="false">

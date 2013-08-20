@@ -261,7 +261,9 @@
 				and tclassextend.type= <cfqueryparam cfsqltype="cf_sql_varchar" value="#getType()#"> 
 				and tclassextend.subtype= <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubType()#">))
 
-		<cfif rsParams.recordcount>		
+		<cfif rsParams.recordcount>	
+		<cfset started = false />
+		<cfset openGrouping=false />		
 		<cfloop query="rsParams">
 			<cfset param=createObject("component","mura.queryParam").init(rsParams.relationship,
 					rsParams.field,
@@ -269,7 +271,7 @@
 					rsParams.condition,
 					rsParams.criteria
 				) />
-								 
+		
 			<cfif param.getIsValid()>	
 				<cfif not started >
 					<cfset started = true />and (
@@ -285,6 +287,7 @@
 						<cfset openGrouping=true />
 					<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
 						)
+						<cfset openGrouping=false />
 					<cfelse>
 						<cfif not openGrouping>
 						#param.getRelationship()#
@@ -293,21 +296,27 @@
 						</cfif>
 					</cfif>
 				</cfif>
-				<cfif  listLen(param.getField(),".") gt 1>			
-					(#param.getField()# #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
-				<cfelseif len(param.getField())>
-					<cfif isNumeric(param.getField())>
-						(select #dataTable#.baseID from #dataTable# #tableModifier# where attributeID
-						= <cfqueryparam cfsqltype="cf_sql_numeric" value="#param.getField()#">
-					<cfelse>
-						#dataTable#.baseID
-						IN (
-						select #dataTable#.baseID from #dataTable# #tableModifier# INNER JOIN tclassextendattributes #tableModifier#
-							on (#dataTable#.attributeID = tclassextendattributes.attributeID)
-						where tclassextendattributes.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#">
-						and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
+				
+				<cfif len(param.getField())>	
+					<cfif  listLen(param.getField(),".") gt 1>			
+						(#param.getField()# #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
+					<cfelseif len(param.getField())>
+						<cfif isNumeric(param.getField())>
+							(select #dataTable#.baseID from #dataTable# #tableModifier# where attributeID
+							= <cfqueryparam cfsqltype="cf_sql_numeric" value="#param.getField()#">
+						<cfelse>
+							#dataTable#.baseID
+							IN (
+							select #dataTable#.baseID from #dataTable# #tableModifier# INNER JOIN tclassextendattributes #tableModifier#
+								on (#dataTable#.attributeID = tclassextendattributes.attributeID)
+							where tclassextendattributes.siteid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#getSiteID()#">
+							and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
+						</cfif>
+						and <cfif param.getCondition() neq "like">#variables.configBean.getClassExtensionManager().getCastString(param.getField(),getSiteID())#<cfelse>attributeValue</cfif> #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
 					</cfif>
-					and <cfif param.getCondition() neq "like">#variables.configBean.getClassExtensionManager().getCastString(param.getField(),getSiteID())#<cfelse>attributeValue</cfif> #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
+
+
+					<cfset openGrouping=false />
 				</cfif>
 			</cfif>						
 		</cfloop>

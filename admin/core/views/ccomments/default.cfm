@@ -85,8 +85,8 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<ul class="nav nav-tabs">
-				<li<cfif !rc.isapproved> class="active"</cfif>><a href="#buildURL(action='cComments.default', querystring='isapproved=0')#"><i class="icon-bell-alt"></i> #rc.$.rbKey('comments.pending')#</a></li>
-				<li<cfif rc.isapproved> class="active"</cfif>><a href="#buildURL(action='cComments.default', querystring='isapproved=1')#"><i class="icon-check"></i> #rc.$.rbKey('comments.approved')#</a></li>
+				<li<cfif !rc.isapproved> class="active"</cfif>><a href="#buildURL(action='cComments.default', querystring='siteid=#urlEncodedFormat(session.siteID)#&isapproved=0')#"><i class="icon-bell-alt"></i> #rc.$.rbKey('comments.pending')#</a></li>
+				<li<cfif rc.isapproved> class="active"</cfif>><a href="#buildURL(action='cComments.default', querystring='siteid=#urlEncodedFormat(session.siteID)#&isapproved=1')#"><i class="icon-check"></i> #rc.$.rbKey('comments.approved')#</a></li>
 			</ul>
 		</div>
 	</div>

@@ -1,4 +1,4 @@
-﻿ <!--- This file is part of Mura CMS.
+<!--- This file is part of Mura CMS.
 
 Mura CMS is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -44,24 +44,42 @@ For clarity, if you create a modified version of Mura CMS, you are not obligated
 modified version; it is your choice whether to do so, or to make such modified version available under the GNU General Public License 
 version 2 without this exception.  You may, if you choose, apply this exception to your own modified versions of Mura CMS.
 --->
-<cfset request.layout=false>
-<cfswitch expression="#rc.classid#">	
-	<cfcase value="feed">
-		<cfinclude template="objectclass/dsp_feed_configurator.cfm">
-	</cfcase>
-	<cfcase value="feed_slideshow">
-		<cfinclude template="objectclass/dsp_slideshow_configurator.cfm">
-	</cfcase>
-	<cfcase value="category_summary">
-		<cfinclude template="objectclass/dsp_category_summary_configurator.cfm">
-	</cfcase>
-	<cfcase value="related_content,related_section_content">
-		<cfinclude template="objectclass/dsp_related_content_configurator.cfm">
-	</cfcase>
-	<cfcase value="tag_cloud">
-		<cfinclude template="objectclass/dsp_tagcloud_configurator.cfm">
-	</cfcase>
-	<cfdefaultcase>
-		<cfoutput>#rc.classid#</cfoutput>
-	</cfdefaultcase>
-</cfswitch>
+<cfset content=$.getBean("content").loadBy(contentID=rc.objectid)>
+
+<cfif isDefined("form.params") and isJSON(form.params)>
+	<cfset params=deserializeJSON(form.params)>
+	<cfparam name="params.taggroup" default="">
+<cfelse>
+	<cfset params={}>
+	<cfset params.taggroup="">	
+</cfif>
+
+<cfoutput>
+
+<div id="availableObjectParams" 
+	data-object="tag_cloud" 
+	data-name="#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.taggroup')#" 
+	data-objectid="#createUUID()#">
+	<div class="fieldset-wrap">
+		<div class="fieldset">
+			<div class="control-group">
+				<label class="control-label">
+					#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.selecttaggroup')#
+				</label>
+				<div class="controls">
+					<select name="taggroup" class="objectParam">
+						<option value="">Default</option>
+						<cfif len($.siteConfig('customTagGroups'))>
+							<cfloop list="#$.siteConfig('customTagGroups')#" index="g">
+								<option value="#g#" <cfif g eq params.taggroup>selected</cfif>>#g#</option>
+							</cfloop>
+						</cfif>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</cfoutput>
+

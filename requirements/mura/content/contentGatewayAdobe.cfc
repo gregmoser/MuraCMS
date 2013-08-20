@@ -343,6 +343,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			<cfargument name="tag" type="string" required="yes" default="" >
 			<cfargument name="aggregation" type="boolean" required="yes" default="false" >
 			<cfargument name="applyPermFilter" type="boolean" required="yes" default="false" >
+			<cfargument name="tagGroup" type="string" required="yes" default="" >
 			
 			<cfset var rsKids = ""/>
 			<cfset var relatedListLen = listLen(arguments.relatedID) />
@@ -523,7 +524,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 		  					)
 					
 					<cfif len(arguments.tag)>
-						and tcontenttags.tag= <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.tag#"/> 
+						and (
+								tcontenttags.tag in (<cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#arguments.tag#"/> )
+								<cfif len(arguments.tagGroup) and arguments.tagGroup neq 'default'>
+									and tcontenttags.taggroup=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.taggroup#"/>
+								</cfif>
+							)
 					</cfif>
 					
 					<cfif relatedListLen >
@@ -1570,6 +1576,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="tag" type="string" required="true" default="">
 	<cfargument name="sectionID" type="string" required="true" default="">
 	<cfargument name="categoryID" type="string" required="true" default="">
+	<cfargument name="tagGroup" type="string" required="true" default="">
+
 	<cfset var rsPublicSearch = "">
 	<cfset var w = "">
 	<cfset var c = "">
@@ -1633,7 +1641,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 				
 				<cfif len(arguments.tag)>
-					and tcontenttags.Tag= <cfqueryparam cfsqltype="cf_sql_varchar" value="#trim(arguments.tag)#"/> 
+					and (
+							tcontenttags.tag in (<cfqueryparam list="true" cfsqltype="cf_sql_varchar" value="#arguments.tag#"/> )
+							<cfif len(arguments.tagGroup) and arguments.tagGroup neq 'default'>
+								and tcontenttags.taggroup=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.taggroup#"/>
+							</cfif>
+						)	
 				<cfelse>
 					<!---
 					<cfloop list="#trim(arguments.keywords)#" index="w" delimiters=" ">
@@ -2071,6 +2084,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfargument name="categoryID" type="string" required="true" default="">
 	<cfargument name="rsContent" type="any" required="true" default="">
 	<cfargument name="moduleID" type="string" required="true" default="00000000000000000000000000000000000">
+	<cfargument name="taggroup" default="">
+
 	<cfset var rsTagCloud= ''/>
 	
 	<cfquery attributeCollection="#variables.configBean.getReadOnlyQRYAttrs(name='rsTagCloud')#">
@@ -2099,6 +2114,12 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	
 	<cfif len(arguments.categoryID)>
 		and tcontentcategories.path like <cfqueryparam cfsqltype="cf_sql_varchar" value="%#arguments.categoryID#%"/>
+	</cfif>
+
+	<cfif len(arguments.taggroup) and arguments.taggroup neq 'default'>
+		and tcontenttags.taggroup=<cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.taggroup#"/>
+	<cfelse>
+		and tcontenttags.taggroup is null
 	</cfif>
 
 	  AND 

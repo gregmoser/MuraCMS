@@ -118,6 +118,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 <cfproperty name="contentApprovalScript" type="string" default=""/>
 <cfproperty name="contentRejectionScript" type="string" default=""/>
 <cfproperty name="enableLockdown" type="string" default="" />
+<cfproperty name="customTagGroups" type="string" default="" />
 
 <cffunction name="init" returntype="any" output="false" access="public">
 	
@@ -206,6 +207,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	<cfset variables.instance.contentApprovalScript=""/>
 	<cfset variables.instance.contentRejectionScript=""/>
 	<cfset variables.instance.enableLockdown=""/>
+	<cfset variables.instance.customTagGroups=""/>
 	
 	<cfset variables.primaryKey = 'siteid'>
 	<cfset variables.entityName = 'site'>
