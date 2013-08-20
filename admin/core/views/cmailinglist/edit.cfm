@@ -65,7 +65,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 			</div>
 		</div>
 	<cfelse>
-		<div class="tabbable tabs-left">
+		<div class="tabbable tabs-left mura-ui">
 		<ul class="nav nav-tabs tabs initActiveTab">
 		<cfloop from="1" to="#listlen(tabList)#" index="t">
 		<li><a href="###listGetAt(tabList,t)#" onclick="return false;"><span>#listGetAt(tabLabelList,t)#</span></a></li>
@@ -103,7 +103,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 	</div>
 
 <cfelse>
-	<div class="tabbable tabs-left">
+	<div class="tabbable tabs-left mura-ui">
 		<ul class="nav nav-tabs tabs initActiveTab">
 	<cfloop from="1" to="#listlen(tabList)#" index="t">
 	<li><a href="###listGetAt(tabList,t)#" onclick="return false;"><span>#listGetAt(tabLabelList,t)#</span></a></li>

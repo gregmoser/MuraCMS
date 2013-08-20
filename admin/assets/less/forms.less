@@ -372,27 +372,122 @@ label:last-child {
 #selectAssocImageResults {
 	
 	max-height: 300px;
+	/*
 	padding: 1em;
 	border: 1px solid @grayLight;
 	background: @white;
 	.border-radius(4px);
+	*/
 	margin-bottom: @baseLineHeight;
 	
-	li {
-		.inline-block();
-		border: 1px solid @grayLight;
-		.border-radius(3px);
+	> .nav-tabs {
+		border: 0;
+		margin: 0;
+		width: 100%;
+		z-index: 100;
+		}
+	
+	> .nav-tabs > li {
+		.box-sizing(border-box);
+		width: 50%;
+		
+		&:last-child {
+			float: right;
+			}	
+		}
+		
+	> .nav-tabs > li > a,
+	> .nav-tabs > li > a:hover {
+		border: 0;
+		margin-bottom: -2px;
+		margin-right: 0;
+		display: block;
+		padding: .75em;
 		background: @grayLighter;
-		padding: .5em;
-		margin: .5em;
 		text-align: center;
+		.border-top-radius(4px);
+		color: @grayDark;
+		//font-weight: normal;
+		}
+	
+	> .nav-tabs > li > a:hover {
+		background: @gray;
+		}
+		
+	> .nav-tabs > li.active {
+	
+		> a {
+			border: 0 !important;
+			background: @grayLight;
+			color: @grayDark;
+			font-weight: bold;
+			}
+		}	
+				
+	/* Content */
+	> .tab-content {
+		
+		> .tab-pane {
+			max-height: 200px;
+			overflow-y: scroll;
+			background: @grayLight;
+			padding: 1em;
+			
+			> ul { 
+			
+				> li {
+					border: 1px solid @grayLight;
+					.border-radius(3px);
+					background: lighten(@grayLighter,2%);
+					padding: .5em;
+					margin: 0 .5em .5em 0;
+					.clearfix();
+					}
+				}
+				
+			&#mura-assoc-files > ul > li {
+						text-align: left;
+						line-height: 28px;
+						margin: 0 0 .2em 0;
+						//.border-radius(0);			
+						
+							input[type="radio"] {
+								margin: 0;
+								}
+							
+							i {
+								vertical-align: middle;
+								margin: 0 .2em;
+								}
+							}	
+			
+			&#mura-assoc-images > ul > li {
+						.inline-block();
+						text-align: center;
+						}
+			
+			}
+		}
 	}
-}
+
 // Basic Tab
 .mura-file {
 	font-size: 15px;
 	line-height: 28px;
 	margin-bottom: 0;
+	
+	> .current-file {
+		text-transform: uppercase;
+		padding: .5em 1em;
+		.border-radius(8px);
+		letter-spacing: 1px;
+		background: @grayDark;
+		color: @white;
+		font-size: 9px;
+		.inline-block;
+		line-height: 1;
+		margin: 0 0 .5em;
+		}
 	
 	> i {
 		vertical-align: middle;

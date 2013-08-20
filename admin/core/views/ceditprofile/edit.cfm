@@ -68,7 +68,7 @@ select * from rsSubTypes where subType <> 'Default'
 	
 	<p>(*Required, **Required to login to Site)<p>
 
-<div class="tabbable tabs-left">
+<div class="tabbable tabs-left mura-ui">
 
 	<ul class="nav nav-tabs tabs initActiveTab">
 	<cfloop from="1" to="#listlen(tabList)#" index="t">

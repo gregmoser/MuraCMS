@@ -15,8 +15,10 @@
 			or
 			 (not fileMetaData.hasImageFileExt() and attributes.property neq 'fileid')
 		)>
-	     <p class="mura-file #lcase(attributes.bean.getFileExt())#"><i class="<cfif fileMetaData.hasImageFileExt()>icon-picture<cfelse>icon-file-text-alt</cfif> icon-2x"></i> #HTMLEditFormat(fileMetaData.getFilename())#<cfif attributes.property eq 'fileid' and attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif>
-	     </p>
+	     <div class="mura-file #lcase(attributes.bean.getFileExt())#">
+	     	<!--- <p class="current-file">Current File</p><br> --->
+		 	<i class="<cfif fileMetaData.hasImageFileExt()>icon-picture<cfelse>icon-file-text-alt</cfif> icon-2x"></i> #HTMLEditFormat(fileMetaData.getFilename())#<cfif attributes.property eq 'fileid' and attributes.bean.getMajorVersion()> (v#attributes.bean.getMajorVersion()#.#attributes.bean.getMinorVersion()#)</cfif>
+	     </div>
 	     
 	</cfif>
 

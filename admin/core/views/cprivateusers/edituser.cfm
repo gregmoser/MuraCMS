@@ -434,7 +434,7 @@ select * from rsSubTypes where subType <> 'Default'
 </cfsavecontent>	
 <cfoutput>	
 
-<div class="tabbable tabs-left">
+<div class="tabbable tabs-left mura-ui">
 <ul class="nav nav-tabs tabs initActiveTab">
 <cfloop from="1" to="#listlen(tabList)#" index="t">
 <li<cfif listGetAt(tabList,t) eq 'tabExtendedattributes'> id="tabExtendedattributesLI" class="hide"</cfif>><a href="###listGetAt(tabList,t)#" onclick="return false;"><span>#listGetAt(tabLabelList,t)#</span></a></li>
