@@ -66,7 +66,7 @@
 	}
 }
 
-.tabs-left { // Content Editing, etc.
+.mura-ui { // Content Editing, etc.
 		
 	> .nav-tabs {
 		border: 0 !important;
@@ -96,26 +96,25 @@
 			position: relative;
 			}
 		}	
-
 				
 	/* Content */
-	.tab-content {
+	> .tab-content {
 		.makeColumn(10);
 		.border-radius(3px);
 		padding: 0;
 		margin-left: 0;
 		#gradient .vertical(darken(@btnBackground,2%),@btnBackgroundHighlight);
 		.box-shadow(@globalDropShadow);
-		//behavior: @PIE;
 		}
 	} // End .tabs-left
+
 
 .pane-padded {
 	padding: @gridGutterWidth @gridGutterWidth 0 !important;
 	}
 	
 .fieldset-wrap {
-	.tabs-left > .tab-content;
+	.mura-ui > .tab-content;
 	.makeColumn(12);
 	margin: 0 0 @baseLineHeight*2 0;
 	max-width: 100%;

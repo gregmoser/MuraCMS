@@ -77,14 +77,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 </cfoutput>
 
 <cfif len(rc.keywords)>
-	<div class="tabbable tabs-left"  id="selectAssocImageResults">
+	<div class="tabbable" id="selectAssocImageResults">
 		<ul class="nav nav-tabs tabs">
-			<li><a href="##mura-assoc-images" onclick="return false;"><span>Images</span></a></li>
-			<cfif rc.type eq 'file'><li><a href="##mura-assoc-files" onclick="return false;"><span>Other Files</span></a></li></cfif>
+			<li><a href="##mura-assoc-images" onclick="return false;"><i class="icon-picture"></i> Images</a></li>
+			<cfif rc.type eq 'file'><li><a href="##mura-assoc-files" onclick="return false;"><i class="icon-file-text-alt"></i> Other Files</a></li></cfif>
 		</ul>
 		<div class="tab-content">
 			<div id="mura-assoc-images" class="tab-pane fade">
-				<div style="overflow-y: auto;" >
 					<ul>
 						<cfset counter=0 />
 					    <cfif rsimages.recordcount>
@@ -111,15 +110,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 						 </cfif>
 						 <cfif not counter>
 							<cfoutput>
-							<li>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
+							<li class="no-results">#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
 							</cfoutput>
 						</cfif>
 					</ul>
-				</div>
 			</div>
 			<cfif rc.type eq 'file'>
 				<div id="mura-assoc-files" class="tab-pane fade">
-					<div style="overflow-y: auto;" >
 						<ul>
 							<cfset counter=0 />
 							<cfif rsfiles.recordcount>
@@ -133,24 +130,17 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 									<cfif verdict neq 'none'>
 										<cfset filtered['#rsfiles.fileid#']=true>
 										<cfset counter=counter+1/> 
-								        <li>
-								        <cfif hasImage>
-								        <img src="#application.configBean.getContext()#/tasks/render/small/?fileID=#rsfiles.fileid#"><br>
-								        <cfelse>
-								        <i class="icon-file-text-alt icon-5x"></i><br>#rsfiles.assocfilename#<br>
-								        </cfif>
-								        <input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rsfiles.fileid#"></li>
+								        <li><input type="radio" name="#HTMLEditFormat(rc.property)#" value="#rsfiles.fileid#">&nbsp;<i class="icon-file-text-alt icon-2x"></i>&nbsp;#rsfiles.assocfilename#</li>							        
 								 	</cfif>		 	
 							 	</cfif>
 						      </cfoutput>
 							 </cfif>
 							 <cfif not counter>
 								<cfoutput>
-								<li>#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
+								<li class="no-results">#application.rbFactory.getKeyValue(session.rb,'sitemanager.noresults')#</li>
 								</cfoutput>
 							</cfif>
 						</ul>
-					</div>
 				</div>
 			</cfif>
 		</div>

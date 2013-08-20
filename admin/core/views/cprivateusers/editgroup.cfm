@@ -88,7 +88,7 @@ select * from rsSubTypes where subType <> 'Default'
      <form novalidate="novalidate"<cfif not (rsSubTypes.recordcount or rsPluginScripts.recordcount)> class="fieldset-wrap"</cfif> action="index.cfm?muraAction=cPrivateUsers.update&userid=#URLEncodedFormat(rc.userid)#" enctype="multipart/form-data" method="post" name="form1" onsubmit="return validate(this);">
       </cfoutput>
       <cfif rsSubTypes.recordcount or rsPluginScripts.recordcount>
-        <div class="tabbable tabs-left">
+        <div class="tabbable tabs-left mura-ui">
         <ul class="nav nav-tabs tabs initActiveTab">
         <cfoutput>
           <li><a href="##tabBasic" onclick="return false;"><span>#HTMLEditFormat(application.rbFactory.getKeyValue(session.rb,'user.basic'))#</span></a></li>

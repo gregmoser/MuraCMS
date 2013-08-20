@@ -98,7 +98,7 @@ to your own modified versions of Mura CMS.
       <cfset tabLabelList=listAppend(tabLabelList,rsPluginScripts.name)/>
       <cfset tabList=listAppend(tabList,"tab" & $.createCSSID(rsPluginScripts.name))>
     </cfoutput> </cfoutput> <cfoutput>
-    <div class="tabbable tabs-left">
+    <div class="tabbable tabs-left mura-ui">
     <ul class="nav nav-tabs tabs initActiveTab">
         <cfloop from="1" to="#listlen(tabList)#" index="t">
         <li><a href="###listGetAt(tabList,t)#" onclick="return false;"><span>#listGetAt(tabLabelList,t)#</span></a></li>
