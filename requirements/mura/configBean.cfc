@@ -819,7 +819,6 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					SELECT column_name, 
 					data_length column_size, 
 					data_type type_name, 
-					data_default column_default_value,
 					nullable is_nullable,
 					 data_precision 
 					FROM user_tab_cols
