@@ -1230,13 +1230,16 @@ function getDialogPosition() {
 }
 
 function openPreviewDialog(previewURL) {
-	if(previewURL.indexOf("?") == -1) {
-		previewURL = previewURL + '?muraadminpreview';
+
+	var $previewURL=previewURL;
+
+	if($previewURL.indexOf("?") == -1) {
+		$previewURL = previewURL + '?muraadminpreview';
 	} else {
-		previewURL = previewURL + '&muraadminpreview';
+		$previewURL = previewURL + '&muraadminpreview';
 	}
 
-	var $dialog = $('<div></div>').html('<iframe id="preview-dialog" style="border: 0; " src="' + previewURL + '" width="1075" height="600"></iframe>').dialog({
+	var $dialog = $('<div></div>').html('<iframe id="preview-dialog" style="border: 0; " src="' + $previewURL + '&mobileFormat=false" width="1075" height="600"></iframe>').dialog({
 		width: 1100,
 		height: 600,
 		modal: true,
@@ -1244,28 +1247,43 @@ function openPreviewDialog(previewURL) {
 		resize: function(event,ui){
 			$('#preview-dialog').attr('width',ui.size.width-25);
 		},
+		close: function(){
+			$($dialog).dialog( "destroy" );
+		},
 		open: function(){
-			$('.ui-dialog-titlebar-close').before('<div id="mura-preview-device-selector"><a class="btn mura-device-standard">Standard Browser</a><a class="btn mura-device-tablet">Tablet</a><a class="btn mura-device-phone">Phone</a></div>');
+			$('.ui-dialog-titlebar-close').before('<div id="mura-preview-device-selector" class="btn-group"><a class="btn mura-device-standard active">Standard Browser</a><a class="btn mura-device-tablet">Tablet</a><a class="btn mura-device-phone">Phone</a></div>');
 			
 			$('.mura-device-standard').bind('click', function () {
 			    $( $dialog ).dialog( "option", "width", 1100 );
-			    $('#preview-dialog').attr('width',$('.ui-dialog').width()-25);
+			    $('#preview-dialog')
+			    	.attr('width',$('.ui-dialog').width()-25)
+			   	 .attr('src',$previewURL + '&mobileFormat=false');
 			    $( $dialog ).dialog( "option", "position", "center" );
+			    $('#mura-preview-device-selector .btn').removeClass('active');
+			    $('.mura-device-standard').addClass('active');
 
 			    return false;
 			});
 			$('.mura-device-tablet').bind('click', function () { 
 			    $( $dialog ).dialog( "option", "width", 700 );
-			    $('#preview-dialog').attr('width',$('.ui-dialog').width()-25);
+			    $('#preview-dialog')
+			    	.attr('width',$('.ui-dialog').width()-25)
+			    	.attr('src',$previewURL + '&mobileFormat=false');
 			    $( $dialog ).dialog( "option", "position", "center" );
+			    $('#mura-preview-device-selector .btn').removeClass('active');
+			    $('.mura-device-tablet').addClass('active');
 
 			    return false;
 			});
 			$('.mura-device-phone').bind('click', function () {
 			    $( $dialog ).dialog( "option", "width", 350 );
-			    $('#preview-dialog').attr('width',$('.ui-dialog').width()-25);
+			    $('#preview-dialog')
+			    	.attr('width',$('.ui-dialog').width()-25)
+			    	.attr('src',$previewURL + '&mobileFormat=true');
 			    $( $dialog ).dialog( "option", "position", "center" );
-			   
+			    $('#mura-preview-device-selector .btn').removeClass('active');
+			    $('.mura-device-phone').addClass('active');
+
 			    return false;
 			});
 		}

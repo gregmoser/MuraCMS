@@ -309,16 +309,40 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					);
 				}
  	
+ 				var shifted=false;
+
  				chechForSave=function(e) {
-				  if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-				    e.preventDefault();
-				    document.contentForm.approved.value=0;
-					document.contentForm.preview.value=0;
-					document.contentForm.murakeepediting.value=true;
-					submitForm(document.contentForm,'add');
-				  }
+				  	if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+				    	e.preventDefault();
+				   
+				   		if(e.altKey){
+							document.contentForm.approved.value=1;
+						} else {
+							document.contentForm.approved.value=0;
+						}
+
+						if(e.shiftKey){
+							document.contentForm.preview.value=1;
+						} else {
+							document.contentForm.preview.value=0;
+						}
+
+						<cfif rc.compactDisplay neq 'true'>
+						document.contentForm.murakeepediting.value=true;
+						</cfif>
+
+					    if(siteManager.ckContent(draftremovalnotice)){
+							submitForm(document.contentForm,'add');
+						} else {
+							document.contentForm.approved.value=0;
+							document.contentForm.murakeepediting.value=false;
+							document.contentForm.preview.value=0;
+							document.contentForm.approved.value=0;
+						}
+						
+					}
 				}
-				
+
 				window.top.document.addEventListener("keydown", chechForSave , false);
 				
 		</script>
