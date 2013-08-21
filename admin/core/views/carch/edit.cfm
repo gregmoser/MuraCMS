@@ -309,6 +309,8 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					);
 				}
  	
+ 				var shifted=false;
+
  				chechForSave=function(e) {
 				  if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
 				    e.preventDefault();
@@ -318,13 +320,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					} else {
 						document.contentForm.preview.value=0;
 					}
+					<cfif rc.compactDisplay neq 'true'>
 					document.contentForm.murakeepediting.value=true;
+					</cfif>
 					submitForm(document.contentForm,'add');
 				  }
 				}
-				
-			 $(document).bind('keyup keydown', function(e){shifted = e.shiftKey} );
-
+				window.top.document.addEventListener("keyup",  function(e){shifted = e.shiftKey}  , false);
+				window.top.document.addEventListener("keydown",  function(e){shifted = e.shiftKey}  , false);
 				window.top.document.addEventListener("keydown", chechForSave , false);
 				
 		</script>
