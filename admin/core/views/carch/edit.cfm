@@ -313,12 +313,18 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				  if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
 				    e.preventDefault();
 				    document.contentForm.approved.value=0;
-					document.contentForm.preview.value=0;
+				    if(shifted){
+						document.contentForm.preview.value=1;
+					} else {
+						document.contentForm.preview.value=0;
+					}
 					document.contentForm.murakeepediting.value=true;
 					submitForm(document.contentForm,'add');
 				  }
 				}
 				
+			 $(document).bind('keyup keydown', function(e){shifted = e.shiftKey} );
+
 				window.top.document.addEventListener("keydown", chechForSave , false);
 				
 		</script>
