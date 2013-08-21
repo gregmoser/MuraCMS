@@ -104,8 +104,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 	<cfif not len(variables.instance.tableFieldList)>
 		<cfset variables.instance.tableFieldLookUp=variables.configBean.getValue("#variables.instance.entityName#FieldLookUp")>
-		<cfset variables.instance.tableFieldList=variables.configBean.getValue("#variables.instance.entityName#FieldList
-			")>
+		<cfset variables.instance.tableFieldList=variables.configBean.getValue("#variables.instance.entityName#FieldList")>
 		<cfif not len(variables.instance.tableFieldList)>
 			<cfset variables.instance.tableFieldLookUp=structNew()>
 			<cfset rs=variables.configBean.dbTableColumns(variables.instance.table)>
