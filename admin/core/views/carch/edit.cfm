@@ -326,8 +326,11 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					submitForm(document.contentForm,'add');
 				  }
 				}
-				window.top.document.addEventListener("keyup",  function(e){shifted = e.shiftKey}  , false);
-				window.top.document.addEventListener("keydown",  function(e){shifted = e.shiftKey}  , false);
+
+				toggleShift=function(e){shifted = e.shiftKey}
+
+				window.top.document.addEventListener("keyup", toggleShift   , false);
+				window.top.document.addEventListener("keydown",  toggleShift  , false);
 				window.top.document.addEventListener("keydown", chechForSave , false);
 				
 		</script>
