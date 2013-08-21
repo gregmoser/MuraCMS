@@ -209,7 +209,6 @@
 	position: relative;
 	margin-bottom: 0;
 	border: 0;
-	float: left;
 }
 
 .ui-dialog .ui-dialog-title {
@@ -499,6 +498,7 @@
 		font-size: 8px;
 		color: #fff;
 		text-align: center;
+		z-index: 100000;
 		
 			> p {
 				text-align: center;
@@ -509,22 +509,23 @@
 				}
 
 			> a {
-				background: #666;
+				background: @grayDarker;
 				display: inline-block;
 				font-size: 18px;
 				padding: 2px;
 				margin-right: 2px;
 				border-radius: 4px;
 				line-height: 25px;
-				color: #fff;
+				color: @gray;
 				width: 22px;
 				height: 22px;
 				overflow: hidden;
 				cursor: pointer;
 				
-				&:hover {
+				&:hover, &.active {
 					text-decoration: none;
 					background: @grayDark;
+					color: @white;
 				}
 				
 				&:last-child {
