@@ -335,21 +335,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					variables.instance.params.criteria
 				) />
 								 
-			<cfif param.getIsValid()>	
+			<cfif param.getIsValid()>
 				<cfif not started >
+					<cfset openGrouping=true />	
 					and (
 				</cfif>
 				<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
-					(
+					<cfif not openGrouping>and</cfif> (
 					<cfset openGrouping=true />
 				<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
-					<cfif started>or</cfif> (
+					<cfif not openGrouping>or</cfif> (
 					<cfset openGrouping=true />
 				<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
-					<cfif started>and</cfif> (
+					<cfif not openGrouping>and</cfif> (
 					<cfset openGrouping=true />
 				<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
 					)
+					<cfset openGrouping=false />
 				<cfelse>
 					<cfif not openGrouping and started>
 						#param.getRelationship()#
@@ -359,6 +361,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfif>
 				
 				<cfset started = true />
+
 				<cfset isListParam=listFindNoCase("IN,NOT IN",param.getCondition())>					
 				#param.getField()# #param.getCondition()# <cfif isListParam>(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#"><cfif isListParam>)</cfif>  	
 				

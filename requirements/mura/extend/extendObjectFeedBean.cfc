@@ -262,8 +262,7 @@
 				and tclassextend.subtype= <cfqueryparam cfsqltype="cf_sql_varchar" value="#getSubType()#">))
 
 		<cfif rsParams.recordcount>	
-		<cfset started = false />
-		<cfset openGrouping=false />		
+		<cfset started = false />	
 		<cfloop query="rsParams">
 			<cfset param=createObject("component","mura.queryParam").init(rsParams.relationship,
 					rsParams.field,
@@ -274,29 +273,27 @@
 		
 			<cfif param.getIsValid()>	
 				<cfif not started >
-					<cfset started = true />and (
-				<cfelse>
-					<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
-						(
-						<cfset openGrouping=true />
-					<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
-						or (
-						<cfset openGrouping=true />
-					<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
-						and (
-						<cfset openGrouping=true />
-					<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
-						)
-						<cfset openGrouping=false />
-					<cfelse>
-						<cfif not openGrouping>
-						#param.getRelationship()#
-						<cfelse>
-						<cfset openGrouping=false />
-						</cfif>
-					</cfif>
+					<cfset openGrouping=true />	
+					and (
+				</cfif>
+				<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
+					(
+					<cfset openGrouping=true />
+				<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
+					<cfif not openGrouping>or</cfif> (
+					<cfset openGrouping=true />
+				<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
+					<cfif not openGrouping>and</cfif> (
+					<cfset openGrouping=true />
+				<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
+					)
+					<cfset openGrouping=false />
+				<cfelseif not openGrouping>
+					#param.getRelationship()#
 				</cfif>
 				
+				<cfset started = true />
+
 				<cfif len(param.getField())>	
 					<cfif  listLen(param.getField(),".") gt 1>			
 						(#param.getField()# #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
