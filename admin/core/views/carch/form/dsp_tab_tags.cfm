@@ -58,7 +58,7 @@ version 2 without this exception.  You may, if you choose, apply this exception 
    		<cfif len($.siteConfig('customTagGroups'))>
    		#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.defaulttags')#
    		<cfelse>
-   		#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.defaulttags')#<
+   		#application.rbFactory.getKeyValue(session.rb,'sitemanager.content.fields.defaulttags')#
    		</cfif>
    	</label>	    
    	<div class="controls">
