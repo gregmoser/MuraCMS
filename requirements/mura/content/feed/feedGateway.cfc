@@ -207,26 +207,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 										 
 					<cfif param.getIsValid() and (param.isGroupingParam() or listLen(param.getField(),".") eq 1)>	
 						<cfif not started >
+							<cfset openGrouping=true />
 							and (
 						</cfif>
 						<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
-							(
+							<cfif not openGrouping>and</cfif> (
 							<cfset openGrouping=true />
 						<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
-							<cfif started>or</cfif> (
+							<cfif not openGrouping>or</cfif> (
 							<cfset openGrouping=true />
 						<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
-							<cfif started>and</cfif> (
+							<cfif not openGrouping>and</cfif> (
 							<cfset openGrouping=true />
 						<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
 							)
 							<cfset openGrouping=false />
-						<cfelse>
-							<cfif not openGrouping and started>
-								#param.getRelationship()#
-							<cfelse>
-								<cfset openGrouping=false />
-							</cfif>
+						<cfelseif not openGrouping>
+							#param.getRelationship()#
 						</cfif>
 						
 						<cfset started = true />
@@ -374,28 +371,27 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 													 
 								<cfif param.getIsValid() and (param.isGroupingParam() or listLen(param.getField(),".") gt 1)>	
 									<cfif not started >
+										<cfset openGrouping=true />
 										and (
 									</cfif>
 									<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
-										(
+										<cfif not openGrouping>and</cfif> (
 										<cfset openGrouping=true />
 									<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
-										<cfif started>or</cfif> (
+										<cfif not openGrouping>or</cfif> (
 										<cfset openGrouping=true />
 									<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
-										<cfif started>and</cfif> (
+										<cfif not openGrouping>and</cfif> (
 										<cfset openGrouping=true />
 									<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
 										)
 										<cfset openGrouping=false />
-									<cfelse>
-										<cfif not openGrouping and started>
-											#param.getRelationship()#
-										<cfelse>
-											<cfset openGrouping=false />
-										</cfif>
+									<cfelseif not openGrouping>
+										#param.getRelationship()#
 									</cfif>
 									
+									<cfset started=true>
+
 									<cfif listLen(param.getField(),".") gt 1>
 										<cfset started = true />
 										<cfset isListParam=listFindNoCase("IN,NOT IN",param.getCondition())>			
@@ -578,26 +574,23 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 
 			<cfif param.getIsValid() and (listLen(param.getField(),".") gt 1 or param.isGroupingParam())>	
 				<cfif not started >
+					<cfset openGrouping=true />
 					and (
 				</cfif>
 				<cfif listFindNoCase("openGrouping,(",param.getRelationship())>
-					(
+					<cfif not openGrouping>and</cfif> (
 					<cfset openGrouping=true />
 				<cfelseif listFindNoCase("orOpenGrouping,or (",param.getRelationship())>
-					<cfif started>or</cfif> (
+					<cfif not openGrouping>or</cfif> (
 					<cfset openGrouping=true />
 				<cfelseif listFindNoCase("andOpenGrouping,and (",param.getRelationship())>
-					<cfif started>and</cfif> (
+					<cfif not openGrouping>and</cfif> (
 					<cfset openGrouping=true />
 				<cfelseif listFindNoCase("closeGrouping,)",param.getRelationship())>
 					)
 					<cfset openGrouping=false />
-				<cfelse>
-					<cfif not openGrouping and started>
-						#param.getRelationship()#
-					<cfelse>
-						<cfset openGrouping=false />
-					</cfif>
+				<cfelseif not openGrouping>
+					#param.getRelationship()#
 				</cfif>
 				
 				<cfset started = true />
@@ -613,9 +606,10 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 							#param.getField()# #param.getCondition()# <cfif isListParam>(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(isListParam,de('true'),de('false'))#" null="#iif(param.getCriteria() eq 'null',de('true'),de('false'))#"><cfif isListParam>)</cfif> 
 							)
 					</cfif>
+
+					<cfset openGrouping=false />
 				</cfif>
-				
-				<cfset openGrouping=false />
+					
 			</cfif>						
 		</cfloop>
 		<cfif started>)</cfif>
