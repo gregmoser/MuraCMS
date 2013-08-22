@@ -631,6 +631,7 @@ buttons: {
 			
 			if (isNew == 0 && advSearch == true) {
 				$('#rcAdvancedSearch').show();
+				$('#aAdvancedSearch').addClass('active');
 			}
 			
 			siteManager.bindMouse();
