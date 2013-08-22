@@ -297,6 +297,7 @@
 				<cfif len(param.getField())>	
 					<cfif  listLen(param.getField(),".") gt 1>			
 						(#param.getField()# #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
+						<cfset openGrouping=false />
 					<cfelseif len(param.getField())>
 						<cfif isNumeric(param.getField())>
 							(select #dataTable#.baseID from #dataTable# #tableModifier# where attributeID
@@ -310,10 +311,9 @@
 							and tclassextendattributes.name=<cfqueryparam cfsqltype="cf_sql_varchar" value="#param.getField()#">
 						</cfif>
 						and <cfif param.getCondition() neq "like">#variables.configBean.getClassExtensionManager().getCastString(param.getField(),getSiteID())#<cfelse>attributeValue</cfif> #param.getCondition()# <cfif param.getCondition() eq "IN">(</cfif><cfqueryparam cfsqltype="cf_sql_#param.getDataType()#" value="#param.getCriteria()#" list="#iif(param.getCondition() eq 'IN',de('true'),de('false'))#"><cfif param.getCondition() eq "IN">)</cfif>)
+						
+						<cfset openGrouping=false />
 					</cfif>
-
-
-					<cfset openGrouping=false />
 				</cfif>
 			</cfif>						
 		</cfloop>
