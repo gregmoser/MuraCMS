@@ -2171,13 +2171,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfquery>
 				<cfset fileBean=read(contentHistID=fileBean.getContentHistID(),siteid=fileBean.getSiteID())>
 				<cfset local.returnStr={
-					    "name":"#JSStringFormat(fileBean.getTitle())#",
-					    "size":#fileBean.getFileSize()#,
-					    "url":"#JSStringFormat(fileBean.getImageURL(size='source'))#",
-					    "edit_url":"#JSStringFormat(fileBean.getEditURL())#",
-					    "thumbnail_url":"#JSStringFormat(fileBean.getImageURL(size='small'))#",
-					    "delete_url":"",
-					    "delete_type":"DELETE"
+					    name=JSStringFormat(fileBean.getTitle()),
+					    size=fileBean.getFileSize(),
+					    url=JSStringFormat(fileBean.getImageURL(size='source')),
+					    edit_url=JSStringFormat(fileBean.getEditURL()),
+					    thumbnail_url=JSStringFormat(fileBean.getImageURL(size='small')),
+					    delete_url="",
+					    delete_type="DELETE"
 					  }>
 				<cfset structAppend(local.returnStr,local.extraParams)>
 				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
@@ -2233,13 +2233,13 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 				</cfquery>
 				<cfset fileBean=read(contentHistID=fileBean.getContentHistID(),siteid=fileBean.getSiteID())>
 				<cfset local.returnStr={
-					    "name":"#JSStringFormat(fileBean.getTitle())#",
-					    "size":#fileBean.getFileSize()#,
-					    "url":"#JSStringFormat(fileBean.getImageURL(size='source'))#",
-					    "edit_url":"#JSStringFormat(fileBean.getEditURL())#",
-					    "thumbnail_url":"#JSStringFormat(fileBean.getImageURL(size='small'))#",
-					    "delete_url":"",
-					    "delete_type":"DELETE"
+					    name=JSStringFormat(fileBean.getTitle()),
+					    size=fileBean.getFileSize(),
+					    url=JSStringFormat(fileBean.getImageURL(size='source')),
+					    edit_url=JSStringFormat(fileBean.getEditURL()),
+					    thumbnail_url=JSStringFormat(fileBean.getImageURL(size='small')),
+					    delete_url="",
+					    delete_type="DELETE"
 					  }>
 				<cfset structAppend(local.returnStr,local.extraParams)>
 				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
