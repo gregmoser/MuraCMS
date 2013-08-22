@@ -2170,15 +2170,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					 where fileid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getFileID()#">
 				</cfquery>
 				<cfset fileBean=read(contentHistID=fileBean.getContentHistID(),siteid=fileBean.getSiteID())>
-				<cfset local.returnStr={
-					    "name":"#JSStringFormat(fileBean.getTitle())#",
-					    "size":#fileBean.getFileSize()#,
-					    "url":"#JSStringFormat(fileBean.getImageURL(size='source'))#",
-					    "edit_url":"#JSStringFormat(fileBean.getEditURL())#",
-					    "thumbnail_url":"#JSStringFormat(fileBean.getImageURL(size='small'))#",
-					    "delete_url":"",
-					    "delete_type":"DELETE"
-					  }>
+				<cfset local.returnStr={} />
+				<cfset local.returnStr["name"] = "#JSStringFormat(fileBean.getTitle())#" />
+				<cfset local.returnStr["size"] = "#fileBean.getFileSize()#" />
+				<cfset local.returnStr["url"] = "#JSStringFormat(fileBean.getImageURL(size='source'))#" />
+				<cfset local.returnStr["edit_url"] = "#JSStringFormat(fileBean.getEditURL())#" />
+				<cfset local.returnStr["thumbnail_url"] = "#JSStringFormat(fileBean.getImageURL(size='small'))#" />
+				<cfset local.returnStr["delete_url"] = "" />
+				<cfset local.returnStr["delete_type"] = "DELETE" />
 				<cfset structAppend(local.returnStr,local.extraParams)>
 				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
 				<cfif f lt arrayLen(form.files)><cfoutput>,</cfoutput></cfif>
@@ -2232,15 +2231,14 @@ version 2 without this exception.  You may, if you choose, apply this exception 
 					 where fileid=<cfqueryparam cfsqltype="cf_sql_varchar" value="#fileBean.getFileID()#">
 				</cfquery>
 				<cfset fileBean=read(contentHistID=fileBean.getContentHistID(),siteid=fileBean.getSiteID())>
-				<cfset local.returnStr={
-					    "name":"#JSStringFormat(fileBean.getTitle())#",
-					    "size":#fileBean.getFileSize()#,
-					    "url":"#JSStringFormat(fileBean.getImageURL(size='source'))#",
-					    "edit_url":"#JSStringFormat(fileBean.getEditURL())#",
-					    "thumbnail_url":"#JSStringFormat(fileBean.getImageURL(size='small'))#",
-					    "delete_url":"",
-					    "delete_type":"DELETE"
-					  }>
+				<cfset local.returnStr={} />
+				<cfset local.returnStr["name"] = "#JSStringFormat(fileBean.getTitle())#" />
+				<cfset local.returnStr["size"] = "#fileBean.getFileSize()#" />
+				<cfset local.returnStr["url"] = "#JSStringFormat(fileBean.getImageURL(size='source'))#" />
+				<cfset local.returnStr["edit_url"] = "#JSStringFormat(fileBean.getEditURL())#" />
+				<cfset local.returnStr["thumbnail_url"] = "#JSStringFormat(fileBean.getImageURL(size='small'))#" />
+				<cfset local.returnStr["delete_url"] = "" />
+				<cfset local.returnStr["delete_type"] = "DELETE" />
 				<cfset structAppend(local.returnStr,local.extraParams)>
 				<cfoutput>#createObject("component","mura.json").encode(local.returnStr)#</cfoutput>
 			<!---</cfloop>--->
