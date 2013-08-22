@@ -1239,12 +1239,14 @@ function openPreviewDialog(previewURL) {
 		$previewURL = previewURL + '&muraadminpreview';
 	}
 
+	var position=["top",20];
+
 	var $dialog = $('<div></div>').html('<iframe id="preview-dialog" style="border: 0; " src="' + $previewURL + '&mobileFormat=false" width="1075" height="600" allowfullscreen></iframe>').dialog({
 		width: 1105,
 		height: 600,
 		modal: true,
 		title: 'Preview',
-		position: getDialogPosition(),
+		position: position,
 		resize: function(event,ui){
 			$('#preview-dialog').attr('width',ui.size.width-25);
 		},
@@ -1273,7 +1275,7 @@ function openPreviewDialog(previewURL) {
 			    	.attr('width',1075)
 			    	.attr('height',600)
 			   	 .attr('src',$previewURL + '&mobileFormat=false');
-			    $( $dialog ).dialog( "option", "position", getDialogPosition() );
+			    $( $dialog ).dialog( "option", "position", position );
 			    $('#mura-preview-device-selector a').removeClass('active');
 			    $('.mura-device-standard').addClass('active');
 
@@ -1286,7 +1288,7 @@ function openPreviewDialog(previewURL) {
 			    	.attr('width',768)
 			    	.attr('height',600)
 			    	.attr('src',$previewURL + '&mobileFormat=false');
-			    $( $dialog ).dialog( "option", "position", getDialogPosition() );
+			    $( $dialog ).dialog( "option", "position", position );
 			    $('#mura-preview-device-selector a').removeClass('active');
 			    $('.mura-device-tablet').addClass('active');
 
@@ -1299,7 +1301,7 @@ function openPreviewDialog(previewURL) {
 			    	.attr('width',1024)
 			    	.attr('height',500)
 			    	.attr('src',$previewURL + '&mobileFormat=false');
-			    $( $dialog ).dialog( "option", "position", getDialogPosition() );
+			    $( $dialog ).dialog( "option", "position", position );
 			    $('#mura-preview-device-selector a').removeClass('active');
 			    $('.mura-device-tablet-landscape').addClass('active');
 
@@ -1312,7 +1314,7 @@ function openPreviewDialog(previewURL) {
 			    	.attr('width',320)
 			    	.attr('height',480)
 			    	.attr('src',$previewURL + '&mobileFormat=true');
-			    $( $dialog ).dialog( "option", "position", getDialogPosition() );
+			    $( $dialog ).dialog( "option", "position", position );
 			    $('#mura-preview-device-selector a').removeClass('active');
 			    $('.mura-device-phone').addClass('active');
 
@@ -1325,7 +1327,7 @@ function openPreviewDialog(previewURL) {
 			    	.attr('width',520)
 			    	.attr('height',250)
 			    	.attr('src',$previewURL + '&mobileFormat=true');
-			    $( $dialog ).dialog( "option", "position", getDialogPosition() );
+			    $( $dialog ).dialog( "option", "position", position );
 			    $('#mura-preview-device-selector a').removeClass('active');
 			    $('.mura-device-phone-landscape').addClass('active');
 
