@@ -1263,7 +1263,7 @@ function openPreviewDialog(previewURL) {
 				$tools=$tools+'<a class="mura-device-phone-landscape" data-height="250" data-width="520" data-mobileformat="true"><i class="icon-mobile-phone icon-rotate-270"></i></a>';
 				$tools=$tools+'</div>';
 
-			var wos=26;
+			var wos=30;
 			var hos=85+39;
 
 			$('.ui-dialog').prepend($tools);
