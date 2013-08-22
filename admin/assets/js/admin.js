@@ -1256,83 +1256,35 @@ function openPreviewDialog(previewURL) {
 		open: function(){
 
 			var $tools='<div id="mura-preview-device-selector"><p>Preview Mode</p>';
-				$tools=$tools+'<a class="mura-device-standard active"><i class="icon-desktop"></i></a>';
-				$tools=$tools+'<a class="mura-device-tablet"><i class="icon-tablet"></i></a>';
-				$tools=$tools+'<a class="mura-device-tablet-landscape"><i class="icon-tablet icon-rotate-270"></i></a>';
-				$tools=$tools+'<a class="mura-device-phone"><i class="icon-mobile-phone"></i></a>';
-				$tools=$tools+'<a class="mura-device-phone-landscape"><i class="icon-mobile-phone icon-rotate-270"></i></a>';
+				$tools=$tools+'<a class="mura-device-standard active" data-height="600" data-width="1075" data-mobileformat="false"><i class="icon-desktop"></i></a>';
+				$tools=$tools+'<a class="mura-device-tablet" data-height="600" data-width="768" data-mobileformat="false"><i class="icon-tablet"></i></a>';
+				$tools=$tools+'<a class="mura-device-tablet-landscape" data-height="480" data-width="1024" data-mobileformat="false"><i class="icon-tablet icon-rotate-270"></i></a>';
+				$tools=$tools+'<a class="mura-device-phone" data-height="480" data-width="320" data-mobileformat="true"><i class="icon-mobile-phone"></i></a>';
+				$tools=$tools+'<a class="mura-device-phone-landscape" data-height="250" data-width="520" data-mobileformat="true"><i class="icon-mobile-phone icon-rotate-270"></i></a>';
 				$tools=$tools+'</div>';
 
 			var wos=26;
 			var hos=85+39;
+
 			$('.ui-dialog').prepend($tools);
 			
-			$('.mura-device-standard').bind('click', function () {
-			    $( $dialog ).dialog( "option", "width", 1075 + wos );
-			    $( $dialog ).dialog( "option", "height", 600 + hos);
+			$('#mura-preview-device-selector a').bind('click', function () {
+				var data=$(this).data();
+
+			    $( $dialog ).dialog( "option", "width", data.width + wos );
+			    $( $dialog ).dialog( "option", "height", data.height + hos);
 
 			    $('#preview-dialog')
-			    	.attr('width',1075)
-			    	.attr('height',600)
-			   	 .attr('src',$previewURL + '&mobileFormat=false');
+			    	.attr('width',data.width)
+			    	.attr('height',data.height)
+			   	 .attr('src',$previewURL + '&mobileFormat=' + data.mobileformat);
 			    $( $dialog ).dialog( "option", "position", position );
 			    $('#mura-preview-device-selector a').removeClass('active');
-			    $('.mura-device-standard').addClass('active');
+			    $(this).addClass('active');
 
 			    return false;
 			});
-			$('.mura-device-tablet').bind('click', function () { 
-			    $( $dialog ).dialog( "option", "width", 768 + wos );
-			    $( $dialog ).dialog( "option", "height", 600 + hos);
-			    $('#preview-dialog')
-			    	.attr('width',768)
-			    	.attr('height',600)
-			    	.attr('src',$previewURL + '&mobileFormat=false');
-			    $( $dialog ).dialog( "option", "position", position );
-			    $('#mura-preview-device-selector a').removeClass('active');
-			    $('.mura-device-tablet').addClass('active');
-
-			    return false;
-			});
-			$('.mura-device-tablet-landscape').bind('click', function () { 
-			    $( $dialog ).dialog( "option", "width", 1024 + wos );
-			    $( $dialog ).dialog( "option", "height", 480 + hos);
-			    $('#preview-dialog')
-			    	.attr('width',1024)
-			    	.attr('height',500)
-			    	.attr('src',$previewURL + '&mobileFormat=false');
-			    $( $dialog ).dialog( "option", "position", position );
-			    $('#mura-preview-device-selector a').removeClass('active');
-			    $('.mura-device-tablet-landscape').addClass('active');
-
-			    return false;
-			});
-			$('.mura-device-phone').bind('click', function () {
-			    $( $dialog ).dialog( "option", "width", 320 + wos);
-			    $( $dialog ).dialog( "option", "height", 480 + hos);
-			    $('#preview-dialog')
-			    	.attr('width',320)
-			    	.attr('height',480)
-			    	.attr('src',$previewURL + '&mobileFormat=true');
-			    $( $dialog ).dialog( "option", "position", position );
-			    $('#mura-preview-device-selector a').removeClass('active');
-			    $('.mura-device-phone').addClass('active');
-
-			    return false;
-			});
-			$('.mura-device-phone-landscape').bind('click', function () {
-			    $( $dialog ).dialog( "option", "width", 520 + wos );
-			    $( $dialog ).dialog( "option", "height", 250 + hos);
-			    $('#preview-dialog')
-			    	.attr('width',520)
-			    	.attr('height',250)
-			    	.attr('src',$previewURL + '&mobileFormat=true');
-			    $( $dialog ).dialog( "option", "position", position );
-			    $('#mura-preview-device-selector a').removeClass('active');
-			    $('.mura-device-phone-landscape').addClass('active');
-
-			    return false;
-			});
+			
 		}
 	});
 
